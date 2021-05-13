@@ -2,7 +2,7 @@
  * Extend the basic ItemSheet with some very simple modifications
  * @extends {ItemSheet}
  */
-export class Merp1eItemSheet extends ItemSheet {
+export class Merp1eSpelllistSheet extends ItemSheet {
 
   /** @override */
   static get defaultOptions() {
@@ -55,15 +55,14 @@ export class Merp1eItemSheet extends ItemSheet {
     if (!this.options.editable) return;
 
     // Roll handlers, click handlers, etc. would go here.
+    // Add attribute groups.
+    html.find(".sheet-body").on("drop", ".spelllist-spell-table", MerpSpellListItemSheetHelper.onDropSpellControl.bind(this));
+    html.find(".sheet-body").on("click", ".spelllist-spell-control", MerpSpellListItemSheetHelper.onClickSpellControl.bind(this));
   }
 
   /** @override */
   _updateObject(event, formData) {
-    switch(this.object.data.type) {
-      case "spelllist":
-        formData = MerpSpellListItemSheetHelper.updateSpells(formData, this);
-        break;
-    }
+    formData = MerpSpellListItemSheetHelper.updateSpells(formData, this);
     return this.object.update(formData);
   }
 }

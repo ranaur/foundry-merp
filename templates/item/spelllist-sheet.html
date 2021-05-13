@@ -1,0 +1,58 @@
+<form class="{{cssClass}}" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name"/></h1>
+            <div class="resource">
+            <label class="resource-label">Spell List Group</label>
+            <select name="data.group">
+                {{#each rules.spelllist.groups as |group|}}
+                <option value="{{group}}" {{#if (isEqual ../data.group group)}}selected{{/if}}>{{group}}</option>
+                {{/each}}
+            </select>
+            </div>
+        </div>
+    </header>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+        <h2>Spells:</h2>
+        <table class="spelllist-spell-table">
+            <thead>
+                <tr class="spelllist-spells-header flexrow">
+                    <td class="spelllist-spell-level">Lvl</td>
+                    <td class="spelllist-spell-name flex2">Name</td>
+                    <td class="spelllist-spell-class">Class</td>
+                    <td class="spelllist-spell-areaofeffect">Area Of Effect</td>
+                    <td class="spelllist-spell-duration">Duration</td>
+                    <td class="spelllist-spell-range">Range</td>
+                    <td class="spelllist-spell-instantaneous">Inst?</td>
+                    <td></td>
+                </tr> 
+            </thead>
+            <tbody>
+                {{#each data.spells as |spell|}}
+                <tr class="spelllist-spells-line spelllist-spell-level-{{spell.level}} flexrow">
+                    <input name="data.spells.{{spell.level}}.level" type="hidden" value="{{spell.level}}"/>
+                    <td class="spelllist-spell-level">{{spell.level}}</td>
+                    <input name="data.spells.{{spell.level}}.name" type="hidden" value="{{spell.name}}"/>
+                    <td class="spelllist-spell-name flex2">{{spell.name}}</td>
+                    <input name="data.spells.{{spell.level}}.class" type="hidden" value="{{spell.class}}"/>
+                    <td class="spelllist-spell-class">{{spell.class}}</td>
+                    <input name="data.spells.{{spell.level}}.areaofeffect" type="hidden" value="{{spell.areaofeffect}}"/>
+                    <td class="spelllist-spell-areaofeffect">{{spell.areaofeffect}}</td>
+                    <input name="data.spells.{{spell.level}}.duration" type="hidden" value="{{spell.duration}}"/>
+                    <td class="spelllist-spell-duration">{{spell.duration}}</td>
+                    <input name="data.spells.{{spell.level}}.range" type="hidden" value="{{spell.range}}"/>
+                    <td class="spelllist-spell-range">{{spell.range}}</td>
+                    <input name="data.spells.{{spell.level}}.instantaneous" type="hidden" value="{{spell.instantaneous}}"/>
+                    <td class="spelllist-spell-instantaneous">{{#if spell.instantaneous}}*{{else}}-{{/if}}</td>
+                    <td>
+                        <a class="spelllist-spell-control" data-action="delete"><i class="fas fa-trash"></i></a>
+                    </td>
+                </tr> 
+                {{/each}}
+            </tbody>
+        </td>
+    </section>
+</form>

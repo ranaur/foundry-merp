@@ -1,52 +1,57 @@
 {
   "Actor": {
-    "types": ["character"],
+    "types": ["character", "npc"],
     "templates": {
       "base": {
-        "health": {
+        "level": 1,
+        "hp": {
           "value": 10,
           "min": 0,
           "max": 10
         },
-        "power": {
+        "pp": {
           "value": 5,
           "min": 0,
           "max": 5
+        },
+        "defense": {
+          "defense": {
+            "db": 0,
+            "armor": ["NO", "SL", "RL", "CH", "PL"],
+            "shield": 0,
+            "helm": 0,
+            "armgreaves": 0,
+            "leggreaves": 0
         }
+      },
+      "stats": {
+        "st": { "value": 50, "bonuses": {}, "bonus": 0 },
+        "ag": { "value": 50, "bonuses": {}, "bonus": 0 },
+        "co": { "value": 50, "bonuses": {}, "bonus": 0 },
+        "ig": { "value": 50, "bonuses": {}, "bonus": 0 },
+        "it": { "value": 50, "bonuses": {}, "bonus": 0 },
+        "pr": { "value": 50, "bonuses": {}, "bonus": 0 },
+        "ap": { "value": 50 }
+      },
+      "realm": {
+        "realm": ["Essence", "Channeling"]
       }
     },
     "character": {
-      "templates": ["base"],
-      "biography": "",
-      "attributes": {
-        "level": {
-          "value": 1
-        }
-      },
-      "abilities": {
-        "str": {
-          "value": 10
-        },
-        "dex": {
-          "value": 10
-        },
-        "con": {
-          "value": 10
-        },
-        "int": {
-          "value": 10
-        },
-        "wis": {
-          "value": 10
-        },
-        "cha": {
-          "value": 10
-        }
-      }
+      "templates": ["base", "stats", "realm", "defense"],
+      "xp": 0,
+      "skills": {},
+      "languages": {}
+    },
+    "npc": {
+      "templates": ["base", "stats", "realm"],
+      "skills": {},
+      "languages": {}
     }
+  }
   },
   "Item": {
-    "types": ["item"],
+    "types": ["item", "spell", "spelllist", "container", "race", "profession"],
     "templates": {
       "base": {
         "description": ""
@@ -56,6 +61,29 @@
       "templates": ["base"],
       "quantity": 1,
       "weight": 0
+    },
+    "spell": {
+      "templates": ["base"],
+      "level": 1,
+      "areaofeffect": "",
+      "duration": "",
+      "range": "",
+      "class": ["E", "F", "P", "U", "I"],
+      "instantaneous": false
+    },
+    "spelllist": {
+      "templates": ["base"],
+      "group": "",
+      "spells": {}
+    },
+    "container": {
+      "templates": ["base"]
+    },
+    "race": {
+      "templates": ["base"]
+    },
+    "profession": {
+      "templates": ["base"]
     }
   }
 }

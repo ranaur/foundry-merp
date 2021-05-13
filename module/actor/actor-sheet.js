@@ -2,7 +2,7 @@
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
  */
-export class merp1eActorSheet extends ActorSheet {
+export class Merp1eActorSheet extends ActorSheet {
 
   /** @override */
   static get defaultOptions() {
@@ -21,9 +21,9 @@ export class merp1eActorSheet extends ActorSheet {
   getData() {
     const data = super.getData();
     data.dtypes = ["String", "Number", "Boolean"];
-    for (let attr of Object.values(data.data.attributes)) {
-      attr.isCheckbox = attr.dtype === "Boolean";
-    }
+    //for (let attr of Object.values(data.data.attributes)) {
+    //  attr.isCheckbox = attr.dtype === "Boolean";
+    //}
     return data;
   }
 
