@@ -9,13 +9,13 @@ export class MerpSpell {
     }
 };
 export class MerpSpellList {
-    static groups = [
-        "Essence Open Lists", 
-        "Mage Lists", 
-        "Bard Lists", 
-        "Channeling", 
-        "Open Lists", 
-        "Animist Lists", 
-        "Ranger Lists"
-    ];
+    static groups = {
+        EOL: { name: "Essence Open Lists" },
+        ML: { name: "Mage Lists" }, 
+        BL: { name: "Bard Lists" }, 
+        CH: { name: "Channeling" }, 
+        OL: { name: "Open Lists" }, 
+        AL: { name: "Animist Lists" }, 
+        RL: { name: "Ranger Lists" }
+    };
 }

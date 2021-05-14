@@ -302,5 +302,5 @@ export class MerpSkill {
         PerceptionAndTracking: [
             { value: +20, description: "If the player states that his character is spending time looking for specific information. The number of rounds spent affects the difficulty." }
         ]
-    }
+    };
 };

@@ -36,12 +36,19 @@ export class Merp1eRules {
     };
 
     static resolveSkillRankBonus(ranks) {
-        // Table BT-4
-        if(ranks == 0) return -25;
-        if(ranks <= 10) return ranks * 5;
-        if(ranks <= 20) return 50 + (ranks - 10) * 2;
-
-        return 70 + (ranks - 20);
+        if(typeof ranks === "number") {
+            // Table BT-4
+            if(ranks == 0) return -25;
+            if(ranks <= 10) return ranks * 5;
+            if(ranks <= 20) return 50 + (ranks - 10) * 2;
+            return 70 + (ranks - 20);
+        }
+        if(Array.isArray(ranks)) {
+            // sum the values (Body Development)
+            return ranks.reduce((a, i) => {return a+i;}, 0);
+        }
+        // XXX Implement dictionary level/qtd { 0: 1, 1: 2, 2: 1 ...}
+        return null;
     }
 }
 

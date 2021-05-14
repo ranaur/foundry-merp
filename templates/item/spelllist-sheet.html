@@ -2,12 +2,12 @@
     <header class="sheet-header">
         <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
         <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name"/></h1>
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="{{localize "MERP1E.Spelllist.Name"}}"/></h1>
             <div class="resource">
-            <label class="resource-label">Spell List Group</label>
+            <label class="resource-label">{{localize "MERP1E.Spelllist.Group"}}</label>
             <select name="data.group">
-                {{#each rules.spelllist.groups as |group|}}
-                <option value="{{group}}" {{#if (isEqual ../data.group group)}}selected{{/if}}>{{group}}</option>
+                {{#each rules.spelllist.groups as |group groupKey|}}
+                <option value="{{groupKey}}" {{#if (isEqual ../data.group groupKey)}}selected{{/if}}>{{localize (concat "MERP1E.Spelllist.Groups." groupKey)}}</option>
                 {{/each}}
             </select>
             </div>
@@ -20,13 +20,13 @@
         <table class="spelllist-spell-table">
             <thead>
                 <tr class="spelllist-spells-header flexrow">
-                    <td class="spelllist-spell-level">Lvl</td>
-                    <td class="spelllist-spell-name flex2">Name</td>
-                    <td class="spelllist-spell-class">Class</td>
-                    <td class="spelllist-spell-areaofeffect">Area Of Effect</td>
-                    <td class="spelllist-spell-duration">Duration</td>
-                    <td class="spelllist-spell-range">Range</td>
-                    <td class="spelllist-spell-instantaneous">Inst?</td>
+                    <td class="spelllist-spell-level">{{localize "MERP1E.Spelllist.Table.Level"}}</td>
+                    <td class="spelllist-spell-name flex2">{{localize "MERP1E.Spelllist.Table.Spell"}}</td>
+                    <td class="spelllist-spell-class">{{localize "MERP1E.Spelllist.Table.Class"}}</td>
+                    <td class="spelllist-spell-areaofeffect">{{localize "MERP1E.Spelllist.Table.AreaOfEffect"}}</td>
+                    <td class="spelllist-spell-duration">{{localize "MERP1E.Spelllist.Table.Duration"}}</td>
+                    <td class="spelllist-spell-range">{{localize "MERP1E.Spelllist.Table.Range"}}</td>
+                    <td class="spelllist-spell-instantaneous">{{localize "MERP1E.Spelllist.Table.Instantaneous"}}Inst?</td>
                     <td></td>
                 </tr> 
             </thead>

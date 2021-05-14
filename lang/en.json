@@ -1,1 +1,39 @@
-{}
+{
+    "MERP1E.Spelllist.Name": "Spell List Name",
+    "MERP1E.Spelllist.Group": "Spell List Group",
+
+    "MERP1E.Spelllist.Table.Level": "Level",
+    "MERP1E.Spelllist.Table.Spell": "Spell",
+    "MERP1E.Spelllist.Table.Class": "Class",
+    "MERP1E.Spelllist.Table.AreaOfEffect": "Area Of Effect",
+    "MERP1E.Spelllist.Table.Duration": "Duration",
+    "MERP1E.Spelllist.Table.Range": "Range",
+    "MERP1E.Spelllist.Table.Instantaneous": "Inst?",
+
+    "MERP1E.Spelllist.Groups.EOL": "Essence Open Lists",
+    "MERP1E.Spelllist.Groups.ML": "Mage Lists",
+    "MERP1E.Spelllist.Groups.BL": "Bard Lists",
+    "MERP1E.Spelllist.Groups.CH": "Channeling",
+    "MERP1E.Spelllist.Groups.OL": "Open Lists",
+    "MERP1E.Spelllist.Groups.AL": "Animist Lists",
+    "MERP1E.Spelllist.Groups.RL": "Ranger Lists",
+
+    "MERP1E.Spell.Name": "Spell Name",
+    "MERP1E.Spell.Level": "Level",
+    "MERP1E.Spell.Class": "Class",
+    "MERP1E.Spell.Instantaneous": "Instantaneous",
+    "MERP1E.Spell.AreaOfEffect": "Area Of Effect",
+    "MERP1E.Spell.Duration": "Duration",
+    "MERP1E.Spell.Range": "Range",
+    "MERP1E.Spell.Description": "Description",
+
+    "MERP1E.Spell.Classes.E": "Elemental",
+    "MERP1E.Spell.Classes.F": "Force",
+    "MERP1E.Spell.Classes.P": "Passive",
+    "MERP1E.Spell.Classes.U": "Utility",
+    "MERP1E.Spell.Classes.I": "Informational",
+
+    "MERP1E.X.X": "",
+
+    "MERP1E.X": "MERP1E"
+}
