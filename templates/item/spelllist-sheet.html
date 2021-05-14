@@ -26,7 +26,7 @@
                     <td class="spelllist-spell-areaofeffect">{{localize "MERP1E.Spelllist.Table.AreaOfEffect"}}</td>
                     <td class="spelllist-spell-duration">{{localize "MERP1E.Spelllist.Table.Duration"}}</td>
                     <td class="spelllist-spell-range">{{localize "MERP1E.Spelllist.Table.Range"}}</td>
-                    <td class="spelllist-spell-instantaneous">{{localize "MERP1E.Spelllist.Table.Instantaneous"}}Inst?</td>
+                    <td class="spelllist-spell-instantaneous">{{localize "MERP1E.Spelllist.Table.Instantaneous"}}</td>
                     <td></td>
                 </tr> 
             </thead>
@@ -46,7 +46,7 @@
                     <input name="data.spells.{{spell.level}}.range" type="hidden" value="{{spell.range}}"/>
                     <td class="spelllist-spell-range">{{spell.range}}</td>
                     <input name="data.spells.{{spell.level}}.instantaneous" type="hidden" value="{{spell.instantaneous}}"/>
-                    <td class="spelllist-spell-instantaneous">{{#if spell.instantaneous}}*{{else}}-{{/if}}</td>
+                    <td class="spelllist-spell-instantaneous">{{#if (isEqual spell.instantaneous "true")}}*{{else}}-{{/if}}</td>
                     <td>
                         <a class="spelllist-spell-control" data-action="delete"><i class="fas fa-trash"></i></a>
                     </td>
