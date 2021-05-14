@@ -25,13 +25,13 @@
         }
       },
       "stats": {
-        "st": { "value": 50, "bonuses": {}, "bonus": 0 },
-        "ag": { "value": 50, "bonuses": {}, "bonus": 0 },
-        "co": { "value": 50, "bonuses": {}, "bonus": 0 },
-        "ig": { "value": 50, "bonuses": {}, "bonus": 0 },
-        "it": { "value": 50, "bonuses": {}, "bonus": 0 },
-        "pr": { "value": 50, "bonuses": {}, "bonus": 0 },
-        "ap": { "value": 50 }
+        "ST": { "value": 50, "bonuses": {}, "bonus": 0 },
+        "AG": { "value": 50, "bonuses": {}, "bonus": 0 },
+        "CO": { "value": 50, "bonuses": {}, "bonus": 0 },
+        "IG": { "value": 50, "bonuses": {}, "bonus": 0 },
+        "IT": { "value": 50, "bonuses": {}, "bonus": 0 },
+        "PR": { "value": 50, "bonuses": {}, "bonus": 0 },
+        "AP": { "value": 50 }
       },
       "realm": {
         "realm": ["Essence", "Channeling"]
@@ -39,6 +39,10 @@
     },
     "character": {
       "templates": ["base", "stats", "realm", "defense"],
+      "profession": "",
+      "race": {
+        "name": ""
+      },
       "xp": 0,
       "skills": {},
       "languages": {}

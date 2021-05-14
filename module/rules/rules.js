@@ -6,7 +6,7 @@ export class Merp1eRules {
     static spell = MerpSpell;
     static spelllist = MerpSpellList;
     static skill = MerpSkill;
-    static stats = ["st", "ag", "co", "ig", "it", "pr", "ap"];
+    static stats = ["ST", "AG", "CO", "IG", "IT", "PR", "AP"];
     static rollTypes = ["MM", "SM", "RR", "OB", "SP"];
     static tables = {
         bt1: TableBT1
@@ -32,7 +32,7 @@ export class Merp1eRules {
     };
 
     static resolveStatBonus(stat) {
-        return MerpRules.lookupTable(tables.bt1, "Bonus", stat);
+        return Merp1eRules.lookupTable(Merp1eRules.tables.bt1, "Bonus", stat);
     };
 
     static resolveSkillRankBonus(ranks) {
@@ -45,7 +45,7 @@ export class Merp1eRules {
         }
         if(Array.isArray(ranks)) {
             // sum the values (Body Development)
-            return ranks.reduce((a, i) => {return a+i;}, 0);
+            return Merp1eRules.resolveSkillRankBonus(ranks.reduce((a, i) => {return a+i;}, 0));
         }
         // XXX Implement dictionary level/qtd { 0: 1, 1: 2, 2: 1 ...}
         return null;

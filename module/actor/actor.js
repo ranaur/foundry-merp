@@ -25,13 +25,35 @@ export class Merp1eActor extends Actor {
   _prepareCharacterData(actorData) {
     const data = actorData.data;
 
-    // Make modifications to data here. For example:
+    // Initialize stats if they don't exist
+    data.stats = data.stats || {};
+    for( let stat of game.merp1e.Merp1eRules.stats) {
+      data.stats[stat] = data.stats[stat] || { "value": 50, "bonuses": {}, "bonus": 0 };
+      if("bonuses" in data.stats[stat]) {
+        data.stats[stat].bonuses.stat = game.merp1e.Merp1eRules.resolveStatBonus(data.stats[stat].value);
+        data.stats[stat].bonuses.race = data.stats[stat].bonuses.race || 0; // XXX Race Bonus
+        // Sum all the bonuses
+        data.stats[stat].total = Object.entries(data.stats[stat].bonuses).reduce((a, i) => { return a + i[1]; }, 0);
+      }
+    }
 
-    // Loop through ability scores, and add their modifiers to our sheet output.
-    for (let [key, ability] of Object.entries(data.abilities)) {
-      // Calculate the modifier using d20 rules.
-      ability.mod = Math.floor((ability.value - 10) / 2);
+    // Fill skills
+    data.skills = data.skills || {};
+    for( let [key, defaultSkill] of Object.entries(game.merp1e.Merp1eRules.skill.list)) {
+      data.skills[key] = data.skills[key] || defaultSkill;
+      data.skills[key].bonuses = data.skills[key].bonuses || {};
+      data.skills[key].ranks = data.skills[key].ranks || [];
+      data.skills[key].bonuses.extra = defaultSkill.extra || 0;
+    }
+    // Calculate skill bonuses
+    for( let [key, skill] of Object.entries(data.skills)) {
+      skill.bonuses.rank = game.merp1e.Merp1eRules.resolveSkillRankBonus(skill.ranks);
+      // Calculate stat bonus
+      if("statBonus" in skill) {
+        skill.bonuses.stat = data.stats[skill.statBonus].total;
+      }
+      // Sum all the bonuses
+      skill.total = Object.entries(skill.bonuses).reduce((a, i) => { return a + i[1]; }, 0);
     }
   }
-
 }

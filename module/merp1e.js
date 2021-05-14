@@ -5,6 +5,7 @@ import { Merp1eItem } from "./item/item.js";
 import { Merp1eItemSheet } from "./item/item-sheet.js";
 import { Merp1eSpelllistSheet } from "./item/spelllist-sheet.js";
 import { Merp1eRules } from "./rules/rules.js"
+import { preloadHandlebarsTemplates } from "./templates.js";
 
 Hooks.once('init', async function() {
 
@@ -60,4 +61,7 @@ Hooks.once('init', async function() {
   Handlebars.registerHelper('isEqual', function(a, b) {
     return a == b;
   });
+
+  // Preload template partials.
+  preloadHandlebarsTemplates();
 });

@@ -8,7 +8,6 @@ export class Merp1eActorSheet extends ActorSheet {
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ["merp1e", "sheet", "actor"],
-      template: "systems/merp1e/templates/actor/actor-sheet.html",
       width: 600,
       height: 600,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }]
@@ -16,6 +15,16 @@ export class Merp1eActorSheet extends ActorSheet {
   }
 
   /* -------------------------------------------- */
+  /** @override */
+  get template() {
+    const path = "systems/merp1e/templates/actor";
+    // Return a single sheet for all item types.
+    //return `${path}/item-sheet.html`;
+    // Alternatively, you could use the following return statement to do a
+    // unique item sheet by type, like `weapon-sheet.html`.
+
+    return `${path}/${this.actor.data.type}-sheet.html`;
+  }
 
   /** @override */
   getData() {
@@ -103,5 +112,8 @@ export class Merp1eActorSheet extends ActorSheet {
       });
     }
   }
-
+  /** @override */
+  _updateObject(event, formData) {
+    return this.object.update(formData);
+  }
 }

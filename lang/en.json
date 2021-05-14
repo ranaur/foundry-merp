@@ -33,7 +33,37 @@
     "MERP1E.Spell.Classes.U": "Utility",
     "MERP1E.Spell.Classes.I": "Informational",
 
-    "MERP1E.X.X": "",
+    "MERP1E.Character.Name": "Name",
+    "MERP1E.Character.Profession": "Profession",
+    "MERP1E.Character.Race": "Race",
+    "MERP1E.Character.XP": "XP",
+    "MERP1E.Character.Level": "Level",
+
+    "MERP1E.CharacterTab.Description": "Description",
+    "MERP1E.CharacterTab.Items": "Items",
+    "MERP1E.CharacterTab.Stats": "Stats",
+
+    "MERP1E.Stats.ST.Name": "Strength",
+    "MERP1E.Stats.ST.Short": "ST",
+    "MERP1E.Stats.AG.Name": "Agility",
+    "MERP1E.Stats.AG.Short": "AG",
+    "MERP1E.Stats.CO.Name": "Constitution",
+    "MERP1E.Stats.CO.Short": "CO",
+    "MERP1E.Stats.IG.Name": "Intelligence",
+    "MERP1E.Stats.IG.Short": "IG",
+    "MERP1E.Stats.IT.Name": "Intuition",
+    "MERP1E.Stats.IT.Short": "IT",
+    "MERP1E.Stats.PR.Name": "Presence",
+    "MERP1E.Stats.PR.Short": "PR",
+    "MERP1E.Stats.AP.Name": "Appearence",
+    "MERP1E.Stats.AP.Short": "AP",
+
+    "MERP1E.StatTable.Stats": "Stats",
+    "MERP1E.StatTable.Abbr": "Abbr",
+    "MERP1E.StatTable.Value": "Value",
+    "MERP1E.StatTable.Bonus": "Bonus",
+    "MERP1E.StatTable.Race": "Race",
+    "MERP1E.StatTable.Total": "Total",
 
     "MERP1E.X": "MERP1E"
 }
