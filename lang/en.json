@@ -43,6 +43,8 @@
     "MERP1E.CharacterTab.Items": "Items",
     "MERP1E.CharacterTab.Stats": "Stats",
     "MERP1E.CharacterTab.Skills": "Skills",
+    "MERP1E.CharacterTab.Languages": "Languages",
+    "MERP1E.CharacterTab.Spells": "Spells",
 
     "MERP1E.Stats.ST.Name": "Strength",
     "MERP1E.Stats.ST.Short": "ST",
@@ -144,5 +146,19 @@
     "MERP1E.SkillGroup.Miscelaneous": "Miscelaneous Skills",
     "MERP1E.SkillGroup.Secondary": "Secondary Skills",
   
+    "MERP1E.Languages.Language": "Language",
+    "MERP1E.Languages.Ranks": "Ranks",
+ 
+    "MERP1E.DeleteGroup": "Delete group?",
+    "MERP1E.DeleteGroupContent": "Do you wish to delete this group? This will delete the following group and all attributes included in it: ",
+  
+    "MERP1E.Description.Height": "Height",
+    "MERP1E.Description.Weight": "Weight",
+    "MERP1E.Description.Hair": "Hair",
+    "MERP1E.Description.Eyes": "Eyes",
+    "MERP1E.Description.Demeanor": "Demeanor",
+    "MERP1E.Description.Special": "Special",
+    "MERP1E.Description.Notes": "Notes",
+
     "MERP1E.X": "MERP1E"
 }

@@ -25,6 +25,8 @@ export class Merp1eActor extends Actor {
   _prepareCharacterData(actorData) {
     const data = actorData.data;
 
+    data.level = game.merp1e.Merp1eRules.resolveLevel(data.xp);
+
     // Initialize stats if they don't exist
     data.stats = data.stats || {};
     for( let stat of game.merp1e.Merp1eRules.stats) {
@@ -60,5 +62,8 @@ export class Merp1eActor extends Actor {
       // Sum all the bonuses
       skill.total = Object.entries(skill.bonuses).reduce((a, i) => { return a + (i[1] || 0); }, 0);
     }
+
+    // Filter spelllist
+    data.spelllists = this.items.filter(item => item.type == "spelllist");
   }
 }

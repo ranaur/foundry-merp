@@ -1,6 +1,5 @@
 <section class="skill-line flexrow">
     <span class="skill-name flex3">{{localize (concat "MERP1E.Skill." skill)}}</span>
-    {{log skill-value}}
     <input class="skill-ranks" name="data.skills.{{skill}}.ranks" value="{{skill-value.ranks}}" type="number" min="0" {{#if skill-data.maxRanks}}max="{{skill-data.maxRanks}}"{{/if}} data-dtype="Number"/>
     <input class="skill-rankbonus" name="data.skills.{{skill}}.bonuses.rank" value="{{skill-value.bonuses.rank}}" type="number" data-dtype="Number" {{#if (isNotEqual "BodyDevel" skill)}}readonly tabindex=-1{{/if}}/>
     <input class="skill-statbonus skill-stat-{{skill-data.statBonus}}" name="data.skills.{{skill}}.bonuses.stat" value="{{skill-value.bonuses.stat}}" type="number" data-dtype="Number" readonly tabindex/>

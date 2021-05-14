@@ -35,6 +35,22 @@ export class Merp1eRules {
         return Merp1eRules.lookupTable(Merp1eRules.tables.bt1, "Bonus", stat);
     };
 
+    // Maps XP to the level
+    static resolveLevel(xp) {
+        const x = Math.floor(xp/10000);
+        if(x < 5) return x;
+        if(x < 17) return Math.floor(((x - 5)/2)+5);
+        return null;
+    }
+
+    // Returns how many XPs is needed to advance to the new level
+    static resolveExperiencePointsRequired(level) {
+        // Table ET-5
+        if(level <= 5) return 10000 * level;
+        if(level <= 10) return 50000 + (20000 * (level - 5));
+        
+        return null;
+    }
     static resolveSkillRankBonus(ranks) {
         if(typeof ranks === "number") {
             // Table BT-4

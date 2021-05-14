@@ -45,7 +45,8 @@
       },
       "xp": 0,
       "skills": {},
-      "languages": {}
+      "languages": {},
+      "spelllists": []
     },
     "npc": {
       "templates": ["base", "stats", "realm"],
