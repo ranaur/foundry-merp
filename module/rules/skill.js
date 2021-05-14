@@ -1,15 +1,50 @@
 export class MerpSkill {
     static sheetOrder = [
-        { id: "Movement", description: "MERP.SkillGroup.Movement", skills: ["NoArmor", "SoftLeather", "RigidLeather", "Chain", "Plate"] },
-        { id: "Weapon", description: "MERP.SkillGroup.Weapon", skills: ["OneHandedEdged", "OneHandedConcussion", "TwoHanded", "Thrown", "Missile", "Polearms"] },
-        { id: "General", description: "MERP.SkillGroup.General", skills: ["Climb", "Ride", "Swim", "Track"] },
-        { id: "Subterfuge", description: "MERP.SkillGroup.Subterfuge", skills: ["Ambush", "StalkHide", "PickLock", "Disarmtrap"] },
-        { id: "Magical", description: "MERP.SkillGroup.Magical", skills: ["ReadRunes", "UseItens", "DirectedSpells"] },
-        { id: "Miscelaneous", description: "MERP.SkillGroup.Miscelaneous", skills: ["Perception", "BodyDevel", "BaseSpells", "LeadershipandInfluence", "DefensiveBonus", "EssenceRR", "ChannelingRR", "PoisonRR", "DiseaseRR"] },
-        { id: "Secondary", description: "MERP.SkillGroup.Secondary", skills: ["Acrobatics", "Acting", "Caving", "Contortions", "Cookery", "Dance", "Diving", "Fletching", "Foraging", "Gambling", "Herding", "LeatherWorking", "Meditation", "Music", "PublicSpeaking", "RopeMastery", "Rowing", "Sailing", "Signaling", "Skiing", "Smithing", "StarGazing", "TrapBuilding", "Trickery", "Tumbling", "WeatherWatching", "WoodCarving"] }
+        { id: "Movement", description: "MERP1E.SkillGroup.Movement", skills: ["NoArmor", "SoftLeather", "RigidLeather", "Chain", "Plate"] },
+        { id: "Weapon", description: "MERP1E.SkillGroup.Weapon", skills: ["OneHandedEdged", "OneHandedConcussion", "TwoHanded", "Thrown", "Missile", "Polearms"] },
+        { id: "General", description: "MERP1E.SkillGroup.General", skills: ["Climb", "Ride", "Swim", "Track"] },
+        { id: "Subterfuge", description: "MERP1E.SkillGroup.Subterfuge", skills: ["Ambush", "StalkHide", "PickLock", "Disarmtrap"] },
+        { id: "Magical", description: "MERP1E.SkillGroup.Magical", skills: ["ReadRunes", "UseItens", "DirectedSpells"] },
+        { id: "Miscelaneous", description: "MERP1E.SkillGroup.Miscelaneous", skills: ["Perception", "BodyDevel", "BaseSpells", "LeadershipandInfluence", "DefensiveBonus", "EssenceRR", "ChannelingRR", "PoisonRR", "DiseaseRR"] },
+        { id: "Secondary", description: "MERP1E.SkillGroup.Secondary", skills: ["Acrobatics", "Acting", "Caving", "Contortions", "Cookery", "Dance", "Diving", "Fletching", "Foraging", "Gambling", "Herding", "LeatherWorking", "Meditation", "Music", "PublicSpeaking", "RopeMastery", "Rowing", "Sailing", "Signaling", "Skiing", "Smithing", "StarGazing", "TrapBuilding", "Trickery", "Tumbling", "WeatherWatching", "WoodCarving"] }
     ];
     
     static list = {
+        NoArmor: {
+            group: "Movement",
+            statBonus: "AG",
+            rollType: "MM",
+            extra: 0,
+            maxRanks: 2
+        },
+        SoftLeather: {
+            group: "Movement",
+            statBonus: "AG",
+            rollType: "MM",
+            extra: -15,
+            maxRanks: 3
+        },
+        RigidLeather: {
+            group: "Movement",
+            statBonus: "AG",
+            rollType: "MM",
+            extra: -30,
+            maxRanks: 5
+        },
+        Chain: {
+            group: "Movement",
+            statBonus: "ST",
+            rollType: "MM",
+            extra: -45,
+            maxRanks: 7
+        },
+        Plate: {
+            group: "Movement",
+            statBonus: "ST",
+            rollType: "MM",
+            extra: -60,
+            maxRanks: 9
+        },        
         OneHandedEdged: {
             group: "Weapon",
             statBonus: "ST",

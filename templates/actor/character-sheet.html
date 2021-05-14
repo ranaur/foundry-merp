@@ -50,6 +50,7 @@
     {{!-- Sheet Tab Navigation --}}
     <nav class="sheet-tabs tabs" data-group="primary">
       <a class="item" data-tab="stats">{{localize "MERP1E.CharacterTab.Stats"}}</a>
+      <a class="item" data-tab="skills">{{localize "MERP1E.CharacterTab.Skills"}}</a>
       <a class="item" data-tab="description">{{localize "MERP1E.CharacterTab.Description"}}</a>
       <a class="item" data-tab="items">{{localize "MERP1E.CharacterTab.Items"}}</a>
     </nav>
@@ -89,6 +90,35 @@
           </tbody>
       </table>
       </div>
+
+      {{!-- Skills Tab --}}
+      <div class="tab skills" data-group="primary" data-tab="skills">
+        <div class="tab skills" data-group="primary" data-tab="skills">
+          <header class="skill-header flexrow">
+              <span class="skill-name flex3">{{localize "MERP1E.SkillTable.SkillName"}}</span>
+              <span class="skill-ranks">{{localize "MERP1E.SkillTable.Ranks"}}</span>
+              <span class="skill-rankbonus">{{localize "MERP1E.SkillTable.RankBonus"}}</span>
+              <span class="skill-statbonus">{{localize "MERP1E.SkillTable.StatBonus"}}</span>
+              <span class="skill-profbonus">{{localize "MERP1E.SkillTable.ProfessionBonus"}}</span>
+              <span class="skill-itembonus">{{localize "MERP1E.SkillTable.ItemBonus"}}</span>
+              <span class="skill-specbonus">{{localize "MERP1E.SkillTable.SpecialBonus"}}</span>
+              <span class="skill-extrabonus">{{localize "MERP1E.SkillTable.ExtraBonus"}}</span>
+              <span class="skill-totalbonus flex2">{{localize "MERP1E.SkillTable.Total"}}</span>                
+            </header>
+          <section class="skill-list flexcol">
+              <div class="skill-groups">
+                  {{#each rules.skill.sheetOrder as | group |}}
+                  <div class="skill-group">
+                      <div class="skill-group-header">{{localize group.description}}</div>
+                      {{#each group.skills as | skill |}}
+                      {{> "systems/merp1e/templates/parts/sheet-skills.html" skill=skill skill-data=(lookup ../../rules.skill.list skill) skill-value=(lookup ../../data.skills skill)}}
+                      {{/each}}
+                  </div>
+                  {{/each}}
+              </div>
+          </section>
+      </div>
+    </div>
 
       {{!-- Biography Tab --}}
       <div class="tab description" data-group="primary" data-tab="description">

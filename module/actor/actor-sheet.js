@@ -33,6 +33,7 @@ export class Merp1eActorSheet extends ActorSheet {
     //for (let attr of Object.values(data.data.attributes)) {
     //  attr.isCheckbox = attr.dtype === "Boolean";
     //}
+    data.rules = game.merp1e.Merp1eRules;
     return data;
   }
 
