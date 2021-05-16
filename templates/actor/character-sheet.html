@@ -14,7 +14,7 @@
             </div>
             <div class="resource flex-group-center">
               <label for="data.profession" class="resource-label">{{localize "MERP1E.Character.Profession"}}</label>
-              <input type="text" name="data.profession" value="{{data.profession}}" data-dtype="String"/>
+              <input type="text" name="data.profession" value="{{data.profession.name}}" data-dtype="String" readonly tabindex=-1/>
             </div>
           </div>
           <div class="resources grid grid-2col">
@@ -109,7 +109,7 @@
           <div class="skill-groups">
             {{#each rules.skill.sheetOrder as | group |}}
             <div class="skill-group">
-              <div class="skill-group-header">{{localize group.description}}</div>
+              <div class="skill-group-header">{{localize (concat "MERP1E.SkillGroup." group.id)}}</div>
               {{#each group.skills as | skill |}}
                 {{> "systems/merp1e/templates/parts/sheet-skills.html" skill=skill skill-data=(lookup ../../rules.skill.list skill) skill-value=(lookup ../../data.skills skill)}}
               {{/each}}
@@ -178,7 +178,6 @@
             <a class="item-control item-create" title="Create item" data-type="item"><i class="fas fa-plus"></i> Add item</a>
           </div>
         </li>
-        {{log actor}}
         {{#each data.spelllists as |item id|}}
           <li class="item flexrow" data-item-id="{{item._id}}">
             <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"/></div>

@@ -50,6 +50,21 @@ export class Merp1eActor extends Actor {
       data.skills[key].ranks = data.skills[key].ranks || 0; // XXX change to XXX to record each rank
       data.skills[key].bonuses.extra = defaultSkill.extra || 0;
     }
+
+    // Filter spelllist
+    data.spelllists = this.items.filter(item => item.type == "spelllist");
+    let professions = this.items.filter(item => item.type == "profession")
+    if( professions.length == 0) {
+      data.profession = null;
+    } else {
+      data.profession = professions[0];
+      for(let [skill, skillBonus] of Object.entries(data.profession.data.data.professionSkillBonuses)) {
+        if(skillBonus != 0) {
+          data.skills[skill].bonuses.prof = skillBonus * data.level;
+        }
+      }
+    }
+
     // Calculate skill bonuses
     for( let [key, skill] of Object.entries(data.skills)) {
       if(key != "BodyDevel") {
@@ -63,7 +78,5 @@ export class Merp1eActor extends Actor {
       skill.total = Object.entries(skill.bonuses).reduce((a, i) => { return a + (i[1] || 0); }, 0);
     }
 
-    // Filter spelllist
-    data.spelllists = this.items.filter(item => item.type == "spelllist");
   }
 }

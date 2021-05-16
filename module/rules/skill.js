@@ -1,12 +1,12 @@
 export class MerpSkill {
     static sheetOrder = [
-        { id: "Movement", description: "MERP1E.SkillGroup.Movement", skills: ["NoArmor", "SoftLeather", "RigidLeather", "Chain", "Plate"] },
-        { id: "Weapon", description: "MERP1E.SkillGroup.Weapon", skills: ["OneHandedEdged", "OneHandedConcussion", "TwoHanded", "Thrown", "Missile", "Polearms"] },
-        { id: "General", description: "MERP1E.SkillGroup.General", skills: ["Climb", "Ride", "Swim", "Track"] },
-        { id: "Subterfuge", description: "MERP1E.SkillGroup.Subterfuge", skills: ["Ambush", "StalkHide", "PickLock", "Disarmtrap"] },
-        { id: "Magical", description: "MERP1E.SkillGroup.Magical", skills: ["ReadRunes", "UseItens", "DirectedSpells"] },
-        { id: "Miscelaneous", description: "MERP1E.SkillGroup.Miscelaneous", skills: ["Perception", "BodyDevel", "BaseSpells", "LeadershipandInfluence", "DefensiveBonus", "EssenceRR", "ChannelingRR", "PoisonRR", "DiseaseRR"] },
-        { id: "Secondary", description: "MERP1E.SkillGroup.Secondary", skills: ["Acrobatics", "Acting", "Caving", "Contortions", "Cookery", "Dance", "Diving", "Fletching", "Foraging", "Gambling", "Herding", "LeatherWorking", "Meditation", "Music", "PublicSpeaking", "RopeMastery", "Rowing", "Sailing", "Signaling", "Skiing", "Smithing", "StarGazing", "TrapBuilding", "Trickery", "Tumbling", "WeatherWatching", "WoodCarving"] }
+        { id: "Movement", skills: ["NoArmor", "SoftLeather", "RigidLeather", "Chain", "Plate"] },
+        { id: "Weapon", skills: ["OneHandedEdged", "OneHandedConcussion", "TwoHanded", "Thrown", "Missile", "Polearms"] },
+        { id: "General", skills: ["Climb", "Ride", "Swim", "Track"] },
+        { id: "Subterfuge", skills: ["Ambush", "StalkHide", "PickLock", "Disarmtrap"] },
+        { id: "Magical", skills: ["ReadRunes", "UseItens", "DirectedSpells"] },
+        { id: "Miscelaneous", skills: ["Perception", "BodyDevel", "BaseSpells", "LeadershipandInfluence", "DefensiveBonus", "EssenceRR", "ChannelingRR", "PoisonRR", "DiseaseRR"] },
+        { id: "Secondary", skills: ["Acrobatics", "Acting", "Caving", "Contortions", "Cookery", "Dance", "Diving", "Fletching", "Foraging", "Gambling", "Herding", "LeatherWorking", "Meditation", "Music", "PublicSpeaking", "RopeMastery", "Rowing", "Sailing", "Signaling", "Skiing", "Smithing", "StarGazing", "TrapBuilding", "Trickery", "Tumbling", "WeatherWatching", "WoodCarving"] }
     ];
     
     static list = {

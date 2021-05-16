@@ -6,7 +6,7 @@ export class Merp1eRules {
     static spell = MerpSpell;
     static spelllist = MerpSpellList;
     static skill = MerpSkill;
-    static stats = ["ST", "AG", "CO", "IG", "IT", "PR", "AP"];
+    static stats = ["st", "ag", "co", "ig", "it", "pr", "ap"];
     static rollTypes = ["MM", "SM", "RR", "OB", "SP"];
     static tables = {
         bt1: TableBT1

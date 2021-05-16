@@ -2,7 +2,7 @@
  * Extend the basic ItemSheet with some very simple modifications
  * @extends {ItemSheet}
  */
-export class Merp1eItemSheet extends ItemSheet {
+export class Merp1eSpellSheet extends ItemSheet {
 
   /** @override */
   static get defaultOptions() {
@@ -18,11 +18,11 @@ export class Merp1eItemSheet extends ItemSheet {
   get template() {
     const path = "systems/merp1e/templates/item";
     // Return a single sheet for all item types.
-    return `${path}/item-sheet.html`;
+    //return `${path}/item-sheet.html`;
     // Alternatively, you could use the following return statement to do a
     // unique item sheet by type, like `weapon-sheet.html`.
 
-    //return `${path}/${this.item.data.type}-sheet.html`;
+    return `${path}/${this.item.data.type}-sheet.html`;
   }
 
   /* -------------------------------------------- */

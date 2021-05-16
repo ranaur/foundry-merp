@@ -2,7 +2,7 @@
     <span class="skill-name flex3">{{localize (concat "MERP1E.Skill." skill)}}</span>
     <input class="skill-ranks" name="data.skills.{{skill}}.ranks" value="{{skill-value.ranks}}" type="number" min="0" {{#if skill-data.maxRanks}}max="{{skill-data.maxRanks}}"{{/if}} data-dtype="Number"/>
     <input class="skill-rankbonus" name="data.skills.{{skill}}.bonuses.rank" value="{{skill-value.bonuses.rank}}" type="number" data-dtype="Number" {{#if (isNotEqual "BodyDevel" skill)}}readonly tabindex=-1{{/if}}/>
-    <input class="skill-statbonus skill-stat-{{skill-data.statBonus}}" name="data.skills.{{skill}}.bonuses.stat" value="{{skill-value.bonuses.stat}}" type="number" data-dtype="Number" readonly tabindex/>
+    <input class="skill-statbonus skill-stat-{{skill-data.statBonus}}" name="data.skills.{{skill}}.bonuses.stat" value="{{skill-value.bonuses.stat}}" type="number" data-dtype="Number" readonly tabindex=-1/>
     <input class="skill-profbonus" name="data.skills.{{skill}}.bonuses.prof" value="{{skill-value.bonuses.prof}}" type="number" data-dtype="Number"/>
     <input class="skill-itembonus" name="data.skills.{{skill}}.bonuses.item" value="{{skill-value.bonuses.item}}" type="number" data-dtype="Number"/>
     <input class="skill-specbonus" name="data.skills.{{skill}}.bonuses.spec" value="{{skill-value.bonuses.spec}}" type="number" data-dtype="Number"/>

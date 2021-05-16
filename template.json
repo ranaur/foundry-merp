@@ -35,14 +35,19 @@
       },
       "realm": {
         "realm": ["Essence", "Channeling"]
+      },
+      "money": {
+        "gp": 0,
+        "sp": 0,
+        "bp": 0,
+        "cp": 0,
+        "tp": 0
       }
     },
     "character": {
       "templates": ["base", "stats", "realm", "defense"],
       "profession": "",
-      "race": {
-        "name": ""
-      },
+      "race": {},
       "xp": 0,
       "skills": {},
       "languages": {},
@@ -56,7 +61,7 @@
   }
   },
   "Item": {
-    "types": ["item", "spell", "spelllist", "container", "race", "profession"],
+    "types": ["item", "spell", "spelllist", "container", "race", "profession", "backgroundOption"],
     "templates": {
       "base": {
         "description": ""
@@ -85,10 +90,70 @@
       "templates": ["base"]
     },
     "race": {
-      "templates": ["base"]
+      "templates": ["base"],
+      "languages": [],
+      "statsBonuses": {
+        "st": 0,
+        "ag": 0,
+        "co": 0,
+        "ig": 0,
+        "it": 0,
+        "pr": 0
+      },
+      "skillBonuses": {
+        "EssenceRR": 0,
+        "ChannelingRR": 0,
+        "PoisonRR": 0,
+        "DiseaseRR": 0
+      },
+      "adolescenceSkillRanks": {
+        "NoArmor": 0,
+        "SoftLeather": 0,
+        "RigidLeather": 0,
+        "Chain": 0,
+        "Plate": 0,
+        "OneHandedEdged": 0,
+        "OneHandedConcussion": 0,
+        "TwoHanded": 0,
+        "Thrown": 0,
+        "Missile": 0,
+        "Polearms": 0,
+        "Climb": 0,
+        "Ride": 0,
+        "Swim": 0,
+        "Track": 0,
+        "Ambush": 0,
+        "StalkHide": 0,
+        "PickLock": 0,
+        "Disarmtrap": 0,
+        "ReadRunes": 0,
+        "UseItens": 0,
+        "DirectedSpells": 0,
+        "Perception": 0,
+        "BodyDevel": 0,
+        "BaseSpells": 0,
+        "LeadershipandInfluence": 0,
+        "DefensiveBonus": 0,
+        "EssenceRR": 0,
+        "ChannelingRR": 0,
+        "PoisonRR": 0,
+        "DiseaseRR": 0
+      },
+      "adolescenceLanguages": 0,
+      "adolescenceSpellListChance": 0,
+      "adolescenceBackgroundPoints": 0
     },
     "profession": {
-      "templates": ["base"]
+      "templates": ["base"],
+      "primeStat": "",
+      "realm": "",
+      "professionSkillGroupBonuses": {},
+      "professionSkillBonuses": {},
+      "developmentPoints": {}
+    },
+    "backgroundOption": {
+      "templates": ["base"],
+      "skillBonus": {}
     }
   }
 }

@@ -90,6 +90,33 @@ export class Merp1eActorSheet extends ActorSheet {
   }
 
 
+  /** @override */
+  async _onDropItemCreate(itemData) {
+    if (itemData.type === "profession") {
+      if(this.object.data.data.profession != null) {
+        new Dialog({
+          title: game.i18n.localize("MERP1E.DeleteGroup"),
+          content: `You cannot drag a second profession. Exclude the current profession!`,
+          buttons: {
+            cancel: {
+              icon: '<i class="fas fa-times"></i>',
+              label: game.i18n.localize("Cancel"),
+            }
+          }
+        }).render(true);
+        return;
+      }
+    }
+
+    // Ignore certain statuses
+    if ( itemData.data ) {
+      ["attunement", "equipped", "proficient", "prepared"].forEach(k => delete itemData.data[k]);
+    }
+
+    // Create the owned item as normal
+    return super._onDropItemCreate(itemData);
+  }
+
   /**
    * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
    * @param {Event} event   The originating click event
