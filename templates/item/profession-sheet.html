@@ -36,26 +36,25 @@
     <section class="sheet-body">
         {{!-- Skill Bonuses Tab --}}
         <div class="tab skillbonuses" data-group="primary" data-tab="skillbonuses">
-        <!--
-            <div>
-                <div>{{localize "MERP1E.Profession.SkillGroups"}}</div>
-                {{#each rules.skill.sheetOrder as |skillGroup|}}
-                <div class="resource">
-                    <label for="data.professionSkillGroupBonuses.{{skillGroup.id}}" class="resource-label">{{localize (concat "MERP1E.SkillGroup." skillGroup.id)}}</label>
-                    <input type="number" name="data.professionSkillGroupBonuses.{{skillGroup.id}}" value="{{lookup ../data.professionSkillGroupBonuses skillGroup.id}}" data-dtype="Number"/>
+            <div class="skill-groups">
+                {{#each rules.skill.sheetOrder as | group |}}
+                <div class="skill-group">
+                  <div class="skill-group-header">{{localize (concat "MERP1E.SkillGroup." group.id)}} (
+                    <a class="skill-group-value" group="{{group.id}}">1</a>
+                    <a class="skill-group-value" group="{{group.id}}">2</a>
+                    <a class="skill-group-value" group="{{group.id}}">3</a>
+                    <a class="skill-group-value" group="{{group.id}}">4</a>
+                    <a class="skill-group-value" group="{{group.id}}">5</a>)
+                  </div>
+                  {{#each group.skills as | skill |}}
+                    <div class="resource">
+                        <label for="data.professionSkillBonuses.{{skill}}" class="resource-label">{{localize (concat "MERP1E.Skill." skill)}}</label>
+                        <input type="number" class="skill-of-group-{{group.id}}" name="data.professionSkillBonuses.{{skill}}" value="{{lookup ../../data.professionSkillBonuses skill}}" data-dtype="Number"/>
+                    </div>
+                  {{/each}}
                 </div>
                 {{/each}}
-            </div>
-        -->
-            <div>
-                <div>{{localize "MERP1E.Profession.Skills"}}</div>
-                {{#each rules.skill.list as |skill key|}}
-                <div class="resource">
-                    <label for="data.professionSkillBonuses.{{key}}" class="resource-label">{{localize (concat "MERP1E.Skill." key)}}</label>
-                    <input type="number" name="data.professionSkillBonuses.{{key}}" value="{{lookup ../data.professionSkillBonuses key}}" data-dtype="Number"/>
-                </div>
-                {{/each}}
-            </div>
+              </div>
         </div>
 
         {{!-- Description Tab --}}

@@ -147,7 +147,6 @@
       "templates": ["base"],
       "primeStat": "",
       "realm": "",
-      "professionSkillGroupBonuses": {},
       "professionSkillBonuses": {},
       "developmentPoints": {}
     },

@@ -31,12 +31,6 @@ export class Merp1eProfessionSheet extends ItemSheet {
   getData() {
     const data = super.getData();
     data.rules = game.merp1e.Merp1eRules;
-    //data.data.professionSkillGroupBonuses = data.data.professionSkillGroupBonuses || {};
-    //for(let skillGroup of data.rules.skill.sheetOrder) {
-    //  data.data.professionSkillGroupBonuses[skillGroup.id] = data.data.professionSkillGroupBonuses[skillGroup.id] || 0;
-    //}
-    //data.data.professionSkillBonuses = data.data.professionSkillBonuses || {};
-    //data.data.developmentPoints = data.data.developmentPoints || {};
     return data;
   }
 
@@ -61,11 +55,23 @@ export class Merp1eProfessionSheet extends ItemSheet {
     if (!this.options.editable) return;
 
     // Roll handlers, click handlers, etc. would go here.
+    
+    html.find(".skill-group-value").on("click", this.onInputSkillGroup.bind(this));
   }
 
   /** @override */
   _updateObject(event, formData) {
     return this.object.update(formData);
+  }
+
+  onInputSkillGroup(event) {
+    const target = event.target;
+    const group = target.getAttribute("group");
+    const value = target.getInnerHTML()
+    let groupElement = target.closest(".skill-group");
+    for(let e of groupElement.getElementsByClassName(`skill-of-group-${group}`)) {
+       e.setAttribute("value", value); 
+    }
   }
 }
 
