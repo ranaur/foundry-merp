@@ -10,12 +10,11 @@ export class MerpSpell {
 };
 export class MerpSpellList {
     static groups = {
-        EOL: { name: "Essence Open Lists" },
-        ML: { name: "Mage Lists" }, 
-        BL: { name: "Bard Lists" }, 
-        CH: { name: "Channeling" }, 
-        OL: { name: "Open Lists" }, 
-        AL: { name: "Animist Lists" }, 
-        RL: { name: "Ranger Lists" }
+        EOL: { name: "Essence Open Lists", realm: "Essence" },
+        ML: { name: "Mage Lists", profession: "Mage" }, 
+        BL: { name: "Bard Lists", profession: "Bard" }, 
+        COL: { name: "Channeling Open Lists", realm: "Chanelling" }, 
+        AL: { name: "Animist Lists", profession: "Animist" }, 
+        RL: { name: "Ranger Lists", profesion: "Ranger" }
     };
 }

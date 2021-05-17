@@ -91,7 +91,7 @@
     },
     "race": {
       "templates": ["base"],
-      "languages": [],
+      "defaultLanguages": [],
       "statsBonuses": {
         "st": 0,
         "ag": 0,
@@ -141,12 +141,36 @@
       },
       "adolescenceLanguages": 0,
       "adolescenceSpellListChance": 0,
-      "adolescenceBackgroundPoints": 0
+      "adolescenceBackgroundPoints": 0,
+      "physycalCharacter": {
+        "build": "",
+        "coloring": "",
+        "endurance": "",
+        "height": "",
+        "lifespan": "",
+        "resistance": "",
+        "specialAbilities": ""
+      },
+      "culture": {
+        "clothingAndDecoration": "",
+        "fearsAndInabilities": "",
+        "lifestyle": "",
+        "marriagePattern": "",
+        "religion": ""
+      },
+      "otherFactors": {
+        "demeanor": "",
+        "language": "",
+        "prejudices": "",
+        "restrictionsOnProfessions": "",
+        "backgroundOptions": ""
+      }
     },
     "profession": {
       "templates": ["base"],
       "primeStat": "",
       "realm": "",
+      "maxSpellLevel": 10,
       "professionSkillBonuses": {},
       "developmentPoints": {}
     },

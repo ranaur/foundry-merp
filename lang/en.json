@@ -13,8 +13,7 @@
     "MERP1E.Spelllist.Groups.EOL": "Essence Open Lists",
     "MERP1E.Spelllist.Groups.ML": "Mage Lists",
     "MERP1E.Spelllist.Groups.BL": "Bard Lists",
-    "MERP1E.Spelllist.Groups.CH": "Channeling",
-    "MERP1E.Spelllist.Groups.OL": "Open Lists",
+    "MERP1E.Spelllist.Groups.COL": "Channeling Open Lists",
     "MERP1E.Spelllist.Groups.AL": "Animist Lists",
     "MERP1E.Spelllist.Groups.RL": "Ranger Lists",
 
@@ -162,6 +161,7 @@
 
     "MERP1E.Profession.PrimeStat": "Prime Stat",
     "MERP1E.Profession.Realm": "Realm",
+    "MERP1E.Profession.MaxSpellLevel": "Max Spell Level",
     "MERP1E.Profession.SkillGroups": "Skill Groups",
     "MERP1E.Profession.Skills": "Skills",
 
@@ -169,5 +169,37 @@
     "MERP1E.Realm.Channeling": "Channeling",
     "MERP1E.Realm.Any": "Any",
 
+    "MERP1E.Race.Languages": "Languages",
+    "MERP1E.Race.StatBonuses": "Stat Bonuses",
+    "MERP1E.Race.Skills": "Skills",
+    "MERP1E.Race.Description": "Description",
+    "MERP1E.Race.Characteristics" : "Characteristics",
+
+    "MERP1E.Race.RacialBonus": "Racial Bonus",
+
+    "MERP1E.Race.Skill": "Skill",
+    "MERP1E.Race.Bonus": "Bonus",
+    "MERP1E.Race.AdolescenceSkillRank": "Adolescence Skill Rank",
+    "MERP1E.Race.OtherAdolescenceRanks": "Other",
+    "MERP1E.Race.AdolescenceLanguages": "Adolescence Languages",
+    "MERP1E.Race.AdolescenceSpellListChance": "Spell List Chance",
+    "MERP1E.Race.AdolescenceBackgroundPoints": "Background Points",
+    "MERP1E.Race.Build": "Build",
+    "MERP1E.Race.Coloring": "Coloring",
+    "MERP1E.Race.Endurance": "Endurance",
+    "MERP1E.Race.Height": "Height",
+    "MERP1E.Race.Lifespan": "Lifespan",
+    "MERP1E.Race.Resistance": "Resistance",
+    "MERP1E.Race.SpecialAbilities": "Special Abilities",
+    "MERP1E.Race.ClothingAndDecoration": "Clothing And Decoration",
+    "MERP1E.Race.FearsAndInabilities": "Fears And Inabilities",
+    "MERP1E.Race.Lifestyle": "Lifestyle",
+    "MERP1E.Race.MarriagePattern": "MarriagePattern",
+    "MERP1E.Race.Religion": "Religion",
+    "MERP1E.Race.Demeanor": "Demeanor",
+    "MERP1E.Race.Language": "Language",
+    "MERP1E.Race.Prejudices": "Prejudices",
+    "MERP1E.Race.RestrictionsOnProfessions": "Restrictions On Professions",
+    "MERP1E.Race.BackgroundOptions": "Background Options",
     "MERP1E.X": "MERP1E"
 }

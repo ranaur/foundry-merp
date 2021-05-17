@@ -3,6 +3,7 @@ import { Merp1eActor } from "./actor/actor.js";
 import { Merp1eActorSheet } from "./actor/actor-sheet.js";
 import { Merp1eItem } from "./item/item.js";
 import { Merp1eItemSheet } from "./item/item-sheet.js";
+import { Merp1eRaceSheet } from "./item/race-sheet.js";
 import { Merp1eSpellSheet } from "./item/spell-sheet.js";
 import { Merp1eSpelllistSheet } from "./item/spelllist-sheet.js";
 import { Merp1eProfessionSheet } from "./item/profession-sheet.js";
@@ -37,7 +38,7 @@ Hooks.once('init', async function() {
   Items.registerSheet("merp1e", Merp1eSpellSheet, { types: ['spell'], makeDefault: true });
   Items.registerSheet("merp1e", Merp1eSpelllistSheet, { types: ['spelllist'], makeDefault: true });
   Items.registerSheet("merp1e", Merp1eProfessionSheet, { types: ['profession'], makeDefault: true });
-  Items.registerSheet("merp1e", Merp1eItemSheet, { types: ['item'], makeDefault: true });
+  Items.registerSheet("merp1e", Merp1eRaceSheet, { types: ['race'], makeDefault: true });
 
   // If you need to add Handlebars helpers, here are a few useful examples:
   Handlebars.registerHelper('concat', function() {

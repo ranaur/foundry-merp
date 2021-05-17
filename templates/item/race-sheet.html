@@ -1,0 +1,163 @@
+<form class="{{cssClass}}" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name"/></h1>
+        </div>
+    </header>
+
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item" data-tab="languages">{{localize "MERP1E.Race.Languages"}}</a>
+        <a class="item" data-tab="statbonuses">{{localize "MERP1E.Race.StatBonuses"}}</a>
+        <a class="item" data-tab="skills">{{localize "MERP1E.Race.Skills"}}</a>
+        <a class="item" data-tab="description">{{localize "MERP1E.Race.Description"}}</a>
+        <a class="item" data-tab="characteristics">{{localize "MERP1E.Race.Characteristics"}}</a>
+    </nav>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+        {{!-- Skill Bonuses Tab --}}
+        <div class="tab statbonuses" data-group="primary" data-tab="statbonuses">
+            <table>
+                <thead>
+                    <tr>
+                        <td>{{localize "MERP1E.StatTable.Stats"}}</td>
+                        <td>{{localize "MERP1E.StatTable.Abbr"}}</td>
+                        <td>{{localize "MERP1E.Race.RacialBonus"}}</td>    
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each rules.stats as | stat |}}
+                    <tr>
+                        <td>{{ localize (concat 'MERP1E.Stats.' stat '.Name') }}</td>
+                        <td>({{ localize (concat 'MERP1E.Stats.' stat '.Short') }})</td>
+                        <td><input type="number" name="data.statsBonuses.{{stat}}" value="{{lookup ../data.statsBonuses stat}}" data-dtype="Number"/></td>
+                    </tr>
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
+            {{!-- Skill Bonuses Tab --}}
+        <div class="tab skillbonuses" data-group="primary" data-tab="skills">
+            <div class="race-skill-table flexcol">
+                <div class="flexrow">
+                    <div>{{localize "MERP1E.Race.Skill"}}</div>
+                    <div>{{localize "MERP1E.Race.Bonus"}}</div>
+                    <div>{{localize "MERP1E.Race.AdolescenceSkillRank"}}</div>
+                </div>
+                {{#each rules.skill.sheetOrder as | group |}}
+                <div class="race-skill-group">
+                    <div class="">{{localize (concat "MERP1E.SkillGroup." group.id)}}</div>
+                    {{#each group.skills as | skill |}}
+                    <div class="race-skill flexrow">
+                        <div>{{localize (concat "MERP1E.Skill." skill)}}</div>
+                        <input type="number" class="" name="data.skillBonuses.{{skill}}" value="{{lookup ../../data.skillBonuses skill}}" data-dtype="Number"/>
+                        <input type="number" class="" name="data.adolescenceSkillRanks.{{skill}}" value="{{lookup ../../data.adolescenceSkillRanks skill}}" data-dtype="Number"/>
+                    </div>
+                    {{/each}}
+                </div>
+                {{/each}}
+                <div class="race-skill-group flexrow">{{localize "MERP1E.Race.OtherAdolescenceRanks"}}</div>
+                <div class="race-skill flexrow">
+                    <div>{{localize "MERP1E.Race.AdolescenceLanguages"}}</div>
+                    <div></div>
+                    <input type="number" class="" name="data.adolescenceLanguages" value="{{data.adolescenceLanguages}}" data-dtype="Number"/>
+                </div>
+                <div class="race-skill flexrow">
+                    <div>{{localize "MERP1E.Race.AdolescenceSpellListChance"}}</div>
+                    <div></div>
+                    <input type="number" class="" name="data.adolescenceSpellListChance" value="{{data.adolescenceSpellListChance}}" data-dtype="Number"/>
+                </div>
+                <div class="race-skill flexrow">
+                    <div>{{localize "MERP1E.Race.AdolescenceBackgroundPoints"}}</div>
+                    <div></div>
+                    <input type="number" class="" name="data.adolescenceBackgroundPoints" value="{{data.adolescenceBackgroundPoints}}" data-dtype="Number"/>
+                </div>
+            </div>
+        </div>
+
+        {{!-- Description Tab --}}
+        <div class="tab" data-group="primary" data-tab="characteristics">
+            <div class="race-group">Physical Character</div>
+            <div>
+                <label for="data.physycalCharacter.build" class="race-label">{{localize "MERP1E.Race.Build"}}</label>
+                <input type="text" class="race-data" name="data.physycalCharacter.build" value="{{data.physycalCharacter.build}}" data-dtype="String"/>
+            </div>
+            <div>
+                <label for="data.physycalCharacter.coloring" class="race-label">{{localize "MERP1E.Race.Coloring"}}</label>
+                <input type="text" class="race-data" name="data.physycalCharacter.coloring" value="{{data.physycalCharacter.coloring}}" data-dtype="String"/>
+            </div>
+            <div>
+                <label for="data.physycalCharacter.endurance" class="race-label">{{localize "MERP1E.Race.Endurance"}}</label>
+                <input type="text" class="race-data" name="data.physycalCharacter.endurance" value="{{data.physycalCharacter.endurance}}" data-dtype="String"/>
+            </div>
+            <div>
+                <label for="data.physycalCharacter.height" class="race-label">{{localize "MERP1E.Race.Height"}}</label>
+                <input type="text" class="race-data" name="data.physycalCharacter.height" value="{{data.physycalCharacter.height}}" data-dtype="String"/>
+            </div>
+            <div>
+                <label for="data.physycalCharacter.lifespan" class="race-label">{{localize "MERP1E.Race.Lifespan"}}</label>
+                <input type="text" class="race-data" name="data.physycalCharacter.lifespan" value="{{data.physycalCharacter.lifespan}}" data-dtype="String"/>
+            </div>
+            <div>
+                <label for="data.physycalCharacter.resistance" class="race-label">{{localize "MERP1E.Race.Resistance"}}</label>
+                <input type="text" class="race-data" name="data.physycalCharacter.resistance" value="{{data.physycalCharacter.resistance}}" data-dtype="String"/>
+            </div>
+            <div>
+                <label for="data.physycalCharacter.specialAbilities" class="race-label">{{localize "MERP1E.Race.SpecialAbilities"}}</label>
+                <input type="text" class="race-data" name="data.physycalCharacter.specialAbilities" value="{{data.physycalCharacter.specialAbilities}}" data-dtype="String"/>
+            </div>
+            <div class="race-group">Culture</div>
+            <div>
+                <label for="data.culture.clothingAndDecoration" class="race-label">{{localize "MERP1E.Race.ClothingAndDecoration"}}</label>
+                <input type="text" class="race-data" name="data.culture.clothingAndDecoration" value="{{data.culture.clothingAndDecoration}}" data-dtype="String"/>
+            </div>
+            <div>
+                <label for="data.culture.fearsAndInabilities" class="race-label">{{localize "MERP1E.Race.FearsAndInabilities"}}</label>
+                <input type="text" class="race-data" name="data.culture.fearsAndInabilities" value="{{data.culture.fearsAndInabilities}}" data-dtype="String"/>
+            </div>
+            <div>
+                <label for="data.culture.lifestyle" class="race-label">{{localize "MERP1E.Race.Lifestyle"}}</label>
+                <input type="text" class="race-data" name="data.culture.lifestyle" value="{{data.culture.lifestyle}}" data-dtype="String"/>
+            </div>
+            <div>
+                <label for="data.culture.marriagePattern" class="race-label">{{localize "MERP1E.Race.MarriagePattern"}}</label>
+                <input type="text" class="race-data" name="data.culture.marriagePattern" value="{{data.culture.marriagePattern}}" data-dtype="String"/>
+            </div>
+            <div>
+                <label for="data.culture.religion" class="race-label">{{localize "MERP1E.Race.Religion"}}</label>
+                <input type="text" class="race-data" name="data.culture.religion" value="{{data.culture.religion}}" data-dtype="String"/>
+            </div>
+            <div class="race-group">Other Factors</div>
+            <div>
+                <label for="data.otherFactors.demeanor" class="race-label">{{localize "MERP1E.Race.Demeanor"}}</label>
+                <input type="text" class="race-data" name="data.otherFactors.demeanor" value="{{data.otherFactors.demeanor}}" data-dtype="String"/>
+            </div>
+            <div>
+                <label for="data.otherFactors.language" class="race-label">{{localize "MERP1E.Race.Language"}}</label>
+                <input type="text" class="race-data" name="data.otherFactors.language" value="{{data.otherFactors.language}}" data-dtype="String"/>
+            </div>
+            <div>
+                <label for="data.otherFactors.prejudices" class="race-label">{{localize "MERP1E.Race.Prejudices"}}</label>
+                <input type="text" class="race-data" name="data.otherFactors.prejudices" value="{{data.otherFactors.prejudices}}" data-dtype="String"/>
+            </div>
+            <div>
+                <label for="data.otherFactors.restrictionsOnProfessions" class="race-label">{{localize "MERP1E.Race.RestrictionsOnProfessions"}}</label>
+                <input type="text" class="race-data" name="data.otherFactors.restrictionsOnProfessions" value="{{data.otherFactors.restrictionsOnProfessions}}" data-dtype="String"/>
+            </div>
+            <div>
+                <label for="data.otherFactors.backgroundOptions" class="race-label">{{localize "MERP1E.Race.BackgroundOptions"}}</label>
+                <input type="text" class="race-data" name="data.otherFactors.backgroundOptions" value="{{data.otherFactors.backgroundOptions}}" data-dtype="String"/>
+            </div>
+        </div>
+        <div class="tab" data-group="primary" data-tab="description">
+            {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+        </div>
+
+        {{!-- Attributes Tab --}}
+        <div class="tab spellgroups" data-group="primary" data-tab="attributes">
+            {{!-- As you add new fields, add them in here! --}}
+        </div>
+    </section>
+</form>

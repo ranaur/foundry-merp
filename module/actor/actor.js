@@ -33,7 +33,11 @@ export class Merp1eActor extends Actor {
       data.stats[stat] = data.stats[stat] || { "value": 50, "bonuses": {}, "bonus": 0 };
       if("bonuses" in data.stats[stat]) {
         data.stats[stat].bonuses.stat = game.merp1e.Merp1eRules.resolveStatBonus(data.stats[stat].value);
-        data.stats[stat].bonuses.race = data.stats[stat].bonuses.race || 0; // XXX Race Bonus
+        if("race" in data) {
+          data.stats[stat].bonuses.race = data.race.data.statsBonuses[stat];
+        } else {
+          data.stats[stat].bonuses.race || 0;
+        }
         // Sum all the bonuses
         data.stats[stat].total = Object.entries(data.stats[stat].bonuses).reduce((a, i) => { return a + (i[1] || 0); }, 0);
       }
@@ -43,10 +47,11 @@ export class Merp1eActor extends Actor {
     data.skills = data.skills || {};
     for( let [key, defaultSkill] of Object.entries(game.merp1e.Merp1eRules.skill.list)) {
       data.skills[key] = data.skills[key] || defaultSkill;
+      data.skills[key].bonuses = data.skills[key].bonuses || {};
       if("statBonus" in defaultSkill) {
         data.skills[key].statBonus = defaultSkill.statBonus;
+        data.skills[key].bonuses.stat = data.stats[defaultSkill.statBonus].total;
       }
-      data.skills[key].bonuses = data.skills[key].bonuses || {};
       data.skills[key].ranks = data.skills[key].ranks || 0; // XXX change to XXX to record each rank
       data.skills[key].bonuses.extra = defaultSkill.extra || 0;
     }

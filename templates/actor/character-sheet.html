@@ -9,8 +9,12 @@
           from 1 to 12 and will create that number of columns.  --}}
           <div class="resources grid grid-2col">
             <div class="resource flex-group-center">
-              <label for="data.profession" class="resource-label">{{localize "MERP1E.Character.Race"}}</label>
-              <input type="text" name="data.race" value="{{data.race}}" data-dtype="String"/>
+              <label for="data.raceId" class="resource-label">{{localize "MERP1E.Character.Race"}}</label>
+              <div>
+                <select name="data.raceId">
+                  {{selectOptions avaliableRaces selected=data.raceId localize=True}}
+                </select>
+              </div>
             </div>
             <div class="resource flex-group-center">
               <label for="data.profession" class="resource-label">{{localize "MERP1E.Character.Profession"}}</label>
@@ -80,13 +84,13 @@
             </tr>
         </thead>
         <tbody>
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="ST" stat-value=data.stats.ST}}
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="AG" stat-value=data.stats.AG}}
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="CO" stat-value=data.stats.CO}}
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="IG" stat-value=data.stats.IG}}
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="IT" stat-value=data.stats.IT}}
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="PR" stat-value=data.stats.PR}}
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="AP" stat-value=data.stats.AP only_value=true}}
+            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="st" stat-value=data.stats.st}}
+            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="ag" stat-value=data.stats.ag}}
+            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="co" stat-value=data.stats.co}}
+            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="ig" stat-value=data.stats.ig}}
+            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="it" stat-value=data.stats.it}}
+            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="pr" stat-value=data.stats.pr}}
+            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="ap" stat-value=data.stats.ap only_value=true}}
         </tbody>
     </table>
     </div>
@@ -170,6 +174,18 @@
 
     {{!-- Spell Tab --}}
     <div class="tab spells" data-group="primary" data-tab="spells">
+      <div>
+        <label for="data.realm" class="resource-label">{{localize "MERP1E.Profession.Realm"}}</label>
+        {{#if (eq data.profession.data.realm "any")}}
+        <select name="data.realm">
+          {{#each rules.spell.realms as |realm|}}
+              <option value="{{realm}}" {{#if (isEqual ../data.realm realm)}}selected{{/if}}>{{localize (concat "MERP1E.Realm." realm)}}</option>
+          {{/each}}
+        </select>
+        {{else}}
+          <input type="text" name="data.realm" value="{{data.profession.data.realm}}" data-dtype="String" readonly tabindex=-1/>
+        {{/if}}
+      </div>
       <ol class="items-list">
         <li class="item flexrow item-header">
           <div class="item-image"></div>

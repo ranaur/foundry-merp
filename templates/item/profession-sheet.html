@@ -16,10 +16,14 @@
                     <label class="resource-label">{{localize "MERP1E.Profession.Realm"}}</label>
                     <select name="data.realm">
                         {{#each rules.spell.realms as |realm|}}
-                            <option value="{{realm}}" {{#if (isEqual ../data.realm realm)}}selected{{/if}}>{{localize (concat "MERP1E.Realm." realm)}}</option>
+                        <option value="{{realm}}" {{#if (isEqual ../data.realm realm)}}selected{{/if}}>{{localize (concat "MERP1E.Realm." realm)}}</option>
                         {{/each}}
-                            <option value="any" {{#if (isEqual ../data.realm realm)}}selected{{/if}}>{{localize (concat "MERP1E.Realm.Any")}}</option>
+                        <option value="any" {{#if (isEqual data.realm "any")}}selected{{/if}}>{{localize (concat "MERP1E.Realm.Any")}}</option>
                     </select>
+                </div>
+                <div class="resource">
+                    <label class="resource-label">{{localize "MERP1E.Profession.MaxSpellLevel"}}</label>
+                    <input name="data.maxSpellLevel" type="number" value="{{data.maxSpellLevel}}" data-dtype="Number"/>
                 </div>
             </div>
         </div>
@@ -29,7 +33,6 @@
     <nav class="sheet-tabs tabs" data-group="primary">
         <a class="item" data-tab="skillbonuses">Skill Bonuses</a>
         <a class="item" data-tab="description">Description</a>
-        <a class="item" data-tab="attributes">Attributes</a>
     </nav>
 
     {{!-- Sheet Body --}}
@@ -40,6 +43,7 @@
                 {{#each rules.skill.sheetOrder as | group |}}
                 <div class="skill-group">
                   <div class="skill-group-header">{{localize (concat "MERP1E.SkillGroup." group.id)}} (
+                    <a class="skill-group-value" group="{{group.id}}">0</a>
                     <a class="skill-group-value" group="{{group.id}}">1</a>
                     <a class="skill-group-value" group="{{group.id}}">2</a>
                     <a class="skill-group-value" group="{{group.id}}">3</a>
@@ -47,7 +51,7 @@
                     <a class="skill-group-value" group="{{group.id}}">5</a>)
                   </div>
                   {{#each group.skills as | skill |}}
-                    <div class="resource">
+                    <div class="flexrow">
                         <label for="data.professionSkillBonuses.{{skill}}" class="resource-label">{{localize (concat "MERP1E.Skill." skill)}}</label>
                         <input type="number" class="skill-of-group-{{group.id}}" name="data.professionSkillBonuses.{{skill}}" value="{{lookup ../../data.professionSkillBonuses skill}}" data-dtype="Number"/>
                     </div>
@@ -60,11 +64,6 @@
         {{!-- Description Tab --}}
         <div class="tab" data-group="primary" data-tab="description">
             {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
-        </div>
-
-        {{!-- Attributes Tab --}}
-        <div class="tab attributes" data-group="primary" data-tab="attributes">
-            {{!-- As you add new fields, add them in here! --}}
         </div>
     </section>
 </form>

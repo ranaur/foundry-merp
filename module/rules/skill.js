@@ -12,87 +12,87 @@ export class MerpSkill {
     static list = {
         NoArmor: {
             group: "Movement",
-            statBonus: "AG",
+            statBonus: "ag",
             rollType: "MM",
             extra: 0,
             maxRanks: 2
         },
         SoftLeather: {
             group: "Movement",
-            statBonus: "AG",
+            statBonus: "ag",
             rollType: "MM",
             extra: -15,
             maxRanks: 3
         },
         RigidLeather: {
             group: "Movement",
-            statBonus: "AG",
+            statBonus: "ag",
             rollType: "MM",
             extra: -30,
             maxRanks: 5
         },
         Chain: {
             group: "Movement",
-            statBonus: "ST",
+            statBonus: "st",
             rollType: "MM",
             extra: -45,
             maxRanks: 7
         },
         Plate: {
             group: "Movement",
-            statBonus: "ST",
+            statBonus: "st",
             rollType: "MM",
             extra: -60,
             maxRanks: 9
         },        
         OneHandedEdged: {
             group: "Weapon",
-            statBonus: "ST",
+            statBonus: "st",
             rollType: "OB"
         },
         OneHandedConcussion: {
             group: "Weapon",
-            statBonus: "ST",
+            statBonus: "st",
             rollType: "OB"
         },
         TwoHanded: {
             group: "Weapon",
-            statBonus: "ST",
+            statBonus: "st",
             rollType: "OB"
         },
         Thrown: {
             group: "Weapon",
-            statBonus: "AG",
+            statBonus: "ag",
             rollType: "OB"
         },
         Missile: {
             group: "Weapon",
-            statBonus: "AG",
+            statBonus: "ag",
             rollType: "OB"
         },
         Polearms: {
             group: "Weapon",
-            statBonus: "ST",
+            statBonus: "st",
             rollType: "OB"
         },
         Climb: {
             group: "General",
-            statBonus: "AG",
+            statBonus: "ag",
             rollType: "MM"
         },
         Ride: {
             group: "General",
-            statBonus: "IT",
+            statBonus: "it",
             rollType: "MM"
         },
         Swim: {
             group: "General",
-            statBonus: "AG",
+            statBonus: "ag",
             rollType: "MM"
         },
         Track: {
             group: "General",
-            statBonus: "IG",
+            statBonus: "ig",
             rollType: "SM"
         },
         Ambush: {
@@ -101,42 +101,42 @@ export class MerpSkill {
         },
         StalkHide: {
             group: "Subterfuge",
-            statBonus: "PR",
+            statBonus: "pr",
             rollType: "SP"
         },
         PickLock: {
             group: "Subterfuge",
-            statBonus: "IG",
+            statBonus: "ig",
             rollType: "SM"
         },
         Disarmtrap: {
             group: "Subterfuge",
-            statBonus: "IT",
+            statBonus: "it",
             rollType: "SM"
         },
         ReadRunes: {
             group: "Magical",
-            statBonus: "IG",
+            statBonus: "ig",
             rollType: "SM"
         },
         UseItens: {
             group: "Magical",
-            statBonus: "IT",
+            statBonus: "it",
             rollType: "SM"
         },
         DirectedSpells: {
             group: "Magical",
-            statBonus: "AG",
+            statBonus: "ag",
             rollType: "OB"
         },
         Perception: {
             group: "Miscelaneous",
-            statBonus: "IT",
+            statBonus: "it",
             rollType: "SM"
         },
         BodyDevel: {
             group: "Miscelaneous",
-            statBonus: "CO",
+            statBonus: "co",
             rollType: "SP",
             extra: 5
         },
@@ -146,167 +146,167 @@ export class MerpSkill {
         },
         LeadershipandInfluence: {
             group: "Miscelaneous",
-            statBonus: "PR",
+            statBonus: "pr",
             rollType: "SM"
         },
         DefensiveBonus: {
             group: "Miscelaneous",
-            statBonus: "AG",
+            statBonus: "ag",
             rollType: "DB"
         },
         EssenceRR: {
             group: "Miscelaneous",
-            statBonus: "IG",
+            statBonus: "ig",
             rollType: "RR"
         },
         ChannelingRR: {
             group: "Miscelaneous",
-            statBonus: "IT",
+            statBonus: "it",
             rollType: "RR"
         },
         PoisonRR: {
             group: "Miscelaneous",
-            statBonus: "CO",
+            statBonus: "co",
             rollType: "RR"
         },
         DiseaseRR: {
             group: "Miscelaneous",
-            statBonus: "CO",
+            statBonus: "co",
             rollType: "RR"
         },
         Acrobatics: {
             group: "Secondary",
-            statBonus: "AG",
+            statBonus: "ag",
             rollType: "MM"
         },
         Acting: {
             group: "Secondary",
-            statBonus: "PR",
+            statBonus: "pr",
             rollType: "SM"
         },
         Caving: {
             group: "Secondary",
-            statBonus: "IG",
+            statBonus: "ig",
             rollType: "SM"
         },
         Contortions: {
             group: "Secondary",
-            statBonus: "AG",
+            statBonus: "ag",
             rollType: "MM"
         },
         Cookery: {
             group: "Secondary",
-            statBonus: "IT",
+            statBonus: "it",
             rollType: "SM"
         },
         Dance: {
             group: "Secondary",
-            statBonus: "IG",
+            statBonus: "ig",
             rollType: "MM"
         },
         Diving: {
             group: "Secondary",
-            statBonus: "AG",
+            statBonus: "ag",
             rollType: "SM"
         },
         Fletching: {
             group: "Secondary",
-            statBonus: "AG",
+            statBonus: "ag",
             rollType: "SM"
         },
         Foraging: {
             group: "Secondary",
-            statBonus: "IT",
+            statBonus: "it",
             rollType: "SM"
         },
         Gambling: {
             group: "Secondary",
-            statBonus: "IT",
+            statBonus: "it",
             rollType: "SM"
         },
         Herding: {
             group: "Secondary",
-            statBonus: "PR",
+            statBonus: "pr",
             rollType: "SM"
         },
         LeatherWorking: {
             group: "Secondary",
-            statBonus: "AG",
+            statBonus: "ag",
             rollType: "SM"
         },
         Meditation: {
             group: "Secondary",
-            statBonus: "PR",
+            statBonus: "pr",
             rollType: "SM"
         },
         Music: {
             group: "Secondary",
-            statBonus: "AG",
+            statBonus: "ag",
             rollType: "SM"
         },
         PublicSpeaking: {
             group: "Secondary",
-            statBonus: "PR",
+            statBonus: "pr",
             rollType: "SM"
         },
         RopeMastery: {
             group: "Secondary",
-            statBonus: "IG",
+            statBonus: "ig",
             rollType: "SM"
         },
         Rowing: {
             group: "Secondary",
-            statBonus: "ST",
+            statBonus: "st",
             rollType: "MM"
         },
         Sailing: {
             group: "Secondary",
-            statBonus: "IT",
+            statBonus: "it",
             rollType: "MM"
         },
         Signaling: {
             group: "Secondary",
-            statBonus: "IG",
+            statBonus: "ig",
             rollType: "SM"
         },
         Skiing: {
             group: "Secondary",
-            statBonus: "AG",
+            statBonus: "ag",
             rollType: "MM"
         },
         Smithing: {
             group: "Secondary",
-            statBonus: "ST",
+            statBonus: "st",
             rollType: "SM"
         },
         StarGazing: {
             group: "Secondary",
-            statBonus: "IT",
+            statBonus: "it",
             rollType: "SM"
         },
         TrapBuilding: {
             group: "Secondary",
-            statBonus: "IG",
+            statBonus: "ig",
             rollType: "SM"
         },
         Trickery: {
             group: "Secondary",
-            statBonus: "PR",
+            statBonus: "pr",
             rollType: "SM"
         },
         Tumbling: {
             group: "Secondary",
-            statBonus: "AG",
+            statBonus: "ag",
             rollType: "MM"
         },
         WeatherWatching: {
             group: "Secondary",
-            statBonus: "IT",
+            statBonus: "it",
             rollType: "SM"
         },
         WoodCarving: {
             group: "Secondary",
-            statBonus: "AG",
+            statBonus: "ag",
             rollType: "SM"
         }
     };

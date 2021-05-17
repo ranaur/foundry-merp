@@ -34,10 +34,14 @@ export class Merp1eActorSheet extends ActorSheet {
     //  attr.isCheckbox = attr.dtype === "Boolean";
     //}
     data.rules = game.merp1e.Merp1eRules;
-
+    data.avaliableRaces = this.getAvaliableRaces();
     return data;
   }
 
+  getAvaliableRaces() {
+    /// XXX add folder of avaliable races (config option)
+    return game.items.filter(item => item.type == "race").reduce((res, race) => { res[race._id] = race.name; return res; }, {});
+  }
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
@@ -92,6 +96,20 @@ export class Merp1eActorSheet extends ActorSheet {
 
   /** @override */
   async _onDropItemCreate(itemData) {
+    if (itemData.type === "race") {
+      new Dialog({
+        title: game.i18n.localize("MERP1E.DeleteGroup"),
+        content: `You cannot a race. Choose from the dropdown in the actor sheet!`,
+        buttons: {
+          cancel: {
+            icon: '<i class="fas fa-times"></i>',
+            label: game.i18n.localize("OK"),
+          }
+        }
+      }).render(true);
+      return;
+    }
+
     if (itemData.type === "profession") {
       if(this.object.data.data.profession != null) {
         new Dialog({
@@ -166,6 +184,10 @@ export class Merp1eActorSheet extends ActorSheet {
 
   /** @override */
   _updateObject(event, formData) {
+    let raceItem = game.data.items.filter(item => item._id == formData["data.raceId"]);
+    if(raceItem.length == 1) {
+      formData["data.race"] = raceItem[0];
+    }
     return this.object.update(formData);
   }
 }
