@@ -70,7 +70,13 @@
     "item": {
       "templates": ["base"],
       "quantity": 1,
-      "weight": 0
+      "weight": 0,
+      "skillBonuses": {},
+      "onUseBonuses": {},
+      "dailySpells": {},
+      "fixedUsesSpells": {},
+      "ppMultiplier": {},
+      "spellAdder": {}
     },
     "spell": {
       "templates": ["base"],
@@ -106,6 +112,7 @@
         "PoisonRR": 0,
         "DiseaseRR": 0
       },
+      "languages": {},
       "adolescenceSkillRanks": {
         "NoArmor": 0,
         "SoftLeather": 0,
@@ -176,7 +183,7 @@
     },
     "backgroundOption": {
       "templates": ["base"],
-      "skillBonus": {}
+      "skillBonuses": {}
     }
   }
 }

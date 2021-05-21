@@ -18,7 +18,11 @@
             </div>
             <div class="resource flex-group-center">
               <label for="data.profession" class="resource-label">{{localize "MERP1E.Character.Profession"}}</label>
-              <input type="text" name="data.profession" value="{{data.profession.name}}" data-dtype="String" readonly tabindex=-1/>
+              <div>
+                <select name="data.professionId">
+                  {{selectOptions avaliableProfessions selected=data.professionId localize=True}}
+                </select>
+              </div>
             </div>
           </div>
           <div class="resources grid grid-2col">
@@ -198,11 +202,29 @@
           <li class="item flexrow" data-item-id="{{item._id}}">
             <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"/></div>
             <h4 class="item-name">{{item.name}}</h4>
-            <div class="item-controls">
-              <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
-              <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
-            </div>
+              {{#if item.data.learned}}
+              <div>X</div>
+              {{else}}
+              <div>{{item.data.chanceoflearning}}</div>
+              {{/if}}
+              <div class="item-controls">
+                <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+              </div>
           </li>
+          {{#if item.data.learned}}
+            {{#each item.data.spells as | spell |}}
+            {{log spell}}
+            <li class="item flexrow" data-item-id="{{item._id}}">
+              <div class="item-image" stype="width: 48px"></div>
+              <div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24"/></div>
+              <h4 class="item-name">{{spell.level}} - {{spell.name}}</h4>
+              <div class="item-controls">
+                ROLL
+              </div>
+            </li>
+            {{/each}}
+          {{/if}}
         {{/each}}
       </ol>
     </div>

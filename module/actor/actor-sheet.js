@@ -1,3 +1,5 @@
+import { LanguageSheetHelper } from '../language-helper.js';
+
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
@@ -35,13 +37,51 @@ export class Merp1eActorSheet extends ActorSheet {
     //}
     data.rules = game.merp1e.Merp1eRules;
     data.avaliableRaces = this.getAvaliableRaces();
+    data.avaliableProfessions = this.getAvaliableProfessions();
+    this.fillAdolescenceSkillRanks(data); // XXX não funciona quando troca de raça
     return data;
   }
 
+  fillAdolescenceSkillRanks(data) {
+    if("race" in data.data) {
+      // Fill adolescence skill ranks
+      for(let [key, asr] of Object.entries(data.data.race.data.adolescenceSkillRanks)) {
+        if(asr > 0 && data.data.skills[key].ranks < asr) {
+          data.data.skills[key].ranks = asr
+        }
+      }
+      // Fill adolescence languages
+      for(let [key, language] of Object.entries(data.data.race.data.languages)) {
+        // search if the character already has the language
+        let found = -1;
+        for(let [charKey, charLanguage] of Object.entries(data.data.languages)) {
+           if(charLanguage.name == language.name) {
+             found = charKey;
+             break;
+           }
+        }
+        if(found == -1) { // not found, add
+          let maxIndex = parseInt(Object.keys(data.data.languages).reduce((res, idx) => { return res > idx ? res : idx; }, 0)) + 1;
+          data.data.languages[maxIndex] = language;
+        } else { // found, update
+          if(data.data.languages[found].rank < language.rank) {
+            data.data.languages[found].rank = language.rank;
+          }
+        }
+      }
+    }
+  }
+
+  getAvaliableProfessions() {
+    /// XXX add folder of avaliable professions (config option)
+    /// Add localization
+    return game.items.filter(item => item.type == "profession").reduce((res, prof) => { res[prof._id] = prof.name; return res; }, {});
+  }
   getAvaliableRaces() {
     /// XXX add folder of avaliable races (config option)
     return game.items.filter(item => item.type == "race").reduce((res, race) => { res[race._id] = race.name; return res; }, {});
   }
+
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
@@ -69,37 +109,15 @@ export class Merp1eActorSheet extends ActorSheet {
     // Rollable abilities.
     html.find('.rollable').click(this._onRoll.bind(this));
 
-    // Add attribute groups.
-    html.find(".languages").on("click", ".language-control", this.onClickLanguageControl.bind(this));
+    html.find(".languages").on("click", ".language-control", LanguageSheetHelper.onClickLanguageControl.bind(this));
   }
-
-  /* -------------------------------------------- */
-  /**
-   * Listen for click events and modify attribute groups.
-   * @param {MouseEvent} event    The originating left click event
-   */
-  onClickLanguageControl(event) {
-    event.preventDefault();
-    const a = event.currentTarget;
-    const action = a.dataset.action;
-
-    switch ( action ) {
-      case "create-language":
-        CharacterActorSheetHelper.createLanguage(event, this);
-        break;
-      case "delete-language":
-        CharacterActorSheetHelper.deleteLanguage(event, this);
-        break;
-    }
-  }
-
 
   /** @override */
   async _onDropItemCreate(itemData) {
     if (itemData.type === "race") {
       new Dialog({
         title: game.i18n.localize("MERP1E.DeleteGroup"),
-        content: `You cannot a race. Choose from the dropdown in the actor sheet!`,
+        content: `You cannot drag a race. Choose from the dropdown in the actor sheet!`,
         buttons: {
           cancel: {
             icon: '<i class="fas fa-times"></i>',
@@ -111,19 +129,17 @@ export class Merp1eActorSheet extends ActorSheet {
     }
 
     if (itemData.type === "profession") {
-      if(this.object.data.data.profession != null) {
-        new Dialog({
-          title: game.i18n.localize("MERP1E.DeleteGroup"),
-          content: `You cannot drag a second profession. Exclude the current profession!`,
-          buttons: {
-            cancel: {
-              icon: '<i class="fas fa-times"></i>',
-              label: game.i18n.localize("Cancel"),
-            }
+      new Dialog({
+        title: game.i18n.localize("MERP1E.DeleteGroup"),
+        content: `You cannot drag a profession. Choose from the dropdown in the actor sheet!`,
+        buttons: {
+          cancel: {
+            icon: '<i class="fas fa-times"></i>',
+            label: game.i18n.localize("OK"),
           }
-        }).render(true);
-        return;
-      }
+        }
+      }).render(true);
+      return;
     }
 
     // Ignore certain statuses
@@ -188,81 +204,12 @@ export class Merp1eActorSheet extends ActorSheet {
     if(raceItem.length == 1) {
       formData["data.race"] = raceItem[0];
     }
+    let professionItem = game.data.items.filter(item => item._id == formData["data.professionId"]);
+    if(professionItem.length == 1) {
+      formData["data.profession"] = professionItem[0];
+    }
+    formData = LanguageSheetHelper.updateLanguages(formData, this);
     return this.object.update(formData);
   }
 }
 
-class CharacterActorSheetHelper {
-  /* ------------------------------------
-
-  /**
-   * Create new language.
-   * @param {MouseEvent} event    The originating left click event
-   * @param {Object} app          The form application object.
-   * @private
-   */
-  static async createLanguage(event, app) {
-  const a = event.currentTarget;
-    const form = app.form;
-    let languageHeader = $(a).closest('.language-header');
-    let languageList = languageHeader.siblings(".language-list");
-    
-    let newValue = 0;
-    for (let item of languageList.children()) {
-      if( item.getAttribute("data-language") > newValue ) {
-        newValue = parseInt(item.getAttribute("data-language").toString());
-      }
-    }
-    newValue++;
-    
-    let newKey = document.createElement("li");
-    newKey.setAttribute("class", "language flexrow");
-    newKey.setAttribute("data-language", `${newValue}`);
-    let localizedLanguage = game.i18n.localize("MERP.CharacterSheet.Language");
-    let localizedRank = game.i18n.localize("MERP.CharacterSheet.Rank");
-    newKey.innerHTML = `
-      <input class="language-name flex4" name="data.languages.${newValue}.name" type="text" value="" placeholder="${localizedLanguage}" type="text" data-dtype="String"/></td>
-      <input class="language-rank flex1" name="data.languages.${newValue}.rank" type="text" value="" placeholder="${localizedRank}" type="number" data-dtype="Number"/></td>
-      <div class="language-controls flex1">
-          <a class="language-control language-delete" data-action="delete-language" title="Delete Item"><i class="fas fa-trash"></i></a>
-      </div>`;
-
-      // Append the form element and submit the form.
-      //newKey = newKey.children[0];
-      form.getElementsByClassName('language-list')[0].appendChild(newKey);
-      await app._onSubmit(event);
-  }
-
-  /**
-   * Delete an attribute group.
-   * @param {MouseEvent} event    The originating left click event
-   * @param {Object} app          The form application object.
-   * @private
-   */
-  static async deleteLanguage(event, app) {
-    const a = event.currentTarget;
-    let language = a.closest(".language");
-    let languageName = $(language).find('.language-name');
-    // Create a dialog to confirm group deletion.
-    new Dialog({
-      title: game.i18n.localize("MERP1E.DeleteGroup"),
-      content: `${game.i18n.localize("MERP1E.DeleteGroupContent")} <strong>${languageName.val()}</strong>`,
-      buttons: {
-        confirm: {
-          icon: '<i class="fas fa-trash"></i>',
-          label: game.i18n.localize("Yes"),
-          callback: async () => {
-            language.parentElement.removeChild(language);
-            await app._onSubmit(event);
-          }
-        },
-        cancel: {
-          icon: '<i class="fas fa-times"></i>',
-          label: game.i18n.localize("No"),
-        }
-      }
-    }).render(true);
-  }
-  
-  /* -------------------------------------------- */
-}

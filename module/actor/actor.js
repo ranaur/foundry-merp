@@ -58,13 +58,9 @@ export class Merp1eActor extends Actor {
 
     // Filter spelllist
     data.spelllists = this.items.filter(item => item.type == "spelllist");
-    let professions = this.items.filter(item => item.type == "profession")
-    if( professions.length == 0) {
-      data.profession = null;
-    } else {
-      data.profession = professions[0];
-      for(let [skill, skillBonus] of Object.entries(data.profession.data.data.professionSkillBonuses)) {
-        if(skillBonus != 0) {
+    if( "profession" in data ) {
+      if( "professionSkillBonuses" in data.profession.data ) {
+        for(let [skill, skillBonus] of Object.entries(data.profession.data.professionSkillBonuses)) {
           data.skills[skill].bonuses.prof = skillBonus * data.level;
         }
       }

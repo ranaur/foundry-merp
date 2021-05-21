@@ -1,0 +1,28 @@
+<form class="{{cssClass}}" autocomplete="off" onsubmit="event.preventDefault();">
+  <div class="generic-selector">
+    <p class="notes">Select the type of the entity and the entyty type</p>
+    <div>
+      <label for="entity-type-actor">Actor</label> 
+      <input type="radio" name="entity-type-actor" value="actor" disabled/>
+      <label for="entity-type-actor">Item</label> 
+      <input type="radio" name="entity-type-item" value="item" checked/>
+    </div>
+    <div>
+      <select style="text-align:center" name="import-type" id="import-file">
+        <option></option>
+        <option value="spelllist">Spell List</option>
+      </select>
+    </div>
+    <div>
+      <div class="form-group">
+        <input type="file" name="data" accept=".csv"/>
+      </div>
+    </div>
+    <div>
+      <button class="dialog-button" data-button="import">
+        <i class="fas fa-check"></i>
+        {{localize "Import"}}
+      </button>
+    </div>
+  </div>
+</form>

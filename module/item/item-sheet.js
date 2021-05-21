@@ -1,3 +1,5 @@
+import {ListSheetHelper} from '../list-helper.js'
+
 /**
  * Extend the basic ItemSheet with some very simple modifications
  * @extends {ItemSheet}
@@ -55,11 +57,19 @@ export class Merp1eItemSheet extends ItemSheet {
     if (!this.options.editable) return;
 
     // Roll handlers, click handlers, etc. would go here.
+    html.find(".list-control").on("click", ListSheetHelper.onClickControl.bind(this)); 
   }
 
   /** @override */
-//  _updateObject(event, formData) {
-//    return this.object.update(formData);
-//  }
+  _updateObject(event, formData) {
+    formData = ListSheetHelper.update(formData, this, "skillBonuses");
+    formData = ListSheetHelper.update(formData, this, "onUseBonuses");
+    formData = ListSheetHelper.update(formData, this, "dailySpells");
+    //formData = ListSheetHelper.update(formData, this, "fixedUsesSpells");
+    //formData = ListSheetHelper.update(formData, this, "ppMultiplier");
+    //formData = ListSheetHelper.update(formData, this, "spellAdder");
+
+    return this.object.update(formData);
+  }
 }
 

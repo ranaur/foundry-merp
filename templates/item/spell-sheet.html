@@ -21,6 +21,15 @@
                     <input name="data.instantaneous" type="checkbox" {{checked data.instantaneous}}/>
                 </div>
             </div>
+            <div class="resource">
+                <label class="resource-label">{{localize "MERP1E.Spell.List"}}</label>
+                <select name="data.spellList._id">
+                    <option></option>
+                    {{#each avaliableSpelllists as |spelllist|}}
+                    <option value="{{spelllist._id}}" {{#if (isEqual ../data.spellList._id spelllist._id)}}selected{{/if}}>{{localize spelllist.name}}</option>
+                    {{/each}}
+                </select>
+            </div>
         </div>
     </header>
 

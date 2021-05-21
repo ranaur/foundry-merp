@@ -17,4 +17,7 @@ export class MerpSpellList {
         AL: { name: "Animist Lists", profession: "Animist" }, 
         RL: { name: "Ranger Lists", profesion: "Ranger" }
     };
+    static getAvaliable() {
+        return game.items.filter((item) => { return item.type == "spelllist"});
+    }
 }

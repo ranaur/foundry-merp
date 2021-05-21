@@ -31,6 +31,7 @@ export class Merp1eSpellSheet extends ItemSheet {
   getData() {
     const data = super.getData();
     data.rules = game.merp1e.Merp1eRules;
+    data.avaliableSpelllists = game.merp1e.Merp1eRules.spelllist.getAvaliable()
     return data;
   }
 

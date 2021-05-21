@@ -4,13 +4,21 @@
         <div class="header-fields">
             <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="{{localize "MERP1E.Spelllist.Name"}}"/></h1>
             <div class="resource">
-            <label class="resource-label">{{localize "MERP1E.Spelllist.Group"}}</label>
-            <select name="data.group">
-                {{#each rules.spelllist.groups as |group groupKey|}}
-                <option value="{{groupKey}}" {{#if (isEqual ../data.group groupKey)}}selected{{/if}}>{{localize (concat "MERP1E.Spelllist.Groups." groupKey)}}</option>
-                {{/each}}
-            </select>
+                <label class="resource-label">{{localize "MERP1E.Spelllist.Group"}}</label>
+                <select name="data.group">
+                    {{#each rules.spelllist.groups as |group groupKey|}}
+                    <option value="{{groupKey}}" {{#if (isEqual ../data.group groupKey)}}selected{{/if}}>{{localize (concat "MERP1E.Spelllist.Groups." groupKey)}}</option>
+                    {{/each}}
+                </select>
             </div>
+            {{#if isOwned}}
+                <div class="resource">
+                    <label for="data.chanceoflearning">{{localize "MERP1E.Spelllist.ChanceOfLearning"}}</label>
+                    <input name="data.chanceoflearning" type="number" value="{{data.chanceoflearning}}" {{#if data.learned}}disabled readonly tabindex=-1{{/if}}/>
+                    <label for="data.learned">{{localize "MERP1E.Spelllist.Learned"}}</label>
+                    <input name="data.learned" type="checkbox" value="{{data.learned}}" {{checked data.learned}}/>
+                </div>
+            {{/if}}
         </div>
     </header>
 

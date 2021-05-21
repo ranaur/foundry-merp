@@ -8,9 +8,9 @@
 
     {{!-- Sheet Tab Navigation --}}
     <nav class="sheet-tabs tabs" data-group="primary">
-        <a class="item" data-tab="languages">{{localize "MERP1E.Race.Languages"}}</a>
         <a class="item" data-tab="statbonuses">{{localize "MERP1E.Race.StatBonuses"}}</a>
         <a class="item" data-tab="skills">{{localize "MERP1E.Race.Skills"}}</a>
+        <a class="item" data-tab="languages">{{localize "MERP1E.Race.Languages"}}</a>
         <a class="item" data-tab="description">{{localize "MERP1E.Race.Description"}}</a>
         <a class="item" data-tab="characteristics">{{localize "MERP1E.Race.Characteristics"}}</a>
     </nav>
@@ -77,6 +77,23 @@
             </div>
         </div>
 
+        {{!-- Skill Bonuses Tab --}}
+        <div class="tab languages" data-group="primary" data-tab="languages">
+            <header class="language-header flexrow">
+                <span class="language-name flex4">{{localize "MERP1E.Languages.Language"}}</span>
+                <span class="language-rank flex1">{{localize "MERP1E.Languages.Ranks"}}</span>
+                <a class="language-control language-add" data-action="create-language"><i class="fas fa-plus"></i></a>
+            </header>
+            <div class="language-list">
+                {{#each data.languages as |language languageKey|}}
+                  <li class="language flexrow" data-language="{{languageKey}}">
+                      <input class="language-name flex4" name="data.languages.{{languageKey}}.name" value="{{language.name}}" placeholder='{{localize "MERP1E.Languages.Language"}}' type="text" data-dtype="String"/>
+                      <input class="language-rank flex1" name="data.languages.{{languageKey}}.rank" value="{{language.rank}}" min="1" max ="5" placeholder='5' type="number" data-dtype="Number"/>
+                      <a class="language-control language-delete" data-action="delete-language" title="Delete Item"><i class="fas fa-trash"></i></a>
+                  </li>
+                {{/each}}
+            </div>
+        </div>
         {{!-- Description Tab --}}
         <div class="tab" data-group="primary" data-tab="characteristics">
             <div class="race-group">Physical Character</div>
@@ -151,6 +168,7 @@
                 <input type="text" class="race-data" name="data.otherFactors.backgroundOptions" value="{{data.otherFactors.backgroundOptions}}" data-dtype="String"/>
             </div>
         </div>
+
         <div class="tab" data-group="primary" data-tab="description">
             {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
         </div>

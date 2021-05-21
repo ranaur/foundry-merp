@@ -1,6 +1,8 @@
 {
     "MERP1E.Spelllist.Name": "Spell List Name",
     "MERP1E.Spelllist.Group": "Spell List Group",
+    "MERP1E.Spelllist.ChanceOfLearning": "Chance of Learning",
+    "MERP1E.Spelllist.Learned": "Learned",
 
     "MERP1E.Spelllist.Table.Level": "Level",
     "MERP1E.Spelllist.Table.Spell": "Spell",
@@ -18,6 +20,7 @@
     "MERP1E.Spelllist.Groups.RL": "Ranger Lists",
 
     "MERP1E.Spell.Name": "Spell Name",
+    "MERP1E.Spell.List": "Spell List",
     "MERP1E.Spell.Level": "Level",
     "MERP1E.Spell.Class": "Class",
     "MERP1E.Spell.Instantaneous": "Instantaneous",

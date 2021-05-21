@@ -9,6 +9,7 @@ import { Merp1eSpelllistSheet } from "./item/spelllist-sheet.js";
 import { Merp1eProfessionSheet } from "./item/profession-sheet.js";
 import { Merp1eRules } from "./rules/rules.js"
 import { preloadHandlebarsTemplates } from "./templates.js";
+import { GenericImporter } from "./apps/generic-importer.js";
 
 Hooks.once('init', async function() {
 
@@ -39,6 +40,7 @@ Hooks.once('init', async function() {
   Items.registerSheet("merp1e", Merp1eSpelllistSheet, { types: ['spelllist'], makeDefault: true });
   Items.registerSheet("merp1e", Merp1eProfessionSheet, { types: ['profession'], makeDefault: true });
   Items.registerSheet("merp1e", Merp1eRaceSheet, { types: ['race'], makeDefault: true });
+  Items.registerSheet("merp1e", Merp1eItemSheet, { types: ['item'], makeDefault: true });
 
   // If you need to add Handlebars helpers, here are a few useful examples:
   Handlebars.registerHelper('concat', function() {
@@ -66,6 +68,28 @@ Hooks.once('init', async function() {
   Handlebars.registerHelper('isEqual', function(a, b) {
     return a == b;
   });
+
+  // Permissions Control Menu
+  game.settings.registerMenu("merp1e", "importData", {
+    name: "Import Data",
+    label: "Data importer",
+    hint: "Window to import game data",
+    icon: "fas fa-user-lock",
+    type: GenericImporter,
+    restricted: true
+  });
+
+    // User Role Permissions
+  game.settings.register("merp1e", "importData", {
+		name: "Import Data",
+    label: "Data importer",
+		hint: "Window to import game data",
+    icon: "fas fa-user-lock",
+		scope: "world",
+		config: true,
+    type: Object,
+    restricted: true
+	});
 
   // Preload template partials.
   preloadHandlebarsTemplates();

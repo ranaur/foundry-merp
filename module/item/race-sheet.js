@@ -1,3 +1,5 @@
+import { LanguageSheetHelper } from '../language-helper.js';
+
 /**
  * Extend the basic ItemSheet with some very simple modifications
  * @extends {ItemSheet}
@@ -55,11 +57,13 @@ export class Merp1eRaceSheet extends ItemSheet {
     if (!this.options.editable) return;
 
     // Roll handlers, click handlers, etc. would go here.
+    html.find(".languages").on("click", ".language-control", LanguageSheetHelper.onClickLanguageControl.bind(this));
   }
 
   /** @override */
-//  _updateObject(event, formData) {
-//    return this.object.update(formData);
-//  }
+  _updateObject(event, formData) {
+    formData = LanguageSheetHelper.updateLanguages(formData, this);
+    return this.object.update(formData);
+  }
 }
 
