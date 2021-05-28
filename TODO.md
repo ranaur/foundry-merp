@@ -1,10 +1,14 @@
 # TODO
+    Usar o meu número de registro e usar a versão mais nova.
+    
     Alterar as profissões
         para pegarem os skills-itens NA LISTA
         para pegarem os skills-itens por drag & drop e delete
         para permitirem exclusão
+        idem para raças
 
-
+    Ficha
+        Implementar uma parada para esconder os skills secundários que estão zerados.
     Importar as profissões
     Fazer tela para skills (e deixá-los como Itens)
         Atualizar a itemsheet de profissão e a actor sheet de ficha para pegar os skills do que estiverem disponíveis na biblioteca
@@ -69,3 +73,13 @@ a = game.items.entities.reduce((a,i) => {
         } return a;}, {})
 
 Object.entries(a).filter((item) => { return Object.entries(item[1]).length != 10; });
+
+
+# DECISIONS
+
+Why don't you implemented skill drap & drop on character sheet?
+    I tried to be as faithful as possible on the record sheet. Maybe we can implement drag & drop on secondary skills, but I thought that having all the skills (specially the primary ones) alredy loaded would be better.
+
+Why do skills have reference?
+    So it could work flawless when importing itens. Maybe it was too much. Time will tell.
+
