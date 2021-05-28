@@ -18,13 +18,20 @@ export class Merp1eItem extends Item {
         case "race":
           this.data.img = "systems/merp1e/icons/anatomy.svg";
           break;
-        case "profession":
-          this.data.img = "systems/merp1e/icons/hooded-figure.svg";
+          case "profession":
+            this.data.img = "systems/merp1e/icons/hooded-figure.svg";
+            break;
+        case "skill":
+          this.data.img = "systems/merp1e/icons/skills.svg";
           break;
-                      // XXX make other classes
+        // XXX make other classes
       }
     }
 
+    // Fill spelllist with spells configured for it
+//    if (this.type == "spelllist") {
+
+//    }
     // Default icon
     super.prepareData();
 

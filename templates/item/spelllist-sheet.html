@@ -3,13 +3,31 @@
         <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
         <div class="header-fields">
             <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="{{localize "MERP1E.Spelllist.Name"}}"/></h1>
-            <div class="resource">
-                <label class="resource-label">{{localize "MERP1E.Spelllist.Group"}}</label>
-                <select name="data.group">
-                    {{#each rules.spelllist.groups as |group groupKey|}}
-                    <option value="{{groupKey}}" {{#if (isEqual ../data.group groupKey)}}selected{{/if}}>{{localize (concat "MERP1E.Spelllist.Groups." groupKey)}}</option>
-                    {{/each}}
-                </select>
+            <div class="spelllist-restriction resource">
+                <div class="spelllist-restriction-radio">
+                    <label for="spelllist-restriction-radios" class="resource-label">{{localize "MERP1E.Spelllist.Restriction"}}</label>
+                    <div class="spelllist-restriction-radios">
+                        {{radioBoxes "data.restriction" rules.spelllist.restrictions checked=data.restriction localize=true}}
+                    </div>
+                </div>
+                <div>
+                    <div class="spelllist-restriction-realm" {{#if (isNotEqual data.restriction "realm")}}hidden{{/if}}>
+                        <label for="spelllist-restriction-realm">{{localize "MERP1E.Realm.Label"}}</label>
+                        <select name="data.realm">
+                            {{#each rules.spell.realms as |realm|}}
+                            <option value="{{realm}}" {{#if (isEqual ../data.realm realm)}}selected{{/if}}>{{localize (concat "MERP1E.Realm." realm)}}</option>
+                            {{/each}}
+                    </select>
+                    </div>
+                    <div class="spelllist-restriction-profession" {{#if (isNotEqual data.restriction "profession")}}hidden{{/if}}>
+                        <label for="spelllist-restriction-profession">{{localize "MERP1E.Profession.Label"}}</label>
+                        <select name="data.restrictedto">
+                            {{#each rules.profession.list as |profession professionKey|}}
+                            <option value="{{professionKey}}" {{#if (isEqual ../data.restrictedto professionKey)}}selected{{/if}}>{{localize (concat "MERP1E.Profession." professionKey)}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                </div>
             </div>
             {{#if isOwned}}
                 <div class="resource">

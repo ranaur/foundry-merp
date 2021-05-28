@@ -61,11 +61,22 @@
   }
   },
   "Item": {
-    "types": ["item", "spell", "spelllist", "container", "race", "profession", "backgroundOption"],
+    "types": ["item", "spell", "spelllist", "container", "race", "profession", "backgroundOption", "skill"],
     "templates": {
       "base": {
         "description": ""
       }
+    },
+    "skill": {
+      "templates": ["base"],
+      "reference": "",
+      "group": ["Movement", "Weapon", "General", "Subterfuge", "Magical", "Miscelaneous", "Secondary"],
+      "order": -1,
+      "statBonus": ["st", "ag", "co", "ig", "it", "pr"],
+      "rollType": ["MM", "SM", "OB", "DB", "SP", "RR"],
+      "rankBonusMethod": ["normal", "always 1", "d10 per rank"],
+      "extraBonus": 0,
+      "maxRanks": 0
     },
     "item": {
       "templates": ["base"],
@@ -85,11 +96,13 @@
       "duration": "",
       "range": "",
       "class": ["E", "F", "P", "U", "I"],
+      "concentration": false,
       "instantaneous": false
     },
     "spelllist": {
-      "templates": ["base"],
-      "group": "",
+      "templates": ["base", "realm"],
+      "restriction": ["open", "profession"],
+      "restrictedto": null,
       "spells": {}
     },
     "container": {

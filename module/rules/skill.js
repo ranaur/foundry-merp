@@ -1,5 +1,5 @@
 export class MerpSkill {
-    static sheetOrder = [
+    /*static sheetOrder = [
         { id: "Movement", skills: ["NoArmor", "SoftLeather", "RigidLeather", "Chain", "Plate"] },
         { id: "Weapon", skills: ["OneHandedEdged", "OneHandedConcussion", "TwoHanded", "Thrown", "Missile", "Polearms"] },
         { id: "General", skills: ["Climb", "Ride", "Swim", "Track"] },
@@ -7,8 +7,16 @@ export class MerpSkill {
         { id: "Magical", skills: ["ReadRunes", "UseItens", "DirectedSpells"] },
         { id: "Miscelaneous", skills: ["Perception", "BodyDevel", "BaseSpells", "LeadershipandInfluence", "DefensiveBonus", "EssenceRR", "ChannelingRR", "PoisonRR", "DiseaseRR"] },
         { id: "Secondary", skills: ["Acrobatics", "Acting", "Caving", "Contortions", "Cookery", "Dance", "Diving", "Fletching", "Foraging", "Gambling", "Herding", "LeatherWorking", "Meditation", "Music", "PublicSpeaking", "RopeMastery", "Rowing", "Sailing", "Signaling", "Skiing", "Smithing", "StarGazing", "TrapBuilding", "Trickery", "Tumbling", "WeatherWatching", "WoodCarving"] }
-    ];
-    
+    ];*/
+    static groups = {
+        "Movement": { order: 10 },
+        "Weapon": { order: 20 },
+        "General": { order: 30 },
+        "Subterfuge": { order: 40 },
+        "Magical": { order: 50 },
+        "Miscelaneous": { order: 60 },
+        "Secondary": { order: 70 }
+    };
     static list = {
         NoArmor: {
             group: "Movement",
@@ -338,4 +346,29 @@ export class MerpSkill {
             { value: +20, description: "If the player states that his character is spending time looking for specific information. The number of rounds spent affects the difficulty." }
         ]
     };
+
+    static getSkills(group) {
+        return game.data.items.filter(item => (item.type == "skill" && item.data.group == group) );
+    }
+
+    static generateSheetOrder() {
+        // Create items array
+        var items = Object.keys(MerpSkill.groups).map(function(key) {
+            let newItem = MerpSkill.groups[key];
+            newItem.id = key;
+            let skillList = MerpSkill.getSkills(key); // XXX Miss sorting by order
+            skillList.sort(function(first, second) {
+                return first.data.order - second.data.order;
+            });
+            newItem.skills = skillList;
+            return newItem;
+        });
+  
+        // Sort the array based on the second element
+        items.sort(function(first, second) {
+            return first.order - second.order;
+        });
+
+        return items;
+    }
 };

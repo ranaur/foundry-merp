@@ -1,10 +1,10 @@
-import {ListSheetHelper} from '../list-helper.js'
+import { LanguageSheetHelper } from '../language-helper.js';
 
 /**
  * Extend the basic ItemSheet with some very simple modifications
  * @extends {ItemSheet}
  */
-export class Merp1eItemSheet extends ItemSheet {
+export class Merp1eSkillSheet extends ItemSheet {
 
   /** @override */
   static get defaultOptions() {
@@ -33,8 +33,6 @@ export class Merp1eItemSheet extends ItemSheet {
   getData() {
     const data = super.getData();
     data.rules = game.merp1e.Merp1eRules;
-    data.avaliableSpells = game.items.filter(item => item.type == "spell"); //.reduce((res, prof) => { res[prof._id] = prof.name; return res; }, {});
-  
     return data;
   }
 
@@ -59,19 +57,11 @@ export class Merp1eItemSheet extends ItemSheet {
     if (!this.options.editable) return;
 
     // Roll handlers, click handlers, etc. would go here.
-    html.find(".list-control").on("click", ListSheetHelper.onClickControl.bind(this)); 
   }
 
   /** @override */
-  _updateObject(event, formData) {
-    formData = ListSheetHelper.update(formData, this, "skillBonuses");
-    formData = ListSheetHelper.update(formData, this, "onUseBonuses");
-    formData = ListSheetHelper.update(formData, this, "dailySpells");
-    //formData = ListSheetHelper.update(formData, this, "fixedUsesSpells");
-    //formData = ListSheetHelper.update(formData, this, "ppMultiplier");
-    //formData = ListSheetHelper.update(formData, this, "spellAdder");
-
-    return this.object.update(formData);
-  }
+  //_updateObject(event, formData) {
+  //  return this.object.update(formData);
+  //}
 }
 

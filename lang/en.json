@@ -1,6 +1,6 @@
 {
     "MERP1E.Spelllist.Name": "Spell List Name",
-    "MERP1E.Spelllist.Group": "Spell List Group",
+    "MERP1E.Spelllist.Restriction": "Restriction",
     "MERP1E.Spelllist.ChanceOfLearning": "Chance of Learning",
     "MERP1E.Spelllist.Learned": "Learned",
 
@@ -24,6 +24,7 @@
     "MERP1E.Spell.Level": "Level",
     "MERP1E.Spell.Class": "Class",
     "MERP1E.Spell.Instantaneous": "Instantaneous",
+    "MERP1E.Spell.Concentration": "Concentration",
     "MERP1E.Spell.AreaOfEffect": "Area Of Effect",
     "MERP1E.Spell.Duration": "Duration",
     "MERP1E.Spell.Range": "Range",
@@ -168,6 +169,15 @@
     "MERP1E.Profession.SkillGroups": "Skill Groups",
     "MERP1E.Profession.Skills": "Skills",
 
+    "MERP1E.Profession.Label": "Profession",
+    "MERP1E.Profession.Warrior": "Warrior",
+    "MERP1E.Profession.Scout": "Scout",
+    "MERP1E.Profession.Ranger": "Ranger",
+    "MERP1E.Profession.Bard": "Bard",
+    "MERP1E.Profession.Mage": "Mage",
+    "MERP1E.Profession.Animinst": "Animinst",
+
+    "MERP1E.Realm.Label": "Realm",
     "MERP1E.Realm.Essence": "Essence",
     "MERP1E.Realm.Channeling": "Channeling",
     "MERP1E.Realm.Any": "Any",
@@ -204,5 +214,24 @@
     "MERP1E.Race.Prejudices": "Prejudices",
     "MERP1E.Race.RestrictionsOnProfessions": "Restrictions On Professions",
     "MERP1E.Race.BackgroundOptions": "Background Options",
+ 
+    "MERP1E.SkillSheet.Group": "Skill Group",
+    "MERP1E.SkillSheet.Order": "Sheet Order",
+    "MERP1E.SkillSheet.StatBonus": "Stat Bonus",
+    "MERP1E.SkillSheet.Rolltype": "Roll Type",
+    "MERP1E.RollType.MM": "MM",
+    "MERP1E.RollType.SM": "SM",
+    "MERP1E.RollType.OB": "OB",
+    "MERP1E.RollType.DB": "DB",
+    "MERP1E.RollType.SP": "SP",
+    "MERP1E.RollType.RR": "RR",
+    "MERP1E.SkillSheet.RankBonusMethod": "Rank Bonus",
+    "MERP1E.SkillRankBonusMethod.normal": "Normal",
+    "MERP1E.SkillRankBonusMethod.always1": "Always 1",
+    "MERP1E.SkillRankBonusMethod.d10PerRank": "D10 per Rank",
+    "MERP1E.SkillSheet.Description": "Description",
+    "MERP1E.SkillSheet.ExtraBonus": "Extra Bonus",
+    "MERP1E.SkillSheet.MaxRanks": "Maximum Ranks",
+
     "MERP1E.X": "MERP1E"
 }

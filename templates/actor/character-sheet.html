@@ -119,7 +119,7 @@
             <div class="skill-group">
               <div class="skill-group-header">{{localize (concat "MERP1E.SkillGroup." group.id)}}</div>
               {{#each group.skills as | skill |}}
-                {{> "systems/merp1e/templates/parts/sheet-skills.html" skill=skill skill-data=(lookup ../../rules.skill.list skill) skill-value=(lookup ../../data.skills skill)}}
+                {{> "systems/merp1e/templates/parts/sheet-skills.html" skill=skill skill-value=(lookup ../../data.skills skill.data.reference)}}
               {{/each}}
             </div>
             {{/each}}

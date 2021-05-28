@@ -30,6 +30,12 @@ export class Merp1eSpelllistSheet extends ItemSheet {
   /** @override */
   getData() {
     const data = super.getData();
+    let spells = game.data.items.filter((item) => { return item.type == 'spell' && item.data.spelllist.id == data.item._id });
+    data.spells = data.spells || {};
+    for(let element of spells) {
+      data.data.spells[element.data.level] = element.data;
+      data.data.spells[element.data.level].name = element.name;
+    };
     data.rules = game.merp1e.Merp1eRules;
     data.isOwned = (this.actor != null);
     return data;
@@ -92,9 +98,8 @@ class MerpSpellListItemSheetHelper {
       case "delete":
         MerpSpellListItemSheetHelper.deleteSpell(event, this);
         break;
-      }
+    }
   }
-
   static async deleteSpell(event, app) {
     let lineElement = event.currentTarget.parentElement.parentElement;
     lineElement.parentElement.removeChild(lineElement);

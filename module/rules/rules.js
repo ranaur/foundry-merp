@@ -6,11 +6,41 @@ export class Merp1eRules {
     static spell = MerpSpell;
     static spelllist = MerpSpellList;
     static skill = MerpSkill;
-    static stats = ["st", "ag", "co", "ig", "it", "pr", "ap"];
-    static rollTypes = ["MM", "SM", "RR", "OB", "SP"];
+    static stats = ["st", "ag", "co", "ig", "it", "pr", "ap"]; // XXX Delme?
     static tables = {
         bt1: TableBT1
     };
+    static stat = {
+        list: {"st": {}, 
+            "ag": {}, 
+            "co": {}, 
+            "ig": {}, 
+            "it": {}, 
+            "pr": {}, 
+            "ap": {}
+        }
+    };
+    static rollType = {
+        list: { 
+            "MM": {},
+            "SM": {},
+            "RR": {},
+            "DB": {},
+            "OB": {},
+            "SP": {}
+        }
+    };
+
+    static profession = {
+        list: {
+            "Warrior": { name: "Warrior" },
+            "Scout": { name: "Scout" },
+            "Ranger": { name: "Ranger" },
+            "Bard": { name: "Bard" },
+            "Mage": { name: "Mage" },
+            "Animinst": { name: "Animinst" }
+        }
+    }; // XXX make a lookkup on item directory
 
     static lookupTable(table, column, number) {
         let ret = null;

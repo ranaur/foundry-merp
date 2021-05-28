@@ -1,0 +1,67 @@
+<form class="{{cssClass}}" autocomplete="off">
+    <header class="sheet-header flexcol">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name"/></h1>
+            <h3 class="charname"><input name="data.reference" type="text" value="{{data.reference}}" placeholder="Reference"/></h3>
+        </div>
+    </header>
+    <div class="flexcol">
+        <div class="skill-group flexrow">
+            <label for="skill-group">{{localize "MERP1E.SkillSheet.Group"}}</label>
+            <select name="data.group">
+                {{#each rules.skill.groups as |group groupKey|}}
+                <option value="{{groupKey}}" {{#if (isEqual ../data.group groupKey)}}selected{{/if}}>{{localize (concat "MERP1E.SkillGroup." groupKey)}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="skill-order flexrow">
+            <label for="skill-order">{{localize "MERP1E.SkillSheet.Order"}}</label>
+            <input id="skill-order" type="number" name="data.order" value="{{data.order}}"/>
+        </div>
+        <div class="skill-statbonus flexrow">
+            <label for="skill-statbonus">{{localize "MERP1E.SkillSheet.StatBonus"}}</label>
+            <select name="data.statBonus">
+                {{#each rules.stat.list as |stat statKey|}}
+                <option value="{{statKey}}" {{#if (isEqual ../data.statBonus statKey)}}selected{{/if}}>{{localize (concat "MERP1E.Stats." statKey ".Name")}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="skill-rolltype flexrow">
+            <label for="skill-rolltype">{{localize "MERP1E.SkillSheet.Rolltype"}}</label>
+            <select name="data.rollType">
+                {{#each rules.rollType.list as |rolltype rolltypeKey|}}
+                <option value="{{rolltypeKey}}" {{#if (isEqual ../data.rollType rolltypeKey)}}selected{{/if}}>{{localize (concat "MERP1E.RollType." rolltypeKey)}}</option>
+                {{/each}}
+            </select>
+        </div>
+        <div class="skill-rankbonusmethod flexrow">
+            <label for="skill-rankbonusmethod">{{localize "MERP1E.SkillSheet.RankBonusMethod"}}</label>
+            <select name="data.rankBonusMethod">
+                <option value="normal" {{#if (isEqual data.rankBonusMethod "normal")}}selected{{/if}}>{{localize (concat "MERP1E.SkillRankBonusMethod.normal")}}</option>
+                <option value="always 1" {{#if (isEqual data.rankBonusMethod "always 1")}}selected{{/if}}>{{localize (concat "MERP1E.SkillRankBonusMethod.always1")}}</option>
+                <option value="d10 per rank" {{#if (isEqual data.rankBonusMethod "d10 per rank")}}selected{{/if}}>{{localize (concat "MERP1E.SkillRankBonusMethod.d10PerRank")}}</option>
+            </select>
+        </div>
+        <div class="skill-extrabonus flexrow">
+            <label for="skill-extrabonus">{{localize "MERP1E.SkillSheet.ExtraBonus"}}</label>
+            <input id="skill-extrabonus" type="number" name="data.extraBonus" value="{{data.extraBonus}}"/>
+        </div>
+        <div class="skill-maxranks flexrow">
+            <label for="skill-maxranks">{{localize "MERP1E.SkillSheet.MaxRanks"}}</label>
+            <input id="skill-maxranks" type="number" name="data.maxRanks" value="{{data.maxRanks}}"/>
+        </div>
+    </div>
+
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item" data-tab="description">{{localize "MERP1E.SkillSheet.Description"}}</a>
+    </nav>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+        <div class="tab" data-group="primary" data-tab="description">
+            {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+        </div>
+    </section>
+</form>
