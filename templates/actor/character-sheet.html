@@ -214,7 +214,6 @@
           </li>
           {{#if item.data.learned}}
             {{#each item.data.spells as | spell |}}
-            {{log spell}}
             <li class="item flexrow" data-item-id="{{item._id}}">
               <div class="item-image" stype="width: 48px"></div>
               <div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24"/></div>

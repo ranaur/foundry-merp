@@ -78,7 +78,6 @@
                     {{#each data.dailySpells as | obj key |}}
                     <li class="list-item flexrow" data-index="{{key}}">
                         <select name="data.dailySpells.{{key}}.spell.id">
-                            {{log ../avaliableSpells}}
                             {{#each ../avaliableSpells as |spell|}}
                                 <option value="{{spell.data._id}}" {{#if (isEqual spell.data._id obj.spell.id)}}selected{{/if}}>{{spell.data.name}}</option>
                             {{/each}}
