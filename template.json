@@ -190,7 +190,7 @@
       "templates": ["base"],
       "primeStat": "",
       "realm": "",
-      "maxSpellLevel": 10,
+      "spellRestriction": ["profession and open", "profession and open up to 5th level", "open up to 5th level", "open up to 3rd level"],
       "professionSkillBonuses": {},
       "developmentPoints": {}
     },

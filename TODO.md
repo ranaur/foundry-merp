@@ -3,7 +3,6 @@
     Atualizar a itemsheet de profissão e a actor sheet de ficha para pegar os skills do que estiverem disponíveis na biblioteca
 
     Sheet: Profession
-        Colocar aba de development points
         Importar as profissões
 
     Sheet: Character

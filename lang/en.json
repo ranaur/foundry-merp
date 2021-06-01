@@ -171,7 +171,12 @@
     "MERP1E.ProfessionSheet.Description": "Description",
     "MERP1E.ProfessionSheet.Languages": "Languages",
     "MERP1E.ProfessionSheet.SpellLists": "Spell Lists",
-    
+
+    "MERP1E.SpellsAllowed.ProfessionOpen": "Professional and Open Lists",
+    "MERP1E.SpellsAllowed.Profession5th": "Professional and Open Lists up to 5th Level",
+    "MERP1E.SpellsAllowed.Open5th": "Open Lists up to 5th Level",
+    "MERP1E.SpellsAllowed.Open3rd": "Open Lists up to 3rd Level",
+
     "MERP1E.Profession.Label": "Profession",
     "MERP1E.Profession.Warrior": "Warrior",
     "MERP1E.Profession.Scout": "Scout",
