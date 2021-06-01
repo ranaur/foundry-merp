@@ -36,7 +36,7 @@ export class Merp1eActorSheet extends ActorSheet {
     //  attr.isCheckbox = attr.dtype === "Boolean";
     //}
     data.rules = game.merp1e.Merp1eRules;
-    data.rules.skill.sheetOrder = data.rules.skill.generateSheetOrder(); // XXX remove???
+    data.rules.skill.sheetOrder = data.rules.skill.generateSheetOrder();
 
     data.avaliableRaces = this.getAvaliableRaces();
     data.avaliableProfessions = this.getAvaliableProfessions();

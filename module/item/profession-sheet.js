@@ -31,6 +31,7 @@ export class Merp1eProfessionSheet extends ItemSheet {
   getData() {
     const data = super.getData();
     data.rules = game.merp1e.Merp1eRules;
+    data.rules.skill.sheetOrder = data.rules.skill.generateSheetOrder();
     return data;
   }
 
@@ -61,6 +62,29 @@ export class Merp1eProfessionSheet extends ItemSheet {
 
   /** @override */
   _updateObject(event, formData) {
+    for(let field of Object.keys(formData)) {
+      if(formData[field] == null) {
+        delete formData[field];
+      }
+      if(field.startsWith("data.professionSkillBonuses.") && formData[field] == 0) {
+        delete formData[field];
+      }
+    }
+
+    // Handle the free-form groups list
+    const formProfessionSkillBonuses = expandObject(formData).data.professionSkillBonuses || {};
+
+    // Remove groups which are no longer used
+    for ( let k of Object.keys(this.object.data.data.professionSkillBonuses) ) {
+      if ( !formProfessionSkillBonuses.hasOwnProperty(k) ) formProfessionSkillBonuses[`-=${k}`] = null;
+    }
+  
+    // Re-combine formData
+    formData = Object.entries(formData).filter(e => !e[0].startsWith("data.professionSkillBonuses")).reduce((obj, e) => {
+      obj[e[0]] = e[1];
+      return obj;
+    }, {_id: this.object._id, "data.professionSkillBonuses": formProfessionSkillBonuses});
+  
     return this.object.update(formData);
   }
 
@@ -71,6 +95,9 @@ export class Merp1eProfessionSheet extends ItemSheet {
     let groupElement = target.closest(".skill-group");
     for(let e of groupElement.getElementsByClassName(`skill-of-group-${group}`)) {
        e.setAttribute("value", value); 
+    }
+    if ( this.options.submitOnChange ) {
+      return this._onSubmit(event);
     }
   }
 }

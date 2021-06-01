@@ -163,12 +163,15 @@
     "MERP1E.Description.Special": "Special",
     "MERP1E.Description.Notes": "Notes",
 
-    "MERP1E.Profession.PrimeStat": "Prime Stat",
-    "MERP1E.Profession.Realm": "Realm",
-    "MERP1E.Profession.MaxSpellLevel": "Max Spell Level",
-    "MERP1E.Profession.SkillGroups": "Skill Groups",
-    "MERP1E.Profession.Skills": "Skills",
-
+    "MERP1E.ProfessionSheet.PrimeStat": "Prime Stat",
+    "MERP1E.ProfessionSheet.Realm": "Realm",
+    "MERP1E.ProfessionSheet.MaxSpellLevel": "Max Spell Level",
+    "MERP1E.ProfessionSheet.ProfessionalSkillBonuses": "Prof. Skill Bonuses",
+    "MERP1E.ProfessionSheet.DevPoints": "Development Points",
+    "MERP1E.ProfessionSheet.Description": "Description",
+    "MERP1E.ProfessionSheet.Languages": "Languages",
+    "MERP1E.ProfessionSheet.SpellLists": "Spell Lists",
+    
     "MERP1E.Profession.Label": "Profession",
     "MERP1E.Profession.Warrior": "Warrior",
     "MERP1E.Profession.Scout": "Scout",
