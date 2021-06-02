@@ -38,7 +38,7 @@ export class Merp1eRules {
             "Ranger": { name: "Ranger" },
             "Bard": { name: "Bard" },
             "Mage": { name: "Mage" },
-            "Animinst": { name: "Animinst" }
+            "Animist": { name: "Animist" }
         }
     }; // XXX make a lookkup on item directory
 

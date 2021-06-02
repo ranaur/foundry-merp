@@ -92,8 +92,7 @@ export class GenericImporter extends FormApplication {
                 }
                 
               }
-              // XXX make the lookup on actor #
-                config[key] = value;
+              if(value != null && value != "") config[key] = value;
             }
             //this._create(data);
             config = await expandObject(config);

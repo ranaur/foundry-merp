@@ -33,6 +33,7 @@ export class Merp1eRaceSheet extends ItemSheet {
   getData() {
     const data = super.getData();
     data.rules = game.merp1e.Merp1eRules;
+    data.rules.skill.sheetOrder = data.rules.skill.generateSheetOrder();
     return data;
   }
 

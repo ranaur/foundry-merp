@@ -110,7 +110,6 @@
     },
     "race": {
       "templates": ["base"],
-      "defaultLanguages": [],
       "statsBonuses": {
         "st": 0,
         "ag": 0,

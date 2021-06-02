@@ -2,37 +2,18 @@
     Usar o meu número de registro e usar a versão mais nova.
     Atualizar a itemsheet de profissão e a actor sheet de ficha para pegar os skills do que estiverem disponíveis na biblioteca
 
-    Sheet: Profession
-        Importar as profissões
-
-    Sheet: Character
-        Implementar uma parada para esconder os skills secundários que estão zerados.
-        Implementar um tooltip mostrando a conta
-        Fazer o cálculo de power points (nível, stat, e itens mágicos)
-        Fazer o cálculo de pontos de vida (aba Health):
-            Hits, Per round, Stun, penalidade na atividade, etc.
-            Power Points (multiplier), spell adder
-
-        
-	Sheet: SpellLists
-        Fazer as spells da lista aparecerem com mais detalhe, abaixo do spelllist
-        Filtrar (ou colocar desabilitado os spells de nível acima do do personagem)
-        Colocar o rank (20/40/60/80/lerned) e desabilitar enquanto estiver com número (e colocar o roll para aprender)
-        Colocar botão de prepare e roll
-
-    Sheet: Race
-        Retirar alguns skills que não deveriam aparecer (Plate, Track, Directed Spells, Vários Misc)
-        Deixar só os RRs
-        Importar as raças
-
     Sheet: Equipment
         Fazer Itens mágicos:
+            On use Bonus : colocar um optgroup nos skills
             Daily Spell e o Numbered Uses Spell
-			    Colocar Optgroup por grupo de spells
+            Fazer um widget que "recebe" spell por drag & drop
                 Aceitar drag and drop no combo
-                PP Multiplier
-                Spell adder
+            PP Multiplier
+            Spell adder
     		Contabilizar os bonuses no skill
+            Colocar bonuses condicionais
+                Fazer dropdown de skills/rolls
+
         Fazer equipamento por tipo:
             Arma => roll de ataque
             Armadura => AT, DB e MM
@@ -46,6 +27,26 @@
         Colocar botão de Roll
         Calacular peso por container/wear
         Fazer o "corpo", container base onde ficam as coisas que estão ativas.
+
+    Sheet: Race
+        Colocar conditional bonuses/special abilities e ligar nas raças
+        Reler raças e colocar os bonus condicionais de skill na planilha
+        Importar as raças
+        Retirar as características e colocar tudo em descrição
+
+    Sheet: Character
+        Implementar uma parada para esconder os skills secundários que estão zerados.
+        Implementar um tooltip mostrando a conta
+        Fazer o cálculo de power points (nível, stat, e itens mágicos)
+        Fazer o cálculo de pontos de vida (aba Health):
+            Hits, Per round, Stun, penalidade na atividade, etc.
+            Power Points (multiplier), spell adder
+
+	Sheet: SpellLists
+        Filtrar (ou colocar desabilitado os spells de nível acima do do personagem)
+        Colocar botão de prepare e roll
+
+    Sheet: Profession
 
     Fazer tela de passagem de nível
         Distribuir os pontos de ranks de skills

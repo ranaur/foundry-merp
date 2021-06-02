@@ -51,9 +51,9 @@
                     <div class="">{{localize (concat "MERP1E.SkillGroup." group.id)}}</div>
                     {{#each group.skills as | skill |}}
                     <div class="race-skill flexrow">
-                        <div>{{localize (concat "MERP1E.Skill." skill)}}</div>
-                        <input type="number" class="" name="data.skillBonuses.{{skill}}" value="{{lookup ../../data.skillBonuses skill}}" data-dtype="Number"/>
-                        <input type="number" class="" name="data.adolescenceSkillRanks.{{skill}}" value="{{lookup ../../data.adolescenceSkillRanks skill}}" data-dtype="Number"/>
+                        <div>{{localize (concat "MERP1E.Skill." skill.data.reference)}}</div>
+                        <input type="number" class="" name="data.skillBonuses.{{skill.data.reference}}" value="{{lookup ../../data.skillBonuses skill.data.reference}}" data-dtype="Number"/>
+                        <input type="number" class="" name="data.adolescenceSkillRanks.{{skill.data.reference}}" value="{{lookup ../../data.adolescenceSkillRanks skill.data.reference}}" data-dtype="Number"/>
                     </div>
                     {{/each}}
                 </div>

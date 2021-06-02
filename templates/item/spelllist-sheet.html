@@ -59,6 +59,7 @@
             <tbody>
                 {{#each data.spells as |spell|}}
                 <tr class="spelllist-spells-line spelllist-spell-level-{{spell.level}} flexrow">
+                    <input name="data.spells.{{spell.level}}._id" type="hidden" value="{{spell._id}}"/>
                     <input name="data.spells.{{spell.level}}.level" type="hidden" value="{{spell.level}}"/>
                     <td class="spelllist-spell-level">{{spell.level}}</td>
                     <input name="data.spells.{{spell.level}}.name" type="hidden" value="{{spell.name}}"/>

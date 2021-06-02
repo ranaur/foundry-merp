@@ -31,10 +31,11 @@ export class Merp1eSpelllistSheet extends ItemSheet {
   getData() {
     const data = super.getData();
     let spells = game.data.items.filter((item) => { return item.type == 'spell' && item.data.spelllist.id == data.item._id });
-    data.spells = data.spells || {};
+    data.data.spells = data.data.spells || {};
     for(let element of spells) {
       data.data.spells[element.data.level] = element.data;
       data.data.spells[element.data.level].name = element.name;
+      data.data.spells[element.data.level]._id = element._id;
     };
     data.rules = game.merp1e.Merp1eRules;
     data.isOwned = (this.actor != null);
@@ -125,6 +126,7 @@ class MerpSpellListItemSheetHelper {
             newElement.setAttribute("class", `spelllist-spells-line spelllist-spell-level-${spell.level} flexrow`);
             let instantaneous = spell.instantaneous ? "*" : "-";
             newElement.innerHTML = `
+              <input name="data.spells.${spell.level}._id" type="hidden" value="${obj.id}"/>
               <input name="data.spells.${spell.level}.level" type="hidden" value="${spell.level}"/>
               <td class="spelllist-spell-level">${spell.level}</td>
               <input name="data.spells.${spell.level}.name" type="hidden" value="${item.data.name}"/>

@@ -7,6 +7,19 @@ export class MerpSpell {
         "U": { name: "Utility", description: "These spells only affect the caster, a willing target, or a target incapable of resistance. Thus, Resistance Rolls are usually not neccessary. A willing target who is capable of resisting may still be required to make a Resistance Roll, but it is modified by -50. Most healing spells fall into this class." },
         "I": { name: "Informational", description: "These spells involve gathering information through means that do not require any Resistance Rolls." }
     };
+    static getSpellHierarchy() {
+        let res = [];
+        for(let [groupKey, group] of Object.entries(MerpSpellList.getAvaliableGroups())) {
+            let newgroup = {};
+            newgroup.reference = groupKey;
+            newgroup.name = group.name;
+            newgroup.realm = group.realm;
+            newgroup.profession = group.profession;
+            newgroup.spellLists = MerpSpellList.getAvaliableSpellLists(group);
+            res.push(newgroup);
+        }
+        return res;
+    }
 };
 export class MerpSpellList {
     static restrictions = {
@@ -17,15 +30,23 @@ export class MerpSpellList {
         EOL: { name: "Essence Open Lists", realm: "Essence" },
         ML: { name: "Mage Lists", profession: "Mage" }, 
         BL: { name: "Bard Lists", profession: "Bard" }, 
-        COL: { name: "Channeling Open Lists", realm: "Chanelling" }, 
+        COL: { name: "Channeling Open Lists", realm: "Channeling" }, 
         AL: { name: "Animist Lists", profession: "Animist" }, 
-        RL: { name: "Ranger Lists", profesion: "Ranger" }
+        RL: { name: "Ranger Lists", profession: "Ranger" }
     };
     static getAvaliable() {
         return game.items.filter((item) => { return item.type == "spelllist"});
     }
+    static getAvaliableSpellLists(group) {
+        return game.items.filter((item) => { 
+            if(group.realm) {
+                return item.type == "spelllist" && item.data.data.restriction == "realm" && item.data.data.realm == group.realm;
+            } else { // profession
+                return item.type == "spelllist" && item.data.data.restriction == "profession" && item.data.data.restrictedto == group.profession;
+            }
+        });
+    }
     static getAvaliableGroups() {
         return this.groups;
     }
-
 }

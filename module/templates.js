@@ -9,7 +9,8 @@ export const preloadHandlebarsTemplates = async function() {
   const templatePaths = [
     // Attribute list partial.
     "systems/merp1e/templates/parts/sheet-stats.html",
-    "systems/merp1e/templates/parts/sheet-skills.html"
+    "systems/merp1e/templates/parts/sheet-skills.html",
+    "systems/merp1e/templates/parts/skill-chooser.html"
   ];
 
   // Load the template parts

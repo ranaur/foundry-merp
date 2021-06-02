@@ -33,8 +33,8 @@ export class Merp1eItemSheet extends ItemSheet {
   getData() {
     const data = super.getData();
     data.rules = game.merp1e.Merp1eRules;
-    data.avaliableSpells = game.items.filter(item => item.type == "spell"); //.reduce((res, prof) => { res[prof._id] = prof.name; return res; }, {});
-  
+    data.spellHierarchy = data.rules.spell.getSpellHierarchy();
+    data.rules.skill.sheetOrder = data.rules.skill.generateSheetOrder();
     return data;
   }
 
@@ -67,6 +67,7 @@ export class Merp1eItemSheet extends ItemSheet {
     formData = ListSheetHelper.update(formData, this, "skillBonuses");
     formData = ListSheetHelper.update(formData, this, "onUseBonuses");
     formData = ListSheetHelper.update(formData, this, "dailySpells");
+    formData = ListSheetHelper.update(formData, this, "conditionalBonuses");
     //formData = ListSheetHelper.update(formData, this, "fixedUsesSpells");
     //formData = ListSheetHelper.update(formData, this, "ppMultiplier");
     //formData = ListSheetHelper.update(formData, this, "spellAdder");

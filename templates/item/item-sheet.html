@@ -35,11 +35,7 @@
                 <ol class="list-data">
                     {{#each data.skillBonuses as | skillBonus key |}}
                     <li class="list-item flexrow" data-index="{{key}}">
-                        <select name="data.skillBonuses.{{key}}.skill">
-                            {{#each ../rules.skill.list as |skill skillKey|}}
-                                <option value="{{skillKey}}" {{#if (isEqual skillBonus.skill skillKey)}}selected{{/if}}>{{localize (concat 'MERP1E.Skill.' skillKey)}}</option>
-                            {{/each}}
-                        </select>
+                        {{> "systems/merp1e/templates/parts/skill-chooser.html" field=(concat "data.skillBonuses." key ".skill") currentValue=skillBonus.skill rules=../rules}}
                         <input type="text" name="data.skillBonuses.{{key}}.value" value="{{skillBonus.value}}" data-dtype="Number"/>
                         <input type="text" name="data.skillBonuses.{{key}}.detail" value="{{skillBonus.detail}}" data-dtype="String"/>
                         <a class="list-control list-create" data-action="delete" title="Delete"><i class="fas fa-trash"></i></a>
@@ -50,18 +46,34 @@
             <div class="list" data-array="onUseBonuses" data-fields="skill,value,detail" data-dtype="String,Number,String">
                 <div class="list-header flexrow">
                     <div class="list-header-text">On Use Bonuses</div>
+                    <div class="list-header-text">Bonus</div>
+                    <div class="list-header-text">Detail</div>
                     <a class="list-control list-create" data-action="create" title="Add"><i class="fas fa-plus"></i></a>
                 </div>
                 <ol class="list-data">
                     {{#each data.onUseBonuses as | skillBonus key |}}
                     <li class="list-item flexrow" data-index="{{key}}">
-                        <select name="data.onUseBonuses.{{key}}.skill">
-                            {{#each ../rules.skill.list as |skill skillKey|}}
-                                <option value="{{skillKey}}" {{#if (isEqual skillBonus.skill skillKey)}}selected{{/if}}>{{localize (concat 'MERP1E.Skill.' skillKey)}}</option>
-                            {{/each}}
-                        </select>
+                        {{> "systems/merp1e/templates/parts/skill-chooser.html" field=(concat "data.onUseBonuses." key ".skill") currentValue=skillBonus.skill rules=../rules}}
                         <input type="text" name="data.onUseBonuses.{{key}}.value" value="{{skillBonus.value}}" data-dtype="Number"/>
                         <input type="text" name="data.onUseBonuses.{{key}}.detail" value="{{skillBonus.detail}}" data-dtype="String"/>
+                        <a class="list-control list-create" data-action="delete" title="Delete"><i class="fas fa-trash"></i></a>
+                    </li>
+                    {{/each}}
+                </ol>
+            </div>
+            <div class="list" data-array="conditionalBonuses" data-fields="skill,value,detail" data-dtype="String,Number,String">
+                <div class="list-header flexrow">
+                    <div class="list-header-text">Conditional Bonus</div>
+                    <div class="list-header-text">Value</div>
+                    <div class="list-header-text">Condition</div>
+                    <a class="list-control list-create" data-action="create" title="Add"><i class="fas fa-plus"></i></a>
+                </div>
+                <ol class="list-data">
+                    {{#each data.conditionalBonuses as | obj key |}}
+                    <li class="list-item flexrow" data-index="{{key}}">
+                        {{> "systems/merp1e/templates/parts/skill-chooser.html" field=(concat "data.conditionalBonuses." key ".skill") currentValue=obj.skill rules=../rules}}
+                        <input type="text" name="data.conditionalBonuses.{{key}}.value" value="{{obj.value}}" data-dtype="Number"/>
+                        <input type="text" name="data.conditionalBonuses.{{key}}.description" value="{{obj.description}}" data-dtype="String"/>
                         <a class="list-control list-create" data-action="delete" title="Delete"><i class="fas fa-trash"></i></a>
                     </li>
                     {{/each}}
@@ -78,17 +90,28 @@
                     {{#each data.dailySpells as | obj key |}}
                     <li class="list-item flexrow" data-index="{{key}}">
                         <select name="data.dailySpells.{{key}}.spell.id">
-                            {{#each ../avaliableSpells as |spell|}}
-                                <option value="{{spell.data._id}}" {{#if (isEqual spell.data._id obj.spell.id)}}selected{{/if}}>{{spell.data.name}}</option>
+                            {{#each ../spellHierarchy as |spellGroup|}}
+                                <optgroup type="spelllistgroup" label="{{localize spellGroup.name}}">
+                                    {{#each spellGroup.spellLists as |spellList|}}
+                                    <optgroup type="spellList" label="{{localize spellList.name}}">
+                                        {{#each spellList.data.data.spells as |spell|}}
+                                        <option value="{{spell._id}}" {{#if (isEqual spell._id obj.spell.id)}}selected{{/if}}>{{spell.level}} - {{spell.name}}</option>
+                                        {{/each}}
+                                    {{/each}}
+                                    </optgroup>
+                                </optgroup>
                             {{/each}}
                         </select>
-                        <input type="text" name="data.dailySpells.{{key}}.usesPerDay" value="{{obj.value}}" data-dtype="Number"/>
+                        <input type="text" name="data.dailySpells.{{key}}.usesPerDay" value="{{obj.usesPerDay}}" data-dtype="Number"/>
                         <input type="text" name="data.dailySpells.{{key}}.detail" value="{{obj.detail}}" data-dtype="String"/>
                         <a class="list-control list-create" data-action="delete" title="Delete"><i class="fas fa-trash"></i></a>
                     </li>
                     {{/each}}
                 </ol>
             </div>
+
+
+
         </div>
 
         {{!-- Description Tab --}}
