@@ -4,7 +4,6 @@
 
     Sheet: Equipment
         Fazer Itens mágicos:
-            On use Bonus : colocar um optgroup nos skills
             Daily Spell e o Numbered Uses Spell
             Fazer um widget que "recebe" spell por drag & drop
                 Aceitar drag and drop no combo

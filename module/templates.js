@@ -10,7 +10,8 @@ export const preloadHandlebarsTemplates = async function() {
     // Attribute list partial.
     "systems/merp1e/templates/parts/sheet-stats.html",
     "systems/merp1e/templates/parts/sheet-skills.html",
-    "systems/merp1e/templates/parts/skill-chooser.html"
+    "systems/merp1e/templates/parts/skill-chooser.html",
+    "systems/merp1e/templates/parts/spell-chooser.html"
   ];
 
   // Load the template parts
