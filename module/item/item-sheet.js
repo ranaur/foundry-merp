@@ -66,8 +66,9 @@ export class Merp1eItemSheet extends ItemSheet {
   _updateObject(event, formData) {
     formData = ListSheetHelper.update(formData, this, "skillBonuses");
     formData = ListSheetHelper.update(formData, this, "onUseBonuses");
-    formData = ListSheetHelper.update(formData, this, "dailySpells");
     formData = ListSheetHelper.update(formData, this, "conditionalBonuses");
+    formData = ListSheetHelper.update(formData, this, "dailySpells");
+    formData = ListSheetHelper.update(formData, this, "chargedSpells");
     //formData = ListSheetHelper.update(formData, this, "fixedUsesSpells");
     //formData = ListSheetHelper.update(formData, this, "ppMultiplier");
     //formData = ListSheetHelper.update(formData, this, "spellAdder");

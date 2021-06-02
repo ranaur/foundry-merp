@@ -79,10 +79,10 @@
                     {{/each}}
                 </ol>
             </div>
-            <div class="list" data-array="dailySpells" data-fields="skill,value,detail" data-dtype="String,Number,String">
+            <div class="list" data-array="dailySpells" data-fields="spell,usesPerDay,detail" data-dtype="String,Number,String">
                 <div class="list-header flexrow">
                     <div class="list-header-text">Daily Spell</div>
-                    <div class="list-header-text"># Uses</div>
+                    <div class="list-header-text"># Uses/day</div>
                     <div class="list-header-text">Detail</div>
                     <a class="list-control list-create" data-action="create" title="Add"><i class="fas fa-plus"></i></a>
                 </div>
@@ -92,6 +92,24 @@
                         {{> "systems/merp1e/templates/parts/spell-chooser.html" field=(concat "data.dailySpells." key ".spell.id") currentValue=obj.spell.id spellHierarchy=../spellHierarchy}}
                         <input type="text" name="data.dailySpells.{{key}}.usesPerDay" value="{{obj.usesPerDay}}" data-dtype="Number"/>
                         <input type="text" name="data.dailySpells.{{key}}.detail" value="{{obj.detail}}" data-dtype="String"/>
+                        <a class="list-control list-create" data-action="delete" title="Delete"><i class="fas fa-trash"></i></a>
+                    </li>
+                    {{/each}}
+                </ol>
+            </div>
+            <div class="list" data-array="chargedSpells" data-fields="spell,charges,detail" data-dtype="String,Number,String">
+                <div class="list-header flexrow">
+                    <div class="list-header-text">Spell</div>
+                    <div class="list-header-text"># Uses</div>
+                    <div class="list-header-text">Detail</div>
+                    <a class="list-control list-create" data-action="create" title="Add"><i class="fas fa-plus"></i></a>
+                </div>
+                <ol class="list-data">
+                    {{#each data.chargedSpells as | obj key |}}
+                    <li class="list-item flexrow" data-index="{{key}}">
+                        {{> "systems/merp1e/templates/parts/spell-chooser.html" field=(concat "data.chargedSpells." key ".spell.id") currentValue=obj.spell.id spellHierarchy=../spellHierarchy}}
+                        <input type="text" name="data.chargedSpells.{{key}}.charges" value="{{obj.charges}}" data-dtype="Number"/>
+                        <input type="text" name="data.chargedSpells.{{key}}.detail" value="{{obj.detail}}" data-dtype="String"/>
                         <a class="list-control list-create" data-action="delete" title="Delete"><i class="fas fa-trash"></i></a>
                     </li>
                     {{/each}}

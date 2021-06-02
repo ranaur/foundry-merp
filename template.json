@@ -85,6 +85,7 @@
       "skillBonuses": {},
       "onUseBonuses": {},
       "dailySpells": {},
+      "chargedSpells": {},
       "fixedUsesSpells": {},
       "ppMultiplier": {},
       "spellAdder": {}

@@ -4,7 +4,7 @@
             {{#each spellGroup.spellLists as |spellList|}}
             <optgroup type="spellList" label="{{localize spellList.name}}">
                 {{#each spellList.data.data.spells as |spell|}}
-                <option value="{{spell._id}}" {{#if (isEqual spell._id ../../currentValue)}}selected{{/if}}>{{spell.level}} - {{spell.name}}</option>
+                <option value="{{spell._id}}" {{#if (isEqual spell._id ../../../currentValue)}}selected{{/if}}>{{spell.level}} - {{spell.name}}</option>
                 {{/each}}
             {{/each}}
             </optgroup>
