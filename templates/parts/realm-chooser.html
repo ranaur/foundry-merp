@@ -1,0 +1,6 @@
+<select name="{{field}}">
+    {{#each realms as |realm|}}
+    <option value="{{realm}}" {{#if (isEqual ../currentValue realm)}}selected{{/if}}>{{localize (concat "MERP1E.Realm." realm)}}</option>
+    {{/each}}
+    <option value="any" {{#if (isEqual currentValue "any")}}selected{{/if}}>{{localize (concat "MERP1E.Realm.Any")}}</option>
+</select>

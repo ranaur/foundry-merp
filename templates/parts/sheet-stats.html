@@ -1,12 +1,12 @@
-<tr class="stat-line" stat="{{stat}}">
-    <td>{{ localize (concat 'MERP1E.Stats.' stat '.Name') }}</td>
-    <td>({{ localize (concat 'MERP1E.Stats.' stat '.Short') }})</td>
-    <td><input class="stat-value" name="data.stats.{{stat}}.value" value='{{stat-value.value}}' min="1" max="102" type="number" data-dtype="Number"/></td>
+<tr class="stat-line" id="stat-{{stat}}">
+    <td>{{ localize (concat 'MERP1E.Stats.' stat.abbr '.Name') }}</td>
+    <td>({{ localize (concat 'MERP1E.Stats.' stat.abbr '.Short') }})</td>
+    <td><input class="stat" name="data.stats.{{stat.abbr}}.value" value='{{stat.value}}' min="1" max="102" type="number" data-dtype="Number"/></td>
     {{#if only_value}}
     <td colspan="3"></td>
     {{else}}
-    <td><input class="stat-value-bonus stat-bonus bonus" name="data.stats.{{stat}}.bonuses.stat" value='{{stat-value.bonuses.stat}}' placeholder="0" type="number" data-dtype="Number" readonly tabindex=-1/></td>
-    <td><input class="stat-race stat-bonus bonus" name="data.stats.{{stat}}.bonuses.race" value='{{stat-value.bonuses.race}}' placeholder="0" type="number" data-dtype="Number" readonly tabindex=-1/></td>
-    <td><input class="stat-total bonus" name="data.stats.{{stat}}.total" value='{{stat-value.total}}' placeholder="0" type="number" data-dtype="Number" readonly tabindex=-1/></td>
+    <td><input class="stat-bonus stat-bonus bonus" value='{{stat.bonuses.stat}}' placeholder="0" type="number" data-dtype="Number" readonly tabindex=-1/></td>
+    <td><input class="stat-race stat-bonus bonus" value='{{stat.bonuses.race}}' placeholder="0" type="number" data-dtype="Number" readonly tabindex=-1/></td>
+    <td><input class="stat-total bonus" value='{{stat.total}}' placeholder="0" type="number" data-dtype="Number" readonly tabindex=-1/></td>
     {{/if}}
 </tr>

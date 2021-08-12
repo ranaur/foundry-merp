@@ -93,6 +93,8 @@ export class GenericImporter extends FormApplication {
                 
               }
               if(value != null && value != "") config[key] = value;
+              if(value == "true") config[key] = true;
+              if(value == "false") config[key] = false;
             }
             //this._create(data);
             config = await expandObject(config);
@@ -101,10 +103,10 @@ export class GenericImporter extends FormApplication {
             let item = game.items.filter((item) => { return item.data.name == config.name && item.data.folder == config.folder});
             if(item.length > 0) {
               console.log(`Updating ${config.name}`)
-              Item.update(mergeObject(item[0].data, config));
+              Item.updateDocuments([mergeObject(item[0].data, config)]);
             } else {
               console.log(`Creating ${config.name}`)
-              Item.create(config);
+              Item.createDocuments([config]);
             }
           }
         }

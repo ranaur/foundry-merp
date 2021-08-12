@@ -1,54 +1,23 @@
-import { LanguageSheetHelper } from '../language-helper.js';
+import { ArraySheetHelper } from '../array-sheet-helper.js';
+import { Merp1eBaseItemSheet } from './base-sheet.js';
 
 /**
  * Extend the basic ItemSheet with some very simple modifications
  * @extends {ItemSheet}
  */
-export class Merp1eRaceSheet extends ItemSheet {
-
-  /** @override */
-  static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
-      classes: ["merp1e", "sheet", "item"],
-      width: 520,
-      height: 640,
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }]
-    });
-  }
-
-  /** @override */
-  get template() {
-    const path = "systems/merp1e/templates/item";
-    // Return a single sheet for all item types.
-    //return `${path}/item-sheet.html`;
-    // Alternatively, you could use the following return statement to do a
-    // unique item sheet by type, like `weapon-sheet.html`.
-
-    return `${path}/${this.item.data.type}-sheet.html`;
-  }
-
+export class Merp1eRaceSheet extends Merp1eBaseItemSheet {
+  languagesHelper = null;
+  
   /* -------------------------------------------- */
 
   /** @override */
   getData() {
-    const data = super.getData();
-    data.rules = game.merp1e.Merp1eRules;
-    data.rules.skill.sheetOrder = data.rules.skill.generateSheetOrder();
-    return data;
+    let sheetData = super.getData()
+    sheetData.data = sheetData.data.data
+
+    sheetData.rules.skill.sheetOrder = this._generateSkillOrder();
+    return sheetData;
   }
-
-  /* -------------------------------------------- */
-
-  /** @override */
-  setPosition(options = {}) {
-    const position = super.setPosition(options);
-    const sheetBody = this.element.find(".sheet-body");
-    const bodyHeight = position.height - 192;
-    sheetBody.css("height", bodyHeight);
-    return position;
-  }
-
-  /* -------------------------------------------- */
 
   /** @override */
   activateListeners(html) {
@@ -56,15 +25,22 @@ export class Merp1eRaceSheet extends ItemSheet {
 
     // Everything below here is only needed if the sheet is editable
     if (!this.options.editable) return;
+    
+    this.languagesHelper = new ArraySheetHelper("languages", this, { name: "New Language", ranks: 0 });
+
+    this.languagesHelper.activateListeners(html);
 
     // Roll handlers, click handlers, etc. would go here.
-    html.find(".languages").on("click", ".language-control", LanguageSheetHelper.onClickLanguageControl.bind(this));
+    //html.find(".list-control").on("click", ListSheetHelper.onClickControl.bind(this)); 
   }
 
   /** @override */
   _updateObject(event, formData) {
-    formData = LanguageSheetHelper.updateLanguages(formData, this);
+    //formData = LanguageSheetHelper.updateLanguages(formData, this);
+    //formData = ListSheetHelper.update(formData, this, "conditionalBonuses");
+    formData = this.languagesHelper.updateObject(formData);
     return this.object.update(formData);
   }
 }
+
 

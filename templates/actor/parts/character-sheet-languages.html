@@ -1,0 +1,22 @@
+<div class="language">
+    <header class="language-header flexrow" style="font-weight: bolder;">
+        <span class="language-name flex4">{{localize "MERP1E.Languages.Language"}}</span>
+        <span class="language-rank flex1">{{localize "MERP1E.Languages.Ranks"}}</span>
+        <span class="language-controls flex1">
+            <a class="language-control language-create" data-action="create-language" title="{{localize MERP1E.Languages.CreateNewLanguage}}"><i class="fas fa-plus"></i></a>
+            <a class="language-control language-add-all" data-action="add-race-languages" title="{{localize MERP1E.Languages.AddRacialLanguages}}"><i class="fas fa-folder-plus"></i></a>
+        </span>
+    </header>
+    <div class="language-list">
+        {{#each actor.languages as |language languageId|}}
+        <li class="language-list-item item flexrow" data-item-id="{{languageId}}">
+                <input class="language-name flex4" name="languages.{{languageId}}.name" value="{{language.name}}" placeholder='{{localize "MERP1E.Languages.Language"}}' type="text" data-dtype="String"/>
+                <input class="language-rank flex1" name="languages.{{languageId}}.ranks" value="{{language.data.data.ranks}}" min="1" max ="5" placeholder='-' type="number" data-dtype="Number"/>
+                <span class="language-controls flex1">
+                    <a class="language-control language-edit" data-action="edit-language" title="{{localize MERP1E.Languages.EditLanguage}}"><i class="fas fa-edit"></i></a>
+                    <a class="language-control language-delete" data-action="delete-language" title="{{localize MERP1E.Languages.DeleteLanguage}}"><i class="fas fa-trash"></i></a>
+                </span>
+        </li>
+        {{/each}}
+    </div>
+</div>

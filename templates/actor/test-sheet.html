@@ -1,0 +1,41 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+  {{!-- Sheet Header --}}
+  <header class="sheet-header">
+      <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
+      <div class="header-fields">
+          <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
+        </div>
+      </div>
+  </header>
+
+  {{!-- Sheet Tab Navigation --}}
+  <nav class="sheet-tabs tabs" data-group="primary">
+    <a class="item" data-tab="description">Description</a>
+    <a class="item" data-tab="data">Data</a>
+  </nav>
+
+  {{!-- Sheet Body --}}
+  <section class="sheet-body">
+    {{!-- Description Tab --}}
+    <div class="tab description" data-group="primary" data-tab="description">
+      {{log this}}
+
+      {{!-- #each data as | item id | }}
+      <div class="{{id}}">
+        <label for="{{id}}-label" class="resource-label">{{id}}</label>
+        <input type="text" name="{{id}}" value="{{item}}" data-dtype="String"/>
+      </div>
+      {{/each --}}
+      <div class="test">
+        <label>Test</label>
+        <input type="text" name="data.test" value="{{data.test}}" data-dtype="String"/>
+      </div>
+
+    </div>
+    <div class="tab description" data-group="primary" data-tab="data">
+      <h2>Notes</h2>
+      {{editor content=data target="data" button=true owner=owner editable=editable }}
+    </div>
+</section>
+</form>
+

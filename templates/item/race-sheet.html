@@ -10,9 +10,10 @@
     <nav class="sheet-tabs tabs" data-group="primary">
         <a class="item" data-tab="statbonuses">{{localize "MERP1E.Race.StatBonuses"}}</a>
         <a class="item" data-tab="skills">{{localize "MERP1E.Race.Skills"}}</a>
+        <a class="item" data-tab="conditional">{{localize "MERP1E.Race.Conditional"}}</a>
         <a class="item" data-tab="languages">{{localize "MERP1E.Race.Languages"}}</a>
         <a class="item" data-tab="description">{{localize "MERP1E.Race.Description"}}</a>
-        <a class="item" data-tab="characteristics">{{localize "MERP1E.Race.Characteristics"}}</a>
+        {{!-- <a class="item" data-tab="characteristics">{{localize "MERP1E.Race.Characteristics"}}</a> --}}
     </nav>
 
     {{!-- Sheet Body --}}
@@ -38,7 +39,8 @@
                 </tbody>
             </table>
         </div>
-            {{!-- Skill Bonuses Tab --}}
+
+        {{!-- Skill Bonuses Tab --}}
         <div class="tab skillbonuses" data-group="primary" data-tab="skills">
             <div class="race-skill-table flexcol">
                 <div class="flexrow">
@@ -48,7 +50,7 @@
                 </div>
                 {{#each rules.skill.sheetOrder as | group |}}
                 <div class="race-skill-group">
-                    <div class="">{{localize (concat "MERP1E.SkillGroup." group.id)}}</div>
+                    <div style="font-weight: bolder;">{{localize (concat "MERP1E.SkillGroup." group.name)}}</div>
                     {{#each group.skills as | skill |}}
                     <div class="race-skill flexrow">
                         <div>{{localize (concat "MERP1E.Skill." skill.data.reference)}}</div>
@@ -58,7 +60,7 @@
                     {{/each}}
                 </div>
                 {{/each}}
-                <div class="race-skill-group flexrow">{{localize "MERP1E.Race.OtherAdolescenceRanks"}}</div>
+                <div class="race-skill-group flexrow" style="font-weight: bolder;">{{localize "MERP1E.Race.OtherAdolescenceRanks"}}</div>
                 <div class="race-skill flexrow">
                     <div>{{localize "MERP1E.Race.AdolescenceLanguages"}}</div>
                     <div></div>
@@ -77,24 +79,52 @@
             </div>
         </div>
 
-        {{!-- Skill Bonuses Tab --}}
-        <div class="tab languages" data-group="primary" data-tab="languages">
-            <header class="language-header flexrow">
-                <span class="language-name flex4">{{localize "MERP1E.Languages.Language"}}</span>
-                <span class="language-rank flex1">{{localize "MERP1E.Languages.Ranks"}}</span>
-                <a class="language-control language-add" data-action="create-language"><i class="fas fa-plus"></i></a>
-            </header>
-            <div class="language-list">
-                {{#each data.languages as |language languageKey|}}
-                  <li class="language flexrow" data-language="{{languageKey}}">
-                      <input class="language-name flex4" name="data.languages.{{languageKey}}.name" value="{{language.name}}" placeholder='{{localize "MERP1E.Languages.Language"}}' type="text" data-dtype="String"/>
-                      <input class="language-rank flex1" name="data.languages.{{languageKey}}.rank" value="{{language.rank}}" min="1" max ="5" placeholder='5' type="number" data-dtype="Number"/>
-                      <a class="language-control language-delete" data-action="delete-language" title="Delete Item"><i class="fas fa-trash"></i></a>
-                  </li>
-                {{/each}}
+        {{!-- Laguages Tab --}}
+        <div class="tab" data-group="primary" data-tab="languages">
+            <div class="languages">
+                <header class="flexrow">
+                    <span class="flex4">{{localize "MERP1E.Languages.Language"}}</span>
+                    <span class="flex1">{{localize "MERP1E.Languages.Ranks"}}</span>
+                    <span class="flex1">
+                        <a class="languages-create" data-action="create-language" title="Create New Language"><i class="fas fa-plus"></i></a>
+                    </span>
+                </header>
+                <div class="languages-list">
+                    {{#each data.languages as |language languageIdx|}}
+                    <li class="languages-list-item item flexrow">
+                            <input class="flex4" name="data.languages.{{languageIdx}}.name" value="{{language.name}}" placeholder='{{localize "MERP1E.Languages.Language"}}' type="text" data-dtype="String"/>
+                            <input class="flex1" name="data.languages.{{languageIdx}}.ranks" value="{{language.ranks}}" min="1" max ="5" placeholder='-' type="number" data-dtype="Number"/>
+                            <span class="flex1">
+                                <a class="languages-delete" data-action="delete-language" title="Delete Item"><i class="fas fa-trash"></i></a>
+                            </span>
+                    </li>
+                    {{/each}}
+                </div>
             </div>
         </div>
-        {{!-- Description Tab --}}
+
+        {{!-- Conditional Tab --}}
+        <div class="tab conditional" data-group="primary" data-tab="conditional">
+            <div class="list" data-array="conditionalBonuses" data-fields="skill,value,detail" data-dtype="String,Number,String">
+                <div class="list-header flexrow">
+                    <div class="list-header-text">Conditional Bonus</div>
+                    <div class="list-header-text">Value</div>
+                    <div class="list-header-text">Condition</div>
+                    <a class="list-control list-create" data-action="create" title="Add"><i class="fas fa-plus"></i></a>
+                </div>
+                <ol class="list-data">
+                    {{#each data.conditionalBonuses as | obj key |}}
+                    <li class="list-item flexrow" data-index="{{key}}">
+                        {{> "systems/merp1e/templates/parts/skill-chooser.html" field=(concat "data.conditionalBonuses." key ".skill") currentValue=obj.skill sheetOrder=../rules.skill.sheetOrder}}
+                        <input type="text" name="data.conditionalBonuses.{{key}}.value" value="{{obj.value}}" data-dtype="Number"/>
+                        <input type="text" name="data.conditionalBonuses.{{key}}.description" value="{{obj.description}}" data-dtype="String"/>
+                        <a class="list-control list-create" data-action="delete" title="Delete"><i class="fas fa-trash"></i></a>
+                    </li>
+                    {{/each}}
+                </ol>
+            </div>
+        </div>
+        {{!-- Characteristics Tab
         <div class="tab" data-group="primary" data-tab="characteristics">
             <div class="race-group">Physical Character</div>
             <div>
@@ -168,14 +198,10 @@
                 <input type="text" class="race-data" name="data.otherFactors.backgroundOptions" value="{{data.otherFactors.backgroundOptions}}" data-dtype="String"/>
             </div>
         </div>
-
+        --}}
+        {{!-- Description Tab --}}
         <div class="tab" data-group="primary" data-tab="description">
             {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
-        </div>
-
-        {{!-- Attributes Tab --}}
-        <div class="tab spellgroups" data-group="primary" data-tab="attributes">
-            {{!-- As you add new fields, add them in here! --}}
         </div>
     </section>
 </form>

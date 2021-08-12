@@ -9,18 +9,18 @@
           from 1 to 12 and will create that number of columns.  --}}
           <div class="resources grid grid-2col">
             <div class="resource flex-group-center">
-              <label for="data.raceId" class="resource-label">{{localize "MERP1E.Character.Race"}}</label>
+              <label class="resource-label">{{localize "MERP1E.Character.Race"}}</label>
               <div>
-                <select name="data.raceId">
-                  {{selectOptions avaliableRaces selected=data.raceId localize=True}}
+                <select name="data.originalRaceId">
+                  {{selectOptions avaliableRaces selected=data.data.originalRaceId localize=True}}
                 </select>
               </div>
             </div>
             <div class="resource flex-group-center">
               <label for="data.profession" class="resource-label">{{localize "MERP1E.Character.Profession"}}</label>
               <div>
-                <select name="data.professionId">
-                  {{selectOptions avaliableProfessions selected=data.professionId localize=True}}
+                <select name="data.originalProfessionId">
+                  {{selectOptions avaliableProfessions selected=data.data.originalProfessionId localize=True}}
                 </select>
               </div>
             </div>
@@ -29,13 +29,13 @@
             <div class="resource flex-group-center">
                 <label for="data.level" class="resource-label">{{localize "MERP1E.Character.Level"}}</label>
                 <div class="resource-content flexrow flex-center flex-between">
-                  <input type="text" name="data.level" value="{{data.level}}" data-dtype="Number" readonly tabindex=-1/>
+                  <input type="text" name="data.level" value="{{actor.data.level}}" data-dtype="Number" readonly tabindex=-1/>
                 </div>
             </div>
             <div class="resource flex-group-center">
                 <label for="data.xp" class="resource-label">{{localize "MERP1E.Character.XP"}}</label>
                 <div class="resource-content flexrow flex-center flex-between">
-                  <input type="text" name="data.xp" value="{{data.xp}}" data-dtype="Number"/>
+                  <input type="text" name="data.xp" value="{{data.data.xp}}" data-dtype="Number"/>
                 </div>
             </div>
         </div>
@@ -88,144 +88,86 @@
             </tr>
         </thead>
         <tbody>
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="st" stat-value=data.stats.st}}
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="ag" stat-value=data.stats.ag}}
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="co" stat-value=data.stats.co}}
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="ig" stat-value=data.stats.ig}}
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="it" stat-value=data.stats.it}}
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="pr" stat-value=data.stats.pr}}
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat="ap" stat-value=data.stats.ap only_value=true}}
+            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat=actor.data.stats.st}}
+            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat=actor.data.stats.ag}}
+            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat=actor.data.stats.co}}
+            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat=actor.data.stats.ig}}
+            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat=actor.data.stats.it}}
+            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat=actor.data.stats.pr}}
+            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat=actor.data.stats.ap only_value=true}}
         </tbody>
     </table>
     </div>
 
     {{!-- Skills Tab --}}
     <div class="tab skills" data-group="primary" data-tab="skills">
-      <div class="tab skills" data-group="primary" data-tab="skills">
-        <header class="skill-header flexrow">
-          <span class="skill-name flex3">{{localize "MERP1E.SkillTable.SkillName"}}</span>
-          <span class="skill-ranks">{{localize "MERP1E.SkillTable.Ranks"}}</span>
-          <span class="skill-rankbonus">{{localize "MERP1E.SkillTable.RankBonus"}}</span>
-          <span class="skill-statbonus">{{localize "MERP1E.SkillTable.StatBonus"}}</span>
-          <span class="skill-profbonus">{{localize "MERP1E.SkillTable.ProfessionBonus"}}</span>
-          <span class="skill-itembonus">{{localize "MERP1E.SkillTable.ItemBonus"}}</span>
-          <span class="skill-specbonus">{{localize "MERP1E.SkillTable.SpecialBonus"}}</span>
-          <span class="skill-extrabonus">{{localize "MERP1E.SkillTable.ExtraBonus"}}</span>
-          <span class="skill-totalbonus flex2">{{localize "MERP1E.SkillTable.Total"}}</span>                
-        </header>
-        <section class="skill-list flexcol">
-          <div class="skill-groups">
-            {{#each rules.skill.sheetOrder as | group |}}
-            <div class="skill-group">
-              <div class="skill-group-header">{{localize (concat "MERP1E.SkillGroup." group.id)}}</div>
-              {{#each group.skills as | skill |}}
-                {{> "systems/merp1e/templates/parts/sheet-skills.html" skill=skill skill-value=(lookup ../../data.skills skill.data.reference)}}
-              {{/each}}
-            </div>
+      <header class="skill-header flexrow">
+        <span class="skill-name flex3">{{localize "MERP1E.SkillTable.SkillName"}}</span>
+        <span class="skill-ranks">{{localize "MERP1E.SkillTable.Ranks"}}</span>
+        <span class="skill-rankbonus">{{localize "MERP1E.SkillTable.RankBonus"}}</span>
+        <span class="skill-statbonus">{{localize "MERP1E.SkillTable.StatBonus"}}</span>
+        <span class="skill-profbonus">{{localize "MERP1E.SkillTable.ProfessionBonus"}}</span>
+        <span class="skill-itembonus">{{localize "MERP1E.SkillTable.ItemBonus"}}</span>
+        <span class="skill-specbonus">{{localize "MERP1E.SkillTable.SpecialBonus"}}</span>
+        <span class="skill-extrabonus">{{localize "MERP1E.SkillTable.ExtraBonus"}}</span>
+        <span class="skill-totalbonus flex2">{{localize "MERP1E.SkillTable.Total"}}
+          <a class="skill-control remove-all" data-action="remove-all"><i class="fas fa-eraser"></i></a>
+          <a class="skill-control add-all" data-action="add-all"><i class="fas fa-folder-plus"></i></a>
+          <a class="skill-control add-item" data-action="add-item"><i class="fas fa-plus"></i></a>
+        </span>
+      </header>
+      <section class="skill-list flexcol">
+        <div class="skill-groups">
+          {{#each sheetOrder as | group |}}
+          <div class="skill-group">
+            <div class="skill-group-header" style="font-weight:bolder">{{localize (concat "MERP1E.SkillGroup." group.name)}}</div> <!-- XXX put style in the CSS -->
+            {{#each group.skills as | skill |}}
+            {{> "systems/merp1e/templates/parts/sheet-skills.html" skill=skill}}
             {{/each}}
           </div>
-        </section>
-      </div>
+          {{/each}}
+        </div>
+      </section>
     </div>
 
     {{!-- Language Tab --}}
     <div class="tab languages" data-group="primary" data-tab="languages">
-      <header class="language-header flexrow">
-          <span class="language-name flex4">{{localize "MERP1E.Languages.Language"}}</span>
-          <span class="language-rank flex1">{{localize "MERP1E.Languages.Ranks"}}</span>
-          <a class="language-control language-add" data-action="create-language"><i class="fas fa-plus"></i></a>
-      </header>
-      <div class="language-list">
-          {{#each data.languages as |language languageKey|}}
-            <li class="language flexrow" data-language="{{languageKey}}">
-                <input class="language-name flex4" name="data.languages.{{languageKey}}.name" value="{{language.name}}" placeholder='{{localize "MERP1E.Languages.Language"}}' type="text" data-dtype="String"/>
-                <input class="language-rank flex1" name="data.languages.{{languageKey}}.rank" value="{{language.rank}}" min="1" max ="5" placeholder='5' type="number" data-dtype="Number"/>
-                <a class="language-control language-delete" data-action="delete-language" title="Delete Item"><i class="fas fa-trash"></i></a>
-            </li>
-          {{/each}}
-      </div>
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-languages.html" actor=actor}}
     </div>
 
     {{!-- Description Tab --}}
     <div class="tab description" data-group="primary" data-tab="description">
       <div class="description-height">
-        <label for="data.description.height" class="resource-label">{{localize "MERP1E.Description.Height"}}</label>
-        <input type="text" name="data.description.height" value="{{data.description.height}}" data-dtype="String"/>
+        <label for="description.height" class="resource-label">{{localize "MERP1E.Description.Height"}}</label>
+        <input type="text" name="data.description.height" value="{{data.data.description.height}}" data-dtype="String"/>
       </div>
       <div class="description-weight">
         <label for="data.description.weight" class="resource-label">{{localize "MERP1E.Description.Weight"}}</label>
-        <input type="text" name="data.description.weight" value="{{data.description.weight}}" data-dtype="String"/>
+        <input type="text" name="data.description.weight" value="{{data.data.description.weight}}" data-dtype="String"/>
       </div>
       <div class="description-hair">
         <label for="data.description.hair" class="resource-label">{{localize "MERP1E.Description.Hair"}}</label>
-        <input type="text" name="data.description.hair" value="{{data.description.hair}}" data-dtype="String"/>
+        <input type="text" name="data.description.hair" value="{{data.data.description.hair}}" data-dtype="String"/>
       </div>
       <div class="description-eyes">
         <label for="data.description.eyes" class="resource-label">{{localize "MERP1E.Description.Eyes"}}</label>
-        <input type="text" name="data.description.eyes" value="{{data.description.eyes}}" data-dtype="String"/>
+        <input type="text" name="data.description.eyes" value="{{data.data.description.eyes}}" data-dtype="String"/>
       </div>
       <div class="description-demeanor">
         <label for="data.description.demeanor" class="resource-label">{{localize "MERP1E.Description.Demeanor"}}</label>
-        <input type="text" name="data.description.demeanor" value="{{data.description.demeanor}}" data-dtype="String"/>
+        <input type="text" name="data.description.demeanor" value="{{data.data.description.demeanor}}" data-dtype="String"/>
       </div>
       <div class="description-special">
         <label for="data.description.special" class="resource-label">{{localize "MERP1E.Description.Special"}}</label>
-        <input type="text" name="data.description.special" value="{{data.description.special}}" data-dtype="String"/>
+        <input type="text" name="data.description.special" value="{{data.data.description.special}}" data-dtype="String"/>
       </div>
       <h2>{{localize "MERP1E.Description.Notes"}}</h2>
-      {{editor content=data.description.notes target="data.description.notes" button=true owner=owner editable=editable}}
+      {{editor content=data.data.description.notes target="data.description.notes" button=true owner=owner editable=editable}}
     </div>
 
     {{!-- Spell Tab --}}
     <div class="tab spells" data-group="primary" data-tab="spells">
-      <div>
-        <label for="data.realm" class="resource-label">{{localize "MERP1E.Profession.Realm"}}</label>
-        {{#if (eq data.profession.data.realm "any")}}
-        <select name="data.realm">
-          {{#each rules.spell.realms as |realm|}}
-              <option value="{{realm}}" {{#if (isEqual ../data.realm realm)}}selected{{/if}}>{{localize (concat "MERP1E.Realm." realm)}}</option>
-          {{/each}}
-        </select>
-        {{else}}
-          <input type="text" name="data.realm" value="{{data.profession.data.realm}}" data-dtype="String" readonly tabindex=-1/>
-        {{/if}}
-      </div>
-      <ol class="items-list">
-        <li class="item flexrow item-header">
-          <div class="item-image"></div>
-          <div class="item-name">Name</div>
-          <div class="item-controls">
-            <a class="item-control item-create" title="Create item" data-type="item"><i class="fas fa-plus"></i> Add item</a>
-          </div>
-        </li>
-        {{#each data.spelllists as |item id|}}
-          <li class="item flexrow" data-item-id="{{item._id}}">
-            <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"/></div>
-            <h4 class="item-name">{{item.name}}</h4>
-              {{#if item.data.learned}}
-              <div>X</div>
-              {{else}}
-              <div>{{item.data.chanceoflearning}}</div>
-              {{/if}}
-              <div class="item-controls">
-                <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
-                <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
-              </div>
-          </li>
-          {{#if item.data.learned}}
-            {{#each item.data.spells as | spell |}}
-            <li class="item flexrow" data-item-id="{{item._id}}">
-              <div class="item-image" stype="width: 48px"></div>
-              <div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24"/></div>
-              <h4 class="item-name">{{spell.level}} - {{spell.name}}</h4>
-              <div class="item-controls">
-                ROLL
-              </div>
-            </li>
-            {{/each}}
-          {{/if}}
-        {{/each}}
-      </ol>
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-spells.html" actor=actor}}
     </div>
 
     {{!-- Owned Items Tab --}}
@@ -240,7 +182,7 @@
         </li>
         {{#each actor.items as |item id|}}
           {{#if (isNotEqual item.type "spelllist")}}
-          <li class="item flexrow" data-item-id="{{item._id}}">
+          <li class="item flexrow" data-item-id="{{item.id}}">
             <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"/></div>
             <h4 class="item-name">{{item.name}}</h4>
             <div class="item-controls">
@@ -252,5 +194,6 @@
         {{/each}}
       </ol>
     </div>
+  </section>
 </form>
 

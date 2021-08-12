@@ -11,7 +11,10 @@ export const preloadHandlebarsTemplates = async function() {
     "systems/merp1e/templates/parts/sheet-stats.html",
     "systems/merp1e/templates/parts/sheet-skills.html",
     "systems/merp1e/templates/parts/skill-chooser.html",
-    "systems/merp1e/templates/parts/spell-chooser.html"
+    "systems/merp1e/templates/parts/realm-chooser.html",
+    "systems/merp1e/templates/parts/spell-chooser.html",
+    "systems/merp1e/templates/actor/parts/character-sheet-languages.html",
+    "systems/merp1e/templates/actor/parts/character-sheet-spells.html"
   ];
 
   // Load the template parts

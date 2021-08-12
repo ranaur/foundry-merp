@@ -71,6 +71,7 @@
     "MERP1E.StatTable.Race": "Race",
     "MERP1E.StatTable.Total": "Total",
 
+    "MERP1E.SkillTable.ChooseOne": "Choose one",
     "MERP1E.SkillTable.SkillName": "Skill",
     "MERP1E.SkillTable.Ranks": "Ranks",
     "MERP1E.SkillTable.RankBonus": "Bonus",
@@ -149,9 +150,6 @@
     "MERP1E.SkillGroup.Miscelaneous": "Miscelaneous Skills",
     "MERP1E.SkillGroup.Secondary": "Secondary Skills",
   
-    "MERP1E.Languages.Language": "Language",
-    "MERP1E.Languages.Ranks": "Ranks",
- 
     "MERP1E.DeleteGroup": "Delete group?",
     "MERP1E.DeleteGroupContent": "Do you wish to delete this group? This will delete the following group and all attributes included in it: ",
   
@@ -177,6 +175,8 @@
     "MERP1E.SpellsAllowed.Open5th": "Open Lists up to 5th Level",
     "MERP1E.SpellsAllowed.Open3rd": "Open Lists up to 3rd Level",
 
+    "MERP1E.Profession.Realm": "Realm",
+    "MERP1E.Profession.ChooseOne": "Choose one",
     "MERP1E.Profession.Label": "Profession",
     "MERP1E.Profession.Warrior": "Warrior",
     "MERP1E.Profession.Scout": "Scout",
@@ -198,8 +198,10 @@
 
     "MERP1E.Race.RacialBonus": "Racial Bonus",
 
+    "MERP1E.Race.ChooseOne": "Choose one",
     "MERP1E.Race.Skill": "Skill",
     "MERP1E.Race.Bonus": "Bonus",
+    "MERP1E.Race.Conditional": "Conditional",
     "MERP1E.Race.AdolescenceSkillRank": "Adolescence Skill Rank",
     "MERP1E.Race.OtherAdolescenceRanks": "Other",
     "MERP1E.Race.AdolescenceLanguages": "Adolescence Languages",
@@ -227,6 +229,7 @@
     "MERP1E.SkillSheet.Order": "Sheet Order",
     "MERP1E.SkillSheet.StatBonus": "Stat Bonus",
     "MERP1E.SkillSheet.Rolltype": "Roll Type",
+    "MERP1E.SkillSheet.ShowOnEverySheet": "Show on Every Sheet?",
     "MERP1E.RollType.MM": "MM",
     "MERP1E.RollType.SM": "SM",
     "MERP1E.RollType.OB": "OB",
@@ -236,10 +239,18 @@
     "MERP1E.SkillSheet.RankBonusMethod": "Rank Bonus",
     "MERP1E.SkillRankBonusMethod.normal": "Normal",
     "MERP1E.SkillRankBonusMethod.always1": "Always 1",
-    "MERP1E.SkillRankBonusMethod.d10PerRank": "D10 per Rank",
+    "MERP1E.SkillRankBonusMethod.rollPerRank": "Roll per Rank",
     "MERP1E.SkillSheet.Description": "Description",
     "MERP1E.SkillSheet.ExtraBonus": "Extra Bonus",
     "MERP1E.SkillSheet.MaxRanks": "Maximum Ranks",
+
+    "MERP1E.Languages.Description": "Description",
+    "MERP1E.Languages.Language": "Language",
+    "MERP1E.Languages.Ranks": "Ranks",
+    "MERP1E.Languages.CreateNewLanguage": "Create New Language",
+    "MERP1E.Languages.AddRacialLanguages": "Add Racial Languages",
+    "MERP1E.Languages.EditLanguage": "Edit Language",
+    "MERP1E.Languages.DeleteLanguage": "Delete Language",
 
     "MERP1E.X": "MERP1E"
 }

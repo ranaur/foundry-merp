@@ -115,9 +115,42 @@
                     {{/each}}
                 </ol>
             </div>
-
-
-
+            <div class="list" data-array="ppMultiplier" data-fields="realm,multiplier,detail" data-dtype="String,Number,String">
+                <div class="list-header flexrow">
+                    <div class="list-header-text">Realm</div>
+                    <div class="list-header-text">Multiplier</div>
+                    <div class="list-header-text">Detail</div>
+                    <a class="list-control list-create" data-action="create" title="Add"><i class="fas fa-plus"></i></a>
+                </div>
+                <ol class="list-data">
+                    {{#each data.ppMultiplier as | obj key |}}
+                    <li class="list-item flexrow" data-index="{{key}}">
+                        {{> "systems/merp1e/templates/parts/realm-chooser.html" field=(concat "data.ppMultiplier." key ".realm") currentValue=obj.realm realms=../rules.spell.realms}}
+                        <input type="text" name="data.ppMultiplier.{{key}}.multiplier" value="{{obj.multiplier}}" data-dtype="Number"/>
+                        <input type="text" name="data.ppMultiplier.{{key}}.detail" value="{{obj.detail}}" data-dtype="String"/>
+                        <a class="list-control list-create" data-action="delete" title="Delete"><i class="fas fa-trash"></i></a>
+                    </li>
+                    {{/each}}
+                </ol>
+            </div>
+            <div class="list" data-array="spellAdder" data-fields="realm,adder,detail" data-dtype="String,Number,String">
+                <div class="list-header flexrow">
+                    <div class="list-header-text">Realm</div>
+                    <div class="list-header-text">Spell Adder</div>
+                    <div class="list-header-text">Detail</div>
+                    <a class="list-control list-create" data-action="create" title="Add"><i class="fas fa-plus"></i></a>
+                </div>
+                <ol class="list-data">
+                    {{#each data.spellAdder as | obj key |}}
+                    <li class="list-item flexrow" data-index="{{key}}">
+                        {{> "systems/merp1e/templates/parts/realm-chooser.html" field=(concat "data.spellAdder." key ".realm") currentValue=obj.realm realms=../rules.spell.realms}}
+                        <input type="text" name="data.spellAdder.{{key}}.adder" value="{{obj.adder}}" data-dtype="Number"/>
+                        <input type="text" name="data.spellAdder.{{key}}.detail" value="{{obj.detail}}" data-dtype="String"/>
+                        <a class="list-control list-create" data-action="delete" title="Delete"><i class="fas fa-trash"></i></a>
+                    </li>
+                    {{/each}}
+                </ol>
+            </div>
         </div>
 
         {{!-- Description Tab --}}

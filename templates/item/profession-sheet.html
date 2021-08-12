@@ -46,45 +46,46 @@
         {{!-- Skill Bonuses Tab --}}
         <div class="tab skillbonuses" data-group="primary" data-tab="professionalskillbonuses">
             <div class="skill-groups">
-                {{#each rules.skill.sheetOrder as | group |}}
+                {{#each sheetOrder as | group |}}
                 <div class="skill-group">
-                  <div class="skill-group-header">{{localize (concat "MERP1E.SkillGroup." group.id)}} ()
-                    <a class="skill-group-value" group="{{group.id}}">0</a>
-                    <a class="skill-group-value" group="{{group.id}}">1</a>
-                    <a class="skill-group-value" group="{{group.id}}">2</a>
-                    <a class="skill-group-value" group="{{group.id}}">3</a>
-                    <a class="skill-group-value" group="{{group.id}}">4</a>
-                    <a class="skill-group-value" group="{{group.id}}">5</a>)
+                  <div class="skill-group-header" style="font-weight:bolder">{{localize (concat "MERP1E.SkillGroup." group.name)}} (
+                    <a class="skill-group-value" group="{{group.name}}">0</a>
+                    <a class="skill-group-value" group="{{group.name}}">1</a>
+                    <a class="skill-group-value" group="{{group.name}}">2</a>
+                    <a class="skill-group-value" group="{{group.name}}">3</a>
+                    <a class="skill-group-value" group="{{group.name}}">4</a>
+                    <a class="skill-group-value" group="{{group.name}}">5</a>)
                   </div>
                   {{#each group.skills as | skill |}}
                     <div class="flexrow">
-                        <label for="data.professionSkillBonuses.{{skill.data.reference}}" class="resource-label">{{localize skill.name}}</label>
-                        <input type="number" class="skill-of-group-{{group.id}}" name="data.professionSkillBonuses.{{skill.data.reference}}" value="{{lookup ../../data.professionSkillBonuses skill.data.reference}}" data-dtype="Number"/>
+                        <label>{{localize skill.name}}</label>
+                        <input type="number" name="data.professionSkillBonuses.{{skill.data.data.reference}}" value="{{lookup ../../data.data.professionSkillBonuses skill.data.data.reference}}" data-dtype="Number"/>
                     </div>
                   {{/each}}
                 </div>
                 {{/each}}
               </div>
         </div>
+        {{!-- Description Tab --}}
         <div class="tab" data-group="primary" data-tab="devpoints">
             <div class="devpoints-groups">
-                {{#each rules.skill.sheetOrder as | group |}}
+                {{#each sheetOrder as | group |}}
                 <div class="flexrow">
-                    <div class="">{{localize (concat "MERP1E.SkillGroup." group.id)}}</div>
-                    <input type="number" class="profession-devpoints-{{group.id}}" name="data.developmentPoints.{{group.id}}" value="{{lookup ../data.developmentPoints group.id}}" data-dtype="Number"/>
+                    <div class="">{{ localize (concat "MERP1E.SkillGroup." group.name)}}</div>
+                    <input type="number" name="data.developmentPoints.{{group.name}}" value="{{lookup ../data.data.developmentPoints group.name}}" data-dtype="Number"/>
                 </div>
                 {{/each}}
                 <div class="flexrow">
                     <div class="">{{localize (concat "MERP1E.Skill.BodyDevel")}}</div>
-                    <input type="number" class="profession-devpoints-BodyDevel" name="data.developmentPoints.BodyDevel" value="{{data.developmentPoints.BodyDevel}}" data-dtype="Number"/>
+                    <input type="number" name="data.developmentPoints.BodyDevel" value="{{data.data.developmentPoints.BodyDevel}}" data-dtype="Number"/>
                 </div>
                 <div class="flexrow">
                     <div class="">{{localize (concat "MERP1E.ProfessionSheet.Languages")}}</div>
-                    <input type="number" class="profession-devpoints-Languages" name="data.developmentPoints.Languages" value="{{data.developmentPoints.Languages}}" data-dtype="Number"/>
+                    <input type="number" name="data.developmentPoints.Languages" value="{{data.data.developmentPoints.Languages}}" data-dtype="Number"/>
                 </div>
                 <div class="flexrow">
                     <div class="">{{localize (concat "MERP1E.ProfessionSheet.SpellLists")}}</div>
-                    <input type="number" class="profession-devpoints-SpellLists" name="data.developmentPoints.SpellLists" value="{{data.developmentPoints.SpellLists}}" data-dtype="Number"/>
+                    <input type="number" name="data.developmentPoints.SpellLists" value="{{data.data.developmentPoints.SpellLists}}" data-dtype="Number"/>
                 </div>
               </div>
         </div>

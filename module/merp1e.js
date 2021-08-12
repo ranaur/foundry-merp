@@ -1,12 +1,14 @@
 // Import Modules
 import { Merp1eActor } from "./actor/actor.js";
-import { Merp1eActorSheet } from "./actor/actor-sheet.js";
+import { Merp1eCharacterSheet } from "./actor/character-sheet.js";
+import { Merp1eTestSheet } from "./actor/test-sheet.js";
 import { Merp1eItem } from "./item/item.js";
-import { Merp1eItemSheet } from "./item/item-sheet.js";
+import { Merp1eEquipmentSheet } from "./item/equipment-sheet.js";
 import { Merp1eRaceSheet } from "./item/race-sheet.js";
 import { Merp1eSpellSheet } from "./item/spell-sheet.js";
 import { Merp1eSpelllistSheet } from "./item/spelllist-sheet.js";
 import { Merp1eProfessionSheet } from "./item/profession-sheet.js";
+import { Merp1eLanguageSheet } from "./item/language-sheet.js";
 import { Merp1eSkillSheet } from "./item/skill-sheet.js";
 import { Merp1eRules } from "./rules/rules.js"
 import { preloadHandlebarsTemplates } from "./templates.js";
@@ -29,21 +31,22 @@ Hooks.once('init', async function() {
     decimals: 2
   };
 
-  // Define custom Entity classes
-  CONFIG.Actor.entityClass = Merp1eActor;
-  CONFIG.Item.entityClass = Merp1eItem;
+  CONFIG.Actor.documentClass = Merp1eActor;
+  CONFIG.Item.documentClass = Merp1eItem;
 
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
-  Actors.registerSheet("merp1e", Merp1eActorSheet, { makeDefault: true });
+  Actors.registerSheet("merp1e", Merp1eCharacterSheet, { makeDefault: true });
+  Actors.registerSheet("merp1e", Merp1eTestSheet, { makeDefault: false });
   Items.unregisterSheet("core", ItemSheet);
   Items.registerSheet("merp1e", Merp1eSpellSheet, { types: ['spell'], makeDefault: true });
   Items.registerSheet("merp1e", Merp1eSpelllistSheet, { types: ['spelllist'], makeDefault: true });
   Items.registerSheet("merp1e", Merp1eProfessionSheet, { types: ['profession'], makeDefault: true });
   Items.registerSheet("merp1e", Merp1eRaceSheet, { types: ['race'], makeDefault: true });
   Items.registerSheet("merp1e", Merp1eSkillSheet, { types: ['skill'], makeDefault: true });
-  Items.registerSheet("merp1e", Merp1eItemSheet, { types: ['item'], makeDefault: true });
-
+  Items.registerSheet("merp1e", Merp1eLanguageSheet, { types: ['language'], makeDefault: true });
+  Items.registerSheet("merp1e", Merp1eEquipmentSheet, { types: ['equipment'], makeDefault: true });
+  
   // If you need to add Handlebars helpers, here are a few useful examples:
   Handlebars.registerHelper('concat', function() {
     var outStr = '';
@@ -56,11 +59,13 @@ Hooks.once('init', async function() {
   });
 
   Handlebars.registerHelper('toLowerCase', function(str) {
-    return str.toLowerCase();
+    if(str === null) return "";
+    return str.toString().toLowerCase();
   });
 
   Handlebars.registerHelper('toUpperCase', function(str) {
-    return str.toUpperCase();
+    if(str === null) return "";
+    return str.toString().toUpperCase();
   });
 
   Handlebars.registerHelper('isNotEqual', function(a, b) {

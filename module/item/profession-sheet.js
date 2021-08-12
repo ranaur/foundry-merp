@@ -31,7 +31,7 @@ export class Merp1eProfessionSheet extends ItemSheet {
   getData() {
     const data = super.getData();
     data.rules = game.merp1e.Merp1eRules;
-    data.rules.skill.sheetOrder = data.rules.skill.generateSheetOrder();
+    data.sheetOrder = game.merp1e.Merp1eRules.generateSheetOrder();
     return data;
   }
 
@@ -93,7 +93,7 @@ export class Merp1eProfessionSheet extends ItemSheet {
     const group = target.getAttribute("group");
     const value = target.getInnerHTML()
     let groupElement = target.closest(".skill-group");
-    for(let e of groupElement.getElementsByClassName(`skill-of-group-${group}`)) {
+    for(let e of groupElement.getElementsByTagName("input")) {
        e.setAttribute("value", value); 
     }
     if ( this.options.submitOnChange ) {

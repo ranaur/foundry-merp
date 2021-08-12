@@ -1,59 +1,25 @@
+import { Merp1eBaseItemSheet } from './base-sheet.js';
+
 /**
  * Extend the basic ItemSheet with some very simple modifications
  * @extends {ItemSheet}
  */
-export class Merp1eSpelllistSheet extends ItemSheet {
-
-  /** @override */
-  static get defaultOptions() {
-    return mergeObject(super.defaultOptions, {
-      classes: ["merp1e", "sheet", "item"],
-      width: 520,
-      height: 640,
-      tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }]
-    });
-  }
-
-  /** @override */
-  get template() {
-    const path = "systems/merp1e/templates/item";
-    // Return a single sheet for all item types.
-    //return `${path}/item-sheet.html`;
-    // Alternatively, you could use the following return statement to do a
-    // unique item sheet by type, like `weapon-sheet.html`.
-
-    return `${path}/${this.item.data.type}-sheet.html`;
-  }
-
-  /* -------------------------------------------- */
-
+export class Merp1eSpelllistSheet extends Merp1eBaseItemSheet {
   /** @override */
   getData() {
-    const data = super.getData();
-    let spells = game.data.items.filter((item) => { return item.type == 'spell' && item.data.spelllist.id == data.item._id });
-    data.data.spells = data.data.spells || {};
+    let sheetData = super.getData()
+    sheetData.data = sheetData.data.data
+
+    let spells = game.data.items.filter((item) => { return item.type == 'spell' && item.data.spelllist.id == sheetData.item._id });
+    sheetData.data.spells = sheetData.data.spells || {};
     for(let element of spells) {
-      data.data.spells[element.data.level] = element.data;
-      data.data.spells[element.data.level].name = element.name;
-      data.data.spells[element.data.level]._id = element._id;
+      sheetData.data.spells[element.data.level] = element.data;
+      sheetData.data.spells[element.data.level].name = element.name;
+      sheetData.data.spells[element.data.level]._id = element._id;
     };
-    data.rules = game.merp1e.Merp1eRules;
-    data.isOwned = (this.actor != null);
-    return data;
+    sheetData.isOwned = (this.actor != null);
+    return sheetData;
   }
-
-  /* -------------------------------------------- */
-
-  /** @override */
-  setPosition(options = {}) {
-    const position = super.setPosition(options);
-    const sheetBody = this.element.find(".sheet-body");
-    const bodyHeight = position.height - 192;
-    sheetBody.css("height", bodyHeight);
-    return position;
-  }
-
-  /* -------------------------------------------- */
 
   /** @override */
   activateListeners(html) {

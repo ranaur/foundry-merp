@@ -4,20 +4,23 @@
         <div class="header-fields">
             <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder='{{localize "MERP1E.Spell.Name"}}'/></h1>
             <div class="grid grid-3col">
-              <div class="resource">
-                <label class="resource-label">{{localize "MERP1E.Spell.Level"}}</label>
-                  <input type="number" name="data.level" value="{{data.level}}" data-dtype="Number"/>
-              </div>
-              <div class="resource">
-                <label class="resource-label">{{localize "MERP1E.Spell.Class"}}</label>
-                <select name="data.class">
-                    {{#each rules.spell.classes as |class classKey|}}
-                    <option value="{{classKey}}" {{#if (isEqual ../data.class classKey)}}selected{{/if}}>{{localize (concat "MERP1E.Spell.Classes." classKey)}}</option>
-                    {{/each}}
-                </select>
                 <div class="resource">
-                    <label class="resource-label">{{localize "MERP1E.Spell.Instantaneous"}}</label>
-                    <input name="data.instantaneous" type="checkbox" {{checked data.instantaneous}}/>
+                    <label class="resource-label">{{localize "MERP1E.Spell.Level"}}</label>
+                    <input type="number" name="data.level" value="{{data.data.level}}" data-dtype="Number"/>
+                </div>
+                <div class="resource">
+                    <div class="resource">
+                            <label class="resource-label">{{localize "MERP1E.Spell.Class"}}</label>
+                        <select name="data.class">
+                            {{#each rules.spell.classes as |class classKey|}}
+                            <option value="{{classKey}}" {{#if (isEqual ../data.data.class classKey)}}selected{{/if}}>{{localize (concat "MERP1E.Spell.Classes." classKey)}}</option>
+                            {{/each}}
+                        </select>
+                    </div>
+                    <div class="resource">
+                        <label class="resource-label">{{localize "MERP1E.Spell.Instantaneous"}}</label>
+                        <input name="data.instantaneous" type="checkbox" {{checked data.data.instantaneous}}/>
+                    </div>
                 </div>
             </div>
             <div class="grid grid-2col">
@@ -26,14 +29,15 @@
                     <select name="data.spelllist.id">
                         <option></option>
                         {{#each avaliableSpelllists as |spelllist|}}
-                        <option value="{{spelllist._id}}" {{#if (isEqual ../data.spelllist.id spelllist._id)}}selected{{/if}}>{{localize spelllist.name}}</option>
+                        <option value="{{spelllist._id}}" {{#if (isEqual ../data.data.spelllist.id spelllist._id)}}selected{{/if}}>{{localize spelllist.name}}</option>
                         {{/each}}
                     </select>
                 </div>
                 <div class="resource">
                     <label class="resource-label">{{localize "MERP1E.Spell.Concentration"}}</label>
-                    <input name="data.concentration" type="checkbox" {{checked data.concentration}}/>
+                    <input name="data.concentration" type="checkbox" {{checked data.data.concentration}}/>
                 </div>
+            </div>
         </div>
     </header>
 
@@ -41,19 +45,19 @@
     <section class="sheet-body">
         <div class="spell-area-of-effect">
             <label>{{localize "MERP1E.Spell.AreaOfEffect"}}</label>
-            <input type="text" name="data.areaofeffect" value="{{data.areaofeffect}}" data-dtype="String"/>
+            <input type="text" name="data.areaofeffect" value="{{data.data.areaofeffect}}" data-dtype="String"/>
         </div>
         <div class="spell-duration">
             <label>{{localize "MERP1E.Spell.Duration"}}</label>
-            <input type="text" name="data.duration" value="{{data.duration}}" data-dtype="String"/>
+            <input type="text" name="data.duration" value="{{data.data.duration}}" data-dtype="String"/>
         </div>
         <div class="spell-range">
             <label>{{localize "MERP1E.Spell.Range"}}</label>
-            <input type="text" name="data.range" value="{{data.range}}" data-dtype="String"/>
+            <input type="text" name="data.range" value="{{data.data.range}}" data-dtype="String"/>
         </div>
         <div class="spell-description">
             <label>{{localize "MERP1E.Spell.Description"}}</label>
-            <textarea name="data.description">{{data.description}}</textarea>
+            <textarea name="data.description">{{data.data.description}}</textarea>
         </div>
     </section>
 </form>

@@ -46,12 +46,8 @@
     },
     "character": {
       "templates": ["base", "stats", "realm", "defense"],
-      "profession": "",
-      "race": {},
       "xp": 0,
-      "skills": {},
-      "languages": {},
-      "spelllists": []
+      "languages": []
     },
     "npc": {
       "templates": ["base", "stats", "realm"],
@@ -61,7 +57,7 @@
   }
   },
   "Item": {
-    "types": ["item", "spell", "spelllist", "container", "race", "profession", "backgroundOption", "skill"],
+    "types": ["skill", "language", "equipment", "spell", "spelllist", "race", "profession", "backgroundOption", "feature"], 
     "templates": {
       "base": {
         "description": ""
@@ -70,15 +66,23 @@
     "skill": {
       "templates": ["base"],
       "reference": "",
-      "group": ["Movement", "Weapon", "General", "Subterfuge", "Magical", "Miscelaneous", "Secondary"],
+      "group": null,
       "order": -1,
-      "statBonus": ["st", "ag", "co", "ig", "it", "pr"],
-      "rollType": ["MM", "SM", "OB", "DB", "SP", "RR"],
-      "rankBonusMethod": ["normal", "always 1", "d10 per rank"],
+      "showOnEverySheet": true,
+      "statBonus": null,
+      "rollType": null,
+      "rankBonusMethod": null,
       "extraBonus": 0,
-      "maxRanks": 0
+      "maxRanks": 0,
+      "ranks": 0,
+      "rankBonus": 0,
+      "rankSet": {}
     },
-    "item": {
+    "language": {
+      "templates": ["base"],
+      "ranks": 0
+    },
+    "equipment": {
       "templates": ["base"],
       "quantity": 1,
       "weight": 0,
@@ -105,9 +109,6 @@
       "restriction": ["open", "profession"],
       "restrictedto": null,
       "spells": {}
-    },
-    "container": {
-      "templates": ["base"]
     },
     "race": {
       "templates": ["base"],
@@ -195,6 +196,9 @@
       "developmentPoints": {}
     },
     "backgroundOption": {
+      "templates": ["base"]
+    },
+    "feature": {
       "templates": ["base"],
       "skillBonuses": {}
     }

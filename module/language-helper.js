@@ -1,120 +1,93 @@
 export class LanguageSheetHelper {
-    /* -------------------------------------------- */
-    /**
-     * Listen for click events and modify attribute groups.
-     * @param {MouseEvent} event    The originating left click event
-     */
-    static async onClickLanguageControl(event) {
-        event.preventDefault();
-        const a = event.currentTarget;
-        const action = a.dataset.action;
 
-        switch ( action ) {
-        case "create-language":
-            LanguageSheetHelper.createLanguage(event, this);
-            break;
-        case "delete-language":
-            LanguageSheetHelper.deleteLanguage(event, this);
-            break;
+  static activateListeners(html, actor) {
+    html.find('.language-create').click(LanguageSheetHelper.languageCreate.bind(actor));
+    html.find('.language-edit').click(LanguageSheetHelper.languageEdit.bind(actor));
+    html.find('.language-delete').click(LanguageSheetHelper.languageDelete.bind(actor));
+    html.find('.language-add-all').click(LanguageSheetHelper.languageAddAll.bind(actor));
+  }
+
+  static languageCreate(event) {
+    event.preventDefault();
+    const header = event.currentTarget;
+    
+    // Get the type of item to create.
+    const type = "language"; //header.dataset.type;
+    // Initialize a default name.
+    const name = `New ${type.capitalize()}`;
+    // Prepare the item object.
+    const itemData = {
+      name: name,
+      type: type
+    };
+    // Remove the type from the dataset since it's in the itemData.type prop.
+    //delete itemData.data["type"];
+
+    return this.createEmbeddedDocuments("Item", [itemData], {renderSheet: true, render: false});
+  }
+  static languageEdit(event) {
+    const itemId = $(event.currentTarget).parents(".item").data("itemId");
+
+    const item = this.getEmbeddedDocument("Item", itemId);
+
+    item.sheet.render(true);
+  }
+  static languageDelete(event) {
+    const li = $(event.currentTarget).parents(".item");
+    const itemId = li.data("itemId");
+
+    this.deleteEmbeddedDocuments("Item", [itemId]);
+
+    li.slideUp(200, () => this.render(false));
+  }
+
+  static languageAddAll(event) {
+    const raceLanguages = this.race.data.data.languages;
+    
+    let languagesToCreate = [];
+    let languagesToUpdate = [];
+    for(let language of Object.values(raceLanguages)) {
+      const actorLanguage = this.getLanguageByName(language.name);
+      if(actorLanguage.length != 0) {
+        let newLanguageData = actorLanguage[0].data.data;
+        if(newLanguageData.ranks > language.ranks) {
+          languagesToUpdate.push({ _id: actorLanguage[0].id, type: "language", name: language.name, data: newLanguageData });
         }
-    }
-  
-    /* ------------------------------------
-    /**
-     * Create new language.
-     * @param {MouseEvent} event    The originating left click event
-     * @param {Object} app          The form application object.
-     * @private
-     */
-    static async createLanguage(event, app) {
-    const a = event.currentTarget;
-      const form = app.form;
-      let languageHeader = $(a).closest('.language-header');
-      let languageList = languageHeader.siblings(".language-list");
-      
-      let newValue = 0;
-      for (let item of languageList.children()) {
-        if( item.getAttribute("data-language") > newValue ) {
-          newValue = parseInt(item.getAttribute("data-language").toString());
-        }
-      }
-      newValue++;
-      
-      let newKey = document.createElement("li");
-      newKey.setAttribute("class", "language flexrow");
-      newKey.setAttribute("data-language", `${newValue}`);
-      let localizedLanguage = game.i18n.localize("MERP.CharacterSheet.Language");
-      let localizedRank = game.i18n.localize("MERP.CharacterSheet.Rank");
-      newKey.innerHTML = `
-        <input class="language-name flex4" name="data.languages.${newValue}.name" type="text" value="" placeholder="${localizedLanguage}" type="text" data-dtype="String"/></td>
-        <input class="language-rank flex1" name="data.languages.${newValue}.rank" type="text" value="" placeholder="${localizedRank}" type="number" data-dtype="Number"/></td>
-        <div class="language-controls flex1">
-            <a class="language-control language-delete" data-action="delete-language" title="Delete Item"><i class="fas fa-trash"></i></a>
-        </div>`;
-  
-        // Append the form element and submit the form.
-        //newKey = newKey.children[0];
-        form.getElementsByClassName('language-list')[0].appendChild(newKey);
-        await app._onSubmit(event);
-    }
-  
-    /**
-     * Delete an attribute group.
-     * @param {MouseEvent} event    The originating left click event
-     * @param {Object} app          The form application object.
-     * @private
-     */
-    static async deleteLanguage(event, app) {
-      const a = event.currentTarget;
-      let language = a.closest(".language");
-      let languageName = $(language).find('.language-name');
-      // Create a dialog to confirm group deletion.
-      new Dialog({
-        title: game.i18n.localize("MERP1E.DeleteGroup"),
-        content: `${game.i18n.localize("MERP1E.DeleteGroupContent")} <strong>${languageName.val()}</strong>`,
-        buttons: {
-          confirm: {
-            icon: '<i class="fas fa-trash"></i>',
-            label: game.i18n.localize("Yes"),
-            callback: async () => {
-              language.parentElement.removeChild(language);
-              await app._onSubmit(event);
-            }
-          },
-          cancel: {
-            icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize("No"),
+      } else { // actor has no language with same name yet, lookup global and create
+        const gameLanguage = game.merp1e.Merp1eRules.getAvaliableLanguageByName(language.name);
+        let newLanguageData = null;
+        if(gameLanguage.length != 0) {
+          newLanguageData = gameLanguage[0].data.data;
+          newLanguageData.ranks = language.ranks;
+        } else { // Not found, create new Language
+          newLanguageData = {
+              ranks: language.ranks
           }
         }
-      }).render(true);
+        languagesToCreate.push({ name: language.name, type: "language", data: newLanguageData });
+      }
+      
     }
+
+    this.updateEmbeddedDocuments("Item", languagesToUpdate, {renderSheet: false, render: false});
+    return this.createEmbeddedDocuments("Item", languagesToCreate, {renderSheet: false, render: false});
+  }
+
+  static updateLanguages(formData, sheet) {
+    const formItems = expandObject(formData).languages || {};
+    const updatetedItems = [];
+    for ( let [itemId, item] of Object.entries(formItems || {}) ) {
+        updatetedItems.push({_id: itemId, data: item, name: item.name});
+    }
+
+    sheet.actor.updateEmbeddedDocuments("Item", updatetedItems);
     
-    /* -------------------------------------------- */
-  /* -------------------------------------------- */
-
-  /**
-   * Update languages when updating an actor object.
-   *
-   * @param {Object} formData Form data object to modify keys and values for.
-   * @returns {Object} updated formData object.
-   */
-   static updateLanguages(formData, entity) {
-    // Handle the free-form groups list
-    const formLanguages = expandObject(formData).data.languages || {};
-
-    // XXX Reduce errors
-
-    // Remove groups which are no longer used
-    for ( let k of Object.keys(entity.object.data.data.languages) ) {
-      if ( !formLanguages.hasOwnProperty(k) ) formLanguages[`-=${k}`] = null;
-    }
-
-    // Re-combine formData
-    formData = Object.entries(formData).filter(e => !e[0].startsWith("data.languages")).reduce((obj, e) => {
+    // remove formData.languages
+    formData = Object.entries(formData).filter(e => !e[0].startsWith("languages")).reduce((obj, e) => {
       obj[e[0]] = e[1];
       return obj;
-    }, {_id: entity.object._id, "data.languages": formLanguages});
-
+    }, {});
+    
     return formData;
   }
 }
