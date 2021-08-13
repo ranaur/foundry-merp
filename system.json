@@ -7,7 +7,7 @@
   "compatibleCoreVersion": "0.8.8",
   "templateVersion": 2,
   "author": "Ranaur",
-  "esmodules": ["module/merp1e.js"],
+  "esmodules": ["merp1e.js"],
   "styles": ["css/merp1e.css"],
   "scripts": [],
   "packs": [],

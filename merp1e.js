@@ -1,18 +1,18 @@
 // Import Modules
-import { Merp1eActor } from "./actor/actor.js";
-import { Merp1eCharacterSheet } from "./actor/character-sheet.js";
-import { Merp1eTestSheet } from "./actor/test-sheet.js";
-import { Merp1eItem } from "./item/item.js";
-import { Merp1eEquipmentSheet } from "./item/equipment-sheet.js";
-import { Merp1eRaceSheet } from "./item/race-sheet.js";
-import { Merp1eSpellSheet } from "./item/spell-sheet.js";
-import { Merp1eSpelllistSheet } from "./item/spelllist-sheet.js";
-import { Merp1eProfessionSheet } from "./item/profession-sheet.js";
-import { Merp1eLanguageSheet } from "./item/language-sheet.js";
-import { Merp1eSkillSheet } from "./item/skill-sheet.js";
-import { Merp1eRules } from "./rules/rules.js"
-import { preloadHandlebarsTemplates } from "./templates.js";
-import { GenericImporter } from "./apps/generic-importer.js";
+import { Merp1eActor } from "./module/actor/actor.js";
+import { Merp1eCharacterSheet } from "./module/actor/character-sheet.js";
+import { Merp1eTestSheet } from "./module/actor/test-sheet.js";
+import { Merp1eItem } from "./module/item/item.js";
+import { Merp1eEquipmentSheet } from "./module/item/equipment-sheet.js";
+import { Merp1eRaceSheet } from "./module/item/race-sheet.js";
+import { Merp1eSpellSheet } from "./module/item/spell-sheet.js";
+import { Merp1eSpelllistSheet } from "./module/item/spelllist-sheet.js";
+import { Merp1eProfessionSheet } from "./module/item/profession-sheet.js";
+import { Merp1eLanguageSheet } from "./module/item/language-sheet.js";
+import { Merp1eSkillSheet } from "./module/item/skill-sheet.js";
+import { Merp1eRules } from "./module/rules/rules.js"
+import { preloadHandlebarsTemplates } from "./module/templates.js";
+import { GenericImporter } from "./module/apps/generic-importer.js";
 
 Hooks.once('init', async function() {
 

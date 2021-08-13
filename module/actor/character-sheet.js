@@ -338,38 +338,7 @@ export class Merp1eCharacterSheet extends ActorSheet {
       await this.actor.deleteEmbeddedDocuments("Item", idsToRemove);
       break;
     case "add-all":
-      // add all skills that does not exist already
-      /*
-      let newSkills = [];
-      game.merp1e.Merp1eRules.getAvaliableSkills().forEach(item => {
-        if(this.actor.getSkillsByReference(item.data.data.reference).length == 0) {
-          newSkills.push({
-            name: item.name,
-            type: item.type,
-            data: item.data,
-          });
-        }
-      });
-      await this.actor.createEmbeddedDocuments("Item", newSkills);
-      */
-      //await this.actor.addDefaultSkills();
-          // add all skills that does not exist already
-      let avaliableSkills = game.merp1e.Merp1eRules.getAvaliableSkills();
-      let newSkills = [];
-      avaliableSkills.forEach(skill => {
-        if(this.actor.getSkillsByReference(skill.data.data.reference).length == 0) {
-          let item = {
-            name: skill.name,
-            type: 'skill',
-            data: skill.data.data
-          };
-          item.data.ranks = 0;
-          item.data.rankBonus = 0;
-          item.data.rankSet = {};
-          newSkills.push(item);
-        }
-      });
-      await this.actor.createEmbeddedDocuments("Item", newSkills);
+      await this.actor.createEmbeddedDocuments("Item", this.actor.getDefaultSkills());
       break;
     case "add-item":
       console.log("Not implemented");

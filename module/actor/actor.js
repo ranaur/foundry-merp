@@ -15,23 +15,10 @@ export class Merp1eActor extends Actor {
     await super._preCreate(createData, options, user);
 
     if (createData.type === "character") {
-      await this.addDefaultSkills();    
+      await this.data.update({ "items": this.getDefaultSkills() });
     }
   }
 
-  getAvaliableSkills() {
-    let skills = [];
-    avaliableSkills.forEach(element => {
-      const data = {
-        name: element.name,
-        type: 'skill',
-        data: element.data
-      }
-      skills.push(data);
-    });
-    return skills;
-  }
-  
   getSkills() {
     return this.skills;
   }
@@ -45,7 +32,7 @@ export class Merp1eActor extends Actor {
     return this.items.filter( (item) => item.type == "language" && item.name == name );
   }
 
-  async addDefaultSkills() {
+  getDefaultSkills() {
     // add all skills that does not exist already
     let avaliableSkills = game.merp1e.Merp1eRules.getAvaliableSkills();
     let newSkills = [];
@@ -62,7 +49,7 @@ export class Merp1eActor extends Actor {
         newSkills.push(item);
       }
     });
-    this.data.update({ "items": newSkills });
+    return newSkills;
   }
 
   createEmbeddedDocuments(embeddedName, dataArray, options) {
@@ -154,13 +141,6 @@ export class Merp1eActor extends Actor {
       // Sum all the bonuses
       actorData.stats[stat].total = Object.entries(actorData.stats[stat].bonuses).reduce((a, i) => { return a + (i[1] || 0); }, 0);
     }
-
-    // SKILLS
-    //let sheetSkills = this.getSkills();
-    //if(sheetSkills.length == 0 ) {
-    //  //await this.createEmbeddedDocuments("Item", Object.values(this.getAvaliableSkills()), {renderSheet:false});
-    //  sheetSkills = this.getSkills();
-    //}
 
     // sum up skill bonuses
     actorData.skills = actorData.skills || {};

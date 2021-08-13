@@ -68,66 +68,12 @@
   <section class="sheet-body">
     {{!-- Stats Tab --}}
     <div class="tab stats" data-group="primary" data-tab="stats">
-      <table class="stats" style="text-align:center">
-        <colgroup>
-            <col style="width:100px">
-            <col style="width:35px">
-            <col style="width:35px">
-            <col style="width:35px">
-            <col style="width:35px">
-            <col style="width:35px">
-        </colgroup>  
-        <thead>
-            <tr class="table-header">
-                <th class="stats-col-1">{{localize "MERP1E.StatTable.Stats"}}</td>
-                <th class="stats-col-2">{{localize "MERP1E.StatTable.Abbr"}}</td>
-                <th class="stats-col-3">{{localize "MERP1E.StatTable.Value"}}</td>
-                <th class="stats-col-4">{{localize "MERP1E.StatTable.Bonus"}}</td>
-                <th class="stats-col-5">{{localize "MERP1E.StatTable.Race"}}</td>
-                <th class="stats-col-6">{{localize "MERP1E.StatTable.Total"}}</td>
-            </tr>
-        </thead>
-        <tbody>
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat=actor.data.stats.st}}
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat=actor.data.stats.ag}}
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat=actor.data.stats.co}}
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat=actor.data.stats.ig}}
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat=actor.data.stats.it}}
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat=actor.data.stats.pr}}
-            {{> "systems/merp1e/templates/parts/sheet-stats.html" stat=actor.data.stats.ap only_value=true}}
-        </tbody>
-    </table>
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-stats.html" actor=actor}}
     </div>
-
+    
     {{!-- Skills Tab --}}
     <div class="tab skills" data-group="primary" data-tab="skills">
-      <header class="skill-header flexrow">
-        <span class="skill-name flex3">{{localize "MERP1E.SkillTable.SkillName"}}</span>
-        <span class="skill-ranks">{{localize "MERP1E.SkillTable.Ranks"}}</span>
-        <span class="skill-rankbonus">{{localize "MERP1E.SkillTable.RankBonus"}}</span>
-        <span class="skill-statbonus">{{localize "MERP1E.SkillTable.StatBonus"}}</span>
-        <span class="skill-profbonus">{{localize "MERP1E.SkillTable.ProfessionBonus"}}</span>
-        <span class="skill-itembonus">{{localize "MERP1E.SkillTable.ItemBonus"}}</span>
-        <span class="skill-specbonus">{{localize "MERP1E.SkillTable.SpecialBonus"}}</span>
-        <span class="skill-extrabonus">{{localize "MERP1E.SkillTable.ExtraBonus"}}</span>
-        <span class="skill-totalbonus flex2">{{localize "MERP1E.SkillTable.Total"}}
-          <a class="skill-control remove-all" data-action="remove-all"><i class="fas fa-eraser"></i></a>
-          <a class="skill-control add-all" data-action="add-all"><i class="fas fa-folder-plus"></i></a>
-          <a class="skill-control add-item" data-action="add-item"><i class="fas fa-plus"></i></a>
-        </span>
-      </header>
-      <section class="skill-list flexcol">
-        <div class="skill-groups">
-          {{#each sheetOrder as | group |}}
-          <div class="skill-group">
-            <div class="skill-group-header" style="font-weight:bolder">{{localize (concat "MERP1E.SkillGroup." group.name)}}</div> <!-- XXX put style in the CSS -->
-            {{#each group.skills as | skill |}}
-            {{> "systems/merp1e/templates/parts/sheet-skills.html" skill=skill}}
-            {{/each}}
-          </div>
-          {{/each}}
-        </div>
-      </section>
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-skills.html" actor=actor}}
     </div>
 
     {{!-- Language Tab --}}
@@ -137,32 +83,7 @@
 
     {{!-- Description Tab --}}
     <div class="tab description" data-group="primary" data-tab="description">
-      <div class="description-height">
-        <label for="description.height" class="resource-label">{{localize "MERP1E.Description.Height"}}</label>
-        <input type="text" name="data.description.height" value="{{data.data.description.height}}" data-dtype="String"/>
-      </div>
-      <div class="description-weight">
-        <label for="data.description.weight" class="resource-label">{{localize "MERP1E.Description.Weight"}}</label>
-        <input type="text" name="data.description.weight" value="{{data.data.description.weight}}" data-dtype="String"/>
-      </div>
-      <div class="description-hair">
-        <label for="data.description.hair" class="resource-label">{{localize "MERP1E.Description.Hair"}}</label>
-        <input type="text" name="data.description.hair" value="{{data.data.description.hair}}" data-dtype="String"/>
-      </div>
-      <div class="description-eyes">
-        <label for="data.description.eyes" class="resource-label">{{localize "MERP1E.Description.Eyes"}}</label>
-        <input type="text" name="data.description.eyes" value="{{data.data.description.eyes}}" data-dtype="String"/>
-      </div>
-      <div class="description-demeanor">
-        <label for="data.description.demeanor" class="resource-label">{{localize "MERP1E.Description.Demeanor"}}</label>
-        <input type="text" name="data.description.demeanor" value="{{data.data.description.demeanor}}" data-dtype="String"/>
-      </div>
-      <div class="description-special">
-        <label for="data.description.special" class="resource-label">{{localize "MERP1E.Description.Special"}}</label>
-        <input type="text" name="data.description.special" value="{{data.data.description.special}}" data-dtype="String"/>
-      </div>
-      <h2>{{localize "MERP1E.Description.Notes"}}</h2>
-      {{editor content=data.data.description.notes target="data.description.notes" button=true owner=owner editable=editable}}
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-description.html" actor=actor}}
     </div>
 
     {{!-- Spell Tab --}}

@@ -1,3 +1,5 @@
+import { Merp1eActiveEffect } from "../active-effect.js";
+
 /**
  * Extend the basic ItemSheet with some very simple modifications
  * @extends {ItemSheet}
@@ -41,6 +43,11 @@ export class Merp1eBaseItemSheet extends ItemSheet {
     const bodyHeight = position.height - 192;
     sheetBody.css("height", bodyHeight);
     return position;
+  }
+
+  activateListeners(html) {
+    super.activateListeners(html);
+    Merp1eActiveEffect.activateListeners(html, this.item);
   }
 
   /* -------------------------------------------- */
