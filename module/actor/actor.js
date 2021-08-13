@@ -84,6 +84,7 @@ export class Merp1eActor extends Actor {
     this.profession = {name: null};
     this.languages = {};
     this.skills = {};
+    this.spelllists = {};
     for(let item of this.items) {
       switch(item.type) {
         case "language":
@@ -93,20 +94,25 @@ export class Merp1eActor extends Actor {
           if(this.race.name != null) {
             console.log("actor has more than one race! Deleting second item.");
             this.deleteEmbeddedDocument("Item", [item.id]);
+          } else {
+            this.race = item;
           }
-          this.race = item;
           break;
         case "profession":
           if(this.profession.name != null) {
             console.log("actor has more than one profession! Deleting second item.");
             this.deleteEmbeddedDocument("Item", [item.id]);
+          } else {
+            this.profession = item;
           }
-          this.profession = item;
           break;
         case "skill":
           this.skills[item.id] = item;
           break;
-          /// XXX put skills and other items?
+        case "spelllist":
+          this.spelllists[item.id] = item;
+          break;
+                /// XXX put skills and other items?
       }
     }
   }

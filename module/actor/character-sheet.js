@@ -248,7 +248,7 @@ export class Merp1eCharacterSheet extends ActorSheet {
     const formItems = expandObject(formData).Item || {};
     const updatetedItems = [];
     for ( let [itemId, item] of Object.entries(formItems || {}) ) {
-        if(itemId in this.actor.skills) updatetedItems.push({_id: itemId, data: item});
+        if(itemId in this.actor.skills || itemId in this.actor.spelllists) updatetedItems.push({_id: itemId, data: item});
     }
     this.actor.updateEmbeddedDocuments("Item", updatetedItems);
     

@@ -1,13 +1,10 @@
 # TODO
-
-    Diferenciar o header dos skills (bold+mudar cor) / fazer em tabela
-    Retirar skills e itens da aba de itens
-    Separar a ficha em partes
-    Fazer a parte de magia (PP, realm, etc.)
-    Fazer a parte de HP/Dano, etc.
-
     Actor:
         Retestar Languages (create, edit e del)
+        Diferenciar o header dos skills (bold+mudar cor) / fazer em tabela
+        Retirar skills e itens da aba de itens
+...     Fazer a parte de magia (PP, realm, etc.)
+        Fazer a parte de HP/Dano, etc.
 
     Atualizar a itemsheet de profissão e a actor sheet de ficha para pegar os skills do que estiverem disponíveis na biblioteca
 
@@ -60,6 +57,7 @@
         Fazer o cálculo de pontos de vida (aba Health):
             Hits, Per round, Stun, penalidade na atividade, etc.
             Power Points (multiplier), spell adder
+        Fazer um tratamento melhor de spelllist.data.data.chanceOfLearning (permitir só de 20 em 20, e marcar quando aprender)
 
 	Sheet: SpellLists
         Filtrar (ou colocar desabilitado os spells de nível acima do do personagem)
