@@ -1,45 +1,72 @@
-<header class="skill-header flexrow">
-    <span class="skill-name flex3">{{localize "MERP1E.SkillTable.SkillName"}}</span>
-    <span class="skill-ranks">{{localize "MERP1E.SkillTable.Ranks"}}</span>
-    <span class="skill-rankbonus">{{localize "MERP1E.SkillTable.RankBonus"}}</span>
-    <span class="skill-statbonus">{{localize "MERP1E.SkillTable.StatBonus"}}</span>
-    <span class="skill-profbonus">{{localize "MERP1E.SkillTable.ProfessionBonus"}}</span>
-    <span class="skill-itembonus">{{localize "MERP1E.SkillTable.ItemBonus"}}</span>
-    <span class="skill-specbonus">{{localize "MERP1E.SkillTable.SpecialBonus"}}</span>
-    <span class="skill-extrabonus">{{localize "MERP1E.SkillTable.ExtraBonus"}}</span>
-    <span class="skill-totalbonus flex2">{{localize "MERP1E.SkillTable.Total"}}
-        <a class="skill-control remove-all" data-action="remove-all"><i class="fas fa-eraser"></i></a>
-        <a class="skill-control add-all" data-action="add-all"><i class="fas fa-folder-plus"></i></a>
-        <a class="skill-control add-item" data-action="add-item"><i class="fas fa-plus"></i></a>
-    </span>
-</header>
-<section class="skill-list flexcol">
-    <div class="skill-groups">
-        {{#each sheetOrder as | group |}}
-        <div class="skill-group">
-            <div class="skill-group-header" style="font-weight:bolder">{{localize (concat "MERP1E.SkillGroup." group.name)}}</div> <!-- XXX put style in the CSS -->
-            {{#each group.skills as | skill |}}
-            <section class="skill-line flexrow item" data-item-id="{{skill.id}}">
-                <span class="skill-name flex3">{{localize skill.name}}</span>
-                <input class="skill-ranks" name="Item.{{skill.id}}.ranks" value="{{skill.data.data.ranks}}" type="number" min="0" {{#if skill.data.maxRanks}}max="{{skill.data.maxRanks}}"{{/if}} data-dtype="Number"/>
-                {{#if (isEqual skill.data.data.rankBonusMethod "roll per rank")}}
-                <input class="skill-rankbonus" name="Item.{{skill.id}}.rankBonus" value="{{skill.data.data.rankBonus}}" type="number" data-dtype="Number"/>
-                {{else}}
-                <input class="skill-rankbonus" value="{{skill.bonuses.rank}}" type="number" data-dtype="Number" readonly tabindex=-1/>
-                {{/if}}
-                <input class="skill-statbonus skill-stat-{{skill.data.statBonus}}" value="{{toUpperCase skill.data.data.statBonus}} {{skill.bonuses.stat}}" type="text" data-dtype="String" readonly tabindex=-1/>
-                <input class="skill-profbonus" value="{{skill.bonuses.prof}}" type="number" data-dtype="Number" readonly tabindex=-1/>
-                <input class="skill-itembonus" value="{{skill.bonuses.item}}" type="number" data-dtype="Number"/ readonly tabindex=-1>
-                <input class="skill-specbonus" name="Item.{{skill.id}}.specialBonus" value="{{skill.bonuses.spec}}" type="number" data-dtype="Number"/>
-                <input class="skill-extrabonus" value="{{skill.bonuses.extra}}" type="number" data-dtype="Number" readonly tabindex=-1/>
-                <input class="skill-totalbonus" value="{{skill.total}}" type="number" placeholder="0" data-dtype="Number" readonly tabindex=-1/>
-                <span>
-                    <a class="item-control item-edit"><i class="fas fa-edit"></i></a>
-                    <a class="item-control item-delete"><i class="fas fa-trash"></i></a>
-                </span>
-            </section>
+<div class="language" style="display: flex; justify-content: center; ">
+    <table class="stats" style="width:100%; text-align: center">
+        <colgroup>
+            <col style="width:20px"/>
+            <col style="width:9%"/>
+            <col style="width:9%"/>
+            <col style="width:9%"/>
+            <col style="width:9%"/>
+            <col style="width:9%"/>
+            <col style="width:9%"/>
+            <col style="width:9%"/>
+            <col style="width:9%"/>
+            <col style="width:8%"/>
+        </colgroup>
+        <thead>
+            <tr>
+                <th>{{localize "MERP1E.SkillTable.SkillName"}}</th>
+                <th>{{localize "MERP1E.SkillTable.Ranks"}}</th>
+                <th>{{localize "MERP1E.SkillTable.RankBonus"}}</th>
+                <th>{{localize "MERP1E.SkillTable.StatBonus"}}</th>
+                <th>{{localize "MERP1E.SkillTable.ProfessionBonus"}}</th>
+                <th>{{localize "MERP1E.SkillTable.ItemBonus"}}</th>
+                <th>{{localize "MERP1E.SkillTable.SpecialBonus"}}</th>
+                <th>{{localize "MERP1E.SkillTable.ExtraBonus"}}</th>
+                <th>{{localize "MERP1E.SkillTable.Total"}}
+                <th>
+                    <a class="skill-control" title="{{localize 'MERP1E.Skills.RemoveUntrained'}}" data-action="remove-all"><i class="fas fa-eraser"></i></a>
+                    <a class="skill-control" title="{{localize 'MERP1E.Skills.AddDefault'}}" data-action="add-all"><i class="fas fa-folder-plus"></i></a>
+                    <a class="item-control item-create" title="{{localize 'MERP1E.Item.New'}}" option-renderSheet=true data-type="skill"><i class="fas fa-plus"></i></a>
+                </th>
+            </tr>
+        </thead>
+        <tbody class="skill-list">
+            {{#each sheetOrder as | group |}}
+                <tr>
+                    <td colspan="10" style="font-weight: bold; text-align: left">{{localize (concat "MERP1E.SkillGroup." group.name)}}</td>
+                </tr>
+                {{#each group.skills as | skill |}}
+                    <tr class="skill-line item" data-item-id="{{skill.id}}">
+                        <td class="skill-name" style="text-align: left">{{localize skill.name}}</td>
+                        {{#if (isEqual skill.data.data.rankBonusMethod "no rank")}}
+                            <td></td>
+                            <td></td>
+                        {{else}}
+                            <td><input class="skill-ranks userentry" name="Item.{{skill.id}}.ranks" value="{{skill.data.data.ranks}}" type="number" min="0" {{#if skill.data.maxRanks}}max="{{skill.data.maxRanks}}"{{/if}} data-dtype="Number"/></td>
+                            {{#if (isEqual skill.data.data.rankBonusMethod "roll per rank")}}
+                            <td><input class="skill-rankbonus userentry" name="Item.{{skill.id}}.rankBonus" value="{{skill.data.data.rankBonus}}" type="number" data-dtype="Number"/></td>
+                            {{else}}
+                            <td><input class="skill-rankbonus" value="{{skill.bonuses.rank}}" type="number" data-dtype="Number" readonly tabindex=-1/></td>
+                            {{/if}}
+                        {{/if}}
+                        {{#if (isEqual skill.data.data.statBonus "")}}
+                        <td></td>
+                        {{else}}
+                        <td><input class="skill-statbonus skill-stat-{{skill.data.statBonus}}" value="{{toUpperCase skill.data.data.statBonus}} {{skill.bonuses.stat}}" type="text" data-dtype="String" readonly tabindex=-1/></td>
+                        {{/if}}
+                        <td><input class="skill-profbonus" value="{{skill.bonuses.prof}}" type="number" data-dtype="Number" readonly tabindex=-1/></td>
+                        <td><input class="skill-itembonus" value="{{skill.bonuses.item}}" type="number" data-dtype="Number" readonly tabindex=-1/></td>
+                        <td><input class="skill-specbonus userentry" name="Item.{{skill.id}}.specialBonus" value="{{skill.bonuses.spec}}" type="number" data-dtype="Number"/></td>
+                        <td><input class="skill-extrabonus" value="{{skill.bonuses.extra}}" type="number" data-dtype="Number" readonly tabindex=-1/></td>
+                        <td><input class="skill-totalbonus" value="{{skill.total}}" type="number" placeholder="0" data-dtype="Number" readonly tabindex=-1/></td>
+                        <td>
+                            <a class="item-control item-edit" title="{{localize 'MERP1E.Item.Edit'}}"><i class="fas fa-edit"></i></a>
+                            <a class="item-control item-delete" title="{{localize 'MERP1E.Item.Delete'}}"><i class="fas fa-trash"></i></a>
+                            <a class="skill-control duplicate" title="{{localize 'MERP1E.Skills.Duplicate'}}" data-id="{{skill.id}}" data-action="duplicate"><i class="fas fa-copy"></i></a>
+                        </td>
+                    </section>
+                {{/each}}
             {{/each}}
-        </div>
-        {{/each}}
-    </div>
-</section>
+        </tbody>
+    </table>
+</div>

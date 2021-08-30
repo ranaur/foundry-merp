@@ -1,29 +1,25 @@
 <table class="stats" style="text-align:center">
     <colgroup>
-        <col style="width:100px">
-        <col style="width:35px">
-        <col style="width:35px">
-        <col style="width:35px">
-        <col style="width:35px">
-        <col style="width:35px">
+        <col style="width:100px"/>
+        <col style="width:35px"/>
+        <col style="width:35px"/>
+        <col style="width:35px"/>
+        <col style="width:35px"/>
+        <col style="width:35px"/>
     </colgroup>  
     <thead>
         <tr class="table-header">
-            <th class="stats-col-1">{{localize "MERP1E.StatTable.Stats"}}</td>
-            <th class="stats-col-2">{{localize "MERP1E.StatTable.Abbr"}}</td>
-            <th class="stats-col-3">{{localize "MERP1E.StatTable.Value"}}</td>
-            <th class="stats-col-4">{{localize "MERP1E.StatTable.Bonus"}}</td>
-            <th class="stats-col-5">{{localize "MERP1E.StatTable.Race"}}</td>
-            <th class="stats-col-6">{{localize "MERP1E.StatTable.Total"}}</td>
+            <th class="stats-col-1">{{localize "MERP1E.StatTable.Stats"}}</th>
+            <th class="stats-col-2">{{localize "MERP1E.StatTable.Abbr"}}</th>
+            <th class="stats-col-3">{{localize "MERP1E.StatTable.Value"}}</th>
+            <th class="stats-col-4">{{localize "MERP1E.StatTable.Bonus"}}</th>
+            <th class="stats-col-5">{{localize "MERP1E.StatTable.Race"}}</th>
+            <th class="stats-col-6">{{localize "MERP1E.StatTable.Total"}}</th>
         </tr>
     </thead>
     <tbody>
-        {{> "systems/merp1e/templates/actor/parts/character-sheet-stat-line.html" stat=actor.data.stats.st}}
-        {{> "systems/merp1e/templates/actor/parts/character-sheet-stat-line.html" stat=actor.data.stats.ag}}
-        {{> "systems/merp1e/templates/actor/parts/character-sheet-stat-line.html" stat=actor.data.stats.co}}
-        {{> "systems/merp1e/templates/actor/parts/character-sheet-stat-line.html" stat=actor.data.stats.ig}}
-        {{> "systems/merp1e/templates/actor/parts/character-sheet-stat-line.html" stat=actor.data.stats.it}}
-        {{> "systems/merp1e/templates/actor/parts/character-sheet-stat-line.html" stat=actor.data.stats.pr}}
-        {{> "systems/merp1e/templates/actor/parts/character-sheet-stat-line.html" stat=actor.data.stats.ap only_value=true}}
+        {{#each rules.stats as | stat |}}
+        {{> "systems/merp1e/templates/actor/parts/character-sheet-stat-line.html" stat=(lookup ../actor.stats stat.abbr)}}
+        {{/each}}
     </tbody>
 </table>

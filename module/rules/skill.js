@@ -1,13 +1,6 @@
 export class MerpSkill {
-    /*static sheetOrder = [
-        { id: "Movement", skills: ["NoArmor", "SoftLeather", "RigidLeather", "Chain", "Plate"] },
-        { id: "Weapon", skills: ["OneHandedEdged", "OneHandedConcussion", "TwoHanded", "Thrown", "Missile", "Polearms"] },
-        { id: "General", skills: ["Climb", "Ride", "Swim", "Track"] },
-        { id: "Subterfuge", skills: ["Ambush", "StalkHide", "PickLock", "Disarmtrap"] },
-        { id: "Magical", skills: ["ReadRunes", "UseItens", "DirectedSpells"] },
-        { id: "Miscelaneous", skills: ["Perception", "BodyDevel", "BaseSpells", "LeadershipandInfluence", "DefensiveBonus", "EssenceRR", "ChannelingRR", "PoisonRR", "DiseaseRR"] },
-        { id: "Secondary", skills: ["Acrobatics", "Acting", "Caving", "Contortions", "Cookery", "Dance", "Diving", "Fletching", "Foraging", "Gambling", "Herding", "LeatherWorking", "Meditation", "Music", "PublicSpeaking", "RopeMastery", "Rowing", "Sailing", "Signaling", "Skiing", "Smithing", "StarGazing", "TrapBuilding", "Trickery", "Tumbling", "WeatherWatching", "WoodCarving"] }
-    ];*/
+    static BODY_DEVELOPMENT = "BodyDevel";
+
     static groups = {
         "Movement": { order: 10 },
         "Weapon": { order: 20 },

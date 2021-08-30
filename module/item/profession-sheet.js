@@ -83,7 +83,7 @@ export class Merp1eProfessionSheet extends ItemSheet {
     formData = Object.entries(formData).filter(e => !e[0].startsWith("data.professionSkillBonuses")).reduce((obj, e) => {
       obj[e[0]] = e[1];
       return obj;
-    }, {_id: this.object._id, "data.professionSkillBonuses": formProfessionSkillBonuses});
+    }, {"data.professionSkillBonuses": formProfessionSkillBonuses});
   
     return this.object.update(formData);
   }

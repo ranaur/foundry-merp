@@ -1,18 +1,68 @@
 # TODO
-    Actor:
-        Retestar Languages (create, edit e del)
-        Diferenciar o header dos skills (bold+mudar cor) / fazer em tabela
-        Retirar skills e itens da aba de itens
-...     Fazer a parte de magia (PP, realm, etc.)
-        Fazer a parte de HP/Dano, etc.
+* Colocar o class="userentry" na damage-sheet, respeitando o applied. (e em todo o resto)
+* Refazer o Applied
+    Retirar o ícone de apply
+    tirar o checkbox => quando cria sem ator é só o initial, quando tem ator é só o current.
+* Colocar a tabela de dano como tabela com borda
+* Colocar a constituição e uncounscious/destroyed
+* Soul departure / stat deterioration
 
-    Atualizar a itemsheet de profissão e a actor sheet de ficha para pegar os skills do que estiverem disponíveis na biblioteca
+    * better treatment of weapon/shield arm. Use the weapon at hand, and if the player is using two weapons, choose randomly/heavier ou left/righ handed.
+
+    Actor:
+        Damage:
+            Testar o heal();
+
+            Testar damage e o cálculo automático
+        Colocar os status (Stun, down, out, dead) no token
+        Fazer com que as fichas atualizem quando mudar o flag de tipo de damage
+
+        Implementar XP: effective, new XP e por item.
+
+        Colocar "favorite skill" e colocar actions (skill, bonus, conditional bonus)
+
+        Colocar class="userentry" em todos os campos de usuário
+
+        Revisar os dados do actor
+            description
+
+        Fazer uma aba Combat/Actions
+            Armor
+            Greaves (Arm/Leg)
+            DB
+            Shield
+        Fazer a aba de Heath & Power
+            Fazer o controle de dano "automático" (com os damages)
+                Consolidar os statuses
+                Ajustar o botão de passa um round para acertar os damages
+            Damage/Heal Button no HP
+            Retestar a ficha de damage
+
+            Consolidated Statuses
+                Current Hit Points
+                Activity Penalty
+                Stunned
+                Unconscious
+                Paralyzed
+                Blind
+                Deaf
+                Drop
+                Dead for N rounds
+            Fazer a lista de damage received criticals para acumular
+
+        Aba Spells
+            PP Multiplier
+            Spell adder
+
+        Fazer uma limpeza em rules.js e seus subitens.
+        Melhorar o tratamento de criação/exclusão de items (aba Language, item, Spells)
+        Fazer suporte a background options
 
     Colocar no generic-importer para importar Languages
         Usar o metadata para pegar os tipos de itens
-        Pensar alguma maneira de fazer subdocumentos
+        Pensar alguma maneira de fazer subdocumentos e ActiveEffects
 
-    Fazer features (ActiveEvents). Tipos:
+    Fazer features (ActiveEffects). Tipos:
         Bonus em um skill
         Stat Increase (1 stat + 2)
         Stat Increase (3 stats + 1)
@@ -38,30 +88,26 @@
         Spell adder
         Power Point Muitiplier
 
-
     Sheet: Race
-        Reler raças e colocar os bonus condicionais de skill na planilha
+        Reler raças e colocar os bonus condicionais de skill na planilha (ActiveEffects?)
         Importar as raças
         Retirar as características e colocar tudo em descrição
         Adicionar os efeitos da raça no actor
-            stat bonuses
-            skill bonuses (fazer feature?)
-            adolescence skill rank
-            languages
+            skill bonuses (ActiveEffects?)
+            adolescence skill rank - fazer ranks por set e colocar na tip do skill
 
     Sheet: Character
-        Contabilizar os bonuses/PP/adder no skill
-        Implementar uma parada para esconder os skills secundários que estão zerados.
+        Contabilizar os bonuses/PP/adder no skill (ActiveEffects?)
+        Implementar uma parada para esconder os skills secundários que estão zerados (fazer no CSS com hidden?)
         Implementar um tooltip mostrando a conta
-        Fazer o cálculo de power points (nível, stat, e itens mágicos)
-        Fazer o cálculo de pontos de vida (aba Health):
-            Hits, Per round, Stun, penalidade na atividade, etc.
-            Power Points (multiplier), spell adder
         Fazer um tratamento melhor de spelllist.data.data.chanceOfLearning (permitir só de 20 em 20, e marcar quando aprender)
+        Aba spells:
+            melhorar a diferença entre spelllist e spell (CSS?)
+            Filtrar (ou colocar desabilitado os spells de nível acima do do personagem)
+            Colocar botão de prepare, cast e roll
 
 	Sheet: SpellLists
-        Filtrar (ou colocar desabilitado os spells de nível acima do do personagem)
-        Colocar botão de prepare e roll
+        Botão para atualizar os spells
 
     Sheet: Equipment
         Fazer um major revision para utilizar localização.
@@ -69,7 +115,7 @@
         Alterar um widget(part spell-chooser para permitir "receber" spell por drag & drop
             Se arrastar o spell em cima da barra (ou do +), cria um novo item.
 
-        Fazer equipamento por tipo:
+        Fazer equipamento por sub tipo:
             Arma => roll de ataque
             Armadura => AT, DB e MM
             Greaves/Helm => Efeito no DB, critical, etc.
@@ -79,14 +125,22 @@
             Fazer o cálculo de DB e AT a partir da armadura helm greaves, etc.
         Fazer os itens com peso e calcular o encumbrance (wear/not wear)
 
+        Colocar Special nos Itens:
+            Daily Spell
+            PP Multiplier (per realm)
+            Spell Adder (per realm)
+            Fixed number od uses spells (1 for potions and scrolls)
+            Stat Bonus
+            Always on Skill Bonus
+            Conditional Stat Bonus
+
         Colocar botão de Roll
         Calacular peso por container/wear
         Fazer o "corpo", container base onde ficam as coisas que estão ativas.
 
-
     Sheet: Profession
 
-    Fazer tela de passagem de nível
+    Fazer tela de passagem de nível/criação de personagem
         Distribuir os pontos de ranks de skills
         Deixar gastar só eles
         Transferir de um para o outro
@@ -175,6 +229,7 @@ for(item of game.data.actors.filter((item) => { return item.type == "character" 
 * Cria ./item/language-sheet.js
 * Cria ./item/language-sheet.html
 * Altera template.json (e recarrega o mundo)
+* Criar o svg
 
 # adicionando suporte de linguagens
     na xxx-sheet.js
@@ -237,6 +292,270 @@ for(item of game.data.actors.filter((item) => { return item.type == "character" 
 +                </div>
 +            </div>
         </div>
+
+# Como usar o conttrole de criação/deleção/edição de itens da base-sheet.js
+    Classes:
+    .item-create => para o botão de criação
+        <div class="item-controls flexrow">
+            <a class="item-control item-create" title="{{localize 'MERP1E.Item.New'}}" option-renderSheet="true" data-type="XXX"><i class="fas fa-plus"></i></a>
+        </div>
+    .item-edit => para o botão de edição
+    .item-delete => para o botão de deleção
+
+    HTML:
+    <ol class="item-list">
+        <li class="item flexrow" data-item-id="{{item._id}}">
+            <div class="item-name flexrow rollable">
+                <div class="item-image" style="background-image: url('{{item.img}}')"></div>
+                <h4>{{item.name}}</h4>
+            </div>
+            <div class="...">{{...}}</div>
+
+            {{#if ../../owner}}
+            <div class="item-controls flexrow">
+                <a class="item-control item-edit" title="{{localize 'MERP1E.Item.Edit'}}"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-delete" title="{{localize 'MERP1E.Item.Delete'}}"><i class="fas fa-trash"></i></a>
+            </div>
+            {{/if}}
+        </li>
+    {{/each}}
+    </ol>
+
+## Font Awesome por damage type
+AdditionalDamage: <i class="fas fa-heart"></i>
+HitsTaken:  <i class="fas fa-heart-broken"></i> 
+HitsPerRound: <i class="fas fa-tint"></i>
+ActivityPenalty: <i class="fas fa-minus"></i> 
+RoundsActivityPenalty: <i class="fas fa-user-minus"></i>
+RoundsDown: <i class="far fa-meh"></i>
+RoundsOut: <i class="far fa-dizzy"></i>
+RoundsUntilDeath: <i class="fas fa-skull-crossbones"></i>
+RoundsStunned: <i class="fas fa-ban"></i>
+RoundsBlinded: <i class="fas fa-eye-slash"></i>
+RoundsWeaponStuck: <i class="fas fa-gavel"></i>
+UnconsciousComa: <i class="fas fa-dizzy"></i>
+Arm": "Arm", <i class="far fa-hand-paper"></i>
+Leg": "Leg", <i class="fas fa-shoe-prints"></i>
+Left": [ok, useless, broken, severed] <i class="fas fa-check-circle"></i> <i class="fas fa-circle"></i> <i class="fas fa-minus-circle"></i> <i class="fas fa-times-circle"></i> 
+Right": [useless, broken, severed] (idem)
+Paralyzed: Waist, Shoulder, Neck <i class="fas fa-wheelchair"></i>
+HearingLoss: [left, right, both] <i class="fas fa-check-circle"> <i class="fas fa-deaf"></i>
+EyeLoss: [left, right, both] <i class="fas fa-eye"></i> </i> <i class="fas fa-eye-slash"></i> 
+
+
+additionalHits
+hitsPerRound
+activityPenalty
+activityPenaltyTemporary
+roundsActivityPenalty
+roundsDown
+roundsOut
+roundsUntilDeath
+roundsStunned
+roundsBlinded
+roundsWeaponStuck
+unconsciousComa
+statusArm
+statusLeg
+paralzed
+statusEars
+statusEyes
+
+### Documentation for Health & Damage
+
+{
+    "description": "",
+    "damageType": "teste",
+    "applied": false,
+    "reference": "HEAT C 90",
+    "text": "",
+    "initial": {
+        "additionalHits": 11,
+        "hitsPerRound": 22,
+        "activityPenalty": 33,
+        "activityPenaltyTemporary": true,
+        "roundsActivityPenalty": 44,
+        "roundsDown": 55,
+        "roundsOut": 66,
+        "roundsUntilDeath": 77,
+        "roundsStunned": 88,
+        "roundsBlinded": 99,
+        "roundsWeaponStuck": 100,
+        "unconsciousComa": 101,
+        "armDamage": "0",
+        "armSide": "0",
+        "legDamage": "2",
+        "legSide": "1"
+        "paralyzed": "1",
+        "hearingLoss": "2",
+        "eyeLoss": "3",
+        "notes": "109"
+    },
+    "current": {
+        "additionalHits": 20,
+        "hitsPerRound": 2,
+        "activityPenalty": -20,
+        "activityPenaltyTemporary": true,
+        "roundsActivityPenalty": 2,
+        "roundsDown": 0,
+        "roundsOut": 0,
+        "roundsUntilDeath": 0,
+        "roundsStunned": 0,
+        "roundsBlinded": 0,
+        "roundsWeaponStuck": 0,
+        "unconsciousComa": 11,
+        "leftArm": "2",
+        "rightArm": "0",
+        "leftLeg": "0",
+        "rightLeg": "3",
+        "paralyzed": "1",
+        "hearingLoss": "3",
+        "eyeLoss": "3",
+        "notes": "19"
+    }
+}
+
+
+
+## Geme Settings
+
+Is there any documentation with all possible options for   game.settings.register? The API Docs shows examples for choice and slider, but is there any other options? BTW is there an easy way to put a slider in the character sheet? How is the HTML?
+
+wildj79 — Ontem às 15:44
+checkbox by setting data.type to Boolean, standard input text box by setting data.type to String with no choices object, and a number input box with data.type set to Number
+there's an example of the slider in core settings, if you want to see how it'll render
+
+## Handlebars
+
+Handlebars.registerHelper({
+  checked: HandlebarsHelpers.checked,
+  colorPicker: HandlebarsHelpers.colorPicker,
+  editor: HandlebarsHelpers.editor,
+  filePicker: HandlebarsHelpers.filePicker,
+  numberFormat: HandlebarsHelpers.numberFormat,
+  localize: HandlebarsHelpers.localize,
+  radioBoxes: HandlebarsHelpers.radioBoxes,
+  rangePicker: HandlebarsHelpers.rangePicker,
+  select: HandlebarsHelpers.select,
+  selectOptions: HandlebarsHelpers.selectOptions,
+  timeSince: timeSince,
+  eq: (v1, v2) => v1 === v2,
+  ne: (v1, v2) => v1 !== v2,
+  lt: (v1, v2) => v1 < v2,
+  gt: (v1, v2) => v1 > v2,
+  lte: (v1, v2) => v1 <= v2,
+  gte: (v1, v2) => v1 >= v2,
+  and() { return Array.prototype.every.call(arguments, Boolean) },
+  or() { return Array.prototype.slice.call(arguments, 0, -1).some(Boolean) }
+});
+
+## IsGM
+agaringer — Ontem às 23:17
+Someone else can probably answer your initial question better than I can, but to address what you're trying to do, the easiest thing is to enclose the relevant portion of the sheet in
+{{#if isGM}}
+...
+{{/if}}
+
+agaringer — Ontem às 23:30
+Ah, my mistake, you also need to add
+data.isGM = game.user.isGM;
+
+to the getData() for that sheet.
+
+## SelectOptions
+
+    Hey, do you have any example selectOptions not working as you think it should ? 
+    cuz all my translations are XXXX.xxx.xxx (sometimes more). And I got no issue.
+    <select name="data.subType">
+        {{selectOptions config.abilitySubTypes selected=data.subType localize=true nameAttr="key" labelAttr="label"}}
+    </select>
+
+    M20E.abilitySubTypes= [
+    {key: "talent", label: "M20E.subType.talent"},
+    {key: "skill", label: "M20E.subType.skill"},
+    {key: "knowledge", label: "M20E.subType.knowledge"}
+    ]
+
+
+## Criando uma nova aba
+
+Criar character-sheet-xp.html
+
+Alterar character-sheet.html
+```html
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item" data-tab="stats">{{localize "MERP1E.CharacterTab.Stats"}}</a>
+        <a class="item" data-tab="skills">{{localize "MERP1E.CharacterTab.Skills"}}</a>
+        <a class="item" data-tab="languages">{{localize "MERP1E.CharacterTab.Languages"}}</a>
+        <a class="item" data-tab="description">{{localize "MERP1E.CharacterTab.Description"}}</a>
+        <a class="item" data-tab="spells">{{localize "MERP1E.CharacterTab.Spells"}}</a>
+        <a class="item" data-tab="items">{{localize "MERP1E.CharacterTab.Items"}}</a>
+        <a class="item" data-tab="health">{{localize "MERP1E.CharacterTab.Health"}}</a>
++       <a class="item" data-tab="xp">{{localize "MERP1E.CharacterTab.XP"}}</a>
+    </nav>
+  (...)
+    {{!-- Health & Damage Tab --}}
+    <div class="tab health" data-group="primary" data-tab="health">
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-health.html" actor=actor}}
+    </div>
+
++   {{!-- XP Tab --}}
++   <div class="tab xp" data-group="primary" data-tab="xp">
++     {{> "systems/merp1e/templates/actor/parts/character-sheet-xp.html" actor=actor}}
++   </div>
+```
+
+Alterar templates.js
+```js
+    // Define template paths to load
+    const templatePaths = [
+        // Attribute list partial.
+        "systems/merp1e/templates/parts/active-effects.html",
+        "systems/merp1e/templates/parts/skill-chooser.html",
+        "systems/merp1e/templates/parts/realm-chooser.html",
+        "systems/merp1e/templates/parts/spell-chooser.html",
+        "systems/merp1e/templates/actor/parts/character-sheet-stat-line.html",
+        "systems/merp1e/templates/actor/parts/character-sheet-stats.html",
+        "systems/merp1e/templates/actor/parts/character-sheet-description.html",
+        "systems/merp1e/templates/actor/parts/character-sheet-languages.html",
+        "systems/merp1e/templates/actor/parts/character-sheet-skills.html",
+        "systems/merp1e/templates/actor/parts/character-sheet-health.html",
++       "systems/merp1e/templates/actor/parts/character-sheet-xp.html",
+        "systems/merp1e/templates/actor/parts/character-sheet-spells.html"
+```
+
+
+Alterar character-sheet.js
+
+```js
+  /** @override */
+  activateListeners(html) {
+    super.activateListeners(html);
+
+  (...)
+    html.find(".health").on("click", ".health-control", this.onClickHealthControl.bind(this));
++   html.find(".xp").on("click", ".xp-control", this.onClickXPControl.bind(this));
+  }
+
+(...)
+
+  async onClickXPControl(event) {
+    event.preventDefault();
+    const a = event.currentTarget;
+    const action = a.dataset.action;
+
+    switch ( action ) {
+    case "consolidate-xp":
+      console.log("XXX TODO");
+      break
+    }
+  }
+```
+
+Alterar actor.js para tratar os dados.
+
+
 
 # DECISIONS
 

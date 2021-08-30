@@ -3,7 +3,7 @@ import { Merp1eBaseItemSheet } from './base-sheet.js';
 /**
  * @extends {Merp1eItem}
  */
-export class Merp1eLanguageSheet extends Merp1eBaseItemSheet {
+export class Merp1eXPSheet extends Merp1eBaseItemSheet {
   /** @override */
   getData() {
     let sheetData = super.getData()

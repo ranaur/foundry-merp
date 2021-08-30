@@ -26,8 +26,9 @@
         <div class="skill-statbonus flexrow">
             <label for="skill-statbonus">{{localize "MERP1E.SkillSheet.StatBonus"}}</label>
             <select name="data.statBonus">
-                {{#each rules.stat.list as |stat statKey|}}
-                <option value="{{statKey}}" {{#if (isEqual ../data.data.statBonus statKey)}}selected{{/if}}>{{localize (concat "MERP1E.Stats." statKey ".Name")}}</option>
+                <option value="" {{#if (isEqual ../data.data.statBonus "")}}selected{{/if}}>{{localize (concat "MERP1E.Stats.None")}}</option>
+                {{#each rules.stats as |stat|}}
+                <option value="{{stat.abbr}}" {{#if (isEqual ../data.data.statBonus stat.abbr)}}selected{{/if}}>{{localize (concat "MERP1E.Stats." stat.abbr ".Name")}}</option>
                 {{/each}}
             </select>
         </div>
@@ -45,6 +46,7 @@
                 <option value="normal" {{#if (isEqual data.data.rankBonusMethod "normal")}}selected{{/if}}>{{localize (concat "MERP1E.SkillRankBonusMethod.normal")}}</option>
                 <option value="always 1" {{#if (isEqual data.data.rankBonusMethod "always 1")}}selected{{/if}}>{{localize (concat "MERP1E.SkillRankBonusMethod.always1")}}</option>
                 <option value="roll per rank" {{#if (isEqual data.data.rankBonusMethod "roll per rank")}}selected{{/if}}>{{localize (concat "MERP1E.SkillRankBonusMethod.rollPerRank")}}</option>
+                <option value="no rank" {{#if (isEqual data.data.rankBonusMethod "no rank")}}selected{{/if}}>{{localize (concat "MERP1E.SkillRankBonusMethod.noRank")}}</option>
             </select>
         </div>
         <div class="skill-extrabonus flexrow">

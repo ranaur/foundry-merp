@@ -6,20 +6,19 @@ export class Merp1eRules {
     static spell = MerpSpell;
     static spelllist = MerpSpellList;
     static skill = MerpSkill;
-    static stats = ["st", "ag", "co", "ig", "it", "pr", "ap"]; // XXX Delme?
+    static stats = ["st", "ag", "co", "ig", "it", "pr", "ap"];
     static tables = {
         bt1: TableBT1
     };
-    static stat = {
-        list: {"st": {}, 
-            "ag": {}, 
-            "co": {}, 
-            "ig": {}, 
-            "it": {}, 
-            "pr": {}, 
-            "ap": {}
-        }
-    };
+    static stats = [
+        { abbr: "st" }, 
+        { abbr: "ag" }, 
+        { abbr: "co" }, 
+        { abbr: "ig" }, 
+        { abbr: "it" }, 
+        { abbr: "pr" }, 
+        { abbr: "ap" , only_value: true }
+    ];
     static rollType = {
         list: { 
             "MM": {},
@@ -42,9 +41,58 @@ export class Merp1eRules {
         }
     }; // XXX make a lookkup on item directory
 
+    static health = {
+        apendageStatus: [
+            { value: "0", label: 'ok', labelI18: 'MERP1E.ApendageStatus.ok' }, 
+            { value: "1", label: 'useless', labelI18: 'MERP1E.ApendageStatus.useless' },
+            { value: "2", label: 'broken', labelI18: 'MERP1E.ApendageStatus.broken' }, 
+            { value: "3", label: 'severed', labelI18: 'MERP1E.ApendageStatus.severed' }
+        ],
+        apendageIcons: {
+            "0": "fas fa-check",
+            "1": "fas fa-thumbs-down", 
+            "2": "fas fa-unlink", 
+            "3": "fas fa-cut"
+        },            
+        sideStatus: [
+            { value: "0", label: 'none', labelI18: 'MERP1E.SideStatus.none' }, 
+            { value: "1", label: 'left', labelI18: 'MERP1E.SideStatus.left' },
+            { value: "2", label: 'right', labelI18: 'MERP1E.SideStatus.right' }, 
+            { value: "3", label: 'both', labelI18: 'MERP1E.SideStatus.both' }
+        ],
+        sideIcons: {
+            "0": "", //fa-check-circle
+            "1": "fas fa-chevron-circle-left", 
+            "2": "fas fa-chevron-circle-right", 
+            "3": "fas fa-times-circle"
+        },            
+        sideChoose: [
+            { value: "0", label: 'random', labelI18: 'MERP1E.SideChoose.random' }, 
+            { value: "1", label: 'left', labelI18: 'MERP1E.SideStatus.left' },
+            { value: "2", label: 'right', labelI18: 'MERP1E.SideStatus.right' }, 
+            { value: "3", label: 'both', labelI18: 'MERP1E.SideChoose.both' },
+            { value: "4", label: 'shield', labelI18: 'MERP1E.SideChoose.shield' }, 
+            { value: "5", label: 'weapon', labelI18: 'MERP1E.SideChoose.weapon' }
+        ],
+        paralyzedStatus: [
+            { value: "0", label: 'none', labelI18: 'MERP1E.ParalyzedStatus.none' }, 
+            { value: "1", label: 'waist', labelI18: 'MERP1E.ParalyzedStatus.waist' },
+            { value: "2", label: 'shoulder', labelI18: 'MERP1E.ParalyzedStatus.shoulder' }, 
+            { value: "3", label: 'neck', labelI18: 'MERP1E.ParalyzedStatus.neck' }
+        ],
+        paralyzedIcons: {
+            "0": "", //fa-check-circle
+            "1": "W", 
+            "2": "S", 
+            "3": "N"
+        },            
+    }
     static lookupTable(table, column, number) {
         let ret = null;
         let choosedLine = null;
+
+        if(number == null) return null;
+
         for (let line of table.table) {
             if(number <= line[0]) {
                 choosedLine = line;
@@ -63,6 +111,10 @@ export class Merp1eRules {
 
     static resolveStatBonus(stat) {
         return Merp1eRules.lookupTable(Merp1eRules.tables.bt1, "Bonus", stat);
+    };
+
+    static resolvePowerPointsPerLevel(stat) {
+        return Merp1eRules.lookupTable(Merp1eRules.tables.bt1, "Power Points", stat);
     };
 
     // Maps XP to the level
@@ -91,6 +143,8 @@ export class Merp1eRules {
 
     static resolveSkillRankBonus(ranks, rankBonus, method) {
         switch(method) {
+            case "no rank":
+                return null;
             case "normal":
                 return this.resolveNormalSkillRankBonus(ranks);
             case "always 1":
@@ -144,8 +198,8 @@ export class Merp1eRules {
         // fill skill groups with skills
         for(let skill of Object.values(skills)) {
           let groupName = skill.data.data.group;
-          // skillByGroups[groupName] = skillByGroups[groupName] || { name: groupName, order: 99, skills = [] } // add any missing group (shoudn't happen)
-          skillByGroups[groupName].skills.push(skill);
+          //console.log(groupName, skill);
+          skillByGroups[groupName || "Secondary"].skills.push(skill);
         }
     
         // reorder skills inside the groups and generate sheetOrder array
@@ -164,4 +218,24 @@ export class Merp1eRules {
         return sheetOrder;
     }
     
+    static settings = {
+        get damageControl() {
+            return game.settings.get("merp1e", "damageControl");
+        },
+        get damageControlManual() {
+            return this.damageControl == "manual";
+        },
+        get damageControlAutomatic() {
+            return this.damageControl == "automatic";
+        },
+        get xpControl() {
+            return game.settings.get("merp1e", "xpControl");
+        },
+        get xpControlManual() {
+            return this.xpControl == "manual";
+        },
+        get xpControlAutomatic() {
+            return this.xpControl == "automatic";
+        }
+    }
 }

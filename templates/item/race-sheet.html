@@ -30,11 +30,13 @@
                 </thead>
                 <tbody>
                     {{#each rules.stats as | stat |}}
+                    {{#if (isEqual (default stat.only_value false) false)}}
                     <tr>
-                        <td>{{ localize (concat 'MERP1E.Stats.' stat '.Name') }}</td>
-                        <td>({{ localize (concat 'MERP1E.Stats.' stat '.Short') }})</td>
-                        <td><input type="number" name="data.statsBonuses.{{stat}}" value="{{lookup ../data.statsBonuses stat}}" data-dtype="Number"/></td>
+                        <td>{{ localize (concat 'MERP1E.Stats.' stat.abbr '.Name') }}</td>
+                        <td>({{ localize (concat 'MERP1E.Stats.' stat.abbr '.Short') }})</td>
+                        <td><input type="number" name="data.statsBonuses.{{stat.abbr}}" value="{{lookup ../data.statsBonuses stat.abbr}}" data-dtype="Number"/></td>
                     </tr>
+                    {{/if}}
                     {{/each}}
                 </tbody>
             </table>
@@ -48,14 +50,14 @@
                     <div>{{localize "MERP1E.Race.Bonus"}}</div>
                     <div>{{localize "MERP1E.Race.AdolescenceSkillRank"}}</div>
                 </div>
-                {{#each rules.skill.sheetOrder as | group |}}
+                {{#each sheetOrder as | group |}}
                 <div class="race-skill-group">
                     <div style="font-weight: bolder;">{{localize (concat "MERP1E.SkillGroup." group.name)}}</div>
                     {{#each group.skills as | skill |}}
                     <div class="race-skill flexrow">
-                        <div>{{localize (concat "MERP1E.Skill." skill.data.reference)}}</div>
-                        <input type="number" class="" name="data.skillBonuses.{{skill.data.reference}}" value="{{lookup ../../data.skillBonuses skill.data.reference}}" data-dtype="Number"/>
-                        <input type="number" class="" name="data.adolescenceSkillRanks.{{skill.data.reference}}" value="{{lookup ../../data.adolescenceSkillRanks skill.data.reference}}" data-dtype="Number"/>
+                        <div>{{localize (concat "MERP1E.Skill." skill.data.data.reference)}}</div>
+                        <input type="number" class="" name="data.skillBonuses.{{skill.data.data.reference}}" value="{{lookup ../../data.skillBonuses skill.data.data.reference}}" data-dtype="Number"/>
+                        <input type="number" class="" name="data.adolescenceSkillRanks.{{skill.data.data.reference}}" value="{{lookup ../../data.adolescenceSkillRanks skill.data.data.reference}}" data-dtype="Number"/>
                     </div>
                     {{/each}}
                 </div>

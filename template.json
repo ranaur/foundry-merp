@@ -3,39 +3,28 @@
     "types": ["character", "npc"],
     "templates": {
       "base": {
-        "level": 1,
-        "hp": {
-          "value": 10,
-          "min": 0,
-          "max": 10
-        },
-        "pp": {
-          "value": 5,
-          "min": 0,
-          "max": 5
-        },
+        "hp": { "value": null },
+        "pp": { "value": null },
         "defense": {
           "defense": {
             "db": 0,
-            "armor": ["NO", "SL", "RL", "CH", "PL"],
-            "shield": 0,
-            "helm": 0,
-            "armgreaves": 0,
-            "leggreaves": 0
+            "armor": "NO",
+            "shield": false,
+            "helm": false,
+            "armgreaves": false,
+            "leggreaves": false
         }
       },
       "stats": {
-        "ST": { "value": 50, "bonuses": {}, "bonus": 0 },
-        "AG": { "value": 50, "bonuses": {}, "bonus": 0 },
-        "CO": { "value": 50, "bonuses": {}, "bonus": 0 },
-        "IG": { "value": 50, "bonuses": {}, "bonus": 0 },
-        "IT": { "value": 50, "bonuses": {}, "bonus": 0 },
-        "PR": { "value": 50, "bonuses": {}, "bonus": 0 },
-        "AP": { "value": 50 }
+        "st": { "value": null, "special": 0 },
+        "ag": { "value": null, "special": 0 },
+        "co": { "value": null, "special": 0 },
+        "ig": { "value": null, "special": 0 },
+        "it": { "value": null, "special": 0 },
+        "pr": { "value": null, "special": 0 },
+        "ap": { "value": null, "special": 0 }
       },
-      "realm": {
-        "realm": ["Essence", "Channeling"]
-      },
+      "choosedRealm": null,
       "money": {
         "gp": 0,
         "sp": 0,
@@ -45,19 +34,25 @@
       }
     },
     "character": {
-      "templates": ["base", "stats", "realm", "defense"],
-      "xp": 0,
-      "languages": []
+      "templates": ["base", "realm", "defense"],
+      "stats": {
+        "st": { "value": null, "special": 0 },
+        "ag": { "value": null, "special": 0 },
+        "co": { "value": null, "special": 0 },
+        "ig": { "value": null, "special": 0 },
+        "it": { "value": null, "special": 0 },
+        "pr": { "value": null, "special": 0 },
+        "ap": { "value": null, "special": 0 }
+      },
+      "xp": { "effective": 0 }
     },
     "npc": {
-      "templates": ["base", "stats", "realm"],
-      "skills": {},
-      "languages": {}
+      "templates": ["base", "stats", "realm"]
     }
   }
   },
   "Item": {
-    "types": ["skill", "language", "equipment", "spell", "spelllist", "race", "profession", "backgroundOption", "feature"], 
+    "types": ["skill", "language", "equipment", "spell", "spelllist", "race", "profession", "backgroundOption", "feature", "damage", "xp"], 
     "templates": {
       "base": {
         "description": ""
@@ -78,9 +73,39 @@
       "rankBonus": 0,
       "rankSet": {}
     },
+    "xp": {
+      "templates": ["base"],
+      "refecence": "",
+      "value": 0
+    },
     "language": {
       "templates": ["base"],
       "ranks": 0
+    },
+    "damage": {
+      "templates": ["base"],
+      "damageType": null,
+      "applied": false,
+      "reference": "",
+      "text": "",
+      "initial": {
+        "additionalHits": null,
+        "hitsPerRound": null,
+        "activityPenalty": null,
+        "roundsActivityPenalty": null,
+        "roundsDown": null,
+        "roundsOut": null,
+        "roundsUntilDeath": null,
+        "roundsStunned": null,
+        "roundsBlinded": null,
+        "roundsWeaponStuck": null,
+        "unconsciousComa": null,
+        "statusArm": null,
+        "statusLeg": null,
+        "paralzed": null,
+        "statusEars": null,
+        "statusEyes": null
+      }
     },
     "equipment": {
       "templates": ["base"],

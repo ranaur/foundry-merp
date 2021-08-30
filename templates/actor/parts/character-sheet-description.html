@@ -1,27 +1,27 @@
 <div class="description-height">
     <label for="description.height" class="resource-label">{{localize "MERP1E.Description.Height"}}</label>
-    <input type="text" name="data.description.height" value="{{actor.data.description.height}}" data-dtype="String"/>
+    <input class="userentry" type="text" name="data.description.height" value="{{data.data.description.height}}" data-dtype="String"/>
 </div>
 <div class="description-weight">
     <label for="data.description.weight" class="resource-label">{{localize "MERP1E.Description.Weight"}}</label>
-    <input type="text" name="data.description.weight" value="{{actor.data.description.weight}}" data-dtype="String"/>
+    <input class="userentry" type="text" name="data.description.weight" value="{{data.data.description.weight}}" data-dtype="String"/>
 </div>
 <div class="description-hair">
     <label for="data.description.hair" class="resource-label">{{localize "MERP1E.Description.Hair"}}</label>
-    <input type="text" name="data.description.hair" value="{{actor.data.description.hair}}" data-dtype="String"/>
+    <input class="userentry" type="text" name="data.description.hair" value="{{data.data.description.hair}}" data-dtype="String"/>
 </div>
 <div class="description-eyes">
     <label for="data.description.eyes" class="resource-label">{{localize "MERP1E.Description.Eyes"}}</label>
-    <input type="text" name="data.description.eyes" value="{{actor.data.description.eyes}}" data-dtype="String"/>
+    <input class="userentry" type="text" name="data.description.eyes" value="{{data.data.description.eyes}}" data-dtype="String"/>
 </div>
 <div class="description-demeanor">
     <label for="data.description.demeanor" class="resource-label">{{localize "MERP1E.Description.Demeanor"}}</label>
-    <input type="text" name="data.description.demeanor" value="{{actor.data.description.demeanor}}" data-dtype="String"/>
+    <input class="userentry" type="text" name="data.description.demeanor" value="{{data.data.description.demeanor}}" data-dtype="String"/>
 </div>
 <div class="description-special">
     <label for="data.description.special" class="resource-label">{{localize "MERP1E.Description.Special"}}</label>
-    <input type="text" name="data.description.special" value="{{actor.data.description.special}}" data-dtype="String"/>
+    <input class="userentry" type="text" name="data.description.special" value="{{data.data.description.special}}" data-dtype="String"/>
 </div>
 
 <h2>{{localize "MERP1E.Description.Notes"}}</h2>
-{{editor content=data.data.description.notes target="actor.description.notes" button=true owner=owner editable=editable}}
+{{editor content=data.data.description.notes target="data.description.notes" button=true owner=owner editable=editable}}

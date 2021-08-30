@@ -14,12 +14,18 @@ export class Merp1eItem extends Item {
 
     switch(this.type) {
       case "race":
-        this._copyClassFunctions(Mer1eRace);
+        this._copyClassFunctions(Merp1eRace);
         break;
       case "profession":
-        this._copyClassFunctions(Mer1eProfession);
+        this._copyClassFunctions(Merp1eProfession);
         break;
-    }
+        case "skill":
+          this._copyClassFunctions(Merp1eSkill);
+          break;
+      case "damage":
+        this._copyClassFunctions(Merp1eDamage);
+        break;
+      }
   }
   /**
    * Augment the basic Item data model with additional dynamic data.
@@ -50,14 +56,50 @@ export class Merp1eItem extends Item {
   }
 }
 
-class Mer1eRace {
+class Merp1eRace {
   getStatBonus(stat) {
     return this.data.data.statsBonuses[stat] || 0;
   }
 }
 
-class Mer1eProfession {
+class Merp1eProfession {
   getProfessionSkillBonuses(skillReference) {
     return this.data.data.professionSkillBonuses[skillReference] || 0;
   }
 }
+
+class Merp1eSkill {
+}
+
+class Merp1eDamage {
+  apply() {
+    if(!this.data.data.applied) {
+      this.data.data.current = duplicate(this.data.data.initial);
+
+      // Weapon arm = right, shield arm = left (sorry left-handed, improvement needed) XXX
+      let armSide = this.data.data.initial.armSide;
+      if(this.data.data.initial.armDamage != 0 && armSide == 0) // rules.heath.sideChoose => random
+      {
+        let coin = new Roll("1d2"); // 1 = shield, 2 = weapon
+        coin.roll({async: false});
+        armSide = coin.total;
+      }
+      this.data.data.current.leftArm = (armSide == 1 || armSide == 3 || armSide == 4) ? this.data.data.initial.armDamage : 0;
+      this.data.data.current.rightArm = (armSide == 2 || armSide == 3 || armSide == 5) ? this.data.data.initial.armDamage : 0;
+
+      let legSide = this.data.data.initial.legSide;
+      if(this.data.data.initial.legDamage != 0 && legSide == 0) // rules.heath.sideChoose => random
+      {
+        let coin = new Roll("1d2"); // 1 = shield, 2 = weapon
+        coin.roll({async: false});
+        legSide = coin.total;
+      }
+      this.data.data.current.leftLeg =  (legSide == 1 || legSide == 3 || legSide == 4) ? this.data.data.initial.legDamage : 0;
+      this.data.data.current.rightLeg = (legSide == 2 || legSide == 3 || legSide == 5) ? this.data.data.initial.legDamage : 0;
+
+      this.data.data.applied = true;
+      this.update({ _id: this.id, data: this.data.data });
+    }
+  }
+}
+

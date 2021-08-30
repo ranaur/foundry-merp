@@ -1,0 +1,262 @@
+<form class="{{cssClass}}" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
+        <div class="header-fields">
+            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name"/></h1>
+            <div class="resources grid grid-3col">
+                <div class="resource flex-group-center">
+                    <label class="resource-label">{{localize "MERP1E.Damage.Type"}}</label>
+                    <div class="resource-content flexrow flex-center flex-between">
+                      <input class="userentry" type="text" name="data.damageType" value="{{data.data.damageType}}" data-dtype="String"/>
+                    </div>
+                </div>
+                <div class="resource flex-group-center">
+                    <label class="resource-label">{{localize "MERP1E.Damage.Reference"}}</label>
+                    <div class="resource-content flexrow flex-center flex-between">
+                      <input class="userentry" type="text" name="data.reference" value="{{data.data.reference}}" data-dtype="String"/>
+                    </div>
+                </div>
+                <div class="resource flex-group-center">
+                    <label class="resource-label">{{localize "MERP1E.Damage.Applied"}}</label>
+                    <input class="userentry" type="checkbox" name="data.applied" {{checked data.data.applied}} data-dtype="Boolean" {{roif item.parent}} />
+                    <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+                        <span class="damage-control" data-action="apply">
+                            <i title="{{localize 'MERP1E.Damage.Apply'}}" class="fas fa-bolt"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="resource flex-group-center">
+                <label class="resource-label">{{localize "MERP1E.Damage.Text"}}</label>
+                <div class="resource-content flexrow flex-center flex-between">
+                  <input class="userentry" type="text" name="data.text" value="{{data.data.text}}" data-dtype="String"/>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item" data-tab="initial">{{localize "MERP1E.Damage.Initial"}}</a>
+        {{#if data.data.applied}}
+        <a class="item" data-tab="current">{{localize "MERP1E.Damage.Current"}}</a>
+        {{/if}}
+        <a class="item" data-tab="description">{{localize "MERP1E.Damage.Description"}}</a>
+    </nav>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+        {{!-- Initial Tab --}}
+        <div class="tab" data-group="primary" data-tab="initial">
+            <h2>{{localize 'MERP1E.Damage.InitialDamageWhenApplied'}}</h2>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-heart-broken"></i> {{localize 'MERP1E.Damage.AdditionalHits'}}</label>
+                <input name="data.initial.additionalHits" value="{{data.data.initial.additionalHits}}" data-dtype="Number" type="number" {{roif data.data.applied}}/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-tint"></i> {{localize "MERP1E.Damage.HitsPerRound"}}</label>
+                <input name="data.initial.hitsPerRound" value="{{data.data.initial.hitsPerRound}}" data-dtype="Number" type="number" {{roif data.data.applied}}/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-minus"></i> {{localize "MERP1E.Damage.ActivityPenalty"}}</label>
+                <input name="data.initial.activityPenalty" value="{{data.data.initial.activityPenalty}}" data-dtype="Number" type="number" {{roif data.data.applied}}/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-user-minus"></i> {{localize "MERP1E.Damage.RoundsActivityPenalty"}}</label>
+                <input type="checkbox" name="data.initial.activityPenaltyTemporary" data-dtype="Boolean" {{checked data.data.initial.activityPenaltyTemporary}} {{roif data.data.applied}}/>                
+                {{#if data.data.initial.activityPenaltyTemporary}}
+                <input name="data.initial.roundsActivityPenalty" value="{{data.data.initial.roundsActivityPenalty}}" data-dtype="Number" type="number" {{roif data.data.applied}}/>
+                {{/if}}
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="far fa-meh"></i> {{localize "MERP1E.Damage.RoundsDown"}}</label>
+                <input name="data.initial.roundsDown" value="{{data.data.initial.roundsDown}}" data-dtype="Number" type="number" {{roif data.data.applied}}/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="far fa-dizzy"></i> {{localize "MERP1E.Damage.RoundsOut"}}</label>
+                <input name="data.initial.roundsOut" value="{{data.data.initial.roundsOut}}" data-dtype="Number" type="number" {{roif data.data.applied}}/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-skull-crossbones"></i> {{localize "MERP1E.Damage.RoundsUntilDeath"}}</label>
+                <input name="data.initial.roundsUntilDeath" value="{{data.data.initial.roundsUntilDeath}}" data-dtype="Number" type="number" {{roif data.data.applied}}/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-ban"></i> {{localize "MERP1E.Damage.RoundsStunned"}}</label>
+                <input name="data.initial.roundsStunned" value="{{data.data.initial.roundsStunned}}" data-dtype="Number" type="number" {{roif data.data.applied}}/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-eye-slash"></i> {{localize "MERP1E.Damage.RoundsBlinded"}}</label>
+                <input name="data.initial.roundsBlinded" value="{{data.data.initial.roundsBlinded}}" data-dtype="Number" type="number" {{roif data.data.applied}}/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-gavel"></i> {{localize "MERP1E.Damage.RoundsWeaponStuck"}}</label>
+                <input name="data.initial.roundsWeaponStuck" value="{{data.data.initial.roundsWeaponStuck}}" data-dtype="Number" type="number" {{roif data.data.applied}}/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-dizzy"></i> {{localize "MERP1E.Damage.UnconsciousComa"}}</label>
+                <input name="data.initial.unconsciousComa" value="{{data.data.initial.unconsciousComa}}" data-dtype="Number" type="number" {{roif data.data.applied}}/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="far fa-hand-paper"></i> {{localize "MERP1E.Damage.Arm"}}</label>
+                <div class="flexrow">
+                    <select name="data.initial.armDamage" {{roif data.data.applied}}>
+                        {{selectOptions rules.health.apendageStatus selected=data.data.initial.armDamage localize=true nameAttr="value" labelAttr="labelI18"}}
+                    </select>
+                    {{#if (isEqual data.data.initial.armDamage "0")}}
+                    <div>&nbsp;</div>
+                    <div>&nbsp;</div>
+                    {{else}}
+                    <label class="resource-label">{{localize "MERP1E.Damage.Side"}}</label>
+                    <select name="data.initial.armSide" {{roif data.data.applied}}>
+                        {{selectOptions rules.health.sideChoose selected=data.data.initial.armSide localize=true nameAttr="value" labelAttr="labelI18"}}
+                    </select>
+                    {{/if}}
+                </div>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-shoe-prints"></i> {{localize "MERP1E.Damage.Leg"}}</label>
+                <div class="flexrow">
+                    <select name="data.initial.legDamage" {{roif data.data.applied}}>
+                        {{selectOptions rules.health.apendageStatus selected=data.data.initial.legDamage localize=true nameAttr="value" labelAttr="labelI18"}}
+                    </select>
+                    {{#if (isEqual data.data.initial.legDamage "0")}}
+                    <div>&nbsp;</div>
+                    <div>&nbsp;</div>
+                    {{else}}
+                    <label class="resource-label">{{localize "MERP1E.Damage.Side"}}</label>
+                    <select name="data.initial.legSide" {{roif data.data.applied}}>
+                        {{selectOptions rules.health.sideChoose selected=data.data.initial.legSide localize=true nameAttr="value" labelAttr="labelI18"}}
+                    </select>
+                    {{/if}}
+                </div>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-wheelchair"></i> {{localize "MERP1E.Damage.Paralyzed"}}</label>
+                <select name="data.initial.paralyzed" {{roif data.data.applied}}>
+                    {{selectOptions rules.health.paralyzedStatus selected=data.data.initial.paralyzed localize=true nameAttr="value" labelAttr="labelI18"}}
+                </select>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-deaf"></i> {{localize "MERP1E.Damage.HearingLoss"}}</label>
+                <select name="data.initial.hearingLoss" {{roif data.data.applied}}>
+                    {{selectOptions rules.health.sideStatus selected=data.data.initial.hearingLoss localize=true nameAttr="value" labelAttr="labelI18"}}
+                </select>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-eye-slash"></i> {{localize "MERP1E.Damage.EyeLoss"}}</label>
+                <select name="data.initial.eyeLoss" {{roif data.data.applied}}>
+                    {{selectOptions rules.health.sideStatus selected=data.data.initial.eyeLoss localize=true nameAttr="value" labelAttr="labelI18"}}
+                </select>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label">{{localize "MERP1E.Health.Notes"}}</label>
+                <input name="data.initial.notes" value="{{data.data.initial.notes}}" data-dtype="String" type="text" {{roif data.data.applied}}/>
+            </div>
+        </div>
+        {{!-- Current Tab --}}
+        {{#if data.data.applied}}
+        <div class="tab" data-group="primary" data-tab="current">
+            <h2>{{localize 'MERP1E.Damage.CurrentEffects'}}</h2>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-heart-broken"></i> {{localize 'MERP1E.Damage.AdditionalHits'}}</label>
+                <input name="data.current.additionalHits" value="{{data.data.current.additionalHits}}" data-dtype="Number" type="number" class="userentry"/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-tint"></i> {{localize "MERP1E.Damage.HitsPerRound"}}</label>
+                <input name="data.current.hitsPerRound" value="{{data.data.current.hitsPerRound}}" data-dtype="Number" type="number" class="userentry"/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-minus"></i> {{localize "MERP1E.Damage.ActivityPenalty"}}</label>
+                <input name="data.current.activityPenalty" value="{{data.data.current.activityPenalty}}" data-dtype="Number" type="number" class="userentry"/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-user-minus"></i> {{localize "MERP1E.Damage.RoundsActivityPenalty"}}</label>
+                <input type="checkbox" name="data.current.activityPenaltyTemporary" data-dtype="Boolean" {{checked data.data.current.activityPenaltyTemporary}} class="userentry"/>
+                {{#if data.data.current.activityPenaltyTemporary}}
+                <input name="data.current.roundsActivityPenalty" value="{{data.data.current.roundsActivityPenalty}}" data-dtype="Number" type="number" class="userentry"/>
+                {{/if}}
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="far fa-meh"></i> {{localize "MERP1E.Damage.RoundsDown"}}</label>
+                <input name="data.current.roundsDown" value="{{data.data.current.roundsDown}}" data-dtype="Number" type="number" class="userentry"/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="far fa-dizzy"></i> {{localize "MERP1E.Damage.RoundsOut"}}</label>
+                <input name="data.current.roundsOut" value="{{data.data.current.roundsOut}}" data-dtype="Number" type="number" class="userentry"/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-skull-crossbones"></i> {{localize "MERP1E.Damage.RoundsUntilDeath"}}</label>
+                <input name="data.current.roundsUntilDeath" value="{{data.data.current.roundsUntilDeath}}" data-dtype="Number" type="number" class="userentry"/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-ban"></i> {{localize "MERP1E.Damage.RoundsStunned"}}</label>
+                <input name="data.current.roundsStunned" value="{{data.data.current.roundsStunned}}" data-dtype="Number" type="number" class="userentry"/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-eye-slash"></i> {{localize "MERP1E.Damage.RoundsBlinded"}}</label>
+                <input name="data.current.roundsBlinded" value="{{data.data.current.roundsBlinded}}" data-dtype="Number" type="number" class="userentry"/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-gavel"></i> {{localize "MERP1E.Damage.RoundsWeaponStuck"}}</label>
+                <input name="data.current.roundsWeaponStuck" value="{{data.data.current.roundsWeaponStuck}}" data-dtype="Number" type="number" class="userentry"/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-dizzy"></i> {{localize "MERP1E.Damage.UnconsciousComa"}}</label>
+                <input name="data.current.unconsciousComa" value="{{data.data.current.unconsciousComa}}" data-dtype="Number" type="number" class="userentry"/>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="far fa-hand-paper"></i> {{localize "MERP1E.Damage.Arm"}}</label>
+                <div class="flexrow">
+                    <label class="resource-label">{{localize "MERP1E.Damage.Left"}}</label>
+                    <select name="data.current.leftArm" class="userentry">
+                        {{selectOptions rules.health.apendageStatus selected=data.data.current.leftArm localize=true nameAttr="value" labelAttr="labelI18"}}
+                    </select>
+                    <label class="resource-label">{{localize "MERP1E.Damage.Right"}}</label>
+                    <select name="data.current.rightArm" class="userentry">
+                        {{selectOptions rules.health.apendageStatus selected=data.data.current.rightArm localize=true nameAttr="value" labelAttr="labelI18"}}
+                    </select>
+                </div>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-shoe-prints"></i> {{localize "MERP1E.Damage.Leg"}}</label>
+                <div class="flexrow">
+                    <label class="resource-label">{{localize "MERP1E.Damage.Left"}}</label>
+                    <select name="data.current.leftLeg" class="userentry">
+                        {{selectOptions rules.health.apendageStatus selected=data.data.current.leftLeg localize=true nameAttr="value" labelAttr="labelI18"}}
+                    </select>
+                    <label class="resource-label">{{localize "MERP1E.Damage.Right"}}</label>
+                    <select name="data.current.rightLeg" class="userentry">
+                        {{selectOptions rules.health.apendageStatus selected=data.data.current.rightLeg localize=true nameAttr="value" labelAttr="labelI18"}}
+                    </select>
+                </div>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-wheelchair"></i> {{localize "MERP1E.Damage.Paralyzed"}}</label>
+                <select name="data.current.paralyzed" class="userentry">
+                    {{selectOptions rules.health.paralyzedStatus selected=data.data.current.paralyzed localize=true nameAttr="value" labelAttr="labelI18"}}
+                </select>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-deaf"></i> {{localize "MERP1E.Damage.HearingLoss"}}</label>
+                <select name="data.current.hearingLoss" class="userentry">
+                    {{selectOptions rules.health.sideStatus selected=data.data.current.hearingLoss localize=true nameAttr="value" labelAttr="labelI18"}}
+                </select>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label"><i class="fas fa-eye-slash"></i> {{localize "MERP1E.Damage.EyeLoss"}}</label>
+                <select name="data.current.eyeLoss" class="userentry">
+                    {{selectOptions rules.health.sideStatus selected=data.data.current.eyeLoss localize=true nameAttr="value" labelAttr="labelI18"}}
+                </select>
+            </div>
+            <div class="flexrow">
+                <label class="resource-label">{{localize "MERP1E.Health.Notes"}}</label>
+                <input name="data.current.notes" value="{{data.data.current.notes}}" data-dtype="String" type="text" class="userentry"/>
+            </div>
+        </div>
+        {{/if}}
+        {{!-- Description Tab --}}
+        <div class="tab" data-group="primary" data-tab="description">
+            {{editor content=data.data.description target="data.description" button=true owner=owner editable=editable}}
+        </div>
+    </section>
+</form>

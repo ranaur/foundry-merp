@@ -8,7 +8,7 @@
                     <label class="resource-label">{{localize "MERP1E.ProfessionSheet.PrimeStat"}}</label>
                     <select name="data.primeStat">
                         {{#each rules.stats as |stat|}}
-                            <option value="{{stat}}" {{#if (isEqual ../data.primeStat stat)}}selected{{/if}}>{{localize (concat "MERP1E.Stats." stat ".Name")}}</option>
+                            <option value="{{stat.abbr}}" {{#if (isEqual ../data.data.primeStat stat.abbr)}}selected{{/if}}>{{localize (concat "MERP1E.Stats." stat.abbr ".Name")}}</option>
                         {{/each}}
                     </select>
                 </div>
@@ -16,18 +16,18 @@
                     <label class="resource-label">{{localize "MERP1E.ProfessionSheet.Realm"}}</label>
                     <select name="data.realm">
                         {{#each rules.spell.realms as |realm|}}
-                        <option value="{{realm}}" {{#if (isEqual ../data.realm realm)}}selected{{/if}}>{{localize (concat "MERP1E.Realm." realm)}}</option>
+                        <option value="{{realm}}" {{#if (isEqual ../data.data.realm realm)}}selected{{/if}}>{{localize (concat "MERP1E.Realm." realm)}}</option>
                         {{/each}}
-                        <option value="any" {{#if (isEqual data.realm "any")}}selected{{/if}}>{{localize (concat "MERP1E.Realm.Any")}}</option>
+                        <option value="any" {{#if (isEqual data.data.realm "any")}}selected{{/if}}>{{localize (concat "MERP1E.Realm.Any")}}</option>
                     </select>
                 </div>
                 <div class="resource">
                     <label class="resource-label">{{localize "MERP1E.ProfessionSheet.MaxSpellLevel"}}</label>
                     <select name="data.spellsAllowed">
-                        <option value="profession and open" {{#if (isEqual data.spellsAllowed "profession and open")}}selected{{/if}}>{{localize "MERP1E.SpellsAllowed.ProfessionOpen"}}</option>
-                        <option value="profession and open up to 5th level" {{#if (isEqual data.spellsAllowed "profession and open up to 5th level")}}selected{{/if}}>{{localize "MERP1E.SpellsAllowed.Profession5th"}}</option>
-                        <option value="open up to 5th level" {{#if (isEqual data.spellsAllowed "open up to 5th level")}}selected{{/if}}>{{localize "MERP1E.SpellsAllowed.Open5th"}}</option>
-                        <option value="open up to 3rd level" {{#if (isEqual data.spellsAllowed "open up to 3rd level")}}selected{{/if}}>{{localize "MERP1E.SpellsAllowed.Open3rd"}}</option>
+                        <option value="profession and open" {{#if (isEqual data.data.spellsAllowed "profession and open")}}selected{{/if}}>{{localize "MERP1E.SpellsAllowed.ProfessionOpen"}}</option>
+                        <option value="profession and open up to 5th level" {{#if (isEqual data.data.spellsAllowed "profession and open up to 5th level")}}selected{{/if}}>{{localize "MERP1E.SpellsAllowed.Profession5th"}}</option>
+                        <option value="open up to 5th level" {{#if (isEqual data.data.spellsAllowed "open up to 5th level")}}selected{{/if}}>{{localize "MERP1E.SpellsAllowed.Open5th"}}</option>
+                        <option value="open up to 3rd level" {{#if (isEqual data.data.spellsAllowed "open up to 3rd level")}}selected{{/if}}>{{localize "MERP1E.SpellsAllowed.Open3rd"}}</option>
                     </select>
                 </div>
             </div>

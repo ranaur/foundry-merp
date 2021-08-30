@@ -17,7 +17,6 @@ export class LanguageSheetHelper {
     const name = `New ${type.capitalize()}`;
     // Prepare the item object.
     const itemData = {
-      name: name,
       type: type
     };
     // Remove the type from the dataset since it's in the itemData.type prop.
@@ -41,7 +40,7 @@ export class LanguageSheetHelper {
     li.slideUp(200, () => this.render(false));
   }
 
-  static languageAddAll(event) {
+  static async languageAddAll(event) {
     const raceLanguages = this.race.data.data.languages;
     
     let languagesToCreate = [];
@@ -49,9 +48,9 @@ export class LanguageSheetHelper {
     for(let language of Object.values(raceLanguages)) {
       const actorLanguage = this.getLanguageByName(language.name);
       if(actorLanguage.length != 0) {
-        let newLanguageData = actorLanguage[0].data.data;
-        if(newLanguageData.ranks > language.ranks) {
-          languagesToUpdate.push({ _id: actorLanguage[0].id, type: "language", name: language.name, data: newLanguageData });
+        let actorLanguageData = actorLanguage[0].data.data;
+        if(actorLanguageData.ranks < language.ranks) {
+          languagesToUpdate.push({ _id: actorLanguage[0].id, data: { ranks: language.ranks} });
         }
       } else { // actor has no language with same name yet, lookup global and create
         const gameLanguage = game.merp1e.Merp1eRules.getAvaliableLanguageByName(language.name);
@@ -69,8 +68,8 @@ export class LanguageSheetHelper {
       
     }
 
-    this.updateEmbeddedDocuments("Item", languagesToUpdate, {renderSheet: false, render: false});
-    return this.createEmbeddedDocuments("Item", languagesToCreate, {renderSheet: false, render: false});
+    await this.updateEmbeddedDocuments("Item", languagesToUpdate);
+    return await this.createEmbeddedDocuments("Item", languagesToCreate);
   }
 
   static updateLanguages(formData, sheet) {

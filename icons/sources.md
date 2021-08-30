@@ -13,4 +13,7 @@ item/race.svg: https://game-icons.net/1x1/lorc/anatomy.html
 item/spell.svg: https://game-icons.net/1x1/lorc/fairy-wand.html
 item/spelllist.svg: https://game-icons.net/1x1/delapouite/spell-book.html
 item/equipment.svg: https://game-icons.net/1x1/lorc/battle-gear.html
+item/damage.svg: https://game-icons.net/1x1/lorc/wrapped-heart.html
+item/experience.svg: https://game-icons.net/1x1/lorc/medal.html
 cash.svg: https://game-icons.net/1x1/lorc/cash.html
+

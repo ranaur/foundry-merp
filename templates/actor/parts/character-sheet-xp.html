@@ -1,0 +1,56 @@
+<div>
+    <div class="xp-statuses">
+        <div class="flexrow">
+            <h2 class="flex3">{{localize 'MERP1E.XP.ExperiencePoints'}}</h2>
+            <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+                <a class="xp-control" title="{{localize 'MERP1E.XP.Consolidate'}}" data-action="consolidate-xp"><i class="fas fa-calculator"></i></a>
+            </div>
+        </div>
+        <div class="resources grid grid-3col">
+            <div>
+                <label class="resource-label">{{localize 'MERP1E.XP.Effective'}}</label>
+                <input type="number" value="{{actor.xp.effective}}" data-dtype="Number" type="number" readonly tabindex=-1/>
+            </div>
+            <div>
+                <label class="resource-label">{{localize 'MERP1E.XP.Awarded'}}</label>
+                {{log rules.settings}}
+                <input name="data.xp.awarded" type="number" value="{{actor.xp.awarded}}" data-dtype="Number" type="number" {{roif rules.settings.xpControlAutomatic}}/>
+            </div>
+            <div>
+                <label class="resource-label">{{localize 'MERP1E.XP.NextLevel'}}</label>
+                <input type="number" value="{{actor.xp.nextLevel}}" data-dtype="Number" type="number" readonly tabindex=-1/>
+            </div>
+        </div>
+    {{#if rules.settings.xpControlAutomatic }}
+    <div class="flexrow">
+        <h2 class="flex3">{{localize 'MERP1E.XP.AwardedXPs'}}</h2>
+
+        <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+            <a class="item-control item-create" title="{{localize 'MERP1E.Item.New'}}" option-renderSheet=true data-type="xp"><i class="fas fa-plus"></i></a>
+        </div>
+    </div>
+
+    <ol class=" grid grid-2col">
+        <li class="flexrow item-header" style="font-weight: bolder;">
+            <div>{{localize "MERP1E.XP.Reference"}}</div>
+            <div>{{localize 'MERP1E.XP.Value'}}</div>
+            <div></div>
+        </li>
+        <li class="flexrow item-header" style="font-weight: bolder;">
+            <div>{{localize "MERP1E.XP.Reference"}}</div>
+            <div>{{localize 'MERP1E.XP.Value'}}</div>
+            <div></div>
+        </li>
+        {{#each actor.xps as | xp | }}
+        <li class="flexrow item" data-item-id="{{xp.id}}">
+            <div class="flex3">{{xp.data.data.reference}}</div>
+            <div>{{xp.data.data.value}}</div>
+            <div class="damage-controls" style="text-align:center">
+                <a class="item-control item-edit" title="{{localize 'MERP1E.Item.Edit'}}"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-delete" title="{{localize 'MERP1E.Item.Delete'}}"><i class="fas fa-trash"></i></a>
+            </div>
+        </li>
+        {{/each}}
+    </ol>
+    {{/if}}
+</div>

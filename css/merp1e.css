@@ -246,3 +246,28 @@
   flex: 0 0 86px;
   text-align: right;
 }
+
+select[readonly] {
+  /* background: #eee; /*Simular campo inativo - Sugestão @GabrielRodrigues*/
+  pointer-events: none;
+  touch-action: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+}
+
+input[readonly] {
+  /* background: #eee; /*Simular campo inativo - Sugestão @GabrielRodrigues*/
+  pointer-events: none;
+  touch-action: none;
+}
+
+select.userentry {
+  background: #ccc;
+}
+
+input.userentry {
+  background: #ccc;
+}
+

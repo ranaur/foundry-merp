@@ -1,5 +1,6 @@
 export class MerpSpell {
     static realms = ["Essence", "Channeling"];
+    static realmStat = {"Essence": "ig", "Channeling": "it"};
     static classes = {
         "E": { name: "Elemental", description: "These spells use the force of the spell to manipulate physical elements (heat, cold, wind, light, water, earth, sound, smell, taste, touch). These elements (and not the spell) are used to either directly attack a target or to af f ect the senses of a target. Since the elements are real, no Resistance Rolls are normally allowed. Elemental attack spells and illusion spells fall into this class." },
         "F": { name: "Force", description: "These spells involve the direct manipulation of matter, energy, the elements, or living being through the use of a spell’s force. If the spell has a target capable of resisting, it must make a Resistance Roll to see if it is affected by the spell. Most base attack spells fall into this class." },

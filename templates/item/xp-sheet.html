@@ -3,9 +3,15 @@
         <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
         <div class="header-fields">
             <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name"/></h1>
-            <div class="resource">
-                <label class="resource-label">{{localize "MERP1E.Languages.Ranks"}}</label>
-                <input type="text" name="data.ranks" value="{{data.data.ranks}}" min="1" max ="5" placeholder='-' type="number" data-dtype="Number"/>
+            <div class="resource grid grid-2col">
+                <div>
+                    <label class="resource-label">{{localize "MERP1E.XP.Reference"}}</label>
+                    <input name="data.reference" value="{{data.data.reference}}" type="text" data-dtype="String"/>
+                </div>
+                <div>
+                    <label class="resource-label">{{localize "MERP1E.XP.Value"}}</label>
+                    <input name="data.value" value="{{data.data.value}}" placeholder='-' type="number" data-dtype="Number"/>
+                </div>
             </div>
         </div>
     </header>

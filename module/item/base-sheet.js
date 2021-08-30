@@ -49,40 +49,5 @@ export class Merp1eBaseItemSheet extends ItemSheet {
     super.activateListeners(html);
     Merp1eActiveEffect.activateListeners(html, this.item);
   }
-
-  /* -------------------------------------------- */
-  _generateSkillOrder() {
-    let skillByGroups = {};
-
-    // initialize skill groups with all skill groups in rules
-    for(let [name, group] of Object.entries(game.merp1e.Merp1eRules.skill.groups)) {
-      skillByGroups[name] = {
-        name: name,
-        order: group.order,
-        skills: []
-      }
-    }
-
-    // fill skill groups with skills
-    for(let skill of Object.values(game.data.items.filter((item) => { return item.type == "skill"; }))) {
-      let groupName = skill.data.group;
-      skillByGroups[groupName].skills.push(skill);
-    }
-
-    // reorder skills inside the groups and generate sheetOrder array
-    let sheetOrder = Object.values(skillByGroups).reduce( (acc, group) => {
-      group.skills.sort(function(first, second) {
-        return first.order - second.order;
-      });
-      acc.push(group);
-      return acc;
-    }, []);
-    // reorder groups in sheetOrder 
-    sheetOrder.sort(function(first, second) {
-      return first.order - second.order;
-    });
-
-    return sheetOrder;
-  }
 }
 

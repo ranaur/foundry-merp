@@ -1,16 +1,17 @@
 import { LanguageSheetHelper } from '../language-helper.js';
+import { Merp1eBaseSheet } from './base-sheet.js';
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
  * @extends {ActorSheet}
  */
-export class Merp1eCharacterSheet extends ActorSheet {
+export class Merp1eCharacterSheet extends Merp1eBaseSheet {
 
   /** @override */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
       classes: ["merp1e", "sheet", "actor"],
-      width: 600,
+      width: 700,
       height: 600,
       tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }]
     });
@@ -28,43 +29,6 @@ export class Merp1eCharacterSheet extends ActorSheet {
     return `${path}/${this.actor.data.type}-sheet.html`;
   }
 
-/*
-  generateSheetOrder() {
-    let skillByGroups = {};
-
-    // initialize skill groups with all skill groups in rules
-    for(let [name, group] of Object.entries(game.merp1e.Merp1eRules.skill.groups)) {
-      skillByGroups[name] = {
-        name: name,
-        order: group.order,
-        skills: []
-      }
-    }
-
-    // fill skill groups with skills
-    for(let skill of Object.values(this.actor.data.skills)) {
-      let groupName = skill.group;
-      // skillByGroups[groupName] = skillByGroups[groupName] || { name: groupName, order: 99, skills = [] } // add any missing group (shoudn't happen)
-      skillByGroups[groupName].skills.push(skill);
-    }
-
-    // reorder skills inside the groups and generate sheetOrder array
-    let sheetOrder = Object.values(skillByGroups).reduce( (acc, group) => {
-      group.skills.sort(function(first, second) {
-        return first.order - second.order;
-      });
-      acc.push(group);
-      return acc;
-    }, []);
-    // reorder groups in sheetOrder 
-    sheetOrder.sort(function(first, second) {
-      return first.order - second.order;
-    });
-
-    return sheetOrder;
-  }
-*/
-
   _prepareCharacter(sheetData) {
     if (this.actor.data.type != 'character') {
       return sheetData
@@ -75,7 +39,7 @@ export class Merp1eCharacterSheet extends ActorSheet {
     if(this.actor.data.skills = null) {
       sheetData.sheetOrder ={}
     } else {
-      sheetData.sheetOrder = game.merp1e.Merp1eRules.generateSheetOrder(this.actor.skills)
+      sheetData.sheetOrder = game.merp1e.Merp1eRules.generateSheetOrder(this.actor.skills);
     }
     this.fillAdolescenceSkillRanks(sheetData); // XXX não funciona quando troca de raça
     return sheetData;
@@ -83,16 +47,16 @@ export class Merp1eCharacterSheet extends ActorSheet {
 
     /** @override */
   getData() {
-    let data = super.getData();
+    let sheetData = super.getData();
 
-    data.rules = game.merp1e.Merp1eRules;
-
+    sheetData.rules = game.merp1e.Merp1eRules;
+    
     // Prepare items.
     if (this.actor.data.type == 'character') {
-      data = this._prepareCharacter(data);
+      sheetData = this._prepareCharacter(sheetData);
     }
 
-    return data;
+    return sheetData;
   }
 
   fillAdolescenceSkillRanks(data) {
@@ -132,29 +96,15 @@ export class Merp1eCharacterSheet extends ActorSheet {
     // Everything below here is only needed if the sheet is editable
     if (!this.options.editable) return;
 
-    // Add Inventory Item
-    html.find('.item-create').click(this._onItemCreate.bind(this));
-
-    // Update Inventory Item
-    html.find('.item-edit').click(ev => {
-      const li = $(ev.currentTarget).parents(".item");
-      const item = this.actor.getOwnedItem(li.data("itemId"));
-      item.sheet.render(true);
-    });
-
-    // Delete Inventory Item
-    html.find('.item-delete').click(ev => {
-      const li = $(ev.currentTarget).parents(".item");
-      this.actor.deleteOwnedItem(li.data("itemId"));
-      li.slideUp(200, () => this.render(false));
-    });
-
     // Rollable abilities.
     html.find('.rollable').click(this._onRoll.bind(this));
 
     LanguageSheetHelper.activateListeners(html, this.actor);
 
     html.find(".skills").on("click", ".skill-control", this.onClickSkillControl.bind(this));
+    html.find(".spells").on("click", ".spell-control", this.onClickSpellControl.bind(this));
+    html.find(".health").on("click", ".health-control", this.onClickHealthControl.bind(this));
+    html.find(".xp").on("click", ".xp-control", this.onClickXPControl.bind(this));
   }
 
   /** @override */
@@ -194,33 +144,6 @@ export class Merp1eCharacterSheet extends ActorSheet {
 
     // Create the owned item as normal
     return super._onDropItemCreate(itemData);
-  }
-
-  /**
-   * Handle creating a new Owned Item for the actor using initial data defined in the HTML dataset
-   * @param {Event} event   The originating click event
-   * @private
-   */
-  _onItemCreate(event) {
-    event.preventDefault();
-    const header = event.currentTarget;
-    // Get the type of item to create.
-    const type = header.dataset.type;
-    // Grab any data associated with this control.
-    const data = duplicate(header.dataset);
-    // Initialize a default name.
-    const name = `New ${type.capitalize()}`;
-    // Prepare the item object.
-    const itemData = {
-      name: name,
-      type: type,
-      data: data
-    };
-    // Remove the type from the dataset since it's in the itemData.type prop.
-    delete itemData.data["type"];
-
-    // Finally, create the item!
-    return this.actor.createOwnedItem(itemData);
   }
 
   /**
@@ -306,6 +229,13 @@ export class Merp1eCharacterSheet extends ActorSheet {
     }
     return formData;
   }
+
+  /** @override */
+  _onUpdateEmbeddedDocuments(embeddedName, documents, result, options, userId) {
+    this.consolidateDamage();
+    super._onUpdateEmbeddedDocuments(embeddedName, documents, result, options, userId);
+  }
+
   /** @override */
   _updateObject(event, formData) {
     /*
@@ -322,6 +252,9 @@ export class Merp1eCharacterSheet extends ActorSheet {
     formData = this._updateRace(formData);
     formData = this._updateProfession(formData);
     formData = this._updateEmbeddedItems(formData);
+
+    //this.actor.health.consolidateDamage();
+    //this.updateHealth();
 
     return this.object.update(formData);
   }
@@ -340,9 +273,148 @@ export class Merp1eCharacterSheet extends ActorSheet {
     case "add-all":
       await this.actor.createEmbeddedDocuments("Item", this.actor.getDefaultSkills());
       break;
-    case "add-item":
-      console.log("Not implemented");
+    case "duplicate":
+      let skillId = a.dataset.id;
+      let skill = this.actor.getEmbeddedDocument("Item", skillId);
+      
+      await this.actor.createEmbeddedDocuments("Item", [{ name: game.i18n.localize("MERP1E.Item.New") + " " + skill.name, type: skill.type, data: skill.data.data }], { renderSheet: true });
       break;
+    }
+  }
+
+  async onClickSpellControl(event) {
+    event.preventDefault();
+    const a = event.currentTarget;
+    const action = a.dataset.action;
+
+    switch ( action ) {
+    case "reset-pp":
+      let inputElement = event.currentTarget.parentNode.getElementsByTagName("input")[0];
+      inputElement.value = this.object.powerPointsMaximum;
+      this.submit();
+      break;
+    }
+  }
+
+  addValueToElement(name, n) {
+    let value = document.getElementsByName(name)[0].value;
+    if(value == "" || value == "0") return;
+    this.setValueToElement(name, parseInt(value) + n);
+  }
+  setValueToElement(name, n) {
+    document.getElementsByName(name)[0].value = n;
+  }
+  getValueFromElement(name) {
+    return document.getElementsByName(name)[0].value;
+  }
+  setCheckedToElement(name, n) {
+    let element = document.getElementsByName(name)[0];
+    
+    if(n) {
+      if(!element.hasAttribute("checked")) element.setAttribute("checked");
+    } else {
+      if(element.hasAttribute("checked")) element.removeAttribute("checked");
+    }
+  }
+  setValueToId(id, n) {
+    document.getElementById(id).value = n;
+  }
+
+  updateHealth() {
+    this.setValueToElement("data.healthStatus.hitsTaken", this.actor.health.hitsTaken);
+    this.setValueToId("hitsLeft", this.actor.health.hitsLeft);
+    this.setValueToId("maximumHP", this.actor.health.maximumHP);
+    this.setValueToElement("data.healthStatus.hitsPerRound", this.actor.health.status.hitsPerRound);
+    this.setValueToElement("data.healthStatus.activityPenalty", this.actor.health.status.activityPenalty);
+    this.setValueToElement("data.healthStatus.roundsStunned", this.actor.health.status.roundsStunned);
+    this.setValueToElement("data.healthStatus.roundsDown", this.actor.health.status.roundsDown);
+    this.setValueToElement("data.healthStatus.roundsOut", this.actor.health.status.roundsOut);
+    this.setValueToElement("data.healthStatus.roundsUntilDeath", this.actor.health.status.roundsUntilDeath);
+    this.setValueToElement("data.healthStatus.roundsBlinded", this.actor.health.status.roundsBlinded);
+    this.setValueToElement("data.healthStatus.roundsWeaponStuck", this.actor.health.status.roundsWeaponStuck);
+    this.setValueToElement("data.healthStatus.unconsciousComa", this.actor.health.status.unconsciousComa);
+    this.setValueToElement("data.healthStatus.paralyzed", this.actor.health.status.paralyzed);
+    this.setValueToElement("data.healthStatus.hearingLoss", this.actor.health.status.hearingLoss);
+    this.setValueToElement("data.healthStatus.eyeLoss", this.actor.health.status.eyeLoss);
+    this.setValueToElement("data.healthStatus.leftArm", this.actor.health.status.leftArm);
+    this.setValueToElement("data.healthStatus.rightArm", this.actor.health.status.rightArm);
+    this.setValueToElement("data.healthStatus.leftLeg", this.actor.health.status.leftLeg);
+    this.setValueToElement("data.healthStatus.rightLeg", this.actor.health.status.rightLeg);
+    
+    this.submit();
+  }
+
+  async onClickHealthControl(event) {
+    event.preventDefault();
+    const a = event.currentTarget;
+    const action = a.dataset.action;
+
+    switch ( action ) {
+    case "damage-add":
+      let step = parseInt(a.dataset.step || 1);
+      let inputElement = event.currentTarget.parentNode.getElementsByTagName("input")[0];
+      inputElement.value = parseInt(inputElement.value) + step;
+      this.submit();
+      break;
+    case "next-round-old":
+      document.getElementsByName("data.healthStatus.hitsTaken")[0].value = 
+        parseInt(document.getElementsByName("data.healthStatus.hitsTaken")[0].value) + 
+        parseInt(document.getElementsByName("data.healthStatus.hitsPerRound")[0].value)
+
+      this.addValueToElement("data.healthStatus.roundsDown", -1);
+      this.addValueToElement("data.healthStatus.roundsOut", -1);
+      if(document.getElementsByName("data.healthStatus.roundsUntilDeath")[0].value == 1) {
+        document.getElementsByName("data.healthStatus.roundsUntilDeath")[0].value = -1;
+      } else {
+        this.addValueToElement("data.healthStatus.roundsUntilDeath", -1);
+      }
+      this.addValueToElement("data.healthStatus.roundsStunned", -1);
+      this.addValueToElement("data.healthStatus.roundsBlinded", -1);
+      this.addValueToElement("data.healthStatus.roundsWeaponStuck", -1);
+      this.submit();
+      break;
+    case "erase-status":
+      this.setValueToElement("data.healthStatus.hitsPerRound", 0);
+      this.setValueToElement("data.healthStatus.roundsStunned", 0);
+      this.setValueToElement("data.healthStatus.roundsDown", 0);
+      this.setValueToElement("data.healthStatus.roundsOut", 0);
+      if(parseInt(document.getElementsByName("data.healthStatus.roundsUntilDeath")[0].value) > 0) {
+        this.setValueToElement("data.healthStatus.roundsUntilDeath", -1);
+      }
+      this.setValueToElement("data.healthStatus.roundsUntilDeath", 0);
+      this.setValueToElement("data.healthStatus.roundsBlinded", 0);
+      this.setValueToElement("data.healthStatus.roundsWeaponStuck", 0);
+      this.submit();
+      break;
+      case "consolidate-damage":
+        this.actor.health.consolidateDamage();
+        this.updateHealth();
+        break;
+      case "next-round":
+        this.actor.health.nextRound();
+        this.updateHealth();
+        break;
+      case "heal":
+        break;
+    }
+  }
+  async onClickXPControl(event) {
+    event.preventDefault();
+    const a = event.currentTarget;
+    const action = a.dataset.action;
+
+    switch ( action ) {
+    case "consolidate-xp":
+      let newXP = parseInt(this.getValueFromElement("data.xp.effective")) + parseInt( this.getValueFromElement("data.xp.awarded"));
+      this.setValueToElement("data.xp.effective", newXP);
+      
+      if(game.merp1e.Merp1eRules.settings.xpControlManual) {
+        this.setValueToElement("data.xp.awarded", 0);
+      } else { // this.rules.settings.xpControlAutomatic
+        this.actor.deleteEmbeddedDocuments("Item", this.actor.xp.awardedList);
+      }
+      this.submit();
+      break
     }
   }
 }
