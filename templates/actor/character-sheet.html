@@ -29,13 +29,13 @@
             <div class="resource flex-group-center">
                 <label for="data.level" class="resource-label">{{localize "MERP1E.Character.Level"}}</label>
                 <div class="resource-content flexrow flex-center flex-between">
-                  <input type="number" value="{{actor.level}}" data-dtype="Number" readonly tabindex=-1/>
+                  <input type="number" value="{{actor.level}}" data-dtype="Number"/>
                 </div>
             </div>
             <div class="resource flex-group-center">
                 <label for="data.xp" class="resource-label">{{localize "MERP1E.Character.XP"}}</label>
                 <div class="resource-content flexrow flex-center flex-between">
-                  <input class="userentry" type="number" name="data.xp.effective" value="{{actor.effectiveXP}}" data-dtype="Number"/>
+                  <input type="number" value="{{actor.effectiveXP}}" data-dtype="Number" readonly tabindex=-1/>
                 </div>
             </div>
         </div>
