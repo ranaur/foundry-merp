@@ -5,7 +5,33 @@
 
     Effect:
         Coloca um ícone para cada tipo?
+        Devo aplicar os efeitos depois de passar por tudo? (copiar os efeitos para o ator e aplicar pelo ator?)
+        Fazer condições de ativação
+            Manual
+            Always on
+            On item wear/yield
+            On toggle
+            On item use
+                Daily
+                Charged
+                Indefinite
+        Melhorar o tratamento das subclasses (ao invés de copiar os métodos)
 
+        Criar subclasses: 
+            Set Armor type
+            Set Helm Type
+            Set Arm Greaves Type
+            Set Leg Greaves Type
+            Set Shield Type
+                Todos esses com priority (high, medim, low)
+
+            Allow Spell Casting: Set of spells to choose
+            Infravision: set dark/light vision
+        OK  Bonus on skill
+        OK  Bonus on skill group
+        OK  Rank Bonus on skill
+            Spell Adder
+            PP Multiplier (per realm)
 
     Actor:
         Aba Damage:

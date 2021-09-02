@@ -82,10 +82,11 @@ export class Merp1eActor extends Actor {
         case "skill":
           item.bonuses = {
             actor: this,
+            itemBonuses: [],
             skill: item,
             rank: game.merp1e.Merp1eRules.resolveSkillBonus(item.data.data),
             get prof() { return this.actor._getProfessionSkillBonus(this.skill.data.data.reference) * this.actor.level; },
-            get item() { return 0; }, /// XXX put itens Skill Bonus
+            get item() { return this.itemBonuses.reduce((acc, itemBonus) => acc + itemBonus.value, 0); }, /// XXX put itens Skill Bonus
             stat: item.data.data.statBonus in this.stats ? this.stats[item.data.data.statBonus].total : null,
             extra: parseInt(item.data.data.extraBonus) || 0,
             spec: parseInt(item.data.data.specialBonus || 0),
@@ -113,6 +114,9 @@ export class Merp1eActor extends Actor {
           this.equipments[item.id] = item;
           break;
       }
+    }
+    for(let effect of this.effects) {
+      effect.apply(this);
     }
   }
 
@@ -308,8 +312,12 @@ export class Merp1eActor extends Actor {
 
   health = {
     actor: this,
-    get maximumHP() {
-      return this.actor.getSkillValue(game.merp1e.Merp1eRules.skill.BODY_DEVELOPMENT) + this.actor.stats.co.value;
+    get maximumHPDie() {
+      return this.maximumHPOut + this.actor.stats.co.value;
+    },
+
+    get maximumHPOut() {
+      return this.actor.getSkillValue(game.merp1e.Merp1eRules.skill.BODY_DEVELOPMENT);
     },
 
     get hitsTaken() {
@@ -317,7 +325,7 @@ export class Merp1eActor extends Actor {
     },
 
     get hitsLeft() {
-      return this.maximumHP - this.hitsTaken;
+      return this.maximumHPOut - this.hitsTaken;
     },
 
     get status() {

@@ -355,46 +355,17 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
       inputElement.value = parseInt(inputElement.value) + step;
       this.submit();
       break;
-    case "next-round-old":
-      document.getElementsByName("data.healthStatus.hitsTaken")[0].value = 
-        parseInt(document.getElementsByName("data.healthStatus.hitsTaken")[0].value) + 
-        parseInt(document.getElementsByName("data.healthStatus.hitsPerRound")[0].value)
-
-      this.addValueToElement("data.healthStatus.roundsDown", -1);
-      this.addValueToElement("data.healthStatus.roundsOut", -1);
-      if(document.getElementsByName("data.healthStatus.roundsUntilDeath")[0].value == 1) {
-        document.getElementsByName("data.healthStatus.roundsUntilDeath")[0].value = -1;
-      } else {
-        this.addValueToElement("data.healthStatus.roundsUntilDeath", -1);
-      }
-      this.addValueToElement("data.healthStatus.roundsStunned", -1);
-      this.addValueToElement("data.healthStatus.roundsBlinded", -1);
-      this.addValueToElement("data.healthStatus.roundsWeaponStuck", -1);
-      this.submit();
+    case "consolidate-damage":
+      this.actor.health.consolidateDamage();
+      this.updateHealth();
       break;
-    case "erase-status":
-      this.setValueToElement("data.healthStatus.hitsPerRound", 0);
-      this.setValueToElement("data.healthStatus.roundsStunned", 0);
-      this.setValueToElement("data.healthStatus.roundsDown", 0);
-      this.setValueToElement("data.healthStatus.roundsOut", 0);
-      if(parseInt(document.getElementsByName("data.healthStatus.roundsUntilDeath")[0].value) > 0) {
-        this.setValueToElement("data.healthStatus.roundsUntilDeath", -1);
-      }
-      this.setValueToElement("data.healthStatus.roundsUntilDeath", 0);
-      this.setValueToElement("data.healthStatus.roundsBlinded", 0);
-      this.setValueToElement("data.healthStatus.roundsWeaponStuck", 0);
-      this.submit();
+    case "next-round":
+      this.actor.health.nextRound();
+      this.updateHealth();
       break;
-      case "consolidate-damage":
-        this.actor.health.consolidateDamage();
-        this.updateHealth();
-        break;
-      case "next-round":
-        this.actor.health.nextRound();
-        this.updateHealth();
-        break;
-      case "heal":
-        break;
+    case "heal":
+      // XXX
+      break;
     }
   }
   async onClickXPControl(event) {

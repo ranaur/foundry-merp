@@ -290,7 +290,8 @@
     "MERP1E.Spells.Spelllists": "Spelllists",
     
     "MERP1E.Health.HitPointsAndStatuses": "Hit Points and Statuses",
-    "MERP1E.Health.MaximumHP": "Maximum HP",
+    "MERP1E.Health.MaximumHPDie": "HP to Die",
+    "MERP1E.Health.MaximumHPOut": "HP to Knock Out",
     "MERP1E.Health.HitsTaken": "Hits Taken",
     "MERP1E.Health.HitsLeft": "Hits Left",
     "MERP1E.Health.Reference": "Reference",
@@ -362,8 +363,15 @@
     "MERP1E.Effect.Delete": "Delete",
     "MERP1E.Effect.Type": "Type",
 
+    "MERP1E.Effect.New": "New Effect",
     "MERP1E.EffectType.SkillBonus": "Skill Bonus",
-
+    "MERP1E.EffectType.SkillGroupBonus": "Skill Group Bonus",
+    "MERP1E.EffectType.RankSkillBonus": "Skill Rank Bonus",
+    "MERP1E.Effect.RankSkillBonus": "Skill Bonus per Rank",
+    "MERP1E.Effect.SkillBonus": "Skill Bonus",
+    "MERP1E.Effect.Skill": "Skill",
+    "MERP1E.Effect.SkillGroupBonus": "Skill Group Bonus",
+    "MERP1E.Effect.SkillGroup": "Skill Group",
     "MERP1E.EffectTab.Details": "Details",
     "MERP1E.EffectTab.Duration": "Duration",
     "MERP1E.EffectTab.Effects": "Effects",

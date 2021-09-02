@@ -5,9 +5,13 @@ export class Merp1eActiveEffectSheet extends DocumentSheet {
     static get defaultOptions() {
         return mergeObject(super.defaultOptions, {
         classes: ["merp1e", "sheet", "actor"],
+        title: "Active Effect", // XXX I18
         width: 700,
         height: 600,
-        tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }]
+        tabs: [{ navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "description" }],
+        closeOnSubmit: false,
+        submitOnClose: true,
+        submitOnChange: true,
         });
     }
 
@@ -26,6 +30,7 @@ export class Merp1eActiveEffectSheet extends DocumentSheet {
     /** @override */
     getData() {
         let sheetData = super.getData()
+        sheetData.effect = sheetData.data;
         sheetData.effectTypes = Merp1eActiveEffect.effectTypes.reduce( (acc, cls) => { acc.push({ value: cls.effectName, label: cls.label }); return acc;}, []);
         sheetData.skills = game.merp1e.Merp1eRules.generateSheetOrder();
         return sheetData;

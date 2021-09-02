@@ -26,10 +26,14 @@
                 {{#if actor.health.isBlind}}<h6>Blind</h6>{{/if}}
             </div>
         </div>
-        <div class="resources grid grid-3col">
+        <div class="resources grid grid-4col">
             <div>
-                <label class="resource-label"><i class="fas fa-heart"></i> {{localize 'MERP1E.Health.MaximumHP'}}</label>
-                <input id="maximumHP" value="{{actor.health.maximumHP}}" data-dtype="Number" type="number" readonly tabindex=-1/>
+                <label class="resource-label"><i class="fas fa-heart"></i> {{localize 'MERP1E.Health.MaximumHPDie'}}</label>
+                <input id="maximumHP" value="{{actor.health.maximumHPDie}}" data-dtype="Number" type="number" readonly tabindex=-1/>
+            </div>
+            <div>
+                <label class="resource-label"><i class="fas fa-heart"></i> {{localize 'MERP1E.Health.MaximumHPOut'}}</label>
+                <input id="maximumHP" value="{{actor.health.maximumHPOut}}" data-dtype="Number" type="number" readonly tabindex=-1/>
             </div>
             <div>
                 <label class="resource-label"><i class="fas fa-heart-broken"></i> {{localize 'MERP1E.Health.HitsTaken'}}</label>
