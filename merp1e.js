@@ -15,6 +15,8 @@ import { Merp1eSpellSheet } from "./module/item/spell-sheet.js";
 import { Merp1eSpelllistSheet } from "./module/item/spelllist-sheet.js";
 import { Merp1eRules } from "./module/rules/rules.js";
 import { preloadHandlebarsTemplates } from "./module/templates.js";
+import { Merp1eActiveEffect } from "./module/active-effect.js";
+import { Merp1eActiveEffectSheet } from "./module/active-effect-sheet.js";
 
 Hooks.once('init', async function() {
 
@@ -36,6 +38,9 @@ Hooks.once('init', async function() {
   CONFIG.Actor.documentClass = Merp1eActor;
   CONFIG.Item.documentClass = Merp1eItem;
 
+  CONFIG.ActiveEffect.sheetClass = Merp1eActiveEffectSheet;
+  CONFIG.ActiveEffect.documentClass = Merp1eActiveEffect;
+  
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("merp1e", Merp1eCharacterSheet, { makeDefault: true });

@@ -1,61 +1,49 @@
 # TODO
-* Colocar o class="userentry" na damage-sheet, respeitando o applied. (e em todo o resto)
-* Refazer o Applied
-    Retirar o ícone de apply
-    tirar o checkbox => quando cria sem ator é só o initial, quando tem ator é só o current.
-* Colocar a tabela de dano como tabela com borda
-* Colocar a constituição e uncounscious/destroyed
-* Soul departure / stat deterioration
 
-    * better treatment of weapon/shield arm. Use the weapon at hand, and if the player is using two weapons, choose randomly/heavier ou left/righ handed.
+* Colocar o class="userentry" em todo o resto
+* Fazer um major revision para utilizar localização.
+
+    Effect:
+        Coloca um ícone para cada tipo?
+
 
     Actor:
-        Damage:
-            Testar o heal();
+        Aba Damage:
+            * Testar o heal();
+            * Refazer o Applied
+                Retirar o ícone de apply
+                tirar o checkbox => quando cria sem ator é só o initial, quando tem ator é só o current.
+            * Colocar a tabela de dano como tabela com borda
+            * Colocar a constituição e uncounscious/destroyed
+            * Soul departure / stat deterioration
+            Colocar os status (Stun, down, out, dead) no token
+            Fazer com que as fichas atualizem quando mudar o flag de tipo de damage
+            * better treatment of weapon/shield arm. Use the weapon at hand, and if the player is using two weapons, choose randomly/heavier ou left/righ handed.
 
-            Testar damage e o cálculo automático
-        Colocar os status (Stun, down, out, dead) no token
-        Fazer com que as fichas atualizem quando mudar o flag de tipo de damage
+        Aba skill:
+        ?    Colocar "favorite skill" e colocar actions (skill, bonus, conditional bonus)
 
-        Implementar XP: effective, new XP e por item.
+        Aba description:
+            Revisar campos
+        ?    Colocar destro/canhoto
 
-        Colocar "favorite skill" e colocar actions (skill, bonus, conditional bonus)
+        Aba Equipment:
+            Fazer uma linha de Defensive
+                Armor
+                Greaves (Arm/Leg)
+                DB
+                Shield
 
-        Colocar class="userentry" em todos os campos de usuário
+        Aba Spells:
+            Colocar Spell adder
+            Contabilizar os bonuses/PP/adder no skill (ActiveEffects?)
+            Permitir preparar/Lançar os spells
 
-        Revisar os dados do actor
-            description
-
-        Fazer uma aba Combat/Actions
-            Armor
-            Greaves (Arm/Leg)
-            DB
-            Shield
-        Fazer a aba de Heath & Power
-            Fazer o controle de dano "automático" (com os damages)
-                Consolidar os statuses
-                Ajustar o botão de passa um round para acertar os damages
-            Damage/Heal Button no HP
-            Retestar a ficha de damage
-
-            Consolidated Statuses
-                Current Hit Points
-                Activity Penalty
-                Stunned
-                Unconscious
-                Paralyzed
-                Blind
-                Deaf
-                Drop
-                Dead for N rounds
-            Fazer a lista de damage received criticals para acumular
-
-        Aba Spells
-            PP Multiplier
-            Spell adder
-
+        Aba language:
+            Padronizar o tratamento de criação/exclusão de items (aba Language, item, Spells)
+        
         Fazer uma limpeza em rules.js e seus subitens.
-        Melhorar o tratamento de criação/exclusão de items (aba Language, item, Spells)
+        
         Fazer suporte a background options
 
     Colocar no generic-importer para importar Languages
@@ -97,7 +85,7 @@
             adolescence skill rank - fazer ranks por set e colocar na tip do skill
 
     Sheet: Character
-        Contabilizar os bonuses/PP/adder no skill (ActiveEffects?)
+        
         Implementar uma parada para esconder os skills secundários que estão zerados (fazer no CSS com hidden?)
         Implementar um tooltip mostrando a conta
         Fazer um tratamento melhor de spelllist.data.data.chanceOfLearning (permitir só de 20 em 20, e marcar quando aprender)
@@ -110,8 +98,6 @@
         Botão para atualizar os spells
 
     Sheet: Equipment
-        Fazer um major revision para utilizar localização.
-
         Alterar um widget(part spell-chooser para permitir "receber" spell por drag & drop
             Se arrastar o spell em cima da barra (ou do +), cria um novo item.
 
@@ -555,6 +541,91 @@ Alterar character-sheet.js
 
 Alterar actor.js para tratar os dados.
 
+## Alterando Active Effects
+CONFIG.ActiveEffect.sheetClass = WFRPActiveEffectConfig
+CONFIG.ActiveEffect.documentClass = ActiveEffectWfrp4e
+
+https://github.com/moo-man/WFRP4e-FoundryVTT/blob/master/modules/apps/active-effect.js
+https://github.com/moo-man/WFRP4e-FoundryVTT/blob/master/modules/system/effect-wfrp4e.js
+
+I went a pretty similar route than @Moo Man's, but extended a DocumentSheet rather than the ActiveEffectConfig mostly to get the same feel as any item or actor sheet. (ie: get rid of submit buttons, have EA icon be click editable, etc...)
+
+    Effect:
+        Label
+        Icon
+        Effect Suspended?
+        Transfer to Actor?
+        
+
+
+        Duration
+            Duration (seconds)
+            Effect Start Time
+            Effect Duration (rounds/turns)
+            Combat Encounter
+            Effect Start Turn (rounds/turns)
+
+        Effects
+            Attribute Key
+            Change Mode (add/multiply/Downgrade/Upgrade/Override)
+            Value
+
+        WFRP:
+            Effect type: (Manually Invoked, Immediate, Dialog Choice, Prefill Dialog, Pre-prepare Data, Pre-prepare Actor Item, Prepare Data, Pre-wound Calculation, Wound Calculation, Pré-apply Damage, Apply Damage, Pre-Take Damage, Take Damage, Pre-aply condition, Apply Condition, Pre-prepare item, Prepare item, Pre-roll Test, Pre-roll woeapon test)
+
+            Effect:
+                Actor
+                When Item equipped
+                Apply with targeting
+                Apply when item applies damage
+            
+            Hide from players
+            Prevent duplicate effect
+
+        On item use/continuous?
+        On wear/yield?
+
+## Colocar special effects em um item:
+
+On equipament-sheet.html:
+```html
+    {{!-- Sheet Tab Navigation --}}
+    <nav class="sheet-tabs tabs" data-group="primary">
++       <a class="item" data-tab="specialEffects">{{localize "MERP1E.Effect.SpecialEffects"}}</a>
+        <a class="item" data-tab="description">Description</a>
+        <a class="item" data-tab="attributes">Attributes</a>
+    </nav>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+        {{!-- Special Effect }}
++       <div class="tab" data-group="primary" data-tab="specialEffect">
++           {{> "systems/merp1e/templates/item/parts/special-effect.html" item=item}}
++       </div>
+```
+
+On equipment-sheet.js:
+```js
+import { ArraySheetHelper } from '../array-sheet-helper.js';
++import { Merp1eActiveEffectHelper } from '../active-effect-helper.js';
+import { Merp1eBaseItemSheet } from './base-sheet.js';
+
+(...)
+
+export class Merp1eEquipmentSheet extends Merp1eBaseItemSheet {
+  /** @override */
+  activateListeners(html) {
+    super.activateListeners(html);
+
+    // Everything below here is only needed if the sheet is editable
+    if (!this.options.editable) return;
+
++   Merp1eActiveEffectHelper.activateListeners(html, this.item);
+  }
+
+(...)
+}
+```
 
 
 # DECISIONS

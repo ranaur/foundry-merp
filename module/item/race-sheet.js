@@ -29,8 +29,6 @@ export class Merp1eRaceSheet extends Merp1eBaseItemSheet {
 
     this.languagesHelper.activateListeners(html);
 
-    // Roll handlers, click handlers, etc. would go here.
-    //html.find(".list-control").on("click", ListSheetHelper.onClickControl.bind(this)); 
   }
 
   /** @override */

@@ -2,25 +2,25 @@ export class MerpSkill {
     static BODY_DEVELOPMENT = "BodyDevel";
 
     static groups = {
-        "Movement": { order: 10 },
-        "Weapon": { order: 20 },
-        "General": { order: 30 },
-        "Subterfuge": { order: 40 },
-        "Magical": { order: 50 },
-        "Miscelaneous": { order: 60 },
-        "Secondary": { order: 70 }
+        "Movement": { order: 10, label: "MERP1E.Group.Movement" },
+        "Weapon": { order: 20, label: "MERP1E.Group.Weapon" },
+        "General": { order: 30, label: "MERP1E.Group.General" },
+        "Subterfuge": { order: 40, label: "MERP1E.Group.Subterfuge" },
+        "Magical": { order: 50, label: "MERP1E.Group.Magical" },
+        "Miscelaneous": { order: 60, label: "MERP1E.Group.Miscelaneous" },
+        "Secondary": { order: 70, label: "MERP1E.Group.Secondary" }
     };
     static modifiers = {
         difficulty: [
-            { id: "Routine", value: 30, description: "MERP.Modifier.Routine" },
-            { id: "Easy", value: 20, description: "MERP.Modifier.Easy" },
-            { id: "Light", value: 10, description: "MERP.Modifier.Light" },
-            { id: "Medium", value: 0, description: "MERP.Modifier.Medium" },
-            { id: "Hard", value: -10, description: "MERP.Modifier.Hard" },
-            { id: "Very Hard", value: -20, description: "MERP.Modifier.VeryHard" },
-            { id: "Extremely Hard", value: -30, description: "MERP.Modifier.ExtremelyHard" },
-            { id: "Sheer Folly", value: -50, description: "MERP.Modifier.SheerFolly" },
-            { id: "Absurd", value: -70, description: "MERP.Modifier.Absurd" },
+            { id: "Routine", value: 30, description: "MERP1E.Modifier.Routine" },
+            { id: "Easy", value: 20, description: "MERP1E.Modifier.Easy" },
+            { id: "Light", value: 10, description: "MERP1E.Modifier.Light" },
+            { id: "Medium", value: 0, description: "MERP1E.Modifier.Medium" },
+            { id: "Hard", value: -10, description: "MERP1E.Modifier.Hard" },
+            { id: "Very Hard", value: -20, description: "MERP1E.Modifier.VeryHard" },
+            { id: "Extremely Hard", value: -30, description: "MERP1E.Modifier.ExtremelyHard" },
+            { id: "Sheer Folly", value: -50, description: "MERP1E.Modifier.SheerFolly" },
+            { id: "Absurd", value: -70, description: "MERP1E.Modifier.Absurd" },
         ],
         InterectionAndInfluence: [
             { value: 50, description: "Audience is personally loyal or devoted to the character." },

@@ -18,15 +18,19 @@
 
     {{!-- Sheet Tab Navigation --}}
     <nav class="sheet-tabs tabs" data-group="primary">
-        <a class="item" data-tab="special">Special</a>
+        <a class="item" data-tab="specialEffects">{{localize "MERP1E.Effect.SpecialEffects"}}</a>
         <a class="item" data-tab="description">Description</a>
         <a class="item" data-tab="attributes">Attributes</a>
     </nav>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
-        {{!-- Description Tab --}}
-        <div class="tab" data-group="primary" data-tab="special">
+        {{!-- Special Effect --}}
+        <div class="tab" data-group="primary" data-tab="specialEffects">
+            {{> "systems/merp1e/templates/item/parts/special-effects.html" item=item}}
+        </div>
+        {{!-- Old Special Tab XXX remove --}}
+        <div class="tab" data-group="primary" data-tab="specialOld">
             <div class="list" data-array="skillBonuses" data-fields="skill,value,detail" data-dtype="String,Number,String">
                 <div class="list-header flexrow">
                     <div class="list-header-text">Skill Bonuses</div>

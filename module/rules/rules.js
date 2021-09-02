@@ -191,6 +191,7 @@ export class Merp1eRules {
           skillByGroups[name] = {
             name: name,
             order: group.order,
+            label: group.label,
             skills: []
           }
         }

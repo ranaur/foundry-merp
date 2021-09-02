@@ -17,7 +17,6 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
     });
   }
 
-  /* -------------------------------------------- */
   /** @override */
   get template() {
     const path = "systems/merp1e/templates/actor";
