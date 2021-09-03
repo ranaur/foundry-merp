@@ -6,18 +6,17 @@ export class Merp1eRules {
     static spell = MerpSpell;
     static spelllist = MerpSpellList;
     static skill = MerpSkill;
-    static stats = ["st", "ag", "co", "ig", "it", "pr", "ap"];
     static tables = {
         bt1: TableBT1
     };
     static stats = [
-        { abbr: "st" }, 
-        { abbr: "ag" }, 
-        { abbr: "co" }, 
-        { abbr: "ig" }, 
-        { abbr: "it" }, 
-        { abbr: "pr" }, 
-        { abbr: "ap" , only_value: true }
+        { value: "st", label: "MERP1E.Stats.st.Name", abbr: "MERP1E.Stats.st.Abbr" }, 
+        { value: "ag", label: "MERP1E.Stats.ag.Name", abbr: "MERP1E.Stats.ag.Abbr" }, 
+        { value: "co", label: "MERP1E.Stats.co.Name", abbr: "MERP1E.Stats.co.Abbr" }, 
+        { value: "ig", label: "MERP1E.Stats.ig.Name", abbr: "MERP1E.Stats.ig.Abbr" }, 
+        { value: "it", label: "MERP1E.Stats.it.Name", abbr: "MERP1E.Stats.it.Abbr" }, 
+        { value: "pr", label: "MERP1E.Stats.pr.Name", abbr: "MERP1E.Stats.pr.Abbr" }, 
+        { value: "ap", label: "MERP1E.Stats.ap.Name", abbr: "MERP1E.Stats.ap.Abbr" , only_value: true }
     ];
     static rollType = {
         list: { 
@@ -40,6 +39,19 @@ export class Merp1eRules {
             "Animist": { name: "Animist" }
         }
     }; // XXX make a lookkup on item directory
+    static magic = {
+        realms: [
+            { name: "Essence", label: "MERP1E.Realm.Essence", stat: "ig" },
+            { name: "Channeling", label: "MERP1E.Realm.Channeling", stat: "it" },
+        ],
+        professionalRestrictions: [
+            { name: "profession and open", label: "MERP1E.SpellsAllowed.ProfessionOpen" },
+            { name: "profession and open up to 5th level", label: "MERP1E.SpellsAllowed.Profession5th" },
+            { name: "open up to 5th level", label: "MERP1E.SpellsAllowed.Open5th" },
+            { name: "open up to 3rd level", label: "MERP1E.SpellsAllowed.Open3rd" },
+        ],
+
+    };
 
     static health = {
         apendageStatus: [

@@ -1,9 +1,11 @@
 <select name="{{field}}">
+    {{#select currentValue}}
     {{#each sheetOrder as | group |}}
     <optgroup type="skillgroup" label="{{localize (concat 'MERP1E.SkillGroup.' group.id)}}">
         {{#each group.skills as | skill |}}
-        <option value="{{skill.data.reference}}" {{#if (isEqual ../../currentValue skill.data.reference)}}selected{{/if}}>{{localize (concat 'MERP1E.Skill.' skill.data.reference)}}</option>
+        <option value="{{skill.data.reference}}">{{localize (concat 'MERP1E.Skill.' skill.data.reference)}}</option>
         {{/each}}
     </optgroup>
     {{/each}}
+    {{/select}}
 </select>

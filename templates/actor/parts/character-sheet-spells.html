@@ -4,9 +4,7 @@
     <div class="flex4">
       {{#if (eq actor.profession.data.data.realm "any")}}
       <select class="userentry" name="data.realm">
-          {{#each rules.spell.realms as |realm|}}
-              <option value="{{realm}}" {{#if (isEqual ../data.realm realm)}}selected{{/if}}>{{localize (concat "MERP1E.Realm." realm)}}</option>
-          {{/each}}
+        {{selectOptions rules.magic.realms selected=data.data.realm localize=true nameAttr="name" labelAttr="label"}}
       </select>
       {{else}}
       <input type="text" value="{{actor.realm}}" data-dtype="String" readonly tabindex=-1/>

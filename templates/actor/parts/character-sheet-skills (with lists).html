@@ -22,7 +22,7 @@
             <section class="skill-line flexrow item" data-item-id="{{skill.id}}">
                 <span class="skill-name flex3">{{localize skill.name}}</span>
                 <input class="skill-ranks" name="Item.{{skill.id}}.ranks" value="{{skill.data.data.ranks}}" type="number" min="0" {{#if skill.data.maxRanks}}max="{{skill.data.maxRanks}}"{{/if}} data-dtype="Number"/>
-                {{#if (isEqual skill.data.data.rankBonusMethod "roll per rank")}}
+                {{#if (eq skill.data.data.rankBonusMethod "roll per rank")}}
                 <input class="skill-rankbonus" name="Item.{{skill.id}}.rankBonus" value="{{skill.data.data.rankBonus}}" type="number" data-dtype="Number"/>
                 {{else}}
                 <input class="skill-rankbonus" value="{{skill.bonuses.rank}}" type="number" data-dtype="Number" readonly tabindex=-1/>

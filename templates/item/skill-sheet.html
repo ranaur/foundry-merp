@@ -10,9 +10,11 @@
         <div class="skill-group flexrow">
             <label for="skill-group">{{localize "MERP1E.SkillSheet.Group"}}</label>
             <select name="data.group">
+                {{#select data.data.group}}
                 {{#each rules.skill.groups as |group groupKey|}}
-                <option value="{{groupKey}}" {{#if (isEqual ../data.data.group groupKey)}}selected{{/if}}>{{localize (concat "MERP1E.SkillGroup." groupKey)}}</option>
+                <option value="{{groupKey}}">{{localize (concat "MERP1E.SkillGroup." groupKey)}}</option>
                 {{/each}}
+                {{/select}}
             </select>
         </div>
         <div class="skill-order flexrow">
@@ -26,27 +28,34 @@
         <div class="skill-statbonus flexrow">
             <label for="skill-statbonus">{{localize "MERP1E.SkillSheet.StatBonus"}}</label>
             <select name="data.statBonus">
-                <option value="" {{#if (isEqual ../data.data.statBonus "")}}selected{{/if}}>{{localize (concat "MERP1E.Stats.None")}}</option>
+                {{#select data.data.statBonus}}
+                <option value="">{{localize "MERP1E.Stats.None"}}</option>
                 {{#each rules.stats as |stat|}}
-                <option value="{{stat.abbr}}" {{#if (isEqual ../data.data.statBonus stat.abbr)}}selected{{/if}}>{{localize (concat "MERP1E.Stats." stat.abbr ".Name")}}</option>
+                <option value="{{stat.abbr}}">{{localize (concat "MERP1E.Stats." stat.abbr ".Name")}}</option>
                 {{/each}}
+                {{/select}}
             </select>
         </div>
         <div class="skill-rolltype flexrow">
             <label for="skill-rolltype">{{localize "MERP1E.SkillSheet.Rolltype"}}</label>
             <select name="data.rollType">
+                {{#unless data.data.rollType}}<option></option>{{/unless}}
+                {{#select data.data.rollType}}
                 {{#each rules.rollType.list as |rolltype rolltypeKey|}}
-                <option value="{{rolltypeKey}}" {{#if (isEqual ../data.data.rollType rolltypeKey)}}selected{{/if}}>{{localize (concat "MERP1E.RollType." rolltypeKey)}}</option>
+                <option value="{{rolltypeKey}}">{{localize (concat "MERP1E.RollType." rolltypeKey)}}</option>
                 {{/each}}
+                {{/select}}
             </select>
         </div>
         <div class="skill-rankbonusmethod flexrow">
             <label for="skill-rankbonusmethod">{{localize "MERP1E.SkillSheet.RankBonusMethod"}}</label>
             <select name="data.rankBonusMethod">
-                <option value="normal" {{#if (isEqual data.data.rankBonusMethod "normal")}}selected{{/if}}>{{localize (concat "MERP1E.SkillRankBonusMethod.normal")}}</option>
-                <option value="always 1" {{#if (isEqual data.data.rankBonusMethod "always 1")}}selected{{/if}}>{{localize (concat "MERP1E.SkillRankBonusMethod.always1")}}</option>
-                <option value="roll per rank" {{#if (isEqual data.data.rankBonusMethod "roll per rank")}}selected{{/if}}>{{localize (concat "MERP1E.SkillRankBonusMethod.rollPerRank")}}</option>
-                <option value="no rank" {{#if (isEqual data.data.rankBonusMethod "no rank")}}selected{{/if}}>{{localize (concat "MERP1E.SkillRankBonusMethod.noRank")}}</option>
+                {{#select data.data.rankBonusMethod}}
+                <option value="normal">{{localize (concat "MERP1E.SkillRankBonusMethod.normal")}}</option>
+                <option value="always 1">{{localize (concat "MERP1E.SkillRankBonusMethod.always1")}}</option>
+                <option value="roll per rank">{{localize (concat "MERP1E.SkillRankBonusMethod.rollPerRank")}}</option>
+                <option value="no rank">{{localize (concat "MERP1E.SkillRankBonusMethod.noRank")}}</option>
+                {{/select}}
             </select>
         </div>
         <div class="skill-extrabonus flexrow">

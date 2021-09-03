@@ -11,20 +11,20 @@
                     </div>
                 </div>
                 <div>
-                    <div class="spelllist-restriction-realm" {{#if (isNotEqual data.restriction "realm")}}hidden{{/if}}>
+                    <div class="spelllist-restriction-realm" {{#if (ne data.restriction "realm")}}hidden{{/if}}>
                         <label for="spelllist-restriction-realm">{{localize "MERP1E.Realm.Label"}}</label>
                         <select name="data.realm">
-                            {{#each rules.spell.realms as |realm|}}
-                            <option value="{{realm}}" {{#if (isEqual ../data.realm realm)}}selected{{/if}}>{{localize (concat "MERP1E.Realm." realm)}}</option>
-                            {{/each}}
-                    </select>
+                            {{selectOptions rules.magic.realms selected=data.data.realm localize=true nameAttr="name" labelAttr="label"}}
+                        </select>
                     </div>
-                    <div class="spelllist-restriction-profession" {{#if (isNotEqual data.restriction "profession")}}hidden{{/if}}>
+                    <div class="spelllist-restriction-profession" {{#if (ne data.restriction "profession")}}hidden{{/if}}>
                         <label for="spelllist-restriction-profession">{{localize "MERP1E.Profession.Label"}}</label>
                         <select name="data.restrictedto">
+                            {{#select data.restrictedto}}
                             {{#each rules.profession.list as |profession professionKey|}}
-                            <option value="{{professionKey}}" {{#if (isEqual ../data.restrictedto professionKey)}}selected{{/if}}>{{localize (concat "MERP1E.Profession." professionKey)}}</option>
+                            <option value="{{professionKey}}">{{localize (concat "MERP1E.Profession." professionKey)}}</option>
                             {{/each}}
+                            {{/select}}
                         </select>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
                     <input name="data.spells.{{spell.level}}.range" type="hidden" value="{{spell.range}}"/>
                     <td class="spelllist-spell-range">{{spell.range}}</td>
                     <input name="data.spells.{{spell.level}}.instantaneous" type="hidden" value="{{spell.instantaneous}}"/>
-                    <td class="spelllist-spell-instantaneous">{{#if (isEqual spell.instantaneous "true")}}*{{else}}-{{/if}}</td>
+                    <td class="spelllist-spell-instantaneous">{{#if (eq spell.instantaneous "true")}}*{{else}}-{{/if}}</td>
                     <td>
                         <a class="spelllist-spell-control" data-action="delete"><i class="fas fa-trash"></i></a>
                     </td>

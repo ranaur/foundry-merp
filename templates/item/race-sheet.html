@@ -30,7 +30,7 @@
                 </thead>
                 <tbody>
                     {{#each rules.stats as | stat |}}
-                    {{#if (isEqual (default stat.only_value false) false)}}
+                    {{#if (eq (default stat.only_value false) false)}}
                     <tr>
                         <td>{{ localize (concat 'MERP1E.Stats.' stat.abbr '.Name') }}</td>
                         <td>({{ localize (concat 'MERP1E.Stats.' stat.abbr '.Short') }})</td>

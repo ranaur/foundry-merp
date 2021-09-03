@@ -14,7 +14,7 @@ import { Merp1eSkillSheet } from "./module/item/skill-sheet.js";
 import { Merp1eSpellSheet } from "./module/item/spell-sheet.js";
 import { Merp1eSpelllistSheet } from "./module/item/spelllist-sheet.js";
 import { Merp1eRules } from "./module/rules/rules.js";
-import { preloadHandlebarsTemplates } from "./module/templates.js";
+import { preloadHandlebarsTemplates, registerHandlebarsHelpers } from "./module/handlebars-utils.js";
 import { Merp1eActiveEffect } from "./module/active-effect.js";
 import { Merp1eActiveEffectSheet } from "./module/active-effect-sheet.js";
 
@@ -56,98 +56,41 @@ Hooks.once('init', async function() {
   Items.registerSheet("merp1e", Merp1eEquipmentSheet, { types: ['equipment'], makeDefault: true });
   Items.registerSheet("merp1e", Merp1eDamageSheet, { types: ['damage'], makeDefault: true });
   
-  // If you need to add Handlebars helpers, here are a few useful examples:
-  Handlebars.registerHelper('concat', function() {
-    var outStr = '';
-    for (var arg in arguments) {
-      if (typeof arguments[arg] != 'object') {
-        outStr += arguments[arg];
-      }
-    }
-    return outStr;
-  });
-
-  Handlebars.registerHelper('toLowerCase', function(str) {
-    if(str === null) return "";
-    return str.toString().toLowerCase();
-  });
-
-  Handlebars.registerHelper('toUpperCase', function(str) {
-    if(str === null) return "";
-    return str.toString().toUpperCase();
-  });
-
-  Handlebars.registerHelper('isNotEqual', function(a, b) {
-    return a != b;
-  });
-
-  Handlebars.registerHelper('isLessThan', function(a, b) {
-    return a < b;
-  });
-
-  Handlebars.registerHelper('isEqual', function(a, b) {
-    return a == b;
-  });
-
-  Handlebars.registerHelper('default', function(a, b) {
-    return a || b;
-  });
-
-    // read only if - makes an input read only iuf parameter is true
-  Handlebars.registerHelper('roif', function(a) {
-    return new Handlebars.SafeString(a ? "readonly tabindex=-1 aria-disabled='true'" : "class='userentry'");
-  });
-
-  // read only if - makes an input read only iuf parameter is true
-  Handlebars.registerHelper('leftRightMap', function(left, right) {
-    left = left || "0";
-    right = right || "0";
-    if( left == "0") {
-      if( right == "0" ) {
-        return "0";
-      } else { // right != 0, left == 0
-        return "2";
-      }
-    } else { // left != 0
-      if( right == "0" ) {
-        return "1";
-      } else { // right != 0, left != 0
-        return "3";
-      }
-    }
-  });
-  
-    // Permissions Control Menu
-  game.settings.registerMenu("merp1e", "importData", {
-    name: "Import Data",
-    label: "Data importer",
-    hint: "Window to import game data",
-    icon: "fas fa-user-lock",
-    type: GenericImporter,
-    restricted: true
-  });
-
-/*
-    // User Role Permissions
-  game.settings.register("merp1e", "importData", {
-		name: "Import Data",
-    label: "Data importer",
-		hint: "Window to import game data",
-    icon: "fas fa-user-lock",
-		scope: "world",
-		config: true,
-    type: Object,
-    restricted: true
-	});
-*/
   registerSettings();
+
+  // register HandleBars Helpers
+  registerHandlebarsHelpers();
 
   // Preload template partials.
   preloadHandlebarsTemplates();
 });
 
 function registerSettings() {
-  /// XXX put in i18
+    // Permissions Control Menu
+    game.settings.registerMenu("merp1e", "importData", {
+      name: "Import Data",
+      label: "Data importer",
+      hint: "Window to import game data",
+      icon: "fas fa-user-lock",
+      type: GenericImporter,
+      restricted: true
+    });
+  
+  /*
+      // User Role Permissions
+    game.settings.register("merp1e", "importData", {
+      name: "Import Data",
+      label: "Data importer",
+      hint: "Window to import game data",
+      icon: "fas fa-user-lock",
+      scope: "world",
+      config: true,
+      type: Object,
+      restricted: true
+    });
+  */
+
+    /// XXX put in i18
 
   game.settings.register("merp1e", "damageControl", {
 		name: "Damage Control",

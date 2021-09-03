@@ -5,8 +5,8 @@
     {{#if stat.only_value}}
     <td colspan="3"></td>
     {{else}}
-    <td><input class="bonus" value='{{stat.bonuses.stat}}' placeholder="0" type="number" data-dtype="Number" readonly tabindex=-1/></td>
-    <td><input class="bonus" value='{{stat.bonuses.race}}' placeholder="0" type="number" data-dtype="Number" readonly tabindex=-1/></td>
-    <td><input class="bonus" value='{{stat.total}}' placeholder="0" type="number" data-dtype="Number" readonly tabindex=-1/></td>
+    <td><input class="bonus" value='{{formatBonus stat.bonuses.stat}}' placeholder="0" type="text" data-dtype="Number" readonly tabindex=-1/></td>
+    <td><input class="bonus" value='{{formatBonus stat.bonuses.race}}' placeholder="0" type="text" data-dtype="Number" readonly tabindex=-1/></td>
+    <td><input class="bonus" value='{{formatBonus stat.total}}' placeholder="0" type="text" data-dtype="Number" readonly tabindex=-1/></td>
     {{/if}}
 </tr>

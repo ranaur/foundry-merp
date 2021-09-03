@@ -12,9 +12,11 @@
                     <div class="resource">
                             <label class="resource-label">{{localize "MERP1E.Spell.Class"}}</label>
                         <select name="data.class">
+                            {{#select data.data.class}}
                             {{#each rules.spell.classes as |class classKey|}}
-                            <option value="{{classKey}}" {{#if (isEqual ../data.data.class classKey)}}selected{{/if}}>{{localize (concat "MERP1E.Spell.Classes." classKey)}}</option>
+                            <option value="{{classKey}}">{{localize (concat "MERP1E.Spell.Classes." classKey)}}</option>
                             {{/each}}
+                            {{/select}}
                         </select>
                     </div>
                     <div class="resource">
@@ -27,10 +29,12 @@
                 <div class="resource">
                     <label class="resource-label">{{localize "MERP1E.Spell.List"}}</label>
                     <select name="data.spelllist.id">
+                        {{#select data.data.spelllist.id}}
                         <option></option>
                         {{#each avaliableSpelllists as |spelllist|}}
-                        <option value="{{spelllist._id}}" {{#if (isEqual ../data.data.spelllist.id spelllist._id)}}selected{{/if}}>{{localize spelllist.name}}</option>
+                        <option value="{{spelllist._id}}">{{localize spelllist.name}}</option>
                         {{/each}}
+                        {{/select}}
                     </select>
                 </div>
                 <div class="resource">
