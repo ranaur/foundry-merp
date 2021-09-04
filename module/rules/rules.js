@@ -10,24 +10,22 @@ export class Merp1eRules {
         bt1: TableBT1
     };
     static stats = [
-        { value: "st", label: "MERP1E.Stats.st.Name", abbr: "MERP1E.Stats.st.Abbr" }, 
-        { value: "ag", label: "MERP1E.Stats.ag.Name", abbr: "MERP1E.Stats.ag.Abbr" }, 
-        { value: "co", label: "MERP1E.Stats.co.Name", abbr: "MERP1E.Stats.co.Abbr" }, 
-        { value: "ig", label: "MERP1E.Stats.ig.Name", abbr: "MERP1E.Stats.ig.Abbr" }, 
-        { value: "it", label: "MERP1E.Stats.it.Name", abbr: "MERP1E.Stats.it.Abbr" }, 
-        { value: "pr", label: "MERP1E.Stats.pr.Name", abbr: "MERP1E.Stats.pr.Abbr" }, 
-        { value: "ap", label: "MERP1E.Stats.ap.Name", abbr: "MERP1E.Stats.ap.Abbr" , only_value: true }
+        { id: "st", label: "MERP1E.Stats.st.Name", abbr: "MERP1E.Stats.st.Abbr" }, 
+        { id: "ag", label: "MERP1E.Stats.ag.Name", abbr: "MERP1E.Stats.ag.Abbr" }, 
+        { id: "co", label: "MERP1E.Stats.co.Name", abbr: "MERP1E.Stats.co.Abbr" }, 
+        { id: "ig", label: "MERP1E.Stats.ig.Name", abbr: "MERP1E.Stats.ig.Abbr" }, 
+        { id: "it", label: "MERP1E.Stats.it.Name", abbr: "MERP1E.Stats.it.Abbr" }, 
+        { id: "pr", label: "MERP1E.Stats.pr.Name", abbr: "MERP1E.Stats.pr.Abbr" }, 
+        { id: "ap", label: "MERP1E.Stats.ap.Name", abbr: "MERP1E.Stats.ap.Abbr" , only_value: true }
     ];
-    static rollType = {
-        list: { 
-            "MM": {},
-            "SM": {},
-            "RR": {},
-            "DB": {},
-            "OB": {},
-            "SP": {}
-        }
-    };
+    static rollType = [
+        { id: "MM", label: "MERP1E.RollType.MM" },
+        { id: "SM", label: "MERP1E.RollType.SM" },
+        { id: "RR", label: "MERP1E.RollType.RR" },
+        { id: "DB", label: "MERP1E.RollType.DB" },
+        { id: "OB", label: "MERP1E.RollType.OB" },
+        { id: "SP", label: "MERP1E.RollType.SP" }
+    ];
 
     static profession = {
         list: {
@@ -41,18 +39,40 @@ export class Merp1eRules {
     }; // XXX make a lookkup on item directory
     static magic = {
         realms: [
-            { name: "Essence", label: "MERP1E.Realm.Essence", stat: "ig" },
-            { name: "Channeling", label: "MERP1E.Realm.Channeling", stat: "it" },
+            { id: "Essence", label: "MERP1E.Realm.Essence", stat: "ig" },
+            { id: "Channeling", label: "MERP1E.Realm.Channeling", stat: "it" },
         ],
         professionalRestrictions: [
-            { name: "profession and open", label: "MERP1E.SpellsAllowed.ProfessionOpen" },
-            { name: "profession and open up to 5th level", label: "MERP1E.SpellsAllowed.Profession5th" },
-            { name: "open up to 5th level", label: "MERP1E.SpellsAllowed.Open5th" },
-            { name: "open up to 3rd level", label: "MERP1E.SpellsAllowed.Open3rd" },
+            { id: "profession and open", label: "MERP1E.SpellsAllowed.ProfessionOpen" },
+            { id: "profession and open up to 5th level", label: "MERP1E.SpellsAllowed.Profession5th" },
+            { id: "open up to 5th level", label: "MERP1E.SpellsAllowed.Open5th" },
+            { id: "open up to 3rd level", label: "MERP1E.SpellsAllowed.Open3rd" },
         ],
 
     };
 
+    static defenseTypes = [
+        { id: "none", label: "MERP1E.DefenseType.None", bonus: 0 },
+        { id: "leather", label: "MERP1E.DefenseType.Leather", bonus: 0 },
+        { id: "metal", label: "MERP1E.DefenseType.Metal", bonus: 0 }
+    ];
+
+    static defense = {
+        armorTypes: [
+            { id: "no", label: "MERP1E.ArmorType.no.Name", abbr: "MERP1E.ArmorType.no.Abbr", bonus: 0 },
+            { id: "sl", label: "MERP1E.ArmorType.sl.Name", abbr: "MERP1E.ArmorType.sl.Abbr", bonus: 0 },
+            { id: "rl", label: "MERP1E.ArmorType.rl.Name", abbr: "MERP1E.ArmorType.rl.Abbr", bonus: 0 },
+            { id: "ch", label: "MERP1E.ArmorType.ch.Name", abbr: "MERP1E.ArmorType.ch.Abbr", bonus: 0 },
+            { id: "pl", label: "MERP1E.ArmorType.pl.Name", abbr: "MERP1E.ArmorType.pl.Abbr", bonus: 0 }
+        ],
+        armGreavesTypes: Merp1eRules.defenseTypes,
+        legGreavesTypes: Merp1eRules.defenseTypes,
+        helmTypes: Merp1eRules.defenseTypes,
+        shieldTypes: [
+            { id: "none", label: "MERP1E.ShieldType.None", bonus: 0 },
+            { id: "yes", label: "MERP1E.ShieldType.Shield", bonus: 25 }
+        ],
+    }
     static health = {
         apendageStatus: [
             { value: "0", label: 'ok', labelI18: 'MERP1E.ApendageStatus.ok' }, 
@@ -199,9 +219,9 @@ export class Merp1eRules {
         let skillByGroups = {};
     
         // initialize skill groups with all skill groups in rules
-        for(let [name, group] of Object.entries(game.merp1e.Merp1eRules.skill.groups)) {
-          skillByGroups[name] = {
-            name: name,
+        for(let group of game.merp1e.Merp1eRules.skill.groups) {
+          skillByGroups[group.id] = {
+            id: group.id,
             order: group.order,
             label: group.label,
             skills: []
@@ -249,6 +269,15 @@ export class Merp1eRules {
         },
         get xpControlAutomatic() {
             return this.xpControl == "automatic";
+        },
+        get armorControl() {
+            return game.settings.get("merp1e", "armorControl");
+        },
+        get armorControlManual() {
+            return this.armorControl == "manual";
+        },
+        get armorControlAutomatic() {
+            return this.armorControl == "automatic";
         }
     }
 }

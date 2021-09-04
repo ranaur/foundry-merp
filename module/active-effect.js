@@ -1,4 +1,4 @@
-import { copyClassFunctions, formatBonus } from "./util.js";
+import { findByID, copyClassFunctions, formatBonus } from "./util.js";
 
 class Merp1eActiveEffectBase {
     applyEffect() {
@@ -71,18 +71,152 @@ class Merp1eActiveEffectRankSkillBonus extends Merp1eActiveEffectBase {
     }
 }
 
+class Merp1eActiveEffectShield extends Merp1eActiveEffectBase {
+    static label = "MERP1E.EffectType.Shield";
+    static effectName = "Shield";
+
+    get type() { return this.data?.flags?.merp1e?.Shield?.type; }
+    get extraBonus() { 
+        if(this.type == "none") return 0;
+
+        return this.data?.flags?.merp1e?.Shield?.extraBonus || 0; 
+    }
+    generateDescription() {
+        if(this.type == undefined) return "Shield Effect not configured yet";
+        if(this.type == "none") return "Shield Effect unset";
+
+        return `Set Shield to ${this.type}` + (this.extraBonus != 0 ? " (" + formatBonus(this.extraBonus) + ")" : "");
+    }
+
+    applyEffect(actor) {
+        if(this.type != null) {
+            actor.defense.shield = duplicate(findByID(game.merp1e.Merp1eRules.defense.shieldTypes, this.type, "none"));
+            if(this.extraBonus != 0) {
+                actor.defense.shield.bonus += this.extraBonus;
+            }
+        }
+    }
+}
+
+class Merp1eActiveEffectArmGreaves extends Merp1eActiveEffectBase {
+    static label = "MERP1E.EffectType.ArmGreaves";
+    static effectName = "ArmGreaves";
+
+    get type() { return this.data?.flags?.merp1e?.ArmGreaves?.type; }
+    get extraBonus() { 
+        if(this.type == "none") return 0;
+
+        return this.data?.flags?.merp1e?.ArmGreaves?.extraBonus || 0; 
+    }
+    generateDescription() {
+        if(this.type == undefined) return "Arm Greaves Effect not configured yet";
+        if(this.type == "none") return "Arm Greaves Effect unset";
+
+        return `Set ArmGreaves to ${this.type}` + (this.extraBonus != 0 ? " (" + formatBonus(this.extraBonus) + ")" : "");
+    }
+
+    applyEffect(actor) {
+        if(this.type != null) {
+            actor.defense.armGreaves = duplicate(findByID(game.merp1e.Merp1eRules.defense.armGreavesTypes, this.type, "none"));
+            if(this.extraBonus != 0) {
+                actor.defense.armGreaves.bonus += this.extraBonus;
+            }
+        }
+    }
+}
+
+class Merp1eActiveEffectLegGreaves extends Merp1eActiveEffectBase {
+    static label = "MERP1E.EffectType.LegGreaves";
+    static effectName = "LegGreaves";
+
+    get type() { return this.data?.flags?.merp1e?.LegGreaves?.type; }
+    get extraBonus() { 
+        if(this.type == "none") return 0;
+
+        return this.data?.flags?.merp1e?.LegGreaves?.extraBonus || 0; 
+    }
+    generateDescription() {
+        if(this.type == undefined) return "Leg Greaves Effect not configured yet";
+        if(this.type == "none") return "Leg Greaves Effect unset";
+
+        return `Set LegGreaves to ${this.type}` + (this.extraBonus != 0 ? " (" + formatBonus(this.extraBonus) + ")" : "");
+    }
+
+    applyEffect(actor) {
+        if(this.type != null) {
+            actor.defense.legGreaves = duplicate(findByID(game.merp1e.Merp1eRules.defense.legGreavesTypes, this.type, "none"));
+            if(this.extraBonus != 0) {
+                actor.defense.legGreaves.bonus += this.extraBonus;
+            }
+        }
+    }
+}
+
+class Merp1eActiveEffectHelm extends Merp1eActiveEffectBase {
+    static label = "MERP1E.EffectType.Helm";
+    static effectName = "Helm";
+
+    get type() { return this.data?.flags?.merp1e?.Helm?.type; }
+    get extraBonus() { 
+        if(this.type == "none") return 0;
+
+        return this.data?.flags?.merp1e?.Helm?.extraBonus || 0; 
+    }
+    generateDescription() {
+        if(this.type == undefined) return "Leg Greaves Effect not configured yet";
+        if(this.type == "none") return "Leg Greaves Effect unset";
+
+        return `Set Helm to ${this.type}` + (this.extraBonus != 0 ? " (" + formatBonus(this.extraBonus) + ")" : "");
+    }
+
+    applyEffect(actor) {
+        if(this.type != null) {
+            actor.defense.helm = duplicate(findByID(game.merp1e.Merp1eRules.defense.helmTypes, this.type, "none"));
+            if(this.extraBonus != 0) {
+                actor.defense.helm.bonus += this.extraBonus;
+            }
+        }
+    }
+}
+
+class Merp1eActiveEffectArmor extends Merp1eActiveEffectBase {
+    static label = "MERP1E.EffectType.Armor";
+    static effectName = "Armor";
+
+    get type() { return this.data?.flags?.merp1e?.Armor?.type; }
+    get extraBonus() { 
+        if(this.type == "none") return 0;
+
+        return this.data?.flags?.merp1e?.Armor?.extraBonus || 0; 
+    }
+    generateDescription() {
+        if(this.type == undefined) return "Armor Effect not configured yet";
+        if(this.type == "none") return "Armor Effect unset";
+
+        return `Set Armor to ${this.type}` + (this.extraBonus != 0 ? " (" + formatBonus(this.extraBonus) + ")" : "");
+    }
+
+    applyEffect(actor) {
+        if(this.type != null) {
+            actor.defense.armor = duplicate(findByID(game.merp1e.Merp1eRules.defense.armorTypes, this.type, "none"));
+            if(this.extraBonus != 0) {
+                actor.defense.armor.bonus += this.extraBonus;
+            }
+        }
+    }
+}
+
 export class Merp1eActiveEffect extends ActiveEffect {
-
-    /*
-    data.effect.type = 
-
-    */
 
     static effectTypes = [
         Merp1eActiveEffectSkillBonus,
         Merp1eActiveEffectSkillGroupBonus,
-        Merp1eActiveEffectRankSkillBonus
-        //{ name: "", label: "MERP1E.EffectType.", class: null },
+        Merp1eActiveEffectRankSkillBonus,
+        Merp1eActiveEffectShield,
+        Merp1eActiveEffectArmGreaves,
+        Merp1eActiveEffectLegGreaves,
+        Merp1eActiveEffectHelm,
+        Merp1eActiveEffectArmor
     ];
     
     

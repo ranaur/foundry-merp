@@ -1,15 +1,22 @@
 export class MerpSkill {
     static BODY_DEVELOPMENT = "BodyDevel";
+    static DEFENSIVE_BONUS = "DefensiveBonus";
 
-    static groups = {
-        "Movement": { order: 10, label: "MERP1E.Group.Movement" },
-        "Weapon": { order: 20, label: "MERP1E.Group.Weapon" },
-        "General": { order: 30, label: "MERP1E.Group.General" },
-        "Subterfuge": { order: 40, label: "MERP1E.Group.Subterfuge" },
-        "Magical": { order: 50, label: "MERP1E.Group.Magical" },
-        "Miscelaneous": { order: 60, label: "MERP1E.Group.Miscelaneous" },
-        "Secondary": { order: 70, label: "MERP1E.Group.Secondary" }
-    };
+    static groups = [
+        { id: "Movement", order: 10, label: "MERP1E.Group.Movement" },
+        { id: "Weapon", order: 20, label: "MERP1E.Group.Weapon" },
+        { id: "General", order: 30, label: "MERP1E.Group.General" },
+        { id: "Subterfuge", order: 40, label: "MERP1E.Group.Subterfuge" },
+        { id: "Magical", order: 50, label: "MERP1E.Group.Magical" },
+        { id: "Miscelaneous", order: 60, label: "MERP1E.Group.Miscelaneous" },
+        { id: "Secondary", order: 70, label: "MERP1E.Group.Secondary" }
+    ];
+    static rankBonusTypes = [
+        { id:"normal", label: "MERP1E.SkillRankBonusMethod.normal" },
+        { id:"always 1", label: "MERP1E.SkillRankBonusMethod.always1" },
+        { id:"roll per rank", label: "MERP1E.SkillRankBonusMethod.rollPerRank" },
+        { id:"no rank", label: "MERP1E.SkillRankBonusMethod.noRank" }
+    ];
     static modifiers = {
         difficulty: [
             { id: "Routine", value: 30, description: "MERP1E.Modifier.Routine" },

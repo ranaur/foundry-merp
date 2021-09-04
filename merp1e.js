@@ -100,7 +100,7 @@ function registerSettings() {
 		scope: "world",
 		config: true,
     type: String,
-    choices: { manual: "manual", "automatic": "automatic" },
+    choices: { manual: "manual", automatic: "automatic" },
     default: "manual",
     restricted: true
 	});
@@ -113,7 +113,20 @@ function registerSettings() {
 		scope: "world",
 		config: true,
     type: String,
-    choices: { manual: "manual", "automatic": "automatic" },
+    choices: { manual: "manual", automatic: "automatic" },
+    default: "manual",
+    restricted: true
+	});
+
+  game.settings.register("merp1e", "armorControl", {
+		name: "Armor Control",
+    label: "Armor Control",
+		hint: "How to control armor,shield and greaves",
+    icon: "fas fa-shield-alt",
+		scope: "world",
+		config: true,
+    type: String,
+    choices: { manual: "manual", automatic: "automatic" },
     default: "manual",
     restricted: true
 	});

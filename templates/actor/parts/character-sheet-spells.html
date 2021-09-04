@@ -4,7 +4,7 @@
     <div class="flex4">
       {{#if (eq actor.profession.data.data.realm "any")}}
       <select class="userentry" name="data.realm">
-        {{selectOptions rules.magic.realms selected=data.data.realm localize=true nameAttr="name" labelAttr="label"}}
+        {{selectOptions rules.magic.realms selected=data.data.realm localize=true nameAttr="id" labelAttr="label"}}
       </select>
       {{else}}
       <input type="text" value="{{actor.realm}}" data-dtype="String" readonly tabindex=-1/>

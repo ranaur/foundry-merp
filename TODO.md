@@ -1,39 +1,50 @@
 # TODO
 
 * Colocar o class="userentry" em todo o resto
-* Fazer um major revision para utilizar localização.
+* ?Fazer um major revision para utilizar localização.
+* Reorganizar spell and power
+
+    Transformar a aba de status em aba de Actions
+        Colocar uma linha para rolar qualquer skill "self"
+        Lista de skills permitidos por itens
+        Lista de ataques (dados pelos itens)
+        Lista de spells que o personagem pode lançar.
 
     Effect:
-        Coloca um ícone para cada tipo?
-        Devo aplicar os efeitos depois de passar por tudo? (copiar os efeitos para o ator e aplicar pelo ator?)
+        Fazer um efeito de "permitir ataque" - escolhe o skill, se tem bonus (por tipo de armadura), e a tabela de ataque (Attack)
+        (Skill use) => Skill, Bonus
+        Bonus on static/moving Maneuvers
+        Conditional bonus
+        Allow spell casting (spell)
+
         Fazer condições de ativação
-            Manual
             Always on
-            On item wear/yield
-            On toggle
+            On condition (text to show)
+            On item wear/yield (when in place: neck, head, torso/body, arms, legs, right hand, left hand, right finger, left finger, back, carried)
+            On toggle (manual)
             On item use
-                Daily
-                Charged
+                Daily (max, current, *renew*)
+                Charged (max, current)
                 Indefinite
+
+            On spell know
+
         Melhorar o tratamento das subclasses (ao invés de copiar os métodos)
+        
+        Melhorar o tratalemnto se tiverem dois helm types, ar types, leg types, armor types.
 
         Criar subclasses: 
-            Set Armor type
-            Set Helm Type
-            Set Arm Greaves Type
-            Set Leg Greaves Type
-            Set Shield Type
-                Todos esses com priority (high, medim, low)
 
             Allow Spell Casting: Set of spells to choose
             Infravision: set dark/light vision
-        OK  Bonus on skill
-        OK  Bonus on skill group
-        OK  Rank Bonus on skill
             Spell Adder
             PP Multiplier (per realm)
 
     Actor:
+        Aba Status:
+            * Fazer o tratamento de itens do tipo armadura
+            * Melhorar Hitpoint and Statuses (colocar penalidade na atividade, etc.)
+
         Aba Damage:
             * Testar o heal();
             * Refazer o Applied
@@ -429,7 +440,7 @@ statusEyes
 
 
 
-## Geme Settings
+## Game Settings
 
 Is there any documentation with all possible options for   game.settings.register? The API Docs shows examples for choice and slider, but is there any other options? BTW is there an easy way to put a slider in the character sheet? How is the HTML?
 
@@ -518,7 +529,7 @@ Alterar character-sheet.html
 +   </div>
 ```
 
-Alterar templates.js
+Alterar handlehasr-utils.js
 ```js
     // Define template paths to load
     const templatePaths = [
@@ -653,6 +664,83 @@ export class Merp1eEquipmentSheet extends Merp1eBaseItemSheet {
 }
 ```
 
+## Criando active Effect novo
+
+* active-effect-sheet.html
+
+```html
+    <section class="sheet-body">
+        <div class="tab" data-group="primary" data-tab="details">
++           {{#if (eq effect.flags.merp1e.effectType "RankSkillBonus")}}
++               <div class="form-group">
++                   <label>{{ localize "MERP1E.Effect.RankSkillBonus" }}</label>
++                   <div class="form-fields">
++                       <input type="number" name="flags.merp1e.SkillRankBonus.value" value="{{effect.flags.merp1e.SkillRankBonus.value }}"/>
++                   </div>
++               </div>
++               <div class="form-group">
++                   <label>{{ localize "MERP1E.Effect.Skill" }}</label>
++                   <div class="form-fields">
++                       <select name="flags.merp1e.SkillRankBonus.skillReference">
++                           {{#unless effect.flags.merp1e.SkillRankBonus.skillReference}}<option></option>{{/unless}}
++                           {{#each skills as | skillGroup | }}
++                           <optgroup label="{{skillGroup.name}}">
++                               {{#select ../effect.flags.merp1e.SkillRankBonus.skillReference}}
++                                   {{#each skillGroup.skills as | skill | }}
++                                   <option value="{{skill.data.data.reference}}">{{skill.name}}</option>
++                                   {{/each}}
++                               {{/select}} 
++                           </optgroup>
++                           {{/each}}
++                       </select>
++                   </div>
++               </div>
++           {{/if}}
+```
+
+* active-effect.js
+```js
++class Merp1eActiveEffectRankSkillBonus extends Merp1eActiveEffectBase {
++    static label = "MERP1E.EffectType.RankSkillBonus";
++    static effectName = "RankSkillBonus";
++
++    generateDescription() {
++        let bonus = parseInt(this.data.flags.merp1e?.SkillRankBonus?.value || 0);
++        if(bonus == 0 || this.data.flags.merp1e?.SkillRankBonus?.skillReference == null) {
++            return "Rank Skill Bonus Effect not configured yet";
++        }
++
++        return formatBonus(bonus) + " per rank on skills with reference " + this.data.flags.merp1e?.SkillRankBonus?.skillReference; // XXX I18
++    }
++
++    applyEffect(actor) {
++        Object.values(actor.skills).forEach( skill => {
++            if(skill.data.data.reference == this.data.flags.merp1e?.SkillRankBonus?.skillReference ) {
++                skill.bonuses.itemBonuses.push({ value: this.data.flags.merp1e.SkillRankBonus.value * skill.data.data.ranks }); // put id, and/or a description
++            }
++        });
++    }
++}
+
+(...)
+
+    static effectTypes = [
+        Merp1eActiveEffectSkillBonus,
+        Merp1eActiveEffectSkillGroupBonus,
++        Merp1eActiveEffectRankSkillBonus
+    ];
+```
+
+* en.json
+```json
+    "MERP1E.Effect.New": "New Effect",
+    "MERP1E.EffectType.SkillBonus": "Skill Bonus",
+    "MERP1E.EffectType.SkillGroupBonus": "Skill Group Bonus",
++   "MERP1E.EffectType.RankSkillBonus": "Skill Rank Bonus",
++   "MERP1E.Effect.RankSkillBonus": "Skill Bonus per Rank",
+    "MERP1E.Effect.SkillBonus": "Skill Bonus",
+    "MERP1E.Effect.Skill": "Skill",
+```
 
 # DECISIONS
 

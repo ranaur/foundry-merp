@@ -12,7 +12,7 @@
               <label class="resource-label">{{localize "MERP1E.Character.Race"}}</label>
               <div>
                 <select class="userentry" name="data.originalRaceId">
-                  {{selectOptions avaliableRaces selected=data.data.originalRaceId localize=True blank=""}}
+                  {{selectOptions avaliableRaces selected=data.data.originalRaceId localize=True}}
                 </select>
               </div>
             </div>
@@ -20,7 +20,7 @@
               <label for="data.profession" class="resource-label">{{localize "MERP1E.Character.Profession"}}</label>
               <div>
                 <select class="userentry" name="data.originalProfessionId">
-                  {{selectOptions avaliableProfessions selected=data.data.originalProfessionId localize=True blank=""}}
+                  {{selectOptions avaliableProfessions selected=data.data.originalProfessionId localize=True}}
                 </select>
               </div>
             </div>
@@ -47,10 +47,11 @@
     <a class="item" data-tab="stats">{{localize "MERP1E.CharacterTab.Stats"}}</a>
     <a class="item" data-tab="skills">{{localize "MERP1E.CharacterTab.Skills"}}</a>
     <a class="item" data-tab="languages">{{localize "MERP1E.CharacterTab.Languages"}}</a>
+    <a class="item" data-tab="health">{{localize "MERP1E.CharacterTab.Health"}}</a>
+    <a class="item" data-tab="status">{{localize "MERP1E.CharacterTab.Status"}}</a>
     <a class="item" data-tab="description">{{localize "MERP1E.CharacterTab.Description"}}</a>
     <a class="item" data-tab="spells">{{localize "MERP1E.CharacterTab.Spells"}}</a>
     <a class="item" data-tab="equipment">{{localize "MERP1E.CharacterTab.Equipment"}}</a>
-    <a class="item" data-tab="health">{{localize "MERP1E.CharacterTab.Health"}}</a>
     <a class="item" data-tab="xp">{{localize "MERP1E.CharacterTab.XP"}}</a>
   </nav>
 
@@ -71,6 +72,16 @@
       {{> "systems/merp1e/templates/actor/parts/character-sheet-languages.html" actor=actor}}
     </div>
 
+    {{!-- Health & Damage Tab --}}
+    <div class="tab health" data-group="primary" data-tab="health">
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-health.html" actor=actor}}
+    </div>
+
+    {{!-- Health & Damage Tab --}}
+    <div class="tab status" data-group="primary" data-tab="status">
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-status.html" actor=actor}}
+    </div>
+
     {{!-- Description Tab --}}
     <div class="tab description" data-group="primary" data-tab="description">
       {{> "systems/merp1e/templates/actor/parts/character-sheet-description.html" actor=actor}}
@@ -79,11 +90,6 @@
     {{!-- Spell Tab --}}
     <div class="tab spells" data-group="primary" data-tab="spells">
       {{> "systems/merp1e/templates/actor/parts/character-sheet-spells.html" actor=actor}}
-    </div>
-
-    {{!-- Health & Damage Tab --}}
-    <div class="tab health" data-group="primary" data-tab="health">
-      {{> "systems/merp1e/templates/actor/parts/character-sheet-health.html" actor=actor}}
     </div>
 
     {{!-- XP Tab --}}

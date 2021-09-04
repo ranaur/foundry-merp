@@ -10,11 +10,7 @@
         <div class="skill-group flexrow">
             <label for="skill-group">{{localize "MERP1E.SkillSheet.Group"}}</label>
             <select name="data.group">
-                {{#select data.data.group}}
-                {{#each rules.skill.groups as |group groupKey|}}
-                <option value="{{groupKey}}">{{localize (concat "MERP1E.SkillGroup." groupKey)}}</option>
-                {{/each}}
-                {{/select}}
+                {{selectOptions rules.skill.groups selected=data.data.group localize=true nameAttr="id" labelAttr="label"}}
             </select>
         </div>
         <div class="skill-order flexrow">
@@ -31,7 +27,7 @@
                 {{#select data.data.statBonus}}
                 <option value="">{{localize "MERP1E.Stats.None"}}</option>
                 {{#each rules.stats as |stat|}}
-                <option value="{{stat.abbr}}">{{localize (concat "MERP1E.Stats." stat.abbr ".Name")}}</option>
+                <option value="{{stat.id}}">{{localize stat.label}}</option>
                 {{/each}}
                 {{/select}}
             </select>
@@ -39,23 +35,13 @@
         <div class="skill-rolltype flexrow">
             <label for="skill-rolltype">{{localize "MERP1E.SkillSheet.Rolltype"}}</label>
             <select name="data.rollType">
-                {{#unless data.data.rollType}}<option></option>{{/unless}}
-                {{#select data.data.rollType}}
-                {{#each rules.rollType.list as |rolltype rolltypeKey|}}
-                <option value="{{rolltypeKey}}">{{localize (concat "MERP1E.RollType." rolltypeKey)}}</option>
-                {{/each}}
-                {{/select}}
+                {{selectOptions rules.rollType selected=data.data.rollType localize=true nameAttr="id" labelAttr="label" blank=""}}
             </select>
         </div>
         <div class="skill-rankbonusmethod flexrow">
             <label for="skill-rankbonusmethod">{{localize "MERP1E.SkillSheet.RankBonusMethod"}}</label>
             <select name="data.rankBonusMethod">
-                {{#select data.data.rankBonusMethod}}
-                <option value="normal">{{localize (concat "MERP1E.SkillRankBonusMethod.normal")}}</option>
-                <option value="always 1">{{localize (concat "MERP1E.SkillRankBonusMethod.always1")}}</option>
-                <option value="roll per rank">{{localize (concat "MERP1E.SkillRankBonusMethod.rollPerRank")}}</option>
-                <option value="no rank">{{localize (concat "MERP1E.SkillRankBonusMethod.noRank")}}</option>
-                {{/select}}
+                {{selectOptions rules.skill.rankBonusTypes selected=data.data.rankBonusMethod localize=true nameAttr="id" labelAttr="label"}}
             </select>
         </div>
         <div class="skill-extrabonus flexrow">

@@ -14,7 +14,7 @@
                     <div class="spelllist-restriction-realm" {{#if (ne data.restriction "realm")}}hidden{{/if}}>
                         <label for="spelllist-restriction-realm">{{localize "MERP1E.Realm.Label"}}</label>
                         <select name="data.realm">
-                            {{selectOptions rules.magic.realms selected=data.data.realm localize=true nameAttr="name" labelAttr="label"}}
+                            {{selectOptions rules.magic.realms selected=data.data.realm localize=true nameAttr="id" labelAttr="label"}}
                         </select>
                     </div>
                     <div class="spelllist-restriction-profession" {{#if (ne data.restriction "profession")}}hidden{{/if}}>

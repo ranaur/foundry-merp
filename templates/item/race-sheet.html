@@ -32,9 +32,9 @@
                     {{#each rules.stats as | stat |}}
                     {{#if (eq (default stat.only_value false) false)}}
                     <tr>
-                        <td>{{ localize (concat 'MERP1E.Stats.' stat.abbr '.Name') }}</td>
-                        <td>({{ localize (concat 'MERP1E.Stats.' stat.abbr '.Short') }})</td>
-                        <td><input type="number" name="data.statsBonuses.{{stat.abbr}}" value="{{lookup ../data.statsBonuses stat.abbr}}" data-dtype="Number"/></td>
+                        <td>{{localize stat.label}}</td>
+                        <td>({{localize stat.abbr}})</td>
+                        <td><input type="number" name="data.statsBonuses.{{stat.id}}" value="{{lookup ../data.statsBonuses stat.id}}" data-dtype="Number"/></td>
                     </tr>
                     {{/if}}
                     {{/each}}

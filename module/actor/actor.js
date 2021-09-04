@@ -1,9 +1,246 @@
+import { max, findByID } from "../util.js";
+
+class Merp1eDefense {
+  constructor(actor) {
+    this.actor = actor;
+    const sheetData = actor.data.data;
+    if(game.merp1e.Merp1eRules.settings.armorControlManual) { // get from sheet data
+      this.shield = findByID(game.merp1e.Merp1eRules.defense.shieldTypes, sheetData.defense?.shield?.id, "none");
+      this.armGreaves = findByID(game.merp1e.Merp1eRules.defense.armGreavesTypes, sheetData.defense?.armGreaves?.id, "none");
+      this.legGreaves = findByID(game.merp1e.Merp1eRules.defense.legGreavesTypes, sheetData.defense?.legGreaves?.id, "none");
+      this.helm = findByID(game.merp1e.Merp1eRules.defense.helmTypes, sheetData.defense?.helm?.id, "none");
+      this.armor = findByID(game.merp1e.Merp1eRules.defense.armorTypes, sheetData.defense?.armor?.id, "none");
+    } else { // get from item effects
+      this.shield = findByID(game.merp1e.Merp1eRules.defense.shieldTypes, "none");
+      this.armGreaves = findByID(game.merp1e.Merp1eRules.defense.armGreavesTypes, "none");
+      this.legGreaves = findByID(game.merp1e.Merp1eRules.defense.legGreavesTypes, "none");
+      this.helm = findByID(game.merp1e.Merp1eRules.defense.helmTypes, "none");
+      this.armor = findByID(game.merp1e.Merp1eRules.defense.armorTypes, "no");
+    }
+  }
+
+  get skill() {
+    return this.actor.getSkillValue(game.merp1e.Merp1eRules.skill.DEFENSIVE_BONUS) || 0;
+  }
+
+  get bonus() { 
+    return this.skill + (this.shield?.bonus || 0) + (this.armGreaves?.bonus || 0) + (this.legGreaves?.bonus || 0) + (this.helm?.bonus || 0) + (this.armor?.bonus || 0);
+  }
+}
+
+class Merp1eXP {
+  constructor(actor) {
+    this.actor = actor;
+  }
+
+  get effective() {
+    return this.actor.data.data.xp.effective || 0;
+  }
+  get awarded() {
+    if( game.merp1e.Merp1eRules.settings.xpControlManual ) { 
+      return this.actor.data.data.xp.awarded || 0;
+    }
+
+    return Object.values(this.actor.xps).reduce( (acc, xp) => { return acc + xp.data.data.value; }, 0 );
+  }
+  get nextLevel() {
+    return game.merp1e.Merp1eRules.resolveExperiencePointsRequired(this.actor.level + 1);
+  }
+  get toNextLevel() {
+    return this.nextLevel - (this.effective + this.awarded);
+  }
+  get awardedList() {
+    return Object.keys(this.actor.xps);
+  }
+}
+
+class Merp1eHealth {
+  constructor(actor) {
+    this.actor = actor;
+  }
+
+  get maximumHPDie() {
+    return this.maximumHPOut + this.actor.stats.co.value;
+  }
+
+  get maximumHPOut() {
+    return this.actor.getSkillValue(game.merp1e.Merp1eRules.skill.BODY_DEVELOPMENT);
+  }
+
+  get hitsTaken() {
+    return this.actor.health.status.hitsTaken;
+  }
+
+  get hitsLeft() {
+    return this.maximumHPOut - this.hitsTaken;
+  }
+
+  get status() {
+    return this.actor.data.data.healthStatus;
+  }
+
+  heal(hits) {
+    if(hits < 0) return;
+
+    if( game.merp1e.Merp1eRules.settings.damageControlManual ) {
+      this.actor.health.status.hitsTaken -= hits;
+      this.update();
+    } else { //game.merp1e.Merp1eRules.settings.damageControlAutomatic()
+      let hitsToHeal = hits;
+      let damagesToUpdate = [];
+      for(let damage in this.damages) {
+        let damage = this.actor.damages[damageId];
+        let currentDamageData = damage.data.data.current;
+        if(currentDamageData.additionalHits > 0) {
+          if(currentDamageData.additionalHits >= hitsToHeal) {
+              // the damage will abosrb all hits to heal
+            currentDamageData.additionalHits -= hitsToHeal;
+            hitsToHeal = 0;
+            damagesToUpdate.push(damage.id);
+            break;
+          } else { // currentDamageData.additionalHits < hits
+              // the healing will zero this damage, and there will be more to heal
+            hitsToHeal -= currentDamageData.additionalHits;
+            currentDamageData.additionalHits = 0;
+            damagesToUpdate.push({ _id: damage.id, data: damage.data } );
+          }
+        }
+      }
+      this.updateEmbeddedDocuments("Item", damagesToUpdate);
+    }
+  }
+
+  consolidateDamage() {
+    if( game.merp1e.Merp1eRules.settings.damageControlManual ) return;
+
+    this.status.hitsTaken = 0;
+    this.status.hitsPerRound = 0;
+    this.status.activityPenalty = 0;
+    this.status.roundsDown = 0;
+    this.status.roundsOut = 0;
+    this.status.roundsUntilDeath = -1;
+    this.status.roundsStunned = 0;
+    this.status.roundsBlinded = 0;
+    this.status.unconsciousComa = 0;
+    this.status.rightArm = 0;
+    this.status.leftArm = 0;
+    this.status.rightLeg = 0;
+    this.status.leftLeg = 0;
+    this.status.paralyzed = 0;
+    this.status.hearingLoss = 0;
+    this.status.eyeLoss = 0;
+
+    for(let damageId in this.actor.damages) {
+      let damage = this.actor.damages[damageId];
+      damage.apply();
+      let currentDamageData = damage.data.data.current;
+
+      this.status.hitsTaken += currentDamageData.additionalHits || 0;
+      this.status.hitsPerRound += currentDamageData.hitsPerRound || 0;
+      if(currentDamageData.roundsActivityPenalty != 0) {
+        this.status.activityPenalty += currentDamageData.activityPenalty;
+      }
+      this.status.roundsStunned += currentDamageData.roundsStunned || 0;
+      this.status.roundsDown += currentDamageData.roundsDown || 0;
+      this.status.roundsOut += currentDamageData.roundsOut || 0;
+      this.status.roundsBlinded += currentDamageData.roundsBlinded || 0;
+      this.status.unconsciousComa += currentDamageData.unconsciousComa || 0;
+      this.status.roundsWeaponStuck = max(this.status.roundsWeaponStuck, currentDamageData.roundsWeaponStuck);
+      if(currentDamageData.roundsUntilDeath > 0) {
+        if(this.status.roundsUntilDeath == -1) { 
+          this.status.roundsUntilDeath = currentDamageData.roundsUntilDeath;
+        } else {
+          this.status.roundsUntilDeath = this.status.roundsUntilDeath > currentDamageData.roundsUntilDeath ? currentDamageData.roundsUntilDeath : this.status.roundsUntilDeath;
+        }
+      }
+      this.status.rightArm = this.status.rightArm | currentDamageData.rightArm; // 01 right, 10 left, 11 both
+      this.status.leftArm = this.status.leftArm | currentDamageData.leftArm; 
+      this.status.rightLeg = this.status.rightLeg | currentDamageData.rightLeg;
+      this.status.leftLeg = this.status.leftLeg | currentDamageData.leftLeg;
+
+      this.status.paralyzed = max(this.status.paralyzed, currentDamageData.paralyzed);
+      this.status.hearingLoss = this.status.hearingLoss | currentDamageData.hearingLoss;
+      this.status.eyeLoss = this.status.eyeLoss | currentDamageData.eyeLoss;
+    }
+  }
+  nextRound() {
+    if( game.merp1e.Merp1eRules.settings.damageControlManual ) return;
+
+    this.consolidateDamage();
+    let adjustedStunDownOut = false;
+    let idsToUpdate = [];
+
+    for(let damageId in this.actor.damages) {
+      let damage = this.actor.damages[damageId];
+      let currentDamageData = damage.data.data.current;
+      if(currentDamageData.hitsPerRound > 0) {
+        currentDamageData.additionalHits += currentDamageData.hitsPerRound;
+      }
+      if(currentDamageData.activityPenaltyTemporary) {
+        if(currentDamageData.roundsActivityPenalty > 0) {
+          currentDamageData.roundsActivityPenalty--;
+        }
+      }
+      if(currentDamageData.roundsUntilDeath > 0 ) {
+        currentDamageData.roundsUntilDeath--;
+        if( currentDamageData.roundsUntilDeath == 0 ) {
+          this.die();
+        }
+      }
+      if(currentDamageData.roundsBlinded > 0) currentDamageData.roundsBlinded--;
+
+      if(!adjustedStunDownOut) {
+        if(this.status.roundsOut > 0) {
+          if(currentDamageData.roundsOut > 0) { currentDamageData.roundsOut--; adjustedStunDownOut = true; }
+        } else if (this.status.roundsDown > 0 ){
+          if(currentDamageData.roundsDown > 0) { currentDamageData.roundsDown--; adjustedStunDownOut = true; }
+        } else if (this.status.roundsStunned > 0 ){
+          if(currentDamageData.roundsStunned > 0) { currentDamageData.roundsStunned--; adjustedStunDownOut = true; }
+        }
+      }
+      idsToUpdate.push({ _id: damageId, data: damage.data.data });
+    }
+    this.actor.updateEmbeddedDocuments("Item", idsToUpdate);
+    this.consolidateDamage();
+  }
+  die(){
+    this.status.dead = true;
+    // XXX record in which round the character died?
+  }
+  get isDead() {
+    return this.status.dead == true || this.status.hitsTaken > this.status.maximumHPDie;
+  }
+  get isUnconscious() {
+    return !this.isDead && this.status.hourUnconscious > 0 && this.status.hitsTaken >= this.status.maximumHPOut;
+  }
+  get isOut() {
+    return this.status.roundsOut > 0;
+  }
+  get isDown() {
+    return (! this.isOut) && this.status.roundsStunned > 0;
+  }
+  get isStunned() {
+    return (! this.isDown) && this.status.roundsStunned > 0;
+  }
+  get isParalyzed() {
+    return this.status.paralyzed != "0";
+  }
+  get isDeaf() {
+    return this.status.earLoss != "3";
+  }
+  get isBlind() {
+    return this.status.roundsBlinded > 0 && this.status.eyeLoss != "3";
+  }
+}
+
+
+
+
 /**
  * Extend the base Actor entity by defining a custom roll data structure which is ideal for the Simple system.
  * @extends {Actor}
  */
 export class Merp1eActor extends Actor {
-
   /* --------------------------------------------------
    * Class overrides
    * -------------------------------------------------- */
@@ -14,7 +251,7 @@ export class Merp1eActor extends Actor {
   /** @override */
   prepareData() {
     super.prepareData();
-		this._characterInit();
+    this._characterInit();
   }
 
   /*
@@ -49,9 +286,27 @@ export class Merp1eActor extends Actor {
     return super.createEmbeddedDocuments(embeddedName, dataArray, options);
   }
 
+  _processUniqueItem(type, def) {
+    let items = this.items.filter( (item) => item.type == type );
+    if(items.length == 0) {
+      return def;
+    } else {
+      if(items.length > 1) {
+        console.log(`actor has more than one ${type}! Deleting remaining items.`);
+  
+        this.deleteEmbeddedDocument("Item", items.filter((data, idx) => idx !== 0 ) );
+      }
+      return items[0];
+    }
+  }
+
+  _applyEffects() {
+    for(let effect of this.effects) {
+      effect.apply(this);
+    }
+  }
+
   async _processItems() {
-    this.race = {name: null};
-    this.profession = {name: null};
     this.languages = {};
     this.skills = {};
     this.spelllists = {};
@@ -64,20 +319,7 @@ export class Merp1eActor extends Actor {
           this.languages[item.id] = item;
           break;
         case "race":
-          if(this.race.name != null) {
-            console.log("actor has more than one race! Deleting second item.");
-            this.deleteEmbeddedDocument("Item", [item.id]);
-          } else {
-            this.race = item;
-          }
-          break;
         case "profession":
-          if(this.profession.name != null) {
-            console.log("actor has more than one profession! Deleting second item.");
-            this.deleteEmbeddedDocument("Item", [item.id]);
-          } else {
-            this.profession = item;
-          }
           break;
         case "skill":
           item.bonuses = {
@@ -114,9 +356,6 @@ export class Merp1eActor extends Actor {
           this.equipments[item.id] = item;
           break;
       }
-    }
-    for(let effect of this.effects) {
-      effect.apply(this);
     }
   }
 
@@ -163,27 +402,34 @@ export class Merp1eActor extends Actor {
       roundsBlinded: 0
     };
 
+    this.defense = new Merp1eDefense(this);
+    this.xp = new Merp1eXP(this);
+    this.health = new Merp1eHealth(this);
+
+    this.race = this._processUniqueItem("race", {name: null});
+    this.profession = this._processUniqueItem("profession", {name: null});;
+
     // ************* STATS
     this.stats = {};
     for( let stat of game.merp1e.Merp1eRules.stats) {
-      this.stats[stat.abbr] = { 
-        "abbr": stat.abbr,
-        "value": sheetData.stats[stat.abbr].value, 
+      this.stats[stat.id] = { 
+        "id": stat.id,
+        "value": sheetData.stats[stat.id].value, 
         "only_value": stat.only_value || false,
         "bonuses": {
-          "special": sheetData.stats[stat.abbr].special || 0,
+          "special": sheetData.stats[stat.id].special || 0,
         }, 
         get total() {
           return Object.entries(this.bonuses).reduce((a, i) => { return a + (i[1] || 0); }, 0);
         }
       };
-      this.stats[stat.abbr].bonuses.stat = game.merp1e.Merp1eRules.resolveStatBonus(sheetData.stats[stat.abbr].value);
-      this.stats[stat.abbr].bonuses.race = this._getRaceStatBonus(stat.abbr);
+      this.stats[stat.id].bonuses.stat = game.merp1e.Merp1eRules.resolveStatBonus(sheetData.stats[stat.id].value);
+      this.stats[stat.id].bonuses.race = this._getRaceStatBonus(stat.id);
       /// XXX put itens Stat Bonus
     }
 
     await this._processItems();
-
+    this._applyEffects();
 /*
 
     // Iterate through items, allocating to containers
@@ -234,7 +480,7 @@ export class Merp1eActor extends Actor {
   }
 
   getSkillValue(reference) {
-    return this.getSkillsByReference(reference)[0].total;
+    return this.getSkillsByReference(reference)[0].total || 0;
   }
   /*
    * Lookup a language that the actor knows by name. Can return an array with more than one item.
@@ -266,13 +512,11 @@ export class Merp1eActor extends Actor {
     return newSkills;
   }
 
-  /** @override */
   _getRaceStatBonus(stat) {
     if(this.race == null || this.race.data == null ) return null;
     return this.race.getStatBonus(stat);
   }
 
-  /** @override */
   _getProfessionSkillBonus(skillReference) {
     if(this.profession == null || this.profession.data == null ) return null; 
     return this.profession.getProfessionSkillBonuses(skillReference);
@@ -297,8 +541,10 @@ export class Merp1eActor extends Actor {
 
   get powerPointsPerLevel() {
     if(this.realm == null) return 0;
-    let realmStat = game.merp1e.Merp1eRules.spell.realmStat[this.realm];
-    return game.merp1e.Merp1eRules.resolvePowerPointsPerLevel(this.stats[realmStat].value);
+    let realm = game.merp1e.Merp1eRules.magic.realms.find((r) => r.id == this.realm);
+    let realmStat = realm?.stat;
+    let realmStatValue = this.stats[realmStat]?.value || 0;
+    return game.merp1e.Merp1eRules.resolvePowerPointsPerLevel(realmStatValue);
   }  
   get powerPointsMultiplier() {
     return 1; // XXX Read from Items with Power Point proprety
@@ -309,209 +555,4 @@ export class Merp1eActor extends Actor {
   get powerPointsCurrent() {
     return this.data.data.pp.value || 0;
   }
-
-  health = {
-    actor: this,
-    get maximumHPDie() {
-      return this.maximumHPOut + this.actor.stats.co.value;
-    },
-
-    get maximumHPOut() {
-      return this.actor.getSkillValue(game.merp1e.Merp1eRules.skill.BODY_DEVELOPMENT);
-    },
-
-    get hitsTaken() {
-      return this.actor.health.status.hitsTaken;
-    },
-
-    get hitsLeft() {
-      return this.maximumHPOut - this.hitsTaken;
-    },
-
-    get status() {
-      return this.actor.data.data.healthStatus;
-    },
-
-    heal(hits) {
-      if(hits < 0) return;
-
-      if( game.merp1e.Merp1eRules.settings.damageControlManual ) {
-        this.actor.health.status.hitsTaken -= hits;
-        this.update();
-      } else { //game.merp1e.Merp1eRules.settings.damageControlAutomatic()
-        let hitsToHeal = hits;
-        let damagesToUpdate = [];
-        for(let damage in this.damages) {
-          let damage = this.actor.damages[damageId];
-          let currentDamageData = damage.data.data.current;
-          if(currentDamageData.additionalHits > 0) {
-            if(currentDamageData.additionalHits >= hitsToHeal) {
-                // the damage will abosrb all hits to heal
-              currentDamageData.additionalHits -= hitsToHeal;
-              hitsToHeal = 0;
-              damagesToUpdate.push(damage.id);
-              break;
-            } else { // currentDamageData.additionalHits < hits
-                // the healing will zero this damage, and there will be more to heal
-              hitsToHeal -= currentDamageData.additionalHits;
-              currentDamageData.additionalHits = 0;
-              damagesToUpdate.push({ _id: damage.id, data: damage.data } );
-            }
-          }
-        }
-        this.updateEmbeddedDocuments("Item", damagesToUpdate);
-      }
-    },
-
-    max(a, b) {
-      return a > b ? a : b;
-    },
-    
-    consolidateDamage() {
-      if( game.merp1e.Merp1eRules.settings.damageControlManual ) return;
-
-      this.status.hitsTaken = 0;
-      this.status.hitsPerRound = 0;
-      this.status.activityPenalty = 0;
-      this.status.roundsDown = 0;
-      this.status.roundsOut = 0;
-      this.status.roundsUntilDeath = -1;
-      this.status.roundsStunned = 0;
-      this.status.roundsBlinded = 0;
-      this.status.unconsciousComa = 0;
-      this.status.rightArm = 0;
-      this.status.leftArm = 0;
-      this.status.rightLeg = 0;
-      this.status.leftLeg = 0;
-      this.status.paralyzed = 0;
-      this.status.hearingLoss = 0;
-      this.status.eyeLoss = 0;
-
-      for(let damageId in this.actor.damages) {
-        let damage = this.actor.damages[damageId];
-        damage.apply();
-        let currentDamageData = damage.data.data.current;
-
-        this.status.hitsTaken += currentDamageData.additionalHits || 0;
-        this.status.hitsPerRound += currentDamageData.hitsPerRound || 0;
-        if(currentDamageData.roundsActivityPenalty != 0) {
-          this.status.activityPenalty += currentDamageData.activityPenalty;
-        }
-        this.status.roundsStunned += currentDamageData.roundsStunned || 0;
-        this.status.roundsDown += currentDamageData.roundsDown || 0;
-        this.status.roundsOut += currentDamageData.roundsOut || 0;
-        this.status.roundsBlinded += currentDamageData.roundsBlinded || 0;
-        this.status.unconsciousComa += currentDamageData.unconsciousComa || 0;
-        this.status.roundsWeaponStuck = this.max(this.status.roundsWeaponStuck, currentDamageData.roundsWeaponStuck);
-        if(currentDamageData.roundsUntilDeath > 0) {
-          if(this.status.roundsUntilDeath == -1) { 
-            this.status.roundsUntilDeath = currentDamageData.roundsUntilDeath;
-          } else {
-            this.status.roundsUntilDeath = this.status.roundsUntilDeath > currentDamageData.roundsUntilDeath ? currentDamageData.roundsUntilDeath : this.status.roundsUntilDeath;
-          }
-        }
-        this.status.rightArm = this.status.rightArm | currentDamageData.rightArm; // 01 right, 10 left, 11 both
-        this.status.leftArm = this.status.leftArm | currentDamageData.leftArm; 
-        this.status.rightLeg = this.status.rightLeg | currentDamageData.rightLeg;
-        this.status.leftLeg = this.status.leftLeg | currentDamageData.leftLeg;
-
-        this.status.paralyzed = this.max(this.status.paralyzed, currentDamageData.paralyzed);
-        this.status.hearingLoss = this.status.hearingLoss | currentDamageData.hearingLoss;
-        this.status.eyeLoss = this.status.eyeLoss | currentDamageData.eyeLoss;
-      }
-    },
-    nextRound() {
-      if( game.merp1e.Merp1eRules.settings.damageControlManual ) return;
-
-      this.consolidateDamage();
-      let adjustedStunDownOut = false;
-      let idsToUpdate = [];
-
-      for(let damageId in this.actor.damages) {
-        let damage = this.actor.damages[damageId];
-        let currentDamageData = damage.data.data.current;
-        if(currentDamageData.hitsPerRound > 0) {
-          currentDamageData.additionalHits += currentDamageData.hitsPerRound;
-        }
-        if(currentDamageData.activityPenaltyTemporary) {
-          if(currentDamageData.roundsActivityPenalty > 0) {
-            currentDamageData.roundsActivityPenalty--;
-          }
-        }
-        if(currentDamageData.roundsUntilDeath > 0 ) {
-          currentDamageData.roundsUntilDeath--;
-          if( currentDamageData.roundsUntilDeath == 0 ) {
-            this.die();
-          }
-        }
-        if(currentDamageData.roundsBlinded > 0) currentDamageData.roundsBlinded--;
-
-        if(!adjustedStunDownOut) {
-          if(this.status.roundsOut > 0) {
-            if(currentDamageData.roundsOut > 0) { currentDamageData.roundsOut--; adjustedStunDownOut = true; }
-          } else if (this.status.roundsDown > 0 ){
-            if(currentDamageData.roundsDown > 0) { currentDamageData.roundsDown--; adjustedStunDownOut = true; }
-          } else if (this.status.roundsStunned > 0 ){
-            if(currentDamageData.roundsStunned > 0) { currentDamageData.roundsStunned--; adjustedStunDownOut = true; }
-          }
-        }
-        idsToUpdate.push({ _id: damageId, data: damage.data.data });
-      }
-      this.actor.updateEmbeddedDocuments("Item", idsToUpdate);
-      this.consolidateDamage();
-    },
-    die(){
-      this.status.dead = true;
-      // XXX record in which round the character died?
-    },
-    get isDead() {
-      return this.status.dead == true || this.status.hitsTaken > this.status.maximumHP + this.actor.stats.co.value;
-    },
-    get isUnconscious() {
-      return this.status.hourUnconscious > 0 || (this.status.hitsTaken > this.status.maximumHP && this.status.hitsTaken <= this.status.maximumHP + this.actor.stats.co.value);
-    },
-    get isOut() {
-      return this.status.roundsOut > 0;
-    },
-    get isDown() {
-      return (! this.isOut) && this.status.roundsStunned > 0;
-    },
-    get isStunned() {
-      return (! this.isDown) && this.status.roundsStunned > 0;
-    },
-    get isParalyzed() {
-      return this.status.paralyzed != "0";
-    },
-    get isDeaf() {
-      return this.status.earLoss != "3";
-    },
-    get isBlind() {
-      return this.status.roundsBlinded > 0 && this.status.eyeLoss != "3";
-    },
-  }
-
-  xp = {
-    actor: this,
-    get effective() {
-      return this.actor.data.data.xp.effective || 0;
-    },
-    get awarded() {
-      if( game.merp1e.Merp1eRules.settings.xpControlManual ) { 
-        return this.actor.data.data.xp.awarded || 0;
-      }
-
-      return Object.values(this.actor.xps).reduce( (acc, xp) => { return acc + xp.data.data.value; }, 0 );
-    },
-    get nextLevel() {
-      return game.merp1e.Merp1eRules.resolveExperiencePointsRequired(this.actor.level + 1);
-    },
-    get toNextLevel() {
-      return this.nextLevel - (this.effective + this.awarded);
-    },
-    get awardedList() {
-      return Object.keys(this.actor.xps);
-    },
-  }
-
-
 }

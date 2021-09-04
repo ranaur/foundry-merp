@@ -19,7 +19,7 @@
     </thead>
     <tbody>
         {{#each rules.stats as | stat |}}
-        {{> "systems/merp1e/templates/actor/parts/character-sheet-stat-line.html" stat=(lookup ../actor.stats stat.abbr)}}
+        {{> "systems/merp1e/templates/actor/parts/character-sheet-stat-line.html" stat=(lookup ../actor.stats stat.id) statLabel=stat}}
         {{/each}}
     </tbody>
 </table>

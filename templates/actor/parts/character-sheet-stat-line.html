@@ -1,7 +1,7 @@
 <tr>
-    <td>{{ localize (concat 'MERP1E.Stats.' stat.abbr '.Name') }}</td>
-    <td>({{ localize (concat 'MERP1E.Stats.' stat.abbr '.Short') }})</td>
-    <td><input class="userentry" name="data.stats.{{stat.abbr}}.value" value='{{stat.value}}' min="1" max="102" type="number" data-dtype="Number"/></td>
+    <td>{{localize statLabel.label}}</td>
+    <td>({{localize statLabel.abbr}})</td>
+    <td><input class="userentry" name="data.stats.{{stat.id}}.value" value='{{stat.value}}' min="1" max="102" type="number" data-dtype="Number"/></td>
     {{#if stat.only_value}}
     <td colspan="3"></td>
     {{else}}

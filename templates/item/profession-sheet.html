@@ -7,22 +7,20 @@
                 <div class="resource">
                     <label class="resource-label">{{localize "MERP1E.ProfessionSheet.PrimeStat"}}</label>
                     <select name="data.primeStat">
-                        {{#unless data.data.primeStat}}<option></option>{{/unless}}
-                        {{selectOptions rules.stats selected=data.data.primeStat localize=true nameAttr="value" labelAttr="label"}}
+                        {{selectOptions rules.stats selected=data.data.primeStat localize=true nameAttr="id" labelAttr="label" blank=""}}
                     </select>
                 </div>
                 <div class="resource">
                     <label class="resource-label">{{localize "MERP1E.ProfessionSheet.Realm"}}</label>
                     <select name="data.realm">
                         <option value="any">{{localize "MERP1E.Realm.Any"}}</option>
-                        {{selectOptions rules.magic.realms selected=data.data.realm localize=true nameAttr="name" labelAttr="label"}}
+                        {{selectOptions rules.magic.realms selected=data.data.realm localize=true nameAttr="id" labelAttr="label"}}
                     </select>
                 </div>
                 <div class="resource">
                     <label class="resource-label">{{localize "MERP1E.ProfessionSheet.MaxSpellLevel"}}</label>
                     <select name="data.spellsAllowed">
-                        {{#unless data.data.spellsAllowed}}<option></option>{{/unless}}
-                        {{selectOptions rules.magic.professionalRestrictions selected=data.data.spellsAllowed localize=true nameAttr="name" labelAttr="label"}}
+                        {{selectOptions rules.magic.professionalRestrictions selected=data.data.spellsAllowed localize=true nameAttr="id" labelAttr="label" blank=""}}
                     </select>
                 </div>
             </div>
@@ -44,12 +42,12 @@
                 {{#each sheetOrder as | group |}}
                 <div class="skill-group">
                   <div class="skill-group-header" style="font-weight:bolder">{{localize (concat "MERP1E.SkillGroup." group.name)}} (
-                    <a class="skill-group-value" group="{{group.name}}">0</a>
-                    <a class="skill-group-value" group="{{group.name}}">1</a>
-                    <a class="skill-group-value" group="{{group.name}}">2</a>
-                    <a class="skill-group-value" group="{{group.name}}">3</a>
-                    <a class="skill-group-value" group="{{group.name}}">4</a>
-                    <a class="skill-group-value" group="{{group.name}}">5</a>)
+                    <a class="skill-group-value" group="{{group.id}}">0</a>
+                    <a class="skill-group-value" group="{{group.id}}">1</a>
+                    <a class="skill-group-value" group="{{group.id}}">2</a>
+                    <a class="skill-group-value" group="{{group.id}}">3</a>
+                    <a class="skill-group-value" group="{{group.id}}">4</a>
+                    <a class="skill-group-value" group="{{group.id}}">5</a>)
                   </div>
                   {{#each group.skills as | skill |}}
                     <div class="flexrow">
@@ -66,8 +64,8 @@
             <div class="devpoints-groups">
                 {{#each sheetOrder as | group |}}
                 <div class="flexrow">
-                    <div class="">{{ localize (concat "MERP1E.SkillGroup." group.name)}}</div>
-                    <input type="number" name="data.developmentPoints.{{group.name}}" value="{{lookup ../data.data.developmentPoints group.name}}" data-dtype="Number"/>
+                    <div class="">{{ localize (concat "MERP1E.SkillGroup." group.id)}}</div>
+                    <input type="number" name="data.developmentPoints.{{group.id}}" value="{{lookup ../data.data.developmentPoints group.id}}" data-dtype="Number"/>
                 </div>
                 {{/each}}
                 <div class="flexrow">

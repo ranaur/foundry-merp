@@ -12,28 +12,14 @@
                 </span>
             </div>
         </div>
-        <div class="flexrow">
-            <h3 class="flex">Statuses</h3>
-            <div class="flex3 flexrow">
-                {{#if actor.health.isDead}}<h6>Dead</h6>{{/if}}
-                {{#if actor.health.isUnconscious}}<h6>isUnconscious</h6>{{/if}}
-                {{#if actor.health.isOut}}<h6>Out</h6>{{/if}}
-                {{#if actor.health.isDown}}<h6>Down</h6>{{/if}}
-                {{#if actor.health.isStunned}}<h6>Stunned</h6>{{/if}}
-                {{#if (lt actor.health.activityPenalty 0)}}<h6>{{actor.health.activityPenalty}}</h6>{{/if}}
-                {{#if actor.health.isParalyzed}}<h6>Paralyzed XXX</h6>{{/if}}
-                {{#if actor.health.isDeaf}}<h6>Deaf</h6>{{/if}}
-                {{#if actor.health.isBlind}}<h6>Blind</h6>{{/if}}
-            </div>
-        </div>
         <div class="resources grid grid-4col">
             <div>
-                <label class="resource-label"><i class="fas fa-heart"></i> {{localize 'MERP1E.Health.MaximumHPDie'}}</label>
-                <input id="maximumHP" value="{{actor.health.maximumHPDie}}" data-dtype="Number" type="number" readonly tabindex=-1/>
+                <label class="resource-label"><i class="fas fa-skull"></i> {{localize 'MERP1E.Health.MaximumHPDie'}}</label>
+                <input id="maximumHPDie" value="{{actor.health.maximumHPDie}}" data-dtype="Number" type="number" readonly tabindex=-1/>
             </div>
             <div>
                 <label class="resource-label"><i class="fas fa-heart"></i> {{localize 'MERP1E.Health.MaximumHPOut'}}</label>
-                <input id="maximumHP" value="{{actor.health.maximumHPOut}}" data-dtype="Number" type="number" readonly tabindex=-1/>
+                <input id="maximumHPOut" value="{{actor.health.maximumHPOut}}" data-dtype="Number" type="number" readonly tabindex=-1/>
             </div>
             <div>
                 <label class="resource-label"><i class="fas fa-heart-broken"></i> {{localize 'MERP1E.Health.HitsTaken'}}</label>

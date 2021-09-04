@@ -1,4 +1,5 @@
 import { Merp1eActiveEffect } from "./active-effect.js"
+import { findByID } from "./util.js";
 
 export class Merp1eActiveEffectSheet extends DocumentSheet {
     /** @override */
@@ -30,9 +31,15 @@ export class Merp1eActiveEffectSheet extends DocumentSheet {
     /** @override */
     getData() {
         let sheetData = super.getData()
+        sheetData.rules = game.merp1e.Merp1eRules;
         sheetData.effect = sheetData.data;
-        sheetData.effectTypes = Merp1eActiveEffect.effectTypes.reduce( (acc, cls) => { acc.push({ value: cls.effectName, label: cls.label }); return acc;}, []);
+        sheetData.effectTypes = Merp1eActiveEffect.effectTypes.reduce( (acc, cls) => { acc.push({ id: cls.effectName, label: cls.label }); return acc;}, []);
         sheetData.skills = game.merp1e.Merp1eRules.generateSheetOrder();
+        sheetData.shieldBaseBonus = findByID(game.merp1e.Merp1eRules.defense.shieldTypes, sheetData.effect.flags?.merp1e?.Shield?.type, "none").bonus;
+        sheetData.armGreavesBaseBonus = findByID(game.merp1e.Merp1eRules.defense.armGreavesTypes, sheetData.effect.flags?.merp1e?.ArmGreaves?.type, "none").bonus;
+        sheetData.legGreavesBaseBonus = findByID(game.merp1e.Merp1eRules.defense.legGreavesTypes, sheetData.effect.flags?.merp1e?.LegGreaves?.type, "none").bonus;
+        sheetData.helmBaseBonus = findByID(game.merp1e.Merp1eRules.defense.helmTypes, sheetData.effect.flags?.merp1e?.Helm?.type, "none").bonus;
+        //sheetData.armorBaseBonus = findByID(game.merp1e.Merp1eRules.defense.armorTypes, sheetData.effect.flags?.merp1e?.Armor?.type, "no").bonus;
         return sheetData;
     }
 

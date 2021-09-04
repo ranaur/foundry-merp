@@ -33,7 +33,7 @@
         <tbody class="skill-list">
             {{#each sheetOrder as | group |}}
                 <tr>
-                    <td colspan="10" style="font-weight: bold; text-align: left">{{localize (concat "MERP1E.SkillGroup." group.name)}}</td>
+                    <td colspan="10" style="font-weight: bold; text-align: left">{{localize group.label}}</td>
                 </tr>
                 {{#each group.skills as | skill |}}
                     <tr class="skill-line item" data-item-id="{{skill.id}}">

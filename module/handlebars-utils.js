@@ -75,7 +75,7 @@ export const preloadHandlebarsTemplates = async function() {
       "systems/merp1e/templates/actor/parts/character-sheet-health.html",
       "systems/merp1e/templates/actor/parts/character-sheet-equipment.html",
       "systems/merp1e/templates/actor/parts/character-sheet-xp.html",
-      "systems/merp1e/templates/actor/parts/character-sheet-defense.html",
+      "systems/merp1e/templates/actor/parts/character-sheet-status.html",
       "systems/merp1e/templates/actor/parts/character-sheet-spells.html"
     ];
   

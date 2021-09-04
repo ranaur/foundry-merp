@@ -1,0 +1,104 @@
+<div>
+    <div class="defense">
+        <div class="flexcol">
+            <div class="flexrow">
+                <h2 class="flex3">{{localize 'MERP1E.Health.HitPointsAndStatuses'}}</h2>
+<!--
+                <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+                    <span class="health-control" data-action="next-round">
+                        <i title="{{localize 'MERP1E.Damage.NextRound'}}" class="fas fa-hourglass-half"></i>
+                    </span>
+                    <span class="health-control" data-action="erase-status">
+                        <i title="{{localize 'MERP1E.Damage.EraseStatus'}}" class="fas fa-eraser"></i>
+                    </span>
+                </div>
+-->
+            </div>
+            <div class="flexrow">
+                <h3 class="flex">Statuses</h3>
+                <div class="flex3 flexrow">
+                    {{#if actor.health.isDead}}<h6>Dead</h6>{{/if}}
+                    {{#if actor.health.isUnconscious}}<h6>isUnconscious</h6>{{/if}}
+                    {{#if actor.health.isOut}}<h6>Out</h6>{{/if}}
+                    {{#if actor.health.isDown}}<h6>Down</h6>{{/if}}
+                    {{#if actor.health.isStunned}}<h6>Stunned</h6>{{/if}}
+                    {{#if (lt actor.health.activityPenalty 0)}}<h6>{{actor.health.activityPenalty}}</h6>{{/if}}
+                    {{#if actor.health.isParalyzed}}<h6>Paralyzed XXX</h6>{{/if}}
+                    {{#if actor.health.isDeaf}}<h6>Deaf</h6>{{/if}}
+                    {{#if actor.health.isBlind}}<h6>Blind</h6>{{/if}}
+                </div>
+            </div>
+        </div>
+
+        <div class="flexrow">
+            <h2 class="flex3">{{localize 'MERP1E.Defense.Defense'}}</h2>
+<!--
+            <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+                <span class="health-control" data-action="next-round">
+                    <i title="{{localize 'MERP1E.Damage.Add'}}" class="fas fa-hourglass-half"></i>
+                </span>
+                <span class="health-control" data-action="erase-status">
+                    <i title="{{localize 'MERP1E.Damage.EraseStatus'}}" class="fas fa-eraser"></i>
+                </span>
+            </div>
+-->
+        </div>
+            <div>
+                <label class="resource-label"><i class="far fa-dot-dircle"></i> {{localize 'MERP1E.Defense.DB'}}</label>
+                <input value="{{actor.defense.bonus}}" data-dtype="String" type="text" readonly tabindex=-1/>
+            </div>
+            <div class="resources grid grid-3col">
+                <div>
+                    <label class="resource-label"><i class="fas fa-shield-alt"></i> {{localize 'MERP1E.Defense.Shield'}}</label>
+                    <div class="flexrow">
+                        <select name="data.defense.shield.id" {{roif rules.settings.armorControlAutomatic}}>
+                            {{selectOptions rules.defense.shieldTypes selected=actor.defense.shield.id localize=true nameAttr="id" labelAttr="label"}}
+                        </select>
+                        <input value="{{actor.defense.shield.bonus}}" data-dtype="Number" type="number" readonly tabindex=-1/>
+                    </div>
+                </div>
+                <div>
+                    <label class="resource-label"><i class="fas fa-hand-paper"></i> {{localize 'MERP1E.Defense.ArmGreaves'}}</label>
+                    <div class="flexrow">
+                        <select name="data.defense.armGreaves.id" {{roif rules.settings.armorControlAutomatic}}>
+                            {{selectOptions rules.defense.armGreavesTypes selected=actor.defense.armGreaves.id localize=true nameAttr="id" labelAttr="label"}}
+                        </select>
+                        <input value="{{actor.defense.armGreaves.bonus}}" data-dtype="Number" type="number" readonly tabindex=-1/>
+                    </div>
+                </div>
+                <div>
+                    <label class="resource-label"><i class="fas fa-socks"></i> {{localize 'MERP1E.Defense.LegGreaves'}}</label>
+                    <div class="flexrow">
+                        <select name="data.defense.legGreaves.id" {{roif rules.settings.armorControlAutomatic}}>
+                            {{selectOptions rules.defense.legGreavesTypes selected=actor.defense.legGreaves.id localize=true nameAttr="id" labelAttr="label"}}
+                        </select>
+                        <input value="{{actor.defense.legGreaves.bonus}}" data-dtype="Number" type="number" readonly tabindex=-1/>
+                    </div>
+                </div>
+                <div>
+                    <label class="resource-label"><i class="fas fa-hard-hat"></i> {{localize 'MERP1E.Defense.Helm'}}</label>
+                    <div class="flexrow">
+                        <select name="data.defense.helm.id" {{roif rules.settings.armorControlAutomatic}}>
+                            {{selectOptions rules.defense.helmTypes selected=actor.defense.helm.id localize=true nameAttr="id" labelAttr="label"}}
+                        </select>
+                        <input value="{{actor.defense.helm.bonus}}" data-dtype="Number" type="number" readonly tabindex=-1/>
+                    </div>
+                </div>
+                <div>
+                    <label class="resource-label"><i class="fas fa-tshirt"></i> {{localize 'MERP1E.Defense.Armor'}}</label>
+                    <div class="flexrow">
+                        <select name="data.defense.armor.id" {{roif rules.settings.armorControlAutomatic}}>
+                            {{selectOptions rules.defense.armorTypes selected=actor.defense.armor.id localize=true nameAttr="id" labelAttr="label"}}
+                        </select>
+                        <input value="{{actor.defense.armor.bonus}}" data-dtype="Number" type="number" readonly tabindex=-1/>
+                    </div>
+                </div>
+                <div>
+                    <label class="resource-label"><i class="fas fa-plus"></i> {{localize 'MERP1E.Defense.Skill'}}</label>
+                    <div class="flexrow">
+                        <input value="{{actor.defense.skill}}" data-dtype="Number" type="number" readonly tabindex=-1/>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>

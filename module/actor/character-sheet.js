@@ -40,6 +40,7 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
     } else {
       sheetData.sheetOrder = game.merp1e.Merp1eRules.generateSheetOrder(this.actor.skills);
     }
+
     this.fillAdolescenceSkillRanks(sheetData); // XXX não funciona quando troca de raça
     return sheetData;
   }
@@ -322,7 +323,8 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
   updateHealth() {
     this.setValueToElement("data.healthStatus.hitsTaken", this.actor.health.hitsTaken);
     this.setValueToId("hitsLeft", this.actor.health.hitsLeft);
-    this.setValueToId("maximumHP", this.actor.health.maximumHP);
+    this.setValueToId("maximumHPDie", this.actor.health.maximumHPDie);
+    this.setValueToId("maximumHPOut", this.actor.health.maximumHPOut);
     this.setValueToElement("data.healthStatus.hitsPerRound", this.actor.health.status.hitsPerRound);
     this.setValueToElement("data.healthStatus.activityPenalty", this.actor.health.status.activityPenalty);
     this.setValueToElement("data.healthStatus.roundsStunned", this.actor.health.status.roundsStunned);
