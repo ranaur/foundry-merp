@@ -1,3 +1,4 @@
+import { Merp1eManeuverApplication } from '../apps/maneuver-app.js';
 import { MerpSpell, MerpSpellList } from "./spell.js";
 import { MerpSkill } from "./skill.js";
 import { TableBT1 } from "./tables/bt-1.js";
@@ -18,7 +19,7 @@ export class Merp1eRules {
         { id: "pr", label: "MERP1E.Stats.pr.Name", abbr: "MERP1E.Stats.pr.Abbr" }, 
         { id: "ap", label: "MERP1E.Stats.ap.Name", abbr: "MERP1E.Stats.ap.Abbr" , only_value: true }
     ];
-    static rollType = [
+    static rollTypes = [
         { id: "MM", label: "MERP1E.RollType.MM" },
         { id: "SM", label: "MERP1E.RollType.SM" },
         { id: "RR", label: "MERP1E.RollType.RR" },
@@ -42,6 +43,11 @@ export class Merp1eRules {
             { id: "Essence", label: "MERP1E.Realm.Essence", stat: "ig" },
             { id: "Channeling", label: "MERP1E.Realm.Channeling", stat: "it" },
         ],
+        realmsAny: [
+            { id: "Any", label: "MERP1E.Realm.Any" },
+            { id: "Essence", label: "MERP1E.Realm.Essence", stat: "ig" },
+            { id: "Channeling", label: "MERP1E.Realm.Channeling", stat: "it" }, // XXX copy from realm on constructor (remove static)
+        ],
         professionalRestrictions: [
             { id: "profession and open", label: "MERP1E.SpellsAllowed.ProfessionOpen" },
             { id: "profession and open up to 5th level", label: "MERP1E.SpellsAllowed.Profession5th" },
@@ -59,11 +65,11 @@ export class Merp1eRules {
 
     static defense = {
         armorTypes: [
-            { id: "no", label: "MERP1E.ArmorType.no.Name", abbr: "MERP1E.ArmorType.no.Abbr", bonus: 0 },
-            { id: "sl", label: "MERP1E.ArmorType.sl.Name", abbr: "MERP1E.ArmorType.sl.Abbr", bonus: 0 },
-            { id: "rl", label: "MERP1E.ArmorType.rl.Name", abbr: "MERP1E.ArmorType.rl.Abbr", bonus: 0 },
-            { id: "ch", label: "MERP1E.ArmorType.ch.Name", abbr: "MERP1E.ArmorType.ch.Abbr", bonus: 0 },
-            { id: "pl", label: "MERP1E.ArmorType.pl.Name", abbr: "MERP1E.ArmorType.pl.Abbr", bonus: 0 }
+            { id: "no", label: "MERP1E.ArmorType.no.Name", abbr: "MERP1E.ArmorType.no.Abbr", bonus: 0, skillReference: "NoArmor" },
+            { id: "sl", label: "MERP1E.ArmorType.sl.Name", abbr: "MERP1E.ArmorType.sl.Abbr", bonus: 0, skillReference: "SoftLeather" },
+            { id: "rl", label: "MERP1E.ArmorType.rl.Name", abbr: "MERP1E.ArmorType.rl.Abbr", bonus: 0, skillReference: "RigidLeather" },
+            { id: "ch", label: "MERP1E.ArmorType.ch.Name", abbr: "MERP1E.ArmorType.ch.Abbr", bonus: 0, skillReference: "Chain" },
+            { id: "pl", label: "MERP1E.ArmorType.pl.Name", abbr: "MERP1E.ArmorType.pl.Abbr", bonus: 0, skillReference: "Plate" }
         ],
         armGreavesTypes: Merp1eRules.defenseTypes,
         legGreavesTypes: Merp1eRules.defenseTypes,
@@ -211,6 +217,9 @@ export class Merp1eRules {
         /// XXX add folder of avaliable races (config option)
         return game.items.filter(item => { return item.type == "skill" && item.data.data.showOnEverySheet == true; });
     }
+    static getActors() {
+        return game.actors.filter(actor => { return actor.type == "character" && actor.permission == CONST.ENTITY_PERMISSIONS.OWNER; });
+    }
     static generateSheetOrder(skills = null) {
         if(skills === null) {
             skills = game.merp1e.Merp1eRules.getAvaliableSkills();
@@ -261,6 +270,7 @@ export class Merp1eRules {
         get damageControlAutomatic() {
             return this.damageControl == "automatic";
         },
+        
         get xpControl() {
             return game.settings.get("merp1e", "xpControl");
         },
@@ -270,6 +280,7 @@ export class Merp1eRules {
         get xpControlAutomatic() {
             return this.xpControl == "automatic";
         },
+
         get armorControl() {
             return game.settings.get("merp1e", "armorControl");
         },
@@ -278,6 +289,22 @@ export class Merp1eRules {
         },
         get armorControlAutomatic() {
             return this.armorControl == "automatic";
+        },
+        
+        get spellcastingControl() {
+            return game.settings.get("merp1e", "spellcastingControl");
+        },
+        get spellcastingControlManual() {
+            return this.spellcastingControl == "manual";
+        },
+        get spellcastingControlAutomatic() {
+            return this.spellcastingControl == "automatic";
         }
+    }
+
+    static async maneuver(event = {}, options ={}){
+        const rolled = await Merp1eManeuverApplication.create({});
+        
+        console.log(rolled);
     }
 }

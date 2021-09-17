@@ -1,0 +1,121 @@
+<form class="{{cssClass}}" autocomplete="off">
+    <header class="app-header flexrcol">
+		<div class="resource">
+			<label class="resource-label">{{localize "MERP1E.Maneuver.Actor"}}</label>
+			<select name="data.actorID">
+				{{selectOptions actors selected=actorID localize=false nameAttr="id" labelAttr="name" blank=""}}
+			</select>
+		</div>
+    </header>
+
+	{{!-- Sheet Tab Navigation --}}
+	<nav class="app-tabs tabs" data-group="primary">
+		{{#each rollTypes as |rollType|}}
+		{{#unless (eq rollType.id "DB") }}
+		<a class="item" data-tab="{{rollType.id}}">{{localize rollType.label}}</a>
+		{{/unless}}
+		{{/each}}
+	</nav>
+	<section class="app-body">
+        <div class="tab" data-group="primary" data-tab="MM">
+			<div>
+				<ul>
+					<li class="flexrow">
+						<div class="flex3">{{localize "MERP1E.Maneuver.Bonuses"}}</div>
+						<div class="flex1">{{localize "MERP1E.Maneuver.Value"}}</div>
+					</li>
+					<li class="flexrow">
+						<div class="flexrow flex3">
+							<label class="">{{localize "MERP1E.Maneuver.Skill"}}</label>
+							<select name="data.mm.skillID" {{roif (eq actorID null)}}>
+								{{#select mm.skillID}}
+								<option value="MM">{{localize "MERP1E.Maneuver.Skill"}}</option>
+								{{#each skills as | skillGroup | }}
+								<optgroup label="{{localize skillGroup.label}}">
+										{{#each skillGroup.skills as | skill | }}
+										{{#if ../../mm.skillsAll}}
+											<option value="{{skill.id}}">{{skill.name}}</option>
+										{{else}}
+											{{#if (eq skill.data.data.rollType "MM")}}
+											<option value="{{skill.id}}">{{skill.name}}</option>
+											{{/if}}
+										{{/if}}
+										{{/each}}
+								</optgroup>
+								{{/each}}
+								{{/select}} 
+							</select>
+							<input type="checkbox" name="data.mm.skillsAll" {{checked mm.skillsAll}}/>
+							<label class="">{{localize "MERP1E.Maneuver.All"}}</label>
+						</div>
+						<div class="flex1" style="display: flex; justify-content: center; align-items: center; text-align: center;">
+							<input class="mm-bonus" type="number" name="data.mm.skill.value" value="{{mm.skill.total}}" {{ro}}/>
+						</div>
+					</li>
+					<li class="flexrow">
+						<div class="flexrow flex3">
+							<label class="">{{localize "MERP1E.Maneuver.Difficulty"}}</label>
+							<select name="data.mm.difficultyID">
+								{{selectOptions mm.difficulties selected=mm.difficultyID localize=true nameAttr="id" labelAttr="label" blank=""}}
+							</select>
+						</div>
+						<div class="flex1" style="display: flex; justify-content: center; align-items: center; text-align: center;">
+							<input class="mm-bonus" type="number" name="data.mm.difficultyValue" value="{{mm.difficultyValue}}" {{ro}}/>
+						</div>
+					</li>
+					{{#each mm.modifiers as | modifier |}}
+					<li class="flexrow">
+						<div class="flexrow flex3">
+							<input type="checkbox" {{checked modifier.enabled}} {{roif (eq modifier.optional false)}}/>
+							<label class="">{{localize modifier.label}}</label>
+						</div>
+						<div class="flex1" style="display: flex; justify-content: center; align-items: center; text-align: center;">
+							{{#if modifier.enabled}}
+							<input class="mm-bonus" type="number" name="data.mm.modifier.values" value="{{modifier.value}}" {{ro}}/>
+							{{else}}
+							<input type="text" value="-" {{ro}}/>
+							{{/if}}
+						</div>
+					</li>
+					{{/each}}
+					<li class="flexrow">
+						<div class="flexrow flex3">
+							<input type="text" name="data.mm.extraBonus.text" value="{{mm.extraBonus.text}}" placeholder="{{localize 'MERP1E.Maneuver.ExtraBonus'}}" {{rw}}/>
+						</div>
+						<div class="flex1" style="display: flex; justify-content: center; align-items: center; text-align: center;">
+							<input class="userentry" type="number" name="data.mm.extraBonus.value" value="{{mm.extraBonus.value}}"/>
+						</div>
+					</li>
+				</ul>
+			</div>
+			
+			<footer class="app-footer">
+				<button type="button"><i class="fas fa-dice"></i> {{localize "MERP1E.Maneuver.Roll"}}</button>
+			</footer>
+		</div>
+        <div class="tab" data-group="primary" data-tab="SM">
+			SM
+			<footer class="app-footer">
+				<button type="submit"><i class="fas fa-dice"></i> {{localize "MERP1E.Maneuver.Roll"}}</button>
+			</footer>
+		</div>
+        <div class="tab" data-group="primary" data-tab="RR">
+			RR
+			<footer class="app-footer">
+				<button type="submit"><i class="fas fa-dice"></i> {{localize "MERP1E.Maneuver.Roll"}}</button>
+			</footer>
+		</div>
+        <div class="tab" data-group="primary" data-tab="OB">
+			OB
+			<footer class="app-footer">
+				<button type="submit"><i class="fas fa-dice"></i> {{localize "MERP1E.Maneuver.Roll"}}</button>
+			</footer>
+		</div>
+        <div class="tab" data-group="primary" data-tab="SP">
+			SP
+			<footer class="app-footer">
+				<button type="submit"><i class="fas fa-dice"></i> {{localize "MERP1E.Maneuver.Roll"}}</button>
+			</footer>
+		</div>
+	</section>
+</form>

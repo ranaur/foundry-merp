@@ -1,52 +1,77 @@
 # TODO
 
-* Colocar o class="userentry" em todo o resto
-* ?Fazer um major revision para utilizar localização.
-* Reorganizar spell and power
+* Colocar condições nos skills
 
-    Transformar a aba de status em aba de Actions
+* Colocar active effect no skill para fazer bonus opcionais e puxar dos skills
+* Fazer o rolamento na tabela (static, moving)
+    escolher qual a rolltable no skill
+    colocar conditions
+        valor Fixo/Fórmula
+        opcional?
+        enableFunction
+        texto
+    
+* fazer os outros tipos de rolamento (MM, RR, SP, e ataque)
+
+* Colocar o class="userentry" em todo o resto
+* Reorganizar spell
+    * colocar só as listas e permitir criar ações favoritas?
+* Melhorar os botões SceneControls#_getControlButtons
+* Colocar na chatwindow o resultado (simples e depois mais complexo, podendo alterar)
+* Fazer o dado Open Ended? Ou tirar o diceOpenEnded de vez (e testar com o dice3d).
+
+    Criar Aba de Actions:
         Colocar uma linha para rolar qualquer skill "self"
         Lista de skills permitidos por itens
         Lista de ataques (dados pelos itens)
         Lista de spells que o personagem pode lançar.
 
     Effect:
-        Fazer um efeito de "permitir ataque" - escolhe o skill, se tem bonus (por tipo de armadura), e a tabela de ataque (Attack)
-        (Skill use) => Skill, Bonus
-        Bonus on static/moving Maneuvers
-        Conditional bonus
-        Allow spell casting (spell)
-
-        Fazer condições de ativação
-            Always on
-            On condition (text to show)
-            On item wear/yield (when in place: neck, head, torso/body, arms, legs, right hand, left hand, right finger, left finger, back, carried)
-            On toggle (manual)
-            On item use
+        *? Colocar conditions no skill?
+            * Fazer um atualizador de ficha para copiar os skills
+        * Fazer novos Active Effects de Action
+            ActionSkill / SkillUse
+                * cria uma action que permite rolar o skill com um eventual bonus
+                - skill
+                - bonus
+                - condicional (vários)
+                - tipo de rolamento (default o do skill): MM/SM/RR/etc.
+            Attack
+                * cria uma action que permite rolar um ataque skill com um eventual bonus
+                ? seria baseado no skillUse to tipo OB?
+                - colocar bonus por tipo de armadura
+                - colocar tabela de ataque (e de critical)
+            ActionSpell / SpellCast
+                - spells
+                - skill (base spell/directed spells)
+            
+            Quantidade de usos:
                 Daily (max, current, *renew*)
                 Charged (max, current)
                 Indefinite
 
-            On spell know
+        * Melhorar o tratamento se tiverem dois helm types, ar types, leg types, armor types.
+        *   colocar uma ordem no active effect - hoje é por ordem de tipo de efeito (sequindo a effectTypes)
+        *   Permitir configurar quantos itens são possíveis em cada local
 
-        Melhorar o tratamento das subclasses (ao invés de copiar os métodos)
-        
-        Melhorar o tratalemnto se tiverem dois helm types, ar types, leg types, armor types.
+        ActiveEffect skill:
+            Colocar Conditional (text to show)
 
         Criar subclasses: 
-
-            Allow Spell Casting: Set of spells to choose
+            Bonus on static/moving Maneuvers (all)
             Infravision: set dark/light vision
-            Spell Adder
-            PP Multiplier (per realm)
+            stunned?
+            knocked out?
+            down?
+            bleeding?
 
     Actor:
         Aba Status:
-            * Fazer o tratamento de itens do tipo armadura
             * Melhorar Hitpoint and Statuses (colocar penalidade na atividade, etc.)
 
         Aba Damage:
             * Testar o heal();
+            * fazer os statuses por activeEffect do damage?
             * Refazer o Applied
                 Retirar o ícone de apply
                 tirar o checkbox => quando cria sem ator é só o initial, quando tem ator é só o current.
@@ -61,24 +86,54 @@
         ?    Colocar "favorite skill" e colocar actions (skill, bonus, conditional bonus)
 
         Aba description:
-            Revisar campos
-        ?    Colocar destro/canhoto
 
         Aba Equipment:
-            Fazer uma linha de Defensive
-                Armor
-                Greaves (Arm/Leg)
-                DB
-                Shield
+        *   Colocar usable/werable no item (marcado)
+        *   Especificar um local onde o item "veste"
+            Criar locais para guardar os itens. Criar uma hierarquia
+                Body
+                +-- Head
+                |   +-- Face
+                |   +-- Top
+                |   +-- Neck
+                |   +-- Ears
+                |       +-- Left
+                |       +-- Right
+                +-- Torso
+                +-- Arms
+                |   +-- Left
+                |       +-- Hand
+                |       +-- Fingers
+                |           +-- Thumb
+                |           +-- Index
+                |           +-- Middle
+                |           +-- Ring
+                |           +-- Little
+                |   +-- Right
+                |           (... same ...)
+                +-- Legs
+                    +-- Left
+                    |   +-- Thigh
+                    |   +-- Calf
+                    |   +-- Foot
+                    +-- Right
+                        (... same ...)
+                
+                Carrying
+                Backpack
+                Sack
+                Room
+                ...
 
         Aba Spells:
-            Colocar Spell adder
-            Contabilizar os bonuses/PP/adder no skill (ActiveEffects?)
             Permitir preparar/Lançar os spells
+            Esconder os spells condicionalmente
 
         Aba language:
             Padronizar o tratamento de criação/exclusão de items (aba Language, item, Spells)
-        
+
+        Aba actions:
+
         Fazer uma limpeza em rules.js e seus subitens.
         
         Fazer suporte a background options
@@ -88,7 +143,6 @@
         Pensar alguma maneira de fazer subdocumentos e ActiveEffects
 
     Fazer features (ActiveEffects). Tipos:
-        Bonus em um skill
         Stat Increase (1 stat + 2)
         Stat Increase (3 stats + 1)
         Hobby skill rank - Increase one primary skill by 2 ranks or increase one secondary skill by 5 ranks	
@@ -742,6 +796,11 @@ export class Merp1eEquipmentSheet extends Merp1eBaseItemSheet {
     "MERP1E.Effect.Skill": "Skill",
 ```
 
+## 
+you could CONFIG.debug.hooks = true and see if there's an update happening.
+
+
+
 # DECISIONS
 
 Why don't you implemented skill drap & drop on character sheet?
@@ -750,3 +809,15 @@ Why don't you implemented skill drap & drop on character sheet?
 Why do skills have reference?
     So it could work flawless when importing itens. Maybe it was too much. Time will tell.
 
+
+# Chat documentation:
+
+## Chat card (hides on click)
+```html
+		<div class="chat-card">
+			<div class="card-title">Title
+			</div>
+			<div class="card-content">Details ...
+			</div>
+		</div>
+```

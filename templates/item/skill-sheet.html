@@ -6,6 +6,7 @@
             <h3 class="charname"><input name="data.reference" type="text" value="{{data.data.reference}}" placeholder="Reference"/></h3>
         </div>
     </header>
+
     <div class="flexcol">
         <div class="skill-group flexrow">
             <label for="skill-group">{{localize "MERP1E.SkillSheet.Group"}}</label>
@@ -13,14 +14,17 @@
                 {{selectOptions rules.skill.groups selected=data.data.group localize=true nameAttr="id" labelAttr="label"}}
             </select>
         </div>
+
         <div class="skill-order flexrow">
             <label for="skill-order">{{localize "MERP1E.SkillSheet.Order"}}</label>
             <input id="skill-order" type="number" name="data.order" value="{{data.data.order}}"/>
         </div>
+
         <div class="skill-statbonus flexrow">
             <label for="skill-showoneverysheet">{{localize "MERP1E.SkillSheet.ShowOnEverySheet"}}</label>
             <input id="skill-showoneverysheet" name="data.showOnEverySheet" type="checkbox" value="{{data.showOnEverySheet}}" {{checked data.data.showOnEverySheet }}/>
         </div>
+
         <div class="skill-statbonus flexrow">
             <label for="skill-statbonus">{{localize "MERP1E.SkillSheet.StatBonus"}}</label>
             <select name="data.statBonus">
@@ -32,10 +36,11 @@
                 {{/select}}
             </select>
         </div>
+
         <div class="skill-rolltype flexrow">
             <label for="skill-rolltype">{{localize "MERP1E.SkillSheet.Rolltype"}}</label>
             <select name="data.rollType">
-                {{selectOptions rules.rollType selected=data.data.rollType localize=true nameAttr="id" labelAttr="label" blank=""}}
+                {{selectOptions rules.rollTypes selected=data.data.rollType localize=true nameAttr="id" labelAttr="label" blank=""}}
             </select>
         </div>
         <div class="skill-rankbonusmethod flexrow">
@@ -44,7 +49,8 @@
                 {{selectOptions rules.skill.rankBonusTypes selected=data.data.rankBonusMethod localize=true nameAttr="id" labelAttr="label"}}
             </select>
         </div>
-        <div class="skill-extrabonus flexrow">
+
+                    <div class="skill-extrabonus flexrow">
             <label for="skill-extrabonus">{{localize "MERP1E.SkillSheet.ExtraBonus"}}</label>
             <input id="skill-extrabonus" type="number" name="data.extraBonus" value="{{data.data.extraBonus}}"/>
         </div>
@@ -65,4 +71,5 @@
             {{editor content=data.data.description target="data.description" button=true owner=owner editable=editable}}
         </div>
     </section>
+
 </form>

@@ -17,6 +17,9 @@ import { Merp1eRules } from "./module/rules/rules.js";
 import { preloadHandlebarsTemplates, registerHandlebarsHelpers } from "./module/handlebars-utils.js";
 import { Merp1eActiveEffect } from "./module/active-effect.js";
 import { Merp1eActiveEffectSheet } from "./module/active-effect-sheet.js";
+import { Merp1eMenu } from "./module/menu.js";
+import { Merp1eChat } from "./module/chat.js";
+import { Merp1eRollOpenEnded } from "./module/dice.js";
 
 Hooks.once('init', async function() {
 
@@ -40,7 +43,8 @@ Hooks.once('init', async function() {
 
   CONFIG.ActiveEffect.sheetClass = Merp1eActiveEffectSheet;
   CONFIG.ActiveEffect.documentClass = Merp1eActiveEffect;
-  
+  CONFIG.Dice.rolls.push(Merp1eRollOpenEnded);
+
   // Register sheet application classes
   Actors.unregisterSheet("core", ActorSheet);
   Actors.registerSheet("merp1e", Merp1eCharacterSheet, { makeDefault: true });
@@ -56,6 +60,8 @@ Hooks.once('init', async function() {
   Items.registerSheet("merp1e", Merp1eEquipmentSheet, { types: ['equipment'], makeDefault: true });
   Items.registerSheet("merp1e", Merp1eDamageSheet, { types: ['damage'], makeDefault: true });
   
+  Hooks.on('renderSceneControls', Merp1eMenu.renderMenu); // getSceneControlButtons
+
   registerSettings();
 
   // register HandleBars Helpers
@@ -64,6 +70,10 @@ Hooks.once('init', async function() {
   // Preload template partials.
   preloadHandlebarsTemplates();
 });
+
+Hooks.on('renderChatLog', (app, html, data) => Merp1eChat.chatListeners(app, html, data));
+Hooks.on('renderChatMessage', (app, html, data) => Merp1eChat.renderMessageHook(app, html, data));
+Hooks.on('updateChatMessage', (chatMessage, chatData, diff, speaker) => Merp1eChat.onUpdateChatMessage(chatMessage, chatData, diff, speaker));
 
 function registerSettings() {
     // Permissions Control Menu
@@ -123,6 +133,19 @@ function registerSettings() {
     label: "Armor Control",
 		hint: "How to control armor,shield and greaves",
     icon: "fas fa-shield-alt",
+		scope: "world",
+		config: true,
+    type: String,
+    choices: { manual: "manual", automatic: "automatic" },
+    default: "manual",
+    restricted: true
+	});
+
+  game.settings.register("merp1e", "spellcastingControl", {
+		name: "Spellcasting Control",
+    label: "Spellcasting Control",
+		hint: "How to control spellcasting (powerpoints and spell adder)",
+    icon: "fas fa-magic",
 		scope: "world",
 		config: true,
     type: String,

@@ -13,10 +13,12 @@ export class Merp1eActiveEffectHelper extends ActiveEffect {
                 icon: "icons/svg/aura.svg",
                 origin: owner.uuid,
                 "duration.rounds": li.dataset.effectType === "temporary" ? 1 : undefined,
-                disabled: li.dataset.effectType === "inactive"
+                disabled: li.dataset.effectType === "inactive",
+                transfer: false
             }]);
             case "edit":
-                return effect.sheet.render(true);
+                let shouldEdit = !owner.isOwned;
+                return effect.sheet.render(true, {editable: shouldEdit});
             case "delete":
                 return effect.delete();
             case "toggle":

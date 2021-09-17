@@ -28,11 +28,39 @@ export const registerHandlebarsHelpers = async function() {
 
     // read only if - makes an input read only iuf parameter is true
     Handlebars.registerHelper('roif', function(a) {
-    return new Handlebars.SafeString(a ? "readonly tabindex=-1 aria-disabled='true'" : "class='userentry'");
+        return new Handlebars.SafeString(a ? "readonly tabindex=-1 aria-disabled='true'" : "class='userentry'");
+    });
+
+    // read only if - makes an input read only iuf parameter is true
+    Handlebars.registerHelper('ro', function() {
+        return new Handlebars.SafeString("readonly tabindex=-1 aria-disabled='true'");
+    });
+    
+    // read only if - makes an input read only iuf parameter is true
+    Handlebars.registerHelper('rw', function(cssClass) {
+        return new Handlebars.SafeString(`class='userentry ${cssClass}'`);
     });
 
     Handlebars.registerHelper('formatBonus', function(value) {
         return new Handlebars.SafeString(formatBonus(value));
+    });
+
+    let button = function(step, icon, title = null) {
+        let titleHTML = title ? `title="{{localize '${title}'}}" ` : "";
+
+        return new Handlebars.SafeString(`
+        <div style="padding-left: 3px; padding-right: 3px; flex: 0;" class="button-control" data-step="${step}" data-action="step">
+            <i ${titleHTML}class="${icon}"></i>
+        </div>`);
+    };
+
+    Handlebars.registerHelper('plusButton', function(data, step = 1, title = null, onlyif = true) { 
+        if(! onlyif) return;
+        return button(step, "fas fa-plus", title);
+    });
+    Handlebars.registerHelper('minusButton', function(data, step = -1, title = null, onlyif = true) { 
+        if(! onlyif) return;
+        return button(step, "fas fa-minus", title);
     });
 
     // calculates Right/Left/Both
@@ -75,6 +103,7 @@ export const preloadHandlebarsTemplates = async function() {
       "systems/merp1e/templates/actor/parts/character-sheet-health.html",
       "systems/merp1e/templates/actor/parts/character-sheet-equipment.html",
       "systems/merp1e/templates/actor/parts/character-sheet-xp.html",
+      "systems/merp1e/templates/actor/parts/character-sheet-effects.html",
       "systems/merp1e/templates/actor/parts/character-sheet-status.html",
       "systems/merp1e/templates/actor/parts/character-sheet-spells.html"
     ];

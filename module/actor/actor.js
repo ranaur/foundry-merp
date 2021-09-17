@@ -1,4 +1,5 @@
-import { max, findByID } from "../util.js";
+import { findByID, max } from "../util.js";
+import { Merp1eActiveEffect } from "../active-effect.js";
 
 class Merp1eDefense {
   constructor(actor) {
@@ -217,13 +218,19 @@ class Merp1eHealth {
     return this.status.roundsOut > 0;
   }
   get isDown() {
-    return (! this.isOut) && this.status.roundsStunned > 0;
+    return (! this.isOut) && this.status.roundsDown > 0;
   }
   get isStunned() {
     return (! this.isDown) && this.status.roundsStunned > 0;
   }
   get isParalyzed() {
     return this.status.paralyzed != "0";
+  }
+  get isLimbOut() {
+    return  this.status.rightArm != "0" ||
+      this.status.leftArm != "0" ||
+      this.status.rightLeg != "0" ||
+      this.status.leftLeg != "0";
   }
   get isDeaf() {
     return this.status.earLoss != "3";
@@ -233,8 +240,91 @@ class Merp1eHealth {
   }
 }
 
+class Merp1eSpellCasting {
+  constructor(actor) {
+    this.actor = actor;
+    this.actor.data.data.spellcasting = this.actor.data.data.spellcasting || {};
+    if(game.merp1e.Merp1eRules.settings.spellcastingControlAutomatic) {
+      this.actor.data.data.spellcasting.powerPointsMultiplier = 1;
+      this.actor.data.data.spellcasting.spellAdderMaximum = 0;
+    }
+  }
 
+  get realm() {
+    let professionRealm = this.actor.profession?.data?.data?.realm || null;
+    if( professionRealm == null) return null;
 
+    if( professionRealm == "any") return this.actor.data.data.spellcasting.realm; // chosen realm
+
+    return professionRealm;
+  }
+
+  get spellAdderMaximum() {
+    return this.actor.data.data.spellcasting.spellAdderMaximum || 0;
+  }
+
+  set spellAdderMaximum(value) {
+    this.actor.data.data.spellcasting.spellAdderMaximum = value;
+  }
+
+  get spellAdderCurrent() {
+    let spellAdderCurrent = this.actor.data.data.spellcasting.spellAdderCurrent || 0;
+    if( spellAdderCurrent < 0 ) spellAdderCurrent = 0;
+    if( spellAdderCurrent > this.spellAdderMaximum )
+    {
+      this.spellAdderCurrent = this.spellAdderMaximum;
+      spellAdderCurrent = this.spellAdderMaximum;
+    }
+    return spellAdderCurrent;
+  }
+
+  set spellAdderCurrent(value) {
+    this.actor.data.data.spellcasting.spellAdderCurrent = value;
+    //this.actor.update( { "data.spellcasting.spellAdderCurrent": value });
+  }
+
+  get powerPointsPerLevel() {
+    if(this.realm == null) return 0;
+    let realm = game.merp1e.Merp1eRules.magic.realms.find((r) => r.id == this.realm);
+    let realmStat = realm?.stat;
+    let realmStatValue = this.actor.stats[realmStat]?.value || 0;
+    return game.merp1e.Merp1eRules.resolvePowerPointsPerLevel(realmStatValue);
+  }  
+
+  set powerPointsMultiplier(value) {
+    this.actor.data.data.spellcasting.powerPointsMultiplier = value;
+    //this.actor.update( { "data.spellcasting.powerPointsMultiplier": this.actor.data.data.spellcasting.powerPointsMultiplier });
+  }
+
+  get powerPointsMultiplier() {
+    return this.actor.data.data.spellcasting.powerPointsMultiplier || 1;
+  }
+
+  get powerPointsMaximum() {
+    return this.powerPointsPerLevel * this.actor.level * this.powerPointsMultiplier;
+  }
+
+  get powerPointsCurrent() {
+    let powerPointsCurrent = this.actor.data.data.spellcasting.powerPointsCurrent || 0;
+    if( powerPointsCurrent < 0 ) powerPointsCurrent = 0;
+    if( powerPointsCurrent > this.powerPointsMaximum )
+    {
+      this.powerPointsCurrent = this.powerPointsMaximum;
+      powerPointsCurrent = this.powerPointsMaximum;
+    }
+    return powerPointsCurrent;
+  }
+
+  set powerPointsCurrent(value) {
+    this.actor.data.data.spellcasting.powerPointCurrent = value;
+    //this.actor.update( { "data.spellcasting.powerPointCurrent": value });
+  }
+
+  get reset() {
+    this.powerPointsCurrent = this.powerPointsMaximum;
+    this.spellAdderCurrent = this.spellAdderMaximum;
+  }
+}
 
 /**
  * Extend the base Actor entity by defining a custom roll data structure which is ideal for the Simple system.
@@ -300,12 +390,52 @@ export class Merp1eActor extends Actor {
     }
   }
 
-  _applyEffects() {
-    for(let effect of this.effects) {
-      effect.apply(this);
+  _applyEffects_old() {
+    let orderedEffects = this.effects.reduce((a, e) => { a.push(e); return a; }, []);
+    orderedEffects.sort(function(first, second) {
+      return first.priority - second.priority;
+    });
+
+    for(let effect of orderedEffects) {
+      let origin = effect.data.origin.split(".");
+      let actorID = origin[1];
+      let itemID = origin[3] || null;
+      let item = null;
+
+      if(itemID) {
+        item = this.getEmbeddedDocument("Item", itemID);
+        if(item == undefined)
+        {
+          this.deleteEmbeddedDocuments("ActiveEffect", [effect.id]); // XXX Should be here?
+        } else {
+          effect.apply(this);
+        }
+      }
     }
   }
+  
+  _applyEffects() {
+    this.itemEffectsByType = {}
+    for(let item of this.items) {
+      for(let effect of item.effects) {
+        let effectType = effect.getFlag("merp1e", "effectType");
+        if(!(effectType in this.itemEffectsByType)) {
+          this.itemEffectsByType[effectType] = [];
+        }
+        this.itemEffectsByType[effectType].push(effect);
+      }
+    }
 
+    for(let effectClass of Merp1eActiveEffect.effectTypes) {
+      let effectType = effectClass.effectName;
+      if(effectType in this.itemEffectsByType) {
+        for(let effect of this.itemEffectsByType[effectType]) {
+          effect.apply(this);
+        }
+      }
+    }
+  }
+  
   async _processItems() {
     this.languages = {};
     this.skills = {};
@@ -405,6 +535,7 @@ export class Merp1eActor extends Actor {
     this.defense = new Merp1eDefense(this);
     this.xp = new Merp1eXP(this);
     this.health = new Merp1eHealth(this);
+    this.spellcasting = new Merp1eSpellCasting(this);
 
     this.race = this._processUniqueItem("race", {name: null});
     this.profession = this._processUniqueItem("profession", {name: null});;
@@ -473,6 +604,13 @@ export class Merp1eActor extends Actor {
    * -------------------------------------------------- */
 
   /*
+   * Lookup skills in the actor.
+   */
+  getSkills() {
+    return this.items.filter( (item) => item.type == "skill" );
+  }
+
+  /*
    * Lookup a skill in the actor by a reference name. Can return an array with more than one item.
    */
   getSkillsByReference(reference) {
@@ -482,6 +620,11 @@ export class Merp1eActor extends Actor {
   getSkillValue(reference) {
     return this.getSkillsByReference(reference)[0].total || 0;
   }
+
+  getSkillMovement() {
+    return this.getSkillsByReference(this.defense.armor.skillReference)[0];
+  }
+
   /*
    * Lookup a language that the actor knows by name. Can return an array with more than one item.
    */
@@ -528,31 +671,5 @@ export class Merp1eActor extends Actor {
 
   get effectiveXP() {
     return this.data.data.xp.effective;
-  }
-
-  get realm() {
-    let professionRealm = this.profession?.data?.data?.realm || null;
-    if( professionRealm == null) return null;
-
-    if( professionRealm == "any") return this.data.data.realm; // chosen realm
-
-    return professionRealm;
-  }
-
-  get powerPointsPerLevel() {
-    if(this.realm == null) return 0;
-    let realm = game.merp1e.Merp1eRules.magic.realms.find((r) => r.id == this.realm);
-    let realmStat = realm?.stat;
-    let realmStatValue = this.stats[realmStat]?.value || 0;
-    return game.merp1e.Merp1eRules.resolvePowerPointsPerLevel(realmStatValue);
-  }  
-  get powerPointsMultiplier() {
-    return 1; // XXX Read from Items with Power Point proprety
-  }
-  get powerPointsMaximum() {
-    return this.powerPointsPerLevel * this.level * this.powerPointsMultiplier;
-  }
-  get powerPointsCurrent() {
-    return this.data.data.pp.value || 0;
   }
 }

@@ -63,6 +63,8 @@
     "MERP1E.CharacterTab.Equipment": "Equipment",
     "MERP1E.CharacterTab.Spells": "Spells",
     "MERP1E.CharacterTab.XP": "XP",
+    "MERP1E.CharacterTab.Effects": "Effects",
+    "MERP1E.Effects.Label": "Effects",
 
     "MERP1E.Stats.None": "None",
     "MERP1E.Stats.st.Name": "Strength",
@@ -281,14 +283,13 @@
     "MERP1E.Skills.AddDefault": "Add default skills",
     "MERP1E.Skills.Duplicate": "Duplicate skill",
  
-    "MERP1E.Spells.PowerPoints": "Power Points",
-    "MERP1E.Spells.CurrentPowerPoints": "Current",
     "MERP1E.Spells.CreateSpelllist": "Create Spelllist",
     "MERP1E.Spells.EditSpelllist": "Edit Spelllist",
     "MERP1E.Spells.DeleteSpelllist": "Delete Spelllist",
     "MERP1E.Spells.ResetPP": "Reset Power Points to Maximum",
     "MERP1E.Spells.RealmPowerPoints": "Realm and power Points",
     "MERP1E.Spells.Spelllists": "Spelllists",
+    "MERP1E.Spells.Name": "Spell Name",
     
     "MERP1E.Health.HitPointsAndStatuses": "Hit Points and Statuses",
     "MERP1E.Health.MaximumHPDie": "HP to Die",
@@ -363,6 +364,9 @@
     "MERP1E.Effect.Edit": "Edit",
     "MERP1E.Effect.Delete": "Delete",
     "MERP1E.Effect.Type": "Type",
+    "MERP1E.Effect.Condition": "Condition",
+    "MERP1E.Effect.AllowedPlaces": "Allowed Places (comma separated)",
+    "MERP1E.Effect.AllowedArmorTypes": "Armor Types",
 
     "MERP1E.Effect.New": "New Effect",
     "MERP1E.EffectType.SkillBonus": "Skill Bonus",
@@ -373,6 +377,8 @@
     "MERP1E.EffectType.LegGreaves": "Leg Greaves",
     "MERP1E.EffectType.Helm": "Helm",
     "MERP1E.EffectType.Armor": "Armor",
+    "MERP1E.EffectType.PPMultiplier": "PP Multiplier",
+    "MERP1E.EffectType.SpellAdder": "Spell Adder",
     "MERP1E.Effect.RankSkillBonus": "Skill Bonus per Rank",
     "MERP1E.Effect.SkillBonus": "Skill Bonus",
     "MERP1E.Effect.Skill": "Skill",
@@ -393,10 +399,22 @@
     "MERP1E.Effect.ArmorType": "Set Armor Type",
     "MERP1E.Effect.ArmorBaseBonus": "Armor Base Bonus",
     "MERP1E.Effect.ArmorExtraBonus": "Armor Extra Bonus",
+    "MERP1E.Effect.Realm": "Realm",
+    "MERP1E.Effect.PPMultiplierValue": "Multiplier",
+    "MERP1E.Effect.SpellAdderValue": "Spell Adder",
+    "MERP1E.Effect.Optional": "Is Optional?",
+
+    "MERP1E.EffectTab.Configuration": "Configuration",
     "MERP1E.EffectTab.Details": "Details",
     "MERP1E.EffectTab.Duration": "Duration",
     "MERP1E.EffectTab.Effects": "Effects",
+    "MERP1E.EffectTab.Condition": "Condition",
 
+    "MERP1E.ActiveEffectCondition.AlwaysOn": "Always On",
+    "MERP1E.ActiveEffectCondition.OnItemCarried": "On Item Carried",
+    "MERP1E.ActiveEffectCondition.OnArmorTypes": "On Armor Types",
+    "MERP1E.ActiveEffectCondition.X": "X",
+    
     "MERP1E.Defense.Defense": "Defense",
     "MERP1E.Defense.DB": "DB",
     "MERP1E.Defense.Shield": "Shield",
@@ -423,6 +441,34 @@
 
     "MERP1E.ShieldType.None": "None",
     "MERP1E.ShieldType.Shield": "Shield",
+
+    "MERP1E.SpellCasting.Label": "Spell Casting",
+    "MERP1E.SpellCasting.Reset": "Reset",
+    "MERP1E.SpellCasting.PowerPoints": "Power Points",
+    "MERP1E.SpellCasting.Current": "Current",
+    "MERP1E.SpellCasting.Multiplier": "Multiplier",
+    "MERP1E.SpellCasting.Maximum": "Maximum",
+
+    "MERP1E.SpellCasting.SpellAdder": "Spell Adder",
+    "MERP1E.Maneuver.Bonuses": "Bonuses",
+    "MERP1E.Maneuver.Value": "Value",
+    "MERP1E.Maneuver.Skill": "Movement Skill",
+    "MERP1E.Maneuver.All": "All",
+    "MERP1E.Maneuver.Difficulty": "Difficulty",
+    "MERP1E.Maneuver.Roll": "Roll",
+    "MERP1E.Maneuver.Stunned": "Stunned",
+    "MERP1E.Maneuver.Down": "Down",
+    "MERP1E.Maneuver.OneLimbOut": "One limb out",
+
+    "MERP1E.Modifier.Routine": "Routine", 
+    "MERP1E.Modifier.Easy": "Easy", 
+    "MERP1E.Modifier.Light": "Light", 
+    "MERP1E.Modifier.Medium": "Medium", 
+    "MERP1E.Modifier.Hard": "Hard", 
+    "MERP1E.Modifier.VeryHard": "Very Hard", 
+    "MERP1E.Modifier.ExtremelyHard": "Extremely Hard", 
+    "MERP1E.Modifier.SheerFolly": "Sheer Folly", 
+    "MERP1E.Modifier.Absurd": "Absurd", 
 
     "MERP1E.X": "MERP1E"
 }

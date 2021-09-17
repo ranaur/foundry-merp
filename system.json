@@ -8,7 +8,7 @@
   "templateVersion": 2,
   "author": "Ranaur",
   "esmodules": ["merp1e.js"],
-  "styles": ["css/merp1e.css"],
+  "styles": ["css/merp1e.css", "fonts/game-icons-net-20200315a.css"],
   "scripts": [],
   "packs": [],
   "languages": [

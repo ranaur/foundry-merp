@@ -41,7 +41,32 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
       sheetData.sheetOrder = game.merp1e.Merp1eRules.generateSheetOrder(this.actor.skills);
     }
 
+    sheetData.effectList = this.object.effects.reduce((acc, effect) => {
+      let origin = effect.data.origin.split(".");
+      let actorID = origin[1];
+      let itemID = origin[3] || null;
+      let item = null;
+      let itemName = "no item";
+      if(itemID) {
+        item = this.object.getEmbeddedDocument("Item", itemID);
+        if(item != undefined)
+          itemName = item.name;
+        else {
+          itemName = "Rougue item " + itemID;
+        }
+      }
+      acc.push({
+        name: effect.name,
+        condition: effect.condition.conditionName,
+        isActive: effect.condition.isActive(effect, this.object),
+        reason: effect.condition.reason(effect, this.object),
+        item: itemName,
+      });
+      return acc
+    }, []);
+
     this.fillAdolescenceSkillRanks(sheetData); // XXX não funciona quando troca de raça
+
     return sheetData;
   }
 
@@ -105,6 +130,7 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
     html.find(".spells").on("click", ".spell-control", this.onClickSpellControl.bind(this));
     html.find(".health").on("click", ".health-control", this.onClickHealthControl.bind(this));
     html.find(".xp").on("click", ".xp-control", this.onClickXPControl.bind(this));
+    html.on("click", ".button-control", this.onClickButtonControl.bind(this));
   }
 
   /** @override */
@@ -343,6 +369,21 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
     this.setValueToElement("data.healthStatus.rightLeg", this.actor.health.status.rightLeg);
     
     this.submit();
+  }
+
+  async onClickButtonControl(event) {
+    event.preventDefault();
+    const a = event.currentTarget;
+    const action = a.dataset.action;
+
+    switch ( action ) {
+    case "step":
+      let step = parseInt(a.dataset.step || 0);
+      let inputElement = event.currentTarget.parentNode.getElementsByTagName("input")[0];
+      inputElement.value = parseInt(inputElement.value) + step;
+      this.submit();
+      break;
+    }
   }
 
   async onClickHealthControl(event) {

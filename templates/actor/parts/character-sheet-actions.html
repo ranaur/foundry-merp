@@ -1,0 +1,23 @@
+<div class="language">
+    <div class="flexrow">
+        <h2 class="flex3">{{localize 'MERP1E.Actions.Label'}}</h2>
+    </div>
+    <ol>
+        <li class="flexrow">
+            <div class="flex2">Name</div>
+            <div>Condition</div>
+            <div class="flex2">Item</div>
+        </li>    
+        {{#each this.actor.actions as | effectTypes effectType  | }}
+            <li style="font-weight: bolder;">{{effectType}}</ol>
+            {{#each effectTypes as | effect | }}
+            <li class="flexrow">
+                {{log effect}}
+                <div class="flex2">{{effect.name}}</div>
+                <div>{{effect.condition.conditionName}}</div>
+                <div class="flex2">{{effect.item}}</div>
+            </li>    
+            {{/each}}
+        {{/each}}
+    </ol>
+</div>

@@ -4,13 +4,20 @@
         <img class="profile-img" src="{{effect.icon}}" data-edit="icon" title="{{effect.name}}" height="100" width="100"/>
         <div class="flexcol">
             <div class="effect-title">
-                {{log this}}
                 <h1>{{ name }}</h1>
             </div>
             <div class="resource">
                 <label class="resource-label">{{localize "MERP1E.Effect.Type" }}</label>
                 <select name="flags.merp1e.effectType">
-                    {{selectOptions effectTypes selected=effect.flags.merp1e.effectType localize=true nameAttr="id" labelAttr="label" blank=""}}
+                    {{#unless effect.flags.merp1e.effectType}}<option></option>{{/unless}}
+                    {{selectOptions effectTypes selected=effect.flags.merp1e.effectType localize=true nameAttr="id" labelAttr="label"}}
+                </select>
+            </div>
+            <div class="resource">
+                <label class="resource-label">{{localize "MERP1E.Effect.Condition" }}</label>
+                <select name="flags.merp1e.conditionType">
+                    {{#unless effect.flags.merp1e.conditionType}}<option></option>{{/unless}}
+                    {{selectOptions conditionTypes selected=effect.flags.merp1e.conditionType localize=true nameAttr="id" labelAttr="label"}}
                 </select>
             </div>
         </div>
@@ -18,15 +25,17 @@
 
     {{!-- Effect Tab Navigation --}}
     <nav class="sheet-tabs tabs" data-group="primary">
+        <a class="item" data-tab="configuration"><i class="fas fa-cogs"></i> {{localize "MERP1E.EffectTab.Configuration"}}</a>
+        <a class="item" data-tab="condition"><i class="fas fa-check"></i> {{localize "MERP1E.EffectTab.Condition"}}</a>
         <a class="item" data-tab="details"><i class="fas fa-book"></i> {{localize "MERP1E.EffectTab.Details"}}</a>
         {{!-- <a class="item" data-tab="duration"><i class="fas fa-clock"></i> {{localize "MERP1E.EffectTab.Duration"}}</a> --}}
         {{!-- <a class="item" data-tab="effects"><i class="fas fa-cogs"></i> {{localize "MERP1E.EffectTab.Effects"}}</a> --}}
         {{!-- #if (isGM) --}}
     </nav>
 
-    <!-- Details Tab -->
     <section class="sheet-body">
-        <div class="tab" data-group="primary" data-tab="details">
+        {{!-- Configuration Tab --}}
+        <div class="tab" data-group="primary" data-tab="configuration">
             {{#if (eq effect.flags.merp1e.effectType "SkillBonus")}}
                 <div class="form-group">
                     <label>{{ localize "MERP1E.Effect.SkillBonus" }}</label>
@@ -40,7 +49,7 @@
                         <select name="flags.merp1e.SkillBonus.skillReference">
                             {{#unless effect.flags.merp1e.SkillBonus.skillReference}}<option></option>{{/unless}}
                             {{#each skills as | skillGroup | }}
-                            <optgroup label="{{skillGroup.name}}">
+                            <optgroup label="{{localize skillGroup.label}}">
                                 {{#select ../effect.flags.merp1e.SkillBonus.skillReference}}
                                     {{#each skillGroup.skills as | skill | }}
                                     <option value="{{skill.data.data.reference}}">{{skill.name}}</option>
@@ -49,6 +58,17 @@
                             </optgroup>
                             {{/each}}
                         </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>{{ localize "MERP1E.Effect.Optional" }}</label>
+                    <div class="form-fields">
+                        <input type="checkbox" name="flags.merp1e.SkillBonus.isOptional" {{checked effect.flags.merp1e.SkillBonus.isOptional}}/>
+                        <div class="flex3">
+                            {{#if effect.flags.merp1e.SkillBonus.isOptional}}
+                            <input type="text" name="flags.merp1e.SkillBonus.conditionText" value="{{effect.flags.merp1e.SkillBonus.conditionText}}"/>
+                            {{/if}}
+                        </div>
                     </div>
                 </div>
             {{/if}}
@@ -63,8 +83,19 @@
                     <label>{{ localize "MERP1E.Effect.SkillGroup" }}</label>
                     <div class="form-fields">
                         <select name="flags.merp1e.SkillGroupBonus.skillGroup">
-                            {{selectOptions skills selected=effect.flags.merp1e.SkillGroupBonus.skillGroup localize=false nameAttr="id" labelAttr="name" blank=""}}
+                            {{selectOptions skills selected=effect.flags.merp1e.SkillGroupBonus.skillGroup localize=true nameAttr="id" labelAttr="label" blank=""}}
                         </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>{{ localize "MERP1E.Effect.Optional" }}</label>
+                    <div class="form-fields">
+                        <input type="checkbox" name="flags.merp1e.SkillGroupBonus.isOptional" {{checked effect.flags.merp1e.SkillGroupBonus.isOptional}}/>
+                        <div class="flex3">
+                            {{#if effect.flags.merp1e.SkillGroupBonus.isOptional}}
+                            <input type="text" name="flags.merp1e.SkillGroupBonus.conditionText" value="{{effect.flags.merp1e.SkillGroupBonus.conditionText}}"/>
+                            {{/if}}
+                        </div>
                     </div>
                 </div>
             {{/if}}
@@ -218,98 +249,175 @@
                 </div>
                 {{/if}}
             {{/if}}
+            {{#if (eq effect.flags.merp1e.effectType "PPMultiplier")}}
+                <div class="form-group">
+                    <label>{{ localize "MERP1E.Effect.Realm" }}</label>
+                    <div class="form-fields">
+                        <select name="flags.merp1e.PPMultiplier.realm">
+                            {{#unless effect.flags.merp1e.PPMultiplier.realm}}<option></option>{{/unless}}
+                            {{selectOptions rules.magic.realmsAny selected=effect.flags.merp1e.PPMultiplier.realm localize=true nameAttr="id" labelAttr="label"}}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>{{ localize "MERP1E.Effect.PPMultiplierValue" }}</label>
+                    <div class="form-fields">
+                        <input type="number" name="flags.merp1e.PPMultiplier.value" value="{{effect.flags.merp1e.PPMultiplier.value}}" placeholder="1"/>
+                    </div>
+                </div>
+            {{/if}}
+            {{#if (eq effect.flags.merp1e.effectType "SpellAdder")}}
+                <div class="form-group">
+                    <label>{{ localize "MERP1E.Effect.Realm" }}</label>
+                    <select name="flags.merp1e.SpellAdder.realm">
+                        {{#unless effect.flags.merp1e.SpellAdder.realm}}<option></option>{{/unless}}
+                        {{selectOptions rules.magic.realmsAny selected=effect.flags.merp1e.SpellAdder.realm localize=true nameAttr="id" labelAttr="label"}}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>{{ localize "MERP1E.Effect.SpellAdderValue" }}</label>
+                    <input type="number" name="flags.merp1e.SpellAdder.value" value="{{effect.flags.merp1e.SpellAdder.value}}" placeholder="1"/>
+                </div>
+            {{/if}}
+        </div>
+        {{!-- Condition tab --}}
+        <div class="tab" data-tab="condition">
+            {{#if (eq effect.flags.merp1e.conditionType "AlwaysOn")}}
+            <div>
+                Always on has no parameters to configure
+            </div> {{!-- XXX i18 --}}
+            {{/if}}
+            {{#if (eq effect.flags.merp1e.conditionType "OnItemCarried")}}
+            <div>
+                <label>{{ localize "MERP1E.Effect.AllowedPlaces" }}</label>
+                <input type="text" name="flags.merp1e.conditions.OnItemCarriedPlaces" value="{{effect.flags.merp1e.conditions.OnItemCarriedPlaces}}" placeholder="Anywhere"/>
+            </div>
+            {{/if}}
+            {{#if (eq effect.flags.merp1e.conditionType "OnArmorTypes")}}
+            <div class="flexrow">
+                <label>{{localize "MERP1E.Effect.AllowedArmorTypes"}}</label>
+    
+                <div class="flexrow">
+                    {{#each rules.defense.armorTypes as | armorType |}}
+                    <div class="flexrow">
+                        <input name="flags.merp1e.conditions.OnArmorTypes.{{armorType.id}}" type="checkbox" {{checked (lookup ../effect.flags.merp1e.conditions.OnArmorTypes armorType.id)}}/>
+                        <label>{{localize armorType.abbr}}</label>
+                    </div>
+                    {{/each}}
+                </div>
+            </div>
+            {{/if}}
+        </div>
+        {{!-- 
+        * Always on
+        * On item wear/yield (when in place: neck, head, torso/body, arms, legs, right hand, left hand, right finger, left finger, back, carried)
+        * On armor types
+        On item use - habilitar o uso do item
+            Daily (max, current, *renew*)
+            Charged (max, current)
+            Indefinite
+        On spell know (spell level <= character level) => no spelllist
+        Conditional (text to show)
+        --}}
+        </div>
+
+        {{!-- Duration Tab --}}
+{{!-- 
+        <div class="tab" data-tab="duration">
+            <div class="form-group">
+                <label>{{ localize "EFFECT.DurationSecs" }}</label>
+                <div class="form-fields">
+                    <input type="number" name="duration.seconds" value="{{ effect.duration.seconds }}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>{{ localize "EFFECT.StartTime" }}</label>
+                <div class="form-fields">
+                    <input type="number" name="duration.startTime" value="{{ effect.duration.startTime }}"/>
+                </div>
+            </div>
+            <hr/>
+            <div class="form-group">
+                <label>{{ localize "EFFECT.DurationTurns" }}</label>
+                <div class="form-fields">
+                    <label>{{ localize "COMBAT.Rounds" }}</label>
+                    <input type="number" name="duration.rounds" value="{{ effect.duration.rounds }}"/>
+                    <label>{{ localize "COMBAT.Turns" }}</label>
+                    <input type="number" name="duration.turns" value="{{ effect.duration.turns }}"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>{{ localize "EFFECT.Combat" }}</label>
+                <div class="form-fields">
+                    <input type="text" name="duration.combat" value="{{ effect.duration.combat }}" disabled/>
+                </div>
+            </div>
+    
+            <div class="form-group">
+                <label>{{ localize "EFFECT.StartTurns" }}</label>
+                <div class="form-fields">
+                    <label>{{ localize "COMBAT.Round" }}</label>
+                    <input type="number" name="duration.startRound" value="{{ effect.duration.startRound }}"/>
+                    <label>{{ localize "COMBAT.Turn" }}</label>
+                    <input type="number" name="duration.startTurn" value="{{ effect.duration.startTurn }}"/>
+                </div>
+            </div>
+        </div>
+--}}
+        {{!-- Details Tab --}}
+        <div class="tab flexcol" data-group="primary" data-tab="details">
+            <div>
+                <label>{{ localize "EFFECT.Label" }}</label>
+                <div class="form-fields">
+                    <input type="text" name="label" value="{{ effect.label }}"/>
+                </div>
+            </div>
+    
+            <div>
+                <label>{{ localize "EFFECT.Icon" }}</label>
+                <div class="form-fields">
+                    {{filePicker target="icon" type="image"}}
+                    <input class="image" type="text" name="icon" placeholder="path/image.png" value="{{effect.icon}}"/>
+                </div>
+            </div>
+    
+            <div>
+                <label>{{ localize "EFFECT.IconTint" }}</label>
+                <div class="form-fields">
+                    <input class="color" type="text" name="tint" value="{{effect.tint}}"/>
+                    <input type="color" value="{{effect.tint}}" data-edit="tint"/>
+                </div>
+            </div>
+    
+            <div>
+                <label>{{ localize "EFFECT.Disabled" }}</label>
+                <input type="checkbox" name="disabled" {{ checked effect.disabled }}/>
+            </div>
+    
+            {{#if isActorEffect}}
+            <div class="form-group">
+                <label>{{ localize "EFFECT.Origin" }}</label>
+                <div class="form-fields">
+                    <input type="text" name="origin" value="{{ effect.origin }}" disabled/>
+                </div>
+            </div>
+            {{/if}}
+    
+            {{!--#if isItemEffect --}}
+            <div class="form-group">
+                <label>{{ localize "EFFECT.Transfer" }}</label>
+                <div class="form-fields">
+                    <input type="checkbox" name="transfer" {{checked effect.transfer}}/>
+                </div>
+            </div>
+            {{!-- /if --}}
         </div>
     </section>
     
 <!--
     <section class="tab" data-tab="details">
-        <div class="form-group">
-            <label>{{ localize "EFFECT.Label" }}</label>
-            <div class="form-fields">
-                <input type="text" name="label" value="{{ effect.label }}"/>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>{{ localize "EFFECT.Icon" }}</label>
-            <div class="form-fields">
-                {{filePicker target="icon" type="image"}}
-                <input class="image" type="text" name="icon" placeholder="path/image.png" value="{{effect.icon}}"/>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>{{ localize "EFFECT.IconTint" }}</label>
-            <div class="form-fields">
-                <input class="color" type="text" name="tint" value="{{effect.tint}}"/>
-                <input type="color" value="{{effect.tint}}" data-edit="tint"/>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>{{ localize "EFFECT.Disabled" }}</label>
-            <input type="checkbox" name="disabled" {{ checked effect.disabled }}/>
-        </div>
-
-        {{#if isActorEffect}}
-        <div class="form-group">
-            <label>{{ localize "EFFECT.Origin" }}</label>
-            <div class="form-fields">
-                <input type="text" name="origin" value="{{ effect.origin }}" disabled/>
-            </div>
-        </div>
-        {{/if}}
-
-        {{#if isItemEffect}}
-        <div class="form-group">
-            <label>{{ localize "EFFECT.Transfer" }}</label>
-            <div class="form-fields">
-                <input type="checkbox" name="transfer" {{checked effect.transfer}}/>
-            </div>
-        </div>
-        {{/if}}
     </section>
 
-    <section class="tab" data-tab="duration">
-        <div class="form-group">
-            <label>{{ localize "EFFECT.DurationSecs" }}</label>
-            <div class="form-fields">
-                <input type="number" name="duration.seconds" value="{{ effect.duration.seconds }}"/>
-            </div>
-        </div>
-        <div class="form-group">
-            <label>{{ localize "EFFECT.StartTime" }}</label>
-            <div class="form-fields">
-                <input type="number" name="duration.startTime" value="{{ effect.duration.startTime }}"/>
-            </div>
-        </div>
-        <hr/>
-        <div class="form-group">
-            <label>{{ localize "EFFECT.DurationTurns" }}</label>
-            <div class="form-fields">
-                <label>{{ localize "COMBAT.Rounds" }}</label>
-                <input type="number" name="duration.rounds" value="{{ effect.duration.rounds }}"/>
-                <label>{{ localize "COMBAT.Turns" }}</label>
-                <input type="number" name="duration.turns" value="{{ effect.duration.turns }}"/>
-            </div>
-        </div>
-        <div class="form-group">
-            <label>{{ localize "EFFECT.Combat" }}</label>
-            <div class="form-fields">
-                <input type="text" name="duration.combat" value="{{ effect.duration.combat }}" disabled/>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>{{ localize "EFFECT.StartTurns" }}</label>
-            <div class="form-fields">
-                <label>{{ localize "COMBAT.Round" }}</label>
-                <input type="number" name="duration.startRound" value="{{ effect.duration.startRound }}"/>
-                <label>{{ localize "COMBAT.Turn" }}</label>
-                <input type="number" name="duration.startTurn" value="{{ effect.duration.startTurn }}"/>
-            </div>
-        </div>
-    </section>
 
     <section class="tab" data-tab="effects">
         <header class="effect-change effects-header flexrow">

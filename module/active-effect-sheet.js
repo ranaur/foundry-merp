@@ -30,10 +30,11 @@ export class Merp1eActiveEffectSheet extends DocumentSheet {
 
     /** @override */
     getData() {
-        let sheetData = super.getData()
+        let sheetData = super.getData();
         sheetData.rules = game.merp1e.Merp1eRules;
         sheetData.effect = sheetData.data;
         sheetData.effectTypes = Merp1eActiveEffect.effectTypes.reduce( (acc, cls) => { acc.push({ id: cls.effectName, label: cls.label }); return acc;}, []);
+        sheetData.conditionTypes = Merp1eActiveEffect.conditionTypes.reduce( (acc, cls) => { let obj = new cls; acc.push({ id: obj.conditionName, label: obj.label }); return acc;}, []);
         sheetData.skills = game.merp1e.Merp1eRules.generateSheetOrder();
         sheetData.shieldBaseBonus = findByID(game.merp1e.Merp1eRules.defense.shieldTypes, sheetData.effect.flags?.merp1e?.Shield?.type, "none").bonus;
         sheetData.armGreavesBaseBonus = findByID(game.merp1e.Merp1eRules.defense.armGreavesTypes, sheetData.effect.flags?.merp1e?.ArmGreaves?.type, "none").bonus;
@@ -45,7 +46,7 @@ export class Merp1eActiveEffectSheet extends DocumentSheet {
 
     /** @override */
     _updateObject(event, formData) {
-        return this.object.update(formData);
+        if(!this.readOnly) return this.object.update(formData);
     }
 
     activateListeners(html) {

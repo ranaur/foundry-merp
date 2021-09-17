@@ -1,0 +1,33 @@
+<div class="language">
+    <div class="flexrow">
+        <h2 class="flex3">{{localize 'MERP1E.Effects.Label'}}</h2>
+<!--
+        <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+            <span class="health-control" data-action="next-round">
+                <i title="{{localize 'MERP1E.Damage.Add'}}" class="fas fa-hourglass-half"></i>
+            </span>
+            <span class="health-control" data-action="erase-status">
+                <i title="{{localize 'MERP1E.Damage.EraseStatus'}}" class="fas fa-eraser"></i>
+            </span>
+        </div>
+-->
+    </div>
+    <ol>
+        <li class="flexrow">
+            <div class="flex2">Name</div>
+            <div>Condition</div>
+            <div class="flex2">Item</div>
+        </li>    
+        {{#each this.actor.itemEffectsByType as | effectTypes effectType  | }}
+            <li style="font-weight: bolder;">{{effectType}}</ol>
+            {{#each effectTypes as | effect | }}
+            <li class="flexrow">
+                {{log effect}}
+                <div class="flex2">{{effect.name}}</div>
+                <div>{{effect.condition.conditionName}}</div>
+                <div class="flex2">{{effect.item}}</div>
+            </li>    
+            {{/each}}
+        {{/each}}
+    </ol>
+</div>

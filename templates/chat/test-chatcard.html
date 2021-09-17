@@ -1,0 +1,24 @@
+<div class="test">
+    {{log this}}
+    Loren Ipsum key = {{key}}
+    <input type="button" name="button"/>
+    <input type="text" name="text" value="{{data.text}}"/>
+    <input type="number" name="number" value="{{data.number}}"/>
+    <input type="checkbox" name="checkbox" {{checked data.checkbox}}/>
+    <label>1</label>
+    <input type="radio" name="radio" value="radio1" {{checked (eq "radio1" data.radio)}}/>
+    <label>2</label>
+    <input type="radio" name="radio" value="radio2" {{checked (eq "radio2" data.radio)}}/>
+    <label>3</label>
+    <input type="radio" name="radio" value="radio3" {{checked (eq "radio3" data.radio)}}/>
+    <label>4</label>
+    <input type="radio" name="radio" value="radio4"{{checked (eq "radio4" data.radio)}}/>
+    <select name="select">
+        {{#select data.select}}
+        <option value="a">a</option>
+        <option value="b">b</option>
+        <option value="c">c</option>
+        <option value="d">d</option>
+        {{/select}}
+    </select>
+</div>
