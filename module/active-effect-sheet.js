@@ -35,7 +35,7 @@ export class Merp1eActiveEffectSheet extends DocumentSheet {
         sheetData.effect = sheetData.data;
         sheetData.effectTypes = Merp1eActiveEffect.effectTypes.reduce( (acc, cls) => { acc.push({ id: cls.effectName, label: cls.label }); return acc;}, []);
         sheetData.conditionTypes = Merp1eActiveEffect.conditionTypes.reduce( (acc, cls) => { let obj = new cls; acc.push({ id: obj.conditionName, label: obj.label }); return acc;}, []);
-        sheetData.skills = game.merp1e.Merp1eRules.generateSheetOrder();
+        sheetData.sheetOrder = game.merp1e.Merp1eRules.skill.generateSheetOrder();
         sheetData.shieldBaseBonus = findByID(game.merp1e.Merp1eRules.defense.shieldTypes, sheetData.effect.flags?.merp1e?.Shield?.type, "none").bonus;
         sheetData.armGreavesBaseBonus = findByID(game.merp1e.Merp1eRules.defense.armGreavesTypes, sheetData.effect.flags?.merp1e?.ArmGreaves?.type, "none").bonus;
         sheetData.legGreavesBaseBonus = findByID(game.merp1e.Merp1eRules.defense.legGreavesTypes, sheetData.effect.flags?.merp1e?.LegGreaves?.type, "none").bonus;

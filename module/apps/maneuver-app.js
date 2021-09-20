@@ -1,5 +1,5 @@
 //import { Merp1eChat } from "../chat.js";
-import { Merp1eStaticManeuverChatCard } from "../chat/chat-card.js";
+import { Merp1eStaticManeuverChatCard } from "../chat/static-maneuver-card.js";
 
 export class Merp1eManeuverApplication extends Application {
 	constructor(options) {
@@ -20,7 +20,7 @@ export class Merp1eManeuverApplication extends Application {
 			mm: {
 				skillID: "MM",
 				skillsAll: false,
-				difficulties: this.rules.skill.modifiers.Difficulties,
+				difficulties: this.rules.skill.difficulties,
 				movementModifiers: this.rules.skill.modifiers.Movement,
 			},
 		};
@@ -142,18 +142,19 @@ export class Merp1eManeuverApplication extends Application {
 		
 		let skills = null
 		if(this.data.actor === null) {
-			skills = this.rules.getAvaliableSkills();
+			skills = this.rules.skill.getAvaliable();
 			this.data.mm.skill = null;
 		} else {
 			skills = this.data.actor.getSkills();
 			if(this.data.mm?.skillID == "MM")
 				this.data.mm.skill = this.data.actor.getSkillMovement();
-			else this.data.mm.skill = this.data.skills.reduce((a, sg) => sg.skills.reduce((a, s) => s.id == this.data.mm?.skillID ? s : a, a), null);
+			else this.data.mm.skill = this.data.actor.getOwnedItem(this.data.mm?.skillID);
 		}
-		this.data.skills = this.rules.generateSheetOrder(skills);
+		this.data.sheetOrder = this.rules.skill.generateSheetOrder(skills);
 
 		this.data.mm.difficultyValue = this.rules.skill.getModifierValue(this.data.mm.difficulties, this.data.mm?.difficultyID);
 		this.data.mm.modifiers = [];
+/* old modifier code
 		for(let modifier of this.data.mm.movementModifiers) {
 			let isEnabled;
 			let isOptional;
@@ -171,7 +172,7 @@ export class Merp1eManeuverApplication extends Application {
 				optional: isOptional
 			})
 		}
-
+*/
 		return this.data;
 	}
 

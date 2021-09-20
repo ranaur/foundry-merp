@@ -1,8 +1,14 @@
 # TODO
+Fazer o active effect (aproveita para colocar o part do skill chooser)
 
+
+Modifier:
 * Colocar condições nos skills
+    Colocar active effect no skill para fazer bonus opcionais e puxar dos skills globais
+    Ao copiar, instanciar no ator, apagar os modificadores "globais"
 
-* Colocar active effect no skill para fazer bonus opcionais e puxar dos skills
+*    Criar active Effect de adicionar modifier em skill (o condicional)
+
 * Fazer o rolamento na tabela (static, moving)
     escolher qual a rolltable no skill
     colocar conditions
@@ -10,15 +16,24 @@
         opcional?
         enableFunction
         texto
-    
+
+* criar um item "configuration" com active effects válidos para todo mundo
+* fazer com que outros lugares usem o part de skill-chooser
 * fazer os outros tipos de rolamento (MM, RR, SP, e ataque)
 
 * Colocar o class="userentry" em todo o resto
 * Reorganizar spell
     * colocar só as listas e permitir criar ações favoritas?
-* Melhorar os botões SceneControls#_getControlButtons
-* Colocar na chatwindow o resultado (simples e depois mais complexo, podendo alterar)
-* Fazer o dado Open Ended? Ou tirar o diceOpenEnded de vez (e testar com o dice3d).
+
+
+    ## Someday/Maybe
+        * Melhorar os botões SceneControls#_getControlButtons
+        * Refatorar o dado Open Ended:
+            - Mudar a fórmula dos dados subsequentes para somar/subtrair direto
+            - Permitir/testar assíncrono
+            - Fazer uma classe (filha da Roll)  com o dado Open Ended
+            - Ou tirar o dice.js de vez (e testar com o dice3d).
+            - Retirar a classe mer1eOpenEnded do dice.js ou fazer o tipo de rolamento direito.
 
     Criar Aba de Actions:
         Colocar uma linha para rolar qualquer skill "self"
@@ -166,6 +181,9 @@
         Daily spell cast - item: an item which allows a spell to be cast a certain number os times a day without expending power points (see Section 4.56): a 1st level spell four times a day, a 2nd level spell thee times a day; a 3rd level spell twice a day, or a 4th level spell once a day. The player my choose the spell (4th level or loweer) and the type of the item (if the GM deems it appropriate) OR the gamemaster and the player may agree on a special magic item (e.g. a canteen that refils once a day, a rope that ties and unties itself, a backpack which is weightless regardless of contents, etc.)
         Spell adder
         Power Point Muitiplier
+
+    Sheet: Damage
+        Colocar o tipo de dano (burn, muscle, bone, etc.)
 
     Sheet: Race
         Reler raças e colocar os bonus condicionais de skill na planilha (ActiveEffects?)
@@ -337,8 +355,8 @@ for(item of game.data.actors.filter((item) => { return item.type == "character" 
 
         // Everything below here is only needed if the sheet is editable
         if (!this.options.editable) return;
-        
 +       this.languagesHelper = new ArraySheetHelper("languages", this, { name: "New Language", ranks: 0 });
++       this.languagesHelper.activateListeners(html);
 
     _updateObject(event, formData) {
 +       formData = this.languagesHelper.updateObject(formData);

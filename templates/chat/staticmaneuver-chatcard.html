@@ -1,73 +1,86 @@
 <div class="static-maneuver">
     {{!-- log this --}}
     <div>Actor: {{actor.name}}</div>
-    <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
         {{!-- Skill --}}
-        <div>Skill:</div>
-        <div>{{skill.name}}</div>
-        <div style="text-align: center;">{{formatBonus skill.total}}</div>
-        
-        {{!-- Difficulty --}}
-        <div>Dif.:</div>
-        <div>
-            <select name="chosenDifficulty">
-                {{selectOptions difficulties.modifiers selected=data.chosenDifficulty localize=true nameAttr="id" labelAttr="label"}}
-            </select>
+        <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
+            <div>Skill:</div>
+            <div>{{skill.name}}</div>
+            <div style="text-align: center;">{{formatBonus skill.total}}</div>
         </div>
-        <div style="text-align: center;">{{formatBonus (lookup difficulties.value data.chosenDifficulty)}}</div>
+        {{!-- Difficulty --}}
+        <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
+            <div>Dif.:</div>
+            <div>
+                <select name="chosenDifficulty">
+                    {{selectOptions difficulties selected=data.chosenDifficulty localize=true nameAttr="id" labelAttr="label"}}
+                </select>
+            </div>
+            <div style="text-align: center;">{{formatBonus (lookup difficultiesValues data.chosenDifficulty)}}</div>
+        </div>
 
         {{!-- Modificators --}}
-        {{#each modifications.modifiers as | mod | }}
-            {{#if mod.enabled}}
-            <div>
-                {{#if mod.optional}}
-                    <input type="checkbox" name="modifiersChecked.{{mod.id}}" {{checked (lookup ../data.modifiersChecked mod.id)}}/>
-                {{/if}}
-            </div>
-            <div>
-                {{mod.label}}
-            </div>
-            <div style="text-align: center; vertical-align: middle;">
-                {{#if (lookup ../modifications.value mod.id)}}
-                    {{#if (and mod.optional (lookup ../data.modifiersChecked mod.id))}}
-                        {{formatBonus (lookup ../modifications.value mod.id)}}
-                    {{else}}
-                        <del>{{formatBonus (lookup ../modifications.value mod.id)}}</del>
-                    {{/if}}
-                {{else}}
-                    <input type="number" name="modifiersValue.{{mod.id}}" value="{{lookup ../data.modifiersValue mod.id}}"/>
-                {{/if}}
-            </div>
+        {{#each modifications as | group | }}
+            <div style="font-weight: bolder;">{{localize group.label}}</div>
+            {{#each group.modifiers as | mod | }}
+            {{#if (or mod.enabled mod.isUserChosen)}}
+                <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
+                    <div>
+                        {{#if mod.isUserChosen}}
+                            <input type="checkbox" name="modifiersChecked.{{group.id}}.{{mod.id}}" {{checked (lookup (lookup ../../data.modifiersChecked group.id) mod.id)}}/>
+                        {{/if}}
+                    </div>
+                    <div>
+                        {{localize mod.label}}
+                    </div>
+                    <div style="text-align: center; vertical-align: middle;">
+                        {{#if mod.isAdHoc}}
+                            {{#if (or (not mod.isUserChosen) (and mod.isUserChosen (lookup (lookup ../../data.modifiersChecked group.id) mod.id)))}}
+                                <input type="number" name="modifiersValue.{{group.id}}.{{mod.id}}" value="{{lookup (lookup ../../data.modifiersValue group.id) mod.id}}"/>
+                            {{else}}
+                                <div></div>
+                            {{/if}}
+                        {{else}}
+                            {{#if (or (not mod.isUserChosen) (and mod.isUserChosen (lookup (lookup ../../data.modifiersChecked group.id) mod.id)))}}
+                                {{formatBonus mod.value}}
+                            {{else}}
+                                <del>{{formatBonus mod.value}}</del>
+                            {{/if}}
+                        {{/if}}
+                    </div>
+                </div>
             {{/if}}
+            {{/each}}
         {{/each}}
 
         {{!-- Roll --}}
-
-        <div>Roll:</div>
-        <div>
-            {{#if data.rollTotal}}
-                {{data.rollResult}}
-            {{else}}
-                <input type="button" name="roll" value="Roll!" data-action="roll"/>
-            {{/if}}
-        </div>
+        <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
+            <div>Roll:</div>
+            <div>
+                {{#if data.rollTotal}}
+                    {{data.rollResult}}
+                {{else}}
+                    <input type="button" name="roll" value="Roll!" data-action="roll"/>
+                {{/if}}
+            </div>
             
-        <div style="text-align: center; vertical-align: middle;">
-            {{#if data.rollTotal}}
-                {{data.rollTotal}}
-            {{else}}
-                <i class="fas fa-dice-d20"></i>
-                <i class="fas fa-dice-d20"></i>
-            {{/if}}
+            <div style="text-align: center; vertical-align: middle;">
+                {{#if data.rollTotal}}
+                    {{formatBonus data.rollTotal}}
+                {{else}}
+                    <i class="fas fa-dice-d20"></i>
+                    <i class="fas fa-dice-d20"></i>
+                {{/if}}
+            </div>
         </div>
-
         {{!-- Total --}}
-        <div>
+        <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
+            <div>
             <b>Total:</b>
-        </div>
-        <div></div>
-        <div style="text-align: center; vertical-align: middle;">
-            <b>{{formatBonus total}}</b>
+            </div>
+            <div></div>
+            <div style="text-align: center; vertical-align: middle;">
+                <b>{{formatBonus total}}</b>
+            </div>
         </div>
     </div>
 </div>

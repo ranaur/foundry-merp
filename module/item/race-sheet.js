@@ -14,7 +14,7 @@ export class Merp1eRaceSheet extends Merp1eBaseItemSheet {
   getData() {
     let sheetData = super.getData()
     sheetData.data = sheetData.data.data
-    sheetData.sheetOrder = game.merp1e.Merp1eRules.generateSheetOrder();
+    sheetData.sheetOrder = game.merp1e.Merp1eRules.skill.generateSheetOrder();
     return sheetData;
   }
 

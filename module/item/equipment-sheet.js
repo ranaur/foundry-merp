@@ -13,7 +13,7 @@ export class Merp1eEquipmentSheet extends Merp1eBaseItemSheet {
   getData() {
     const sheetData = super.getData();
     sheetData.spellHierarchy = sheetData.rules.spell.getSpellHierarchy();
-    sheetData.rules.skill.sheetOrder = sheetData.rules.generateSheetOrder();
+    sheetData.rules.skill.sheetOrder = sheetData.rules.skill.generateSheetOrder();
     return sheetData;
   }
 

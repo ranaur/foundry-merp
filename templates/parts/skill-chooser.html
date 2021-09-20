@@ -1,11 +1,25 @@
-<select name="{{field}}">
-    {{#select currentValue}}
-    {{#each sheetOrder as | group |}}
-    <optgroup type="skillgroup" label="{{localize (concat 'MERP1E.SkillGroup.' group.id)}}">
-        {{#each group.skills as | skill |}}
-        <option value="{{skill.data.reference}}">{{localize (concat 'MERP1E.Skill.' skill.data.reference)}}</option>
-        {{/each}}
+
+
+<select name="{{name}}" {{roif readOnly}}>
+    {{#select selected}}
+    {{#if blank}}
+    {{#unless selected}}<option></option>{{/unless}}
+    {{/if}}
+    {{#if maneuverSkill}}
+    <option value="MM">{{localize "MERP1E.Maneuver.Skill"}}</option>
+    {{/if}}
+    {{#each sheetOrder as | skillGroup | }}
+    <optgroup label="{{localize skillGroup.label}}">
+            {{#each skillGroup.skills as | skill | }}
+            {{#if restrictRollType}}
+                {{#if (eq skill.data.data.rollType restrictRollType)}}
+                <option value="{{#if returnReference}}{{skill.data.reference}}{{else}}{{skill.id}}{{/if}}">{{localize skill.name}}</option>
+                {{/if}}
+            {{else}}
+                <option value="{{#if returnReference}}{{skill.data.reference}}{{else}}{{skill.id}}{{/if}}">{{localize skill.name}}</option>
+            {{/if}}
+            {{/each}}
     </optgroup>
     {{/each}}
-    {{/select}}
+    {{/select}} 
 </select>

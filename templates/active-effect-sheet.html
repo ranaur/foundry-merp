@@ -48,7 +48,7 @@
                     <div class="form-fields">
                         <select name="flags.merp1e.SkillBonus.skillReference">
                             {{#unless effect.flags.merp1e.SkillBonus.skillReference}}<option></option>{{/unless}}
-                            {{#each skills as | skillGroup | }}
+                            {{#each sheetOrder as | skillGroup | }}
                             <optgroup label="{{localize skillGroup.label}}">
                                 {{#select ../effect.flags.merp1e.SkillBonus.skillReference}}
                                     {{#each skillGroup.skills as | skill | }}
@@ -83,7 +83,7 @@
                     <label>{{ localize "MERP1E.Effect.SkillGroup" }}</label>
                     <div class="form-fields">
                         <select name="flags.merp1e.SkillGroupBonus.skillGroup">
-                            {{selectOptions skills selected=effect.flags.merp1e.SkillGroupBonus.skillGroup localize=true nameAttr="id" labelAttr="label" blank=""}}
+                            {{selectOptions sheetOrder selected=effect.flags.merp1e.SkillGroupBonus.skillGroup localize=true nameAttr="id" labelAttr="label" blank=""}}
                         </select>
                     </div>
                 </div>
@@ -111,7 +111,7 @@
                     <div class="form-fields">
                         <select name="flags.merp1e.SkillRankBonus.skillReference">
                             {{#unless effect.flags.merp1e.SkillRankBonus.skillReference}}<option></option>{{/unless}}
-                            {{#each skills as | skillGroup | }}
+                            {{#each sheetOrder as | skillGroup | }}
                             <optgroup label="{{skillGroup.name}}">
                                 {{#select ../effect.flags.merp1e.SkillRankBonus.skillReference}}
                                     {{#each skillGroup.skills as | skill | }}

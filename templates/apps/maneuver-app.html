@@ -27,24 +27,7 @@
 					<li class="flexrow">
 						<div class="flexrow flex3">
 							<label class="">{{localize "MERP1E.Maneuver.Skill"}}</label>
-							<select name="data.mm.skillID" {{roif (eq actorID null)}}>
-								{{#select mm.skillID}}
-								<option value="MM">{{localize "MERP1E.Maneuver.Skill"}}</option>
-								{{#each skills as | skillGroup | }}
-								<optgroup label="{{localize skillGroup.label}}">
-										{{#each skillGroup.skills as | skill | }}
-										{{#if ../../mm.skillsAll}}
-											<option value="{{skill.id}}">{{skill.name}}</option>
-										{{else}}
-											{{#if (eq skill.data.data.rollType "MM")}}
-											<option value="{{skill.id}}">{{skill.name}}</option>
-											{{/if}}
-										{{/if}}
-										{{/each}}
-								</optgroup>
-								{{/each}}
-								{{/select}} 
-							</select>
+							{{> "systems/merp1e/templates/parts/skill-chooser.html" sheetOrder=sheetOrder name="data.mm.skillID" readOnly=(eq actorID null) selected=mm.skillID maneuverSkill=true blank=false restrictRollType="MM" returnReference=false}}
 							<input type="checkbox" name="data.mm.skillsAll" {{checked mm.skillsAll}}/>
 							<label class="">{{localize "MERP1E.Maneuver.All"}}</label>
 						</div>

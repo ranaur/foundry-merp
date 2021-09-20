@@ -637,7 +637,7 @@ export class Merp1eActor extends Actor {
    * Returns an array with all skills that the actor does not already has.
    */
   getDefaultSkills() {
-    let avaliableSkills = game.merp1e.Merp1eRules.getAvaliableSkills();
+    let avaliableSkills = game.merp1e.Merp1eRules.skill.getAvaliable();
     let newSkills = [];
     avaliableSkills.forEach(skill => {
       if(this.getSkillsByReference(skill.data.data.reference).length == 0) {

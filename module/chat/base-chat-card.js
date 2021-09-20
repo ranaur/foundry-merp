@@ -1,18 +1,13 @@
-import { Merp1eModifiers } from "../modifier.js";
-import { Merp1eRollOpenEnded } from "../dice.js";
+import { stripClassName } from "../util.js";
 
-import { stripClassName, getAllSubclasses } from "../util.js";
+export const Merp1eCards = [];
 
 export class Merp1eBaseChatCard {
     static createChatCard(className, data, options = {}, messageID = null) {
-        switch(className) { // XXX refactor with something better (array)
-            case "Merp1eTestChatCard":
-                return new Merp1eTestChatCard(data, options, messageID);
-            case "Merp1eStaticManeuverChatCard":
-                return new Merp1eStaticManeuverChatCard(data, options, messageID);
-            default:
-                return new Merp1eBaseChatCard(data, options, messageID);
-        }
+		
+		const cls = Merp1eCards.find((cls) => cls.name == className);
+
+		return new cls(data, options, messageID);
     }
 
     constructor(data, options = {}, messageID = null) {
@@ -137,7 +132,7 @@ export class Merp1eBaseChatCard {
     /* ************** Event Handlers ************** */
 	async _onClick(event){
         if(event.currentTarget.type == "button") return; // Buttons has their own handlers
-        console.log("_onClick");
+        //console.log("_onClick");
 		const target = event.currentTarget;
         this.data[target.name] = target.value;
 
@@ -145,7 +140,7 @@ export class Merp1eBaseChatCard {
 	}
 
 	async _onToggleCheckbox( event){
-        console.log("_onToggleCheckbox");
+        //console.log("_onToggleCheckbox");
 		const target = event.currentTarget;
         this.data[target.name] = !(!target.checked);
 
@@ -158,7 +153,7 @@ export class Merp1eBaseChatCard {
      * if a method with that name exist it will be triggered.
      */
 	_onButton(event){
-        console.log("_onButton");
+        //console.log("_onButton");
 		event.preventDefault();
 
 		const button = event.currentTarget;
@@ -178,7 +173,7 @@ export class Merp1eBaseChatCard {
 	}
 
 	_onSubmit(event){
-        console.log("_onSubmit");
+        //console.log("_onSubmit");
 		event.preventDefault();
 
 		const target = event.currentTarget;
@@ -240,30 +235,6 @@ export class Merp1eBaseChatCard {
 		return Merp1eBaseChatCard.createChatCard(cardClass, data, options, messageID);
 	}
 
-    /* SYSTEM DEPENDENT */
-    rollOpenEnded(high = true, low = true) {
-        const MARGIN = 40;
-        let r = new Roll("1D100", {async: false});
-        r.roll();
-        r.toMessage();
-        let total = r.total;
-        let result = "".concat(r.total);
-        console.log("first dice: " + r.total);
-        let open = 0;
-        if(high && r.total > (100 - MARGIN)) open = 1;
-        if(low && r.total < (1 + MARGIN)) open = -1;
-        while(open != 0) {
-            let r = new Roll("1D100", {async: false});
-            r.roll();
-            r.toMessage();
-            console.log("other dice: " + r.total);
-            total += r.total * open;
-            result = result.concat(open > 0 ? " + " : " - ").concat(r.total);
-            if(r.total <= (100 - MARGIN)) open = 0;
-        }
-        this.data.rollResult = result;
-        this.data.rollTotal = total;
-    }
 }
 /*
 	///////////////////////////////////
@@ -404,57 +375,9 @@ export class Merp1eBaseChatCard {
 }
 */
 
+Merp1eCards.push(Merp1eBaseChatCard);
+
 export class Merp1eTestChatCard extends Merp1eBaseChatCard {
 }
-
-export class Merp1eStaticManeuverChatCard extends Merp1eBaseChatCard {
-    get title() {
-        return "Static Maneuver";
-    }
-    getData() {
-        this.debounce = true;
-        const data = super.getData();
-        const actor = game.actors.get(data.data.actorID);
-        if(!actor) return data;
-
-        data.actor = actor;
-        const skill = actor.items.get(data.data.skillID);
-
-        if(!skill) return data;
-        data.skill = skill;
-        data.data.chosenDifficulty = data.data.chosenDifficulty || "Medium";
-        data.difficulties = new Merp1eModifiers(game.merp1e.Merp1eRules.skill.modifiers.Difficulties, actor, skill);
-        data.modifications = new Merp1eModifiers(game.merp1e.Merp1eRules.skill.modifiers.ReadRunesUseItens, actor, skill);
-        data.total = skill.total + data.difficulties.value[data.data.chosenDifficulty] + data.modifications.getTotal(data.data.modifiersChecked, data.data.modifiersValue) + (data.data.rollTotal || 0);
-        return data;
-    }
-
-    static create(actorID, skillID, conditions = [], options = {}) {
-        return new Merp1eStaticManeuverChatCard(
-            {
-                actorID: actorID,
-                skillID: skillID,
-                conditions: conditions
-            },
-            options);
-    }
-
-    roll(event, update) {
-        console.log("ROLL!!!");
-        if(!debounce) {
-            console.error("DEBOUNCE!");
-            return;
-        }
-        this.debounce = false;
-        //let r = new Merp1eRollOpenEnded();
-        //r.roll();
-        //r.toMessage();
-        //this.data.rollResult = r.result;
-        //this.data.rollTotal = r.total;
-        this.rollOpenEnded();
-
-        this.close(event);
-    }
-
-}
+Merp1eCards.push(Merp1eTestChatCard);
 

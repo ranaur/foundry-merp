@@ -38,7 +38,7 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
     if(this.actor.data.skills = null) {
       sheetData.sheetOrder ={}
     } else {
-      sheetData.sheetOrder = game.merp1e.Merp1eRules.generateSheetOrder(this.actor.skills);
+      sheetData.sheetOrder = game.merp1e.Merp1eRules.skill.generateSheetOrder(this.actor.skills);
     }
 
     sheetData.effectList = this.object.effects.reduce((acc, effect) => {

@@ -1,3 +1,52 @@
+export function rollOpenEndedSync(high = true, low = true) {
+    const MARGIN = 40; // Normal is 5
+    let r = new Roll("1D100", {async: false});
+    r.roll();
+    r.toMessage();
+    let total = r.total;
+    let result = "".concat(r.total);
+    console.log("first dice: " + r.total);
+    let open = 0;
+    if(high && r.total > (100 - MARGIN)) open = 1;
+    if(low && r.total < (1 + MARGIN)) open = -1;
+    while(open != 0) {
+        let r = new Roll("1D100", {async: false});
+        r.roll();
+        r.toMessage();
+        console.log("other dice: " + r.total);
+        total += r.total * open;
+        result = result.concat(open > 0 ? " + " : " - ").concat(r.total);
+        if(r.total <= (100 - MARGIN)) open = 0;
+    }
+    this.data.rollResult = result;
+    this.data.rollTotal = total;
+}
+
+export async function rollOpenEnded(high = true, low = true) {
+    const MARGIN = 40; // Normal is 5
+    let r = new Roll("1D100", {async: true});
+    await r.roll();
+    await r.toMessage();
+
+    let total = r.total;
+    let result = "".concat(r.total);
+    console.log("first dice: " + r.total);
+    let open = 0;
+    if(high && r.total > (100 - MARGIN)) open = 1;
+    if(low && r.total < (1 + MARGIN)) open = -1;
+    while(open != 0) {
+        let nr = new Roll("1D100", {async: true});
+        await nr.roll();
+        await nr.toMessage();
+        console.log("other dice: " + nr.total);
+        total += nr.total * open;
+        result = result.concat(open > 0 ? " + " : " - ").concat(nr.total);
+        if(nr.total <= (100 - MARGIN)) open = 0;
+    }
+    return { result: result, total: total };
+}
+
+
 export class Merp1eRollOpenEnded extends Roll {
     static NO = 0;
     static HIGH = 1;

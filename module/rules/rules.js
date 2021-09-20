@@ -2,6 +2,7 @@ import { Merp1eManeuverApplication } from '../apps/maneuver-app.js';
 import { MerpSpell, MerpSpellList } from "./spell.js";
 import { MerpSkill } from "./skill.js";
 import { TableBT1 } from "./tables/bt-1.js";
+import { findByID } from '../util.js';
 
 export class Merp1eRules {
     static spell = MerpSpell;
@@ -213,51 +214,12 @@ export class Merp1eRules {
     static getItem(id) {
         return game.items.filter(item => item.id == id)[0];
     }
-    static getAvaliableSkills() {
-        /// XXX add folder of avaliable races (config option)
-        return game.items.filter(item => { return item.type == "skill" && item.data.data.showOnEverySheet == true; });
-    }
     static getActors() {
         return game.actors.filter(actor => { return actor.type == "character" && actor.permission == CONST.ENTITY_PERMISSIONS.OWNER; });
     }
     static generateSheetOrder(skills = null) {
-        if(skills === null) {
-            skills = game.merp1e.Merp1eRules.getAvaliableSkills();
-        }
-
-        let skillByGroups = {};
-    
-        // initialize skill groups with all skill groups in rules
-        for(let group of game.merp1e.Merp1eRules.skill.groups) {
-          skillByGroups[group.id] = {
-            id: group.id,
-            order: group.order,
-            label: group.label,
-            skills: []
-          }
-        }
-    
-        // fill skill groups with skills
-        for(let skill of Object.values(skills)) {
-          let groupName = skill.data.data.group;
-          //console.log(groupName, skill);
-          skillByGroups[groupName || "Secondary"].skills.push(skill);
-        }
-    
-        // reorder skills inside the groups and generate sheetOrder array
-        let sheetOrder = Object.values(skillByGroups).reduce( (acc, group) => {
-          group.skills.sort(function(first, second) {
-            return first.data.data.order - second.data.data.order;
-          });
-          acc.push(group);
-          return acc;
-        }, []);
-        // reorder groups in sheetOrder 
-        sheetOrder.sort(function(first, second) {
-          return first.order - second.order;
-        });
-    
-        return sheetOrder;
+        console.error("rules.generateSheetOrder should not be used. Use generateSheetOrder.skill.generateSheetOrder instead!");
+        return Merp1eRules.generateSheetOrder(skills);
     }
     
     static settings = {

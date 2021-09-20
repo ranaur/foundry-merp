@@ -63,13 +63,50 @@
     {{!-- Sheet Tab Navigation --}}
     <nav class="sheet-tabs tabs" data-group="primary">
         <a class="item" data-tab="description">{{localize "MERP1E.SkillSheet.Description"}}</a>
+        <a class="item" data-tab="modifiers">{{localize "MERP1E.SkillSheet.Modifiers"}}</a>
     </nav>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
+        {{!-- Dsescription Tab --}}
         <div class="tab" data-group="primary" data-tab="description">
             {{editor content=data.data.description target="data.description" button=true owner=owner editable=editable}}
         </div>
+        {{!-- Laguages Tab --}}
+        <div class="tab" data-group="primary" data-tab="modifiers">
+            <div class="modifiers">
+                <header class="flexrow">
+                    <span class="flex2">{{localize "MERP1E.Modifiers.ValueFunction"}}</span>
+                    <span class="flex3">{{localize "MERP1E.Modifiers.Label"}}</span>
+                    <span class="flex1">{{localize "MERP1E.Modifiers.EnableFunction"}}</span>
+                    <span class="flex1">
+                        <a class="modifiers-create" data-action="create" title="Create New Modifier"><i class="fas fa-plus"></i></a>
+                    </span>
+                </header>
+                <div class="modifiers-list">
+                    {{#each data.data.modifiers as |modifier modifierIdx|}}
+                    <li class="modifiers-list-item item flexrow">
+                        <div class="flex2 flexrow">
+                            <select name="data.modifiers.{{modifierIdx}}.valueFunction" >
+                                {{selectOptions ../valueFunctions selected=(lookup (lookup ../data.data.modifiers modifierIdx) "valueFunction") localize=true nameAttr="id" labelAttr="label"}}
+                            </select>
+                            {{#if (eq (lookup (lookup ../data.data.modifiers modifierIdx) "valueFunction") "constant")}}
+                            <input name="data.modifiers.{{modifierIdx}}.value" value="{{modifier.value}}" type="number" data-dtype="Number"/>
+                            {{/if}}
+                        </div>
+                        <input class="flex3" name="data.modifiers.{{modifierIdx}}.label" value="{{modifier.label}}" type="text" data-dtype="String"/>
+                        <select name="data.modifiers.{{modifierIdx}}.enableFunction" class="flex1">
+                            {{selectOptions ../enableFunctions selected=(lookup (lookup ../data.data.modifiers modifierIdx) "enableFunction") localize=true nameAttr="id" labelAttr="label" blank=""}}
+                        </select>
+                        <span class="flex1">
+                            <a class="modifiers-delete" data-action="delete" title="Delete Modifier"><i class="fas fa-trash"></i></a>
+                        </span>
+                    </li>
+                    {{/each}}
+                </div>
+            </div>
+        </div>
+
     </section>
 
 </form>

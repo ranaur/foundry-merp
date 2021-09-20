@@ -268,6 +268,7 @@
     "MERP1E.SkillRankBonusMethod.rollPerRank": "Roll per Rank",
     "MERP1E.SkillRankBonusMethod.noRank": "No Rank",
     "MERP1E.SkillSheet.Description": "Description",
+    "MERP1E.SkillSheet.Modifiers": "Modifiers",
     "MERP1E.SkillSheet.ExtraBonus": "Extra Bonus",
     "MERP1E.SkillSheet.MaxRanks": "Maximum Ranks",
 
@@ -470,5 +471,21 @@
     "MERP1E.Modifier.SheerFolly": "Sheer Folly", 
     "MERP1E.Modifier.Absurd": "Absurd", 
 
+    "MERP1E.Modifiers.ValueFunction": "Value Function",
+    "MERP1E.Modifiers.Value": "Value",
+    "MERP1E.Modifiers.Label": "Label",
+    "MERP1E.Modifiers.Optional": "Optional?",
+    "MERP1E.Modifiers.EnableFunction": "Enable Function",
+
+    "MERP1E.ModifierValueFunctions.constant": "Constant",
+    "MERP1E.ModifierValueFunctions.adHoc": "Ad-Hoc",
+    "MERP1E.ModifierValueFunctions.level": "Char Level",
+    "MERP1E.ModifierValueFunctions.minusSpellLevel": "Spell Level",
+
+    "MERP1E.ModifierEnableFunctions.always": "Always Enabled",
+    "MERP1E.ModifierEnableFunctions.userChosen": "User chosen",
+    "MERP1E.ModifierEnableFunctions.isStunned": "Is Stunned?",
+    "MERP1E.ModifierEnableFunctions.isDown": "Is Down?",
+    "MERP1E.ModifierEnableFunctions.isLimbOut": "Is Limb Out?",
     "MERP1E.X": "MERP1E"
 }

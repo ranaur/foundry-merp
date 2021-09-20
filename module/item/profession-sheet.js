@@ -31,7 +31,7 @@ export class Merp1eProfessionSheet extends ItemSheet {
   getData() {
     const data = super.getData();
     data.rules = game.merp1e.Merp1eRules;
-    data.sheetOrder = game.merp1e.Merp1eRules.generateSheetOrder();
+    data.sheetOrder = game.merp1e.Merp1eRules.skill.generateSheetOrder();
     return data;
   }
 

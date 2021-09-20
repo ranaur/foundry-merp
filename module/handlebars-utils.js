@@ -27,6 +27,11 @@ export const registerHandlebarsHelpers = async function() {
     });
 
     // read only if - makes an input read only iuf parameter is true
+    Handlebars.registerHelper('not', function(a) {
+        return !a;
+    });
+
+    // read only if - makes an input read only iuf parameter is true
     Handlebars.registerHelper('roif', function(a) {
         return new Handlebars.SafeString(a ? "readonly tabindex=-1 aria-disabled='true'" : "class='userentry'");
     });
