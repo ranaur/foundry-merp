@@ -30,6 +30,5 @@ export class Merp1eActiveEffectHelper extends ActiveEffect {
         html.find(".effect-control").click(ev => {
             Merp1eActiveEffectHelper.onManageActiveEffect(ev, document)
         });
-    }
-    
+    }    
 }

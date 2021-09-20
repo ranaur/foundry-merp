@@ -32,23 +32,23 @@ export class MerpSkill {
     ];
     static modifiers = {
         InterectionAndInfluence: [
-            { id: "ii1", value: 50, optional: true, label: "Audience is personally loyal or devoted to the character." },
-            { id: "ii2", value: 20, optional: true, label: "Audience is under hire to the character." }
+            { value: 50, optional: true, label: "Audience is personally loyal or devoted to the character." },
+            { value: 20, optional: true, label: "Audience is under hire to the character." }
         ],
         ReadRunesUseItens: [
-            { id: "rrui1", valueFunction: "adHoc", label: "- (level of the spell)" }, // XXX valueFunction?
-            { id: "rrui2", value: -30, label: "If the realm of the spell is different from the character’s." },
-            { id: "rrui3", value: -10, label: "If the character does not know what the spell or ability is." },
-            { id: "rrui4", value: 20, label: "If the character knows what the spell or ability is." },
-            { id: "rrui5", value: 30, label: "If the character can cast the spell intrinsically." }
+            { valueFunction: "adHoc", label: "- (level of the spell)" }, // XXX valueFunction?
+            { value: -30, label: "If the realm of the spell is different from the character’s." },
+            { value: -10, label: "If the character does not know what the spell or ability is." },
+            { value: 20, label: "If the character knows what the spell or ability is." },
+            { value: 30, label: "If the character can cast the spell intrinsically." }
         ],
         PerceptionAndTracking: [
-            { id: "pt1", value: 20, label: "If the player states that his character is spending time looking for specific information. The number of rounds spent affects the difficulty." }
+            { value: 20, label: "If the player states that his character is spending time looking for specific information. The number of rounds spent affects the difficulty." }
         ],
         Movement: [
-            { id: "mm1", value: -50, label: "MERP1E.Maneuver.Stunned", enableFunction: "isStunned" }, 
-            { id: "mm2", value: -70, label: "MERP1E.Maneuver.Down", enableFunction: "isDown" }, 
-            { id: "mm3", value: -30, label: "MERP1E.Maneuver.OneLimbOut", enableFunction: "isLimbOut" }
+            { value: -50, label: "MERP1E.Maneuver.Stunned", enableFunction: "isStunned" }, 
+            { value: -70, label: "MERP1E.Maneuver.Down", enableFunction: "isDown" }, 
+            { value: -30, label: "MERP1E.Maneuver.OneLimbOut", enableFunction: "isLimbOut" }
         ]
     };
 

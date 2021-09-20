@@ -24,7 +24,7 @@ export class Merp1eStaticManeuverChatCard extends Merp1eBaseChatCard {
 
         // Calculate modifications
         data.modifications = [];
-        data.modifications.push(new Merp1eModifiers("mmm", "Movement Modifiers", game.merp1e.Merp1eRules.skill.modifiers.Movement));
+        data.modifications.push(new Merp1eModifiers("smm", "Static Modifiers", game.merp1e.Merp1eRules.skill.modifiers.Movement));
         if(skill?.data?.data?.reference) {
             let globalSkill = game.merp1e.Merp1eRules.skill.getAvaliableByReference(skill.data.data.reference);
             data.modifications.push(new Merp1eModifiers("sgm", "Skill General Modifiers", globalSkill?.data?.data?.modifiers));

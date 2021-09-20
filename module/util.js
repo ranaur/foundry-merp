@@ -60,3 +60,19 @@ export function getAllSubclasses(baseClass) {
   return classes;
 }
 
+export function toSnakeCase(str) {
+ return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
+}
+
+export function toKebabCase(str) {
+  return str.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
+}
+
+export function replaceData(str, data) {
+  let res = `${str}`;
+  Object.entries(data).forEach(([key, value]) => {
+    let val = typeof value === "function" ? value(data) : value;
+    res = res.replaceAll("$" + key, val);
+  });
+  return res;
+}

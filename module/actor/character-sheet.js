@@ -55,13 +55,13 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
           itemName = "Rougue item " + itemID;
         }
       }
-      acc.push({
-        name: effect.name,
-        condition: effect.condition.conditionName,
-        isActive: effect.condition.isActive(effect, this.object),
-        reason: effect.condition.reason(effect, this.object),
-        item: itemName,
-      });
+      // acc.push({
+      //   name: effect.name,
+      //   condition: effect.condition.conditionName,
+      //   isActive: effect.condition.isActive(effect, this.object),
+      //   reason: effect.condition.reason(effect, this.object),
+      //   item: itemName,
+      // });
       return acc
     }, []);
 
