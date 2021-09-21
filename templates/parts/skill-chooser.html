@@ -1,5 +1,3 @@
-
-
 <select name="{{name}}" {{roif readOnly}}>
     {{#select selected}}
     {{#if blank}}
@@ -13,10 +11,10 @@
             {{#each skillGroup.skills as | skill | }}
             {{#if restrictRollType}}
                 {{#if (eq skill.data.data.rollType restrictRollType)}}
-                <option value="{{#if returnReference}}{{skill.data.reference}}{{else}}{{skill.id}}{{/if}}">{{localize skill.name}}</option>
+                <option value="{{#if ../../returnReference}}{{skill.data.data.reference}}{{else}}{{skill.id}}{{/if}}">{{localize skill.name}}</option>
                 {{/if}}
             {{else}}
-                <option value="{{#if returnReference}}{{skill.data.reference}}{{else}}{{skill.id}}{{/if}}">{{localize skill.name}}</option>
+                <option value="{{#if ../../returnReference}}{{skill.data.data.reference}}{{else}}{{skill.id}}{{/if}}">{{localize skill.name}}</option>
             {{/if}}
             {{/each}}
     </optgroup>

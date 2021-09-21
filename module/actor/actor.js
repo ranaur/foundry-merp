@@ -1,5 +1,5 @@
 import { findByID, max } from "../util.js";
-import { Merp1eActiveEffect } from "../active-effect.js";
+import { Merp1eEffect } from "../active-effect.js";
 
 class Merp1eDefense {
   constructor(actor) {
@@ -390,31 +390,7 @@ export class Merp1eActor extends Actor {
     }
   }
 
-  _applyEffects_old() {
-    let orderedEffects = this.effects.reduce((a, e) => { a.push(e); return a; }, []);
-    orderedEffects.sort(function(first, second) {
-      return first.priority - second.priority;
-    });
-
-    for(let effect of orderedEffects) {
-      let origin = effect.data.origin.split(".");
-      let actorID = origin[1];
-      let itemID = origin[3] || null;
-      let item = null;
-
-      if(itemID) {
-        item = this.getEmbeddedDocument("Item", itemID);
-        if(item == undefined)
-        {
-          this.deleteEmbeddedDocuments("ActiveEffect", [effect.id]); // XXX Should be here?
-        } else {
-          effect.apply(this);
-        }
-      }
-    }
-  }
-  
-  _applyEffects() {
+  applyEffects(data = { actor: this }) {
     this.itemEffectsByType = {}
     for(let item of this.items) {
       for(let effect of item.effects) {
@@ -426,11 +402,11 @@ export class Merp1eActor extends Actor {
       }
     }
 
-    for(let effectClass of Merp1eActiveEffect.effectTypes) {
+    for(let effectClass of Merp1eEffect.registeredTypes) {
       let effectType = effectClass.effectName;
       if(effectType in this.itemEffectsByType) {
         for(let effect of this.itemEffectsByType[effectType]) {
-          effect.apply(this);
+          effect.applyEffect(data);
         }
       }
     }
@@ -560,7 +536,7 @@ export class Merp1eActor extends Actor {
     }
 
     await this._processItems();
-    this._applyEffects();
+    this.applyEffects();
 /*
 
     // Iterate through items, allocating to containers

@@ -3,6 +3,7 @@ import { MerpSpell, MerpSpellList } from "./spell.js";
 import { MerpSkill } from "./skill.js";
 import { TableBT1 } from "./tables/bt-1.js";
 import { findByID } from '../util.js';
+import { Merp1eStaticManeuverChatCard } from "../chat/static-maneuver-card.js";
 
 export class Merp1eRules {
     static spell = MerpSpell;
@@ -21,13 +22,21 @@ export class Merp1eRules {
         { id: "ap", label: "MERP1E.Stats.ap.Name", abbr: "MERP1E.Stats.ap.Abbr" , only_value: true }
     ];
     static rollTypes = [
-        { id: "MM", label: "MERP1E.RollType.MM" },
-        { id: "SM", label: "MERP1E.RollType.SM" },
-        { id: "RR", label: "MERP1E.RollType.RR" },
-        { id: "DB", label: "MERP1E.RollType.DB" },
-        { id: "OB", label: "MERP1E.RollType.OB" },
-        { id: "SP", label: "MERP1E.RollType.SP" }
+        { id: "MM", label: "MERP1E.RollType.MM", abbr: "MERP1E.RollTypeAbbr.MM", rollCard: (data) => new Merp1eStaticManeuverChatCard(data) },
+        { id: "SM", label: "MERP1E.RollType.SM", abbr: "MERP1E.RollTypeAbbr.SM", rollCard: (data) => new Merp1eStaticManeuverChatCard(data) },
+        { id: "RR", label: "MERP1E.RollType.RR", abbr: "MERP1E.RollTypeAbbr.RR", rollCard: (data) => new Merp1eStaticManeuverChatCard(data) },
+        { id: "DB", label: "MERP1E.RollType.DB", abbr: "MERP1E.RollTypeAbbr.DB", rollCard: (data) => new Merp1eStaticManeuverChatCard(data) },
+        { id: "OB", label: "MERP1E.RollType.OB", abbr: "MERP1E.RollTypeAbbr.OB", rollCard: (data) => new Merp1eStaticManeuverChatCard(data) },
+        { id: "SP", label: "MERP1E.RollType.SP", abbr: "MERP1E.RollTypeAbbr.SP", rollCard: (data) => new Merp1eStaticManeuverChatCard(data) }
     ];
+
+    static rollManeuver(skill) {
+        const rolltype = findByID(this.rollTypes, skill?.data?.data?.rollType, "SM");
+        if(rolltype) {
+            const card = rolltype.rollCard({skill: skill, rollTypeID: rolltype.id});
+            card.sendMessage();
+        }
+    }
 
     static profession = {
         list: {

@@ -37,247 +37,43 @@
         {{!-- Configuration Tab --}}
         <div class="tab" data-group="primary" data-tab="configuration">
             {{#if (eq effect.flags.merp1e.effectType "SkillBonus")}}
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.SkillBonus" }}</label>
-                    <div class="form-fields">
-                        <input type="number" name="flags.merp1e.SkillBonus.value" value="{{effect.flags.merp1e.SkillBonus.value }}"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.Skill" }}</label>
-                    <div class="form-fields">
-                        <select name="flags.merp1e.SkillBonus.skillReference">
-                            {{#unless effect.flags.merp1e.SkillBonus.skillReference}}<option></option>{{/unless}}
-                            {{#each sheetOrder as | skillGroup | }}
-                            <optgroup label="{{localize skillGroup.label}}">
-                                {{#select ../effect.flags.merp1e.SkillBonus.skillReference}}
-                                    {{#each skillGroup.skills as | skill | }}
-                                    <option value="{{skill.data.data.reference}}">{{skill.name}}</option>
-                                    {{/each}}
-                                {{/select}} 
-                            </optgroup>
-                            {{/each}}
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.Optional" }}</label>
-                    <div class="form-fields">
-                        <input type="checkbox" name="flags.merp1e.SkillBonus.isOptional" {{checked effect.flags.merp1e.SkillBonus.isOptional}}/>
-                        <div class="flex3">
-                            {{#if effect.flags.merp1e.SkillBonus.isOptional}}
-                            <input type="text" name="flags.merp1e.SkillBonus.conditionText" value="{{effect.flags.merp1e.SkillBonus.conditionText}}"/>
-                            {{/if}}
-                        </div>
-                    </div>
-                </div>
+                {{> "systems/merp1e/templates/effect/skill-bonus-item-effect-part.html" effect=effect sheetOrder=sheetOrder}}
             {{/if}}
             {{#if (eq effect.flags.merp1e.effectType "SkillGroupBonus")}}
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.SkillGroupBonus" }}</label>
-                    <div class="form-fields">
-                        <input type="number" name="flags.merp1e.SkillGroupBonus.value" value="{{effect.flags.merp1e.SkillGroupBonus.value }}"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.SkillGroup" }}</label>
-                    <div class="form-fields">
-                        <select name="flags.merp1e.SkillGroupBonus.skillGroup">
-                            {{selectOptions sheetOrder selected=effect.flags.merp1e.SkillGroupBonus.skillGroup localize=true nameAttr="id" labelAttr="label" blank=""}}
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.Optional" }}</label>
-                    <div class="form-fields">
-                        <input type="checkbox" name="flags.merp1e.SkillGroupBonus.isOptional" {{checked effect.flags.merp1e.SkillGroupBonus.isOptional}}/>
-                        <div class="flex3">
-                            {{#if effect.flags.merp1e.SkillGroupBonus.isOptional}}
-                            <input type="text" name="flags.merp1e.SkillGroupBonus.conditionText" value="{{effect.flags.merp1e.SkillGroupBonus.conditionText}}"/>
-                            {{/if}}
-                        </div>
-                    </div>
-                </div>
+                {{> "systems/merp1e/templates/effect/skill-group-bonus-item-effect-part.html" effect=effect sheetOrder=sheetOrder}}
             {{/if}}
             {{#if (eq effect.flags.merp1e.effectType "RankSkillBonus")}}
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.RankSkillBonus" }}</label>
-                    <div class="form-fields">
-                        <input type="number" name="flags.merp1e.SkillRankBonus.value" value="{{effect.flags.merp1e.SkillRankBonus.value }}"/>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.Skill" }}</label>
-                    <div class="form-fields">
-                        <select name="flags.merp1e.SkillRankBonus.skillReference">
-                            {{#unless effect.flags.merp1e.SkillRankBonus.skillReference}}<option></option>{{/unless}}
-                            {{#each sheetOrder as | skillGroup | }}
-                            <optgroup label="{{skillGroup.name}}">
-                                {{#select ../effect.flags.merp1e.SkillRankBonus.skillReference}}
-                                    {{#each skillGroup.skills as | skill | }}
-                                    <option value="{{skill.data.data.reference}}">{{skill.name}}</option>
-                                    {{/each}}
-                                {{/select}} 
-                            </optgroup>
-                            {{/each}}
-                        </select>
-                    </div>
-                </div>
+                {{> "systems/merp1e/templates/effect/rank-skill-bonus-item-effect-part.html" effect=effect sheetOrder=sheetOrder}}
             {{/if}}
             {{#if (eq effect.flags.merp1e.effectType "Shield")}}
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.ShieldType" }}</label>
-                    <div class="form-fields">
-                        <select name="flags.merp1e.Shield.type">
-                            {{#unless effect.flags.merp1e.Shield.type}}<option></option>{{/unless}}
-                            {{selectOptions rules.defense.shieldTypes selected=effect.flags.merp1e.Shield.type localize=true nameAttr="id" labelAttr="label"}}
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.ShieldBaseBonus" }}</label>
-                    <div class="form-fields">
-                        <input type="number" value="{{shieldBaseBonus}}" placeholder=0 {{roif true}}/>
-                    </div>
-                </div>
-                {{#if (ne effect.flags.merp1e.Shield.type "none")}}
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.ShieldExtraBonus" }}</label>
-                    <div class="form-fields">
-                        <input type="number" name="flags.merp1e.Shield.extraBonus" value="{{effect.flags.merp1e.Shield.extraBonus}}" placeholder="0"/>
-                    </div>
-                </div>
-                {{/if}}
+                {{> "systems/merp1e/templates/effect/shield-item-effect-part.html" effect=effect rules=rules}}
             {{/if}}
             {{#if (eq effect.flags.merp1e.effectType "ArmGreaves")}}
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.ArmGreavesType" }}</label>
-                    <div class="form-fields">
-                        <select name="flags.merp1e.ArmGreaves.type">
-                            {{#unless effect.flags.merp1e.ArmGreaves.type}}<option></option>{{/unless}}
-                            {{selectOptions rules.defense.armGreavesTypes selected=effect.flags.merp1e.ArmGreaves.type localize=true nameAttr="id" labelAttr="label"}}
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.ArmGreavesBaseBonus" }}</label>
-                    <div class="form-fields">
-                        <input type="number" value="{{armGreavesBaseBonus}}" placeholder=0 {{roif true}}/>
-                    </div>
-                </div>
-                {{#if (ne effect.flags.merp1e.ArmGreaves.type "none")}}
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.ArmGreavesExtraBonus" }}</label>
-                    <div class="form-fields">
-                        <input type="number" name="flags.merp1e.ArmGreaves.extraBonus" value="{{effect.flags.merp1e.ArmGreaves.extraBonus}}" placeholder="0"/>
-                    </div>
-                </div>
-                {{/if}}
+                {{> "systems/merp1e/templates/effect/arm-greaves-item-effect-part.html" effect=effect rules=rules}}
             {{/if}}
             {{#if (eq effect.flags.merp1e.effectType "LegGreaves")}}
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.LegGreavesType" }}</label>
-                    <div class="form-fields">
-                        <select name="flags.merp1e.LegGreaves.type">
-                            {{#unless effect.flags.merp1e.LegGreaves.type}}<option></option>{{/unless}}
-                            {{selectOptions rules.defense.legGreavesTypes selected=effect.flags.merp1e.LegGreaves.type localize=true nameAttr="id" labelAttr="label"}}
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.LegGreavesBaseBonus" }}</label>
-                    <div class="form-fields">
-                        <input type="number" value="{{legGreavesBaseBonus}}" placeholder=0 {{roif true}}/>
-                    </div>
-                </div>
-                {{#if (ne effect.flags.merp1e.LegGreaves.type "none")}}
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.LegGreavesExtraBonus" }}</label>
-                    <div class="form-fields">
-                        <input type="number" name="flags.merp1e.LegGreaves.extraBonus" value="{{effect.flags.merp1e.LegGreaves.extraBonus}}" placeholder="0"/>
-                    </div>
-                </div>
-                {{/if}}
+                {{> "systems/merp1e/templates/effect/leg-greaves-item-effect-part.html" effect=effect rules=rules}}
             {{/if}}
             {{#if (eq effect.flags.merp1e.effectType "Helm")}}
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.HelmType" }}</label>
-                    <div class="form-fields">
-                        <select name="flags.merp1e.Helm.type">
-                            {{#unless effect.flags.merp1e.Helm.type}}<option></option>{{/unless}}
-                            {{selectOptions rules.defense.helmTypes selected=effect.flags.merp1e.Helm.type localize=true nameAttr="id" labelAttr="label"}}
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.HelmBaseBonus" }}</label>
-                    <div class="form-fields">
-                        <input type="number" value="{{helmBaseBonus}}" placeholder=0 {{roif true}}/>
-                    </div>
-                </div>
-                {{#if (ne effect.flags.merp1e.Helm.type "none")}}
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.HelmExtraBonus" }}</label>
-                    <div class="form-fields">
-                        <input type="number" name="flags.merp1e.Helm.extraBonus" value="{{effect.flags.merp1e.Helm.extraBonus}}" placeholder="0"/>
-                    </div>
-                </div>
-                {{/if}}
+                {{> "systems/merp1e/templates/effect/helm-item-effect-part.html" effect=effect rules=rules}}
             {{/if}}
             {{#if (eq effect.flags.merp1e.effectType "Armor")}}
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.ArmorType" }}</label>
-                    <div class="form-fields">
-                        <select name="flags.merp1e.Armor.type">
-                            {{#unless effect.flags.merp1e.Armor.type}}<option></option>{{/unless}}
-                            {{selectOptions rules.defense.armorTypes selected=effect.flags.merp1e.Armor.type localize=true nameAttr="id" labelAttr="label"}}
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.ArmorBaseBonus" }}</label>
-                    <div class="form-fields">
-                        <input type="number" value="{{armorBaseBonus}}" placeholder=0 {{roif true}}/>
-                    </div>
-                </div>
-                {{#if (ne effect.flags.merp1e.Armor.type "none")}}
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.ArmorExtraBonus" }}</label>
-                    <div class="form-fields">
-                        <input type="number" name="flags.merp1e.Armor.extraBonus" value="{{effect.flags.merp1e.Armor.extraBonus}}" placeholder="0"/>
-                    </div>
-                </div>
-                {{/if}}
+                {{> "systems/merp1e/templates/effect/armor-item-effect-part.html" effect=effect rules=rules}}
             {{/if}}
             {{#if (eq effect.flags.merp1e.effectType "PPMultiplier")}}
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.Realm" }}</label>
-                    <div class="form-fields">
-                        <select name="flags.merp1e.PPMultiplier.realm">
-                            {{#unless effect.flags.merp1e.PPMultiplier.realm}}<option></option>{{/unless}}
-                            {{selectOptions rules.magic.realmsAny selected=effect.flags.merp1e.PPMultiplier.realm localize=true nameAttr="id" labelAttr="label"}}
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.PPMultiplierValue" }}</label>
-                    <div class="form-fields">
-                        <input type="number" name="flags.merp1e.PPMultiplier.value" value="{{effect.flags.merp1e.PPMultiplier.value}}" placeholder="1"/>
-                    </div>
-                </div>
+                {{> "systems/merp1e/templates/effect/p-p-multiplier-item-effect-part.html" effect=effect rules=rules}}
             {{/if}}
             {{#if (eq effect.flags.merp1e.effectType "SpellAdder")}}
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.Realm" }}</label>
-                    <select name="flags.merp1e.SpellAdder.realm">
-                        {{#unless effect.flags.merp1e.SpellAdder.realm}}<option></option>{{/unless}}
-                        {{selectOptions rules.magic.realmsAny selected=effect.flags.merp1e.SpellAdder.realm localize=true nameAttr="id" labelAttr="label"}}
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>{{ localize "MERP1E.Effect.SpellAdderValue" }}</label>
-                    <input type="number" name="flags.merp1e.SpellAdder.value" value="{{effect.flags.merp1e.SpellAdder.value}}" placeholder="1"/>
-                </div>
+                {{> "systems/merp1e/templates/effect/spell-adder-item-effect-part.html" effect=effect rules=rules}}
+            {{/if}}
+            {{#if (eq effect.flags.merp1e.effectType "SkillModifier")}}
+                {{> "systems/merp1e/templates/effect/skill-modifier-item-effect-part.html" effect=effect rules=rules}}
+            {{/if}}
+            {{#if (eq effect.flags.merp1e.effectType "SkillGroupModifier")}}
+                {{> "systems/merp1e/templates/effect/skill-group-modifier-item-effect-part.html" effect=effect rules=rules}}
+            {{/if}}
+            {{#if (eq effect.flags.merp1e.effectType "RollTypeModifier")}}
+                {{> "systems/merp1e/templates/effect/roll-type-modifier-item-effect-part.html" effect=effect rules=rules}}
             {{/if}}
         </div>
         {{!-- Condition tab --}}

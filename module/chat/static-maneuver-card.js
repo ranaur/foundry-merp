@@ -10,33 +10,40 @@ export class Merp1eStaticManeuverChatCard extends Merp1eBaseChatCard {
 
     getData() {
         const data = super.getData();
-        const actor = game.actors.get(data.data.actorID);
-        if(!actor) return data;
+        let actor;
+        if(!data.skill) {
+            if(!data.data.actorID) return data;
+            if(!data.data.skillID) return data;
+            actor = game.actors.get(data.data.actorID);
+            if(!actor) return data;
+            data.skill = actor.items.get(data.data.skillID);
+        }
+        if(!data.skill) return data;
+        actor.applyEffects(data); // without actor to not apply actor modifiers
 
-        data.actor = actor;
-        const skill = actor.items.get(data.data.skillID);
+        data.actor = data.skill.parent;
 
-        if(!skill) return data;
-        data.skill = skill;
         data.data.chosenDifficulty = data.data.chosenDifficulty || "Medium";
         data.difficulties = game.merp1e.Merp1eRules.skill.difficulties;
 		data.difficultiesValues = data.difficulties.reduce((acc, dif) => { acc[dif.id] = dif.value; return acc; }, {});
 
-        // Calculate modifications
-        data.modifications = [];
-        data.modifications.push(new Merp1eModifiers("smm", "Static Modifiers", game.merp1e.Merp1eRules.skill.modifiers.Movement));
-        if(skill?.data?.data?.reference) {
-            let globalSkill = game.merp1e.Merp1eRules.skill.getAvaliableByReference(skill.data.data.reference);
-            data.modifications.push(new Merp1eModifiers("sgm", "Skill General Modifiers", globalSkill?.data?.data?.modifiers));
+        
+        // Calculate modifiers
+        data.modifiersByGroup = [];
+        data.modifiersByGroup.push(new Merp1eModifiers("smm", "Static Modifiers", game.merp1e.Merp1eRules.skill.modifiers.Movement));
+        if(data.skill?.data?.data?.reference) {
+            let globalSkill = game.merp1e.Merp1eRules.skill.getAvaliableByReference(data.skill.data.data.reference);
+            data.modifiersByGroup.push(new Merp1eModifiers("sgm", "Skill General Modifiers", globalSkill?.data?.data?.modifiers));
         }
-        data.modifications.push(new Merp1eModifiers("mmm", "Skill Specific Modifiers", skill.data?.data?.modifiers));
+        data.modifiersByGroup.push(new Merp1eModifiers("mmm", "Skill Specific Modifiers", data.skill.data?.data?.modifiers));
+        data.modifiersByGroup.push(new Merp1eModifiers("itm", "Item Modifiers", data?.modifiers));
         data.data.modifiersChecked = data.data.modifiersChecked || {};
         data.data.modifiersValue = data.data.modifiersValue || {};
 
         // Calculate total bonus and roll
-        data.total = skill.total;
+        data.total = data.skill.total;
         data.total += findByID(data.difficulties, data.data.chosenDifficulty, {value:0}).value;
-        data.modifications.forEach((mg) => {
+        data.modifiersByGroup.forEach((mg) => {
             mg.evaluate(data);
             const checked = mg.id in data.data.modifiersChecked ? data.data.modifiersChecked[mg.id] : null;
             const values = mg.id in data.data.modifiersValue ? data.data.modifiersValue[mg.id] : null;
@@ -44,16 +51,6 @@ export class Merp1eStaticManeuverChatCard extends Merp1eBaseChatCard {
         });
         data.total += (data.data.rollTotal || 0);
         return data;
-    }
-
-    static create(actorID, skillID, conditions = [], options = {}) {
-        return new Merp1eStaticManeuverChatCard(
-            {
-                actorID: actorID,
-                skillID: skillID,
-                conditions: conditions
-            },
-            options);
     }
 
     async roll(event, update) {

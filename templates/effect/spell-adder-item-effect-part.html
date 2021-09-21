@@ -1,0 +1,11 @@
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.Realm" }}</label>
+    <select name="flags.merp1e.SpellAdder.realm">
+        {{#unless effect.flags.merp1e.SpellAdder.realm}}<option></option>{{/unless}}
+        {{selectOptions rules.magic.realmsAny selected=effect.flags.merp1e.SpellAdder.realm localize=true nameAttr="id" labelAttr="label"}}
+    </select>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.SpellAdderValue" }}</label>
+    <input type="number" name="flags.merp1e.SpellAdder.value" value="{{effect.flags.merp1e.SpellAdder.value}}" placeholder="1"/>
+</div>

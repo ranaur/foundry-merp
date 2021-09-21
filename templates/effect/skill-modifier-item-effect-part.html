@@ -1,0 +1,22 @@
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.Skill" }}</label>
+    {{> "systems/merp1e/templates/parts/skill-chooser.html" sheetOrder=sheetOrder name="flags.merp1e.SkillModifier.skillReference" readOnly=(eq actorID null) selected=effect.flags.merp1e.SkillModifier.skillReference maneuverSkill=true blank=true returnReference=true}}
+</div>
+{{log this}}
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.Modifier" }}</label>
+    <div class="form-fields flexrow">
+        <div class="flex2 flexrow">
+            <select name="flags.merp1e.SkillModifier.valueFunction">
+                {{selectOptions modifierValueFunctions selected=effect.flags.merp1e.SkillModifier.valueFunction localize=true nameAttr="id" labelAttr="label"}}
+            </select>
+            {{#if (eq effect.flags.merp1e.SkillModifier.valueFunction "constant")}}
+            <input name="flags.merp1e.SkillModifier.value" value="{{effect.flags.merp1e.SkillModifier.value}}" type="number" data-dtype="Number"/>
+            {{/if}}
+        </div>
+        <input class="flex3" name="flags.merp1e.SkillModifier.label" value="{{effect.flags.merp1e.SkillModifier.label}}" type="text" data-dtype="String"/>
+        <select name="flags.merp1e.SkillModifier.enableFunction" class="flex1">
+            {{selectOptions modifierEnableFunctions selected=effect.flags.merp1e.SkillModifier.enableFunction localize=true nameAttr="id" labelAttr="label" blank=""}}
+        </select>
+    </div>
+</div>

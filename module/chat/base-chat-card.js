@@ -13,7 +13,12 @@ export class Merp1eBaseChatCard {
     constructor(data, options = {}, messageID = null) {
 		this.options = mergeObject(this.constructor.defaultOptions, this.options);
         this.options.closed = this.options.closed || false;
-		this.data = data;
+		this.data = {...data};
+		if(this.data.skill) {	
+			this.data.skillID = data.skill.id;
+			this.data.actorID = data.skill.parent.id;
+			delete this.data.skill;
+		}
         this.messageID = messageID;
     }
 

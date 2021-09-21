@@ -1,5 +1,5 @@
-<div class="language" style="display: flex; justify-content: center; ">
-    <table class="stats" style="width:100%; text-align: center">
+<div class="skill" style="display: flex; justify-content: center; ">
+    <table class="skill" style="width:100%; text-align: center">
         <colgroup>
             <col style="width:20px"/>
             <col style="width:9%"/>
@@ -58,11 +58,11 @@
                         <td><input class="skill-itembonus" value="{{formatBonus skill.bonuses.item}}" type="text" data-dtype="Number" readonly tabindex=-1/></td>
                         <td><input class="skill-specbonus userentry" name="Item.{{skill.id}}.specialBonus" value="{{skill.bonuses.spec}}" type="number" data-dtype="Number"/></td>
                         <td><input class="skill-extrabonus" value="{{formatBonus skill.bonuses.extra}}" type="text" data-dtype="Number" readonly tabindex=-1/></td>
-                        <td><input class="skill-totalbonus" value="{{formatBonus skill.total}}" type="text" data-dtype="Number" readonly tabindex=-1/></td>
+                        <td><div class="skill-control skill-totalbonus" data-roll-type="{{skill.data.data.rollType}}" data-action="roll-maneuver" data-dtype="Number">{{formatBonus skill.total}} {{skill.data.data.rollType}}</div></td>
                         <td>
                             <a class="item-control item-edit" title="{{localize 'MERP1E.Item.Edit'}}"><i class="fas fa-edit"></i></a>
                             <a class="item-control item-delete" title="{{localize 'MERP1E.Item.Delete'}}"><i class="fas fa-trash"></i></a>
-                            <a class="skill-control duplicate" title="{{localize 'MERP1E.Skills.Duplicate'}}" data-id="{{skill.id}}" data-action="duplicate"><i class="fas fa-copy"></i></a>
+                            <a class="skill-control duplicate" title="{{localize 'MERP1E.Skills.Duplicate'}}" data-action="duplicate"><i class="fas fa-copy"></i></a>
                         </td>
                     </section>
                 {{/each}}

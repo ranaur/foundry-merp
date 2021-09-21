@@ -32,6 +32,8 @@ export class Merp1eModifier {
      *      enableFunction: null // function(data) that returns true/false if the value must be applied to roll *
      *      valueFunction:       // if it is a function, execute the function to calculate and sets on value
      *      label: ""            // label to show on the roll
+     *  -- optional --
+     *      itemId: null         // item that creates the modifier
      *   }
      * 
      *  @data: data can have { actor, skill, spell, value, choosen }

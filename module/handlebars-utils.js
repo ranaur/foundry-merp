@@ -1,4 +1,5 @@
 import { formatBonus } from "./util.js";
+import { Merp1eEffect } from "./active-effect.js";
 
 export const registerHandlebarsHelpers = async function() {
     // If you need to add Handlebars helpers, here are a few useful examples:
@@ -112,7 +113,9 @@ export const preloadHandlebarsTemplates = async function() {
       "systems/merp1e/templates/actor/parts/character-sheet-status.html",
       "systems/merp1e/templates/actor/parts/character-sheet-spells.html"
     ];
-  
+    Merp1eEffect.registerParts(templatePaths);
+
     // Load the template parts
     return loadTemplates(templatePaths);
 };
+

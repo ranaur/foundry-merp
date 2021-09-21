@@ -1,0 +1,25 @@
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.SkillGroup" }}</label>
+    <div class="form-fields">
+        <select name="flags.merp1e.SkillGroupModifier.skillGroup">
+            {{selectOptions sheetOrder selected=effect.flags.merp1e.SkillGroupModifier.skillGroup localize=true nameAttr="id" labelAttr="label" blank=""}}
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.Modifier" }}</label>
+    <div class="form-fields flexrow">
+        <div class="flex2 flexrow">
+            <select name="flags.merp1e.SkillGroupModifier.valueFunction">
+                {{selectOptions modifierValueFunctions selected=effect.flags.merp1e.SkillGroupModifier.valueFunction localize=true nameAttr="id" labelAttr="label"}}
+            </select>
+            {{#if (eq effect.flags.merp1e.SkillGroupModifier.valueFunction "constant")}}
+            <input name="flags.merp1e.SkillGroupModifier.value" value="{{effect.flags.merp1e.SkillGroupModifier.value}}" type="number" data-dtype="Number"/>
+            {{/if}}
+        </div>
+        <input class="flex3" name="flags.merp1e.SkillGroupModifier.label" value="{{effect.flags.merp1e.SkillGroupModifier.label}}" type="text" data-dtype="String"/>
+        <select name="flags.merp1e.SkillGroupModifier.enableFunction" class="flex1">
+            {{selectOptions modifierEnableFunctions selected=effect.flags.merp1e.SkillGroupModifier.enableFunction localize=true nameAttr="id" labelAttr="label" blank=""}}
+        </select>
+    </div>
+</div>

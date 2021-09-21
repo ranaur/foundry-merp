@@ -1,0 +1,25 @@
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.RollType" }}</label>
+    <div class="form-fields">
+        <select name="flags.merp1e.RollTypeModifier.rollType">
+            {{selectOptions rollTypes selected=effect.flags.merp1e.RollTypeModifier.rollType localize=true nameAttr="id" labelAttr="label" blank=""}}
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.Modifier" }}</label>
+    <div class="form-fields flexrow">
+        <div class="flex2 flexrow">
+            <select name="flags.merp1e.RollTypeModifier.valueFunction">
+                {{selectOptions modifierValueFunctions selected=effect.flags.merp1e.RollTypeModifier.valueFunction localize=true nameAttr="id" labelAttr="label"}}
+            </select>
+            {{#if (eq effect.flags.merp1e.RollTypeModifier.valueFunction "constant")}}
+            <input name="flags.merp1e.RollTypeModifier.value" value="{{effect.flags.merp1e.RollTypeModifier.value}}" type="number" data-dtype="Number"/>
+            {{/if}}
+        </div>
+        <input class="flex3" name="flags.merp1e.RollTypeModifier.label" value="{{effect.flags.merp1e.RollTypeModifier.label}}" type="text" data-dtype="String"/>
+        <select name="flags.merp1e.RollTypeModifier.enableFunction" class="flex1">
+            {{selectOptions modifierEnableFunctions selected=effect.flags.merp1e.RollTypeModifier.enableFunction localize=true nameAttr="id" labelAttr="label" blank=""}}
+        </select>
+    </div>
+</div>

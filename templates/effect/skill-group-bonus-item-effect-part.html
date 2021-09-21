@@ -1,0 +1,25 @@
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.SkillGroupBonus" }}</label>
+    <div class="form-fields">
+        <input type="number" name="flags.merp1e.SkillGroupBonus.value" value="{{effect.flags.merp1e.SkillGroupBonus.value }}"/>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.SkillGroup" }}</label>
+    <div class="form-fields">
+        <select name="flags.merp1e.SkillGroupBonus.skillGroup">
+            {{selectOptions sheetOrder selected=effect.flags.merp1e.SkillGroupBonus.skillGroup localize=true nameAttr="id" labelAttr="label" blank=""}}
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.Optional" }}</label>
+    <div class="form-fields">
+        <input type="checkbox" name="flags.merp1e.SkillGroupBonus.isOptional" {{checked effect.flags.merp1e.SkillGroupBonus.isOptional}}/>
+        <div class="flex3">
+            {{#if effect.flags.merp1e.SkillGroupBonus.isOptional}}
+            <input type="text" name="flags.merp1e.SkillGroupBonus.conditionText" value="{{effect.flags.merp1e.SkillGroupBonus.conditionText}}"/>
+            {{/if}}
+        </div>
+    </div>
+</div>

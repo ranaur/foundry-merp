@@ -817,6 +817,107 @@ export class Merp1eEquipmentSheet extends Merp1eBaseItemSheet {
 ## 
 you could CONFIG.debug.hooks = true and see if there's an update happening.
 
+## Instanciar a classe certa
+
+Carter_DC — 16/07/2021
+So, I got inspired by the pf2e classes and made this snip (it's for my items atm, cuz I only got 1 actor type atm^^) but works all the same.
+```js
+export default class M20eItem extends Item {
+
+  /** @override */
+  constructor(data, context) {
+    //useless in the present case but cool
+    //creates a derived class for specific item types
+    if ( data.type in CONFIG.Item.documentClasses && !context?.isExtendedClass) {
+        // specify our custom item subclass here
+        // when the constructor for the new class will call it's super(),
+        // the isExtendedClass flag will be true, thus bypassing this whole process
+        // and resume default behavior
+        return new CONFIG.Item.documentClasses[data.type](data,{...{isExtendedClass: true}, ...context});
+    }    
+    //default behavior, just call super and do random item inits.
+    super(data, context);
+  }
+```
+
+documentClasses are defined in the init hook with st like : 
+```js
+  CONFIG.Actor.documentClass = M20eActor;
+  CONFIG.Item.documentClass = M20eItem;
+  //add references to subclasses for use in the M20eItem constructor
+  //proprty names must be valid item types
+  CONFIG.Item.documentClasses = {"paradigm": M20eParadigmItem};
+```
+
+and lastly, custom item class in it's own file : 
+```js
+/**
+ * Implements M20eParadigmItem as an extension of the M20eItem class
+ * Adds specific methods for paradigm items only.
+ * @extends {M20eItem}
+ */
+export default class M20eParadigmItem extends M20eItem {
+
+  /** @override */
+  constructor(data, context) {
+    super(data, context);
+  }
+
+  /** @override */
+  async _preCreate(data, options, user){
+    log("Je suis un item de paradigme !");
+    await super._preCreate(data, options, user);
+  }
+```
+
+Obviously you'd need some imports, for extended classes in your main (to populate the documentClasses) and your baseItemClass in each of the extended class.
+it does debug as
+
+## How to make a new Effect
+
+1) create a new class on active-effect.js
+    (check Merp1eItemEffectSkillModifier for example)
+
+2) on active-effect-sheet.js
+
+    check in getData() if sheetData it has all info you need.
+
+3) Create a part named the class "effectName in Kebab Case"-item-effect-part.html. in templates/effect. The part is added automatically by the class.
+
+4) Add the part on active-effect-sheet.js
+```js
+            {{#if (eq effect.flags.merp1e.effectType "SkillModifier")}}
+                {{> "systems/merp1e/templates/effect/skill-modifier-item-effect-part.html" effect=effect rules=rules}}
+            {{/if}}
++            {{#if (eq effect.flags.merp1e.effectType "**EFFECTNAME**")}}
++                {{> "systems/merp1e/templates/effect/**EFFECT NAME IN KEBABCASE**-item-effect-part.html" effect=effect rules=rules}}
++            {{/if}}
+```
+
+##################
+Tommycore — Hoje às 07:36
+About custom dice/formulas/etc.
+My system will always have exactly two kinds of rolls, which both rely on the same formula: ([POOL]d6cs>4) +/- [MOD]. If more than half the rolled dies showed a 1, it's a fumble (crit fumble if you also didn't roll any successes). There's the simple roll like that, and the extended roll, where you do a series of simple rolls, each with one die less than the previous one until you're satisfied with the result, run out of die, or fumble. Also, players should be allowed to reroll single dies up to a certain amount.
+So for convenience I'd like to be able to do something like /r 13s+5/4 for "Roll 13, get result, add 5, allow 4 rerolls.
+As far as I understand it, I can register new DiceTerms (like the FateDie is one). But how would I go about that? How can I make sure that by default my custom formula as outlined above will be used? Or at least whenever an "s" term occurs in any roll? How can I have multiple rolls on a single chat card?
+I have solutions for my problems, but they're hacky, unelegant, break the system, and/or force me to reimplement parts by myself that are already there. Like catching message that start with /sr and use them for my systemrolls. Which doesn't necessarily always work.
+I'm at my wit's end. I know those are a load of questions with probably quite complex answers, but I have no idea what or where to search anymore. Any trail I can pick up on would be much appreciated.
+Carter_DC — Hoje às 07:55
+how I add a custom modifer usable in a formula : 
+/**
+ * Adds the custom die modifier 'xs' explodeSuccess, that allows for added auto success on a 10 roll
+ */
+export function registerDieModifier() {
+  //add the modifer to the list with corresponding function name
+  Die.prototype.constructor.MODIFIERS["xs"] = "explodeSuccess";
+  //add said function to the Die prototype
+  Die.prototype.explodeSuccess = function(modifier) {
+  //inside is a modified version of the vanilla explode() function
+  }
+}
+
+That's a start ^^.
+I use it in various formulas like one would a regular 'x' or 'xo' modifier.
 
 
 # DECISIONS

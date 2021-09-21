@@ -1,0 +1,23 @@
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.RankSkillBonus" }}</label>
+    <div class="form-fields">
+        <input type="number" name="flags.merp1e.SkillRankBonus.value" value="{{effect.flags.merp1e.SkillRankBonus.value }}"/>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.Skill" }}</label>
+    <div class="form-fields">
+        <select name="flags.merp1e.SkillRankBonus.skillReference">
+            {{#unless effect.flags.merp1e.SkillRankBonus.skillReference}}<option></option>{{/unless}}
+            {{#each sheetOrder as | skillGroup | }}
+            <optgroup label="{{skillGroup.name}}">
+                {{#select ../effect.flags.merp1e.SkillRankBonus.skillReference}}
+                    {{#each skillGroup.skills as | skill | }}
+                    <option value="{{skill.data.data.reference}}">{{skill.name}}</option>
+                    {{/each}}
+                {{/select}} 
+            </optgroup>
+            {{/each}}
+        </select>
+    </div>
+</div>

@@ -1,5 +1,5 @@
 export function rollOpenEndedSync(high = true, low = true) {
-    const MARGIN = 40; // Normal is 5
+    const MARGIN = 5; // Normal is 5
     let r = new Roll("1D100", {async: false});
     r.roll();
     r.toMessage();
@@ -23,7 +23,7 @@ export function rollOpenEndedSync(high = true, low = true) {
 }
 
 export async function rollOpenEnded(high = true, low = true) {
-    const MARGIN = 40; // Normal is 5
+    const MARGIN = 5; // Normal is 5
     let r = new Roll("1D100", {async: true});
     await r.roll();
     await r.toMessage();

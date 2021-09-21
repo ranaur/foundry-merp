@@ -130,9 +130,8 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
     html.find(".spells").on("click", ".spell-control", this.onClickSpellControl.bind(this));
     html.find(".health").on("click", ".health-control", this.onClickHealthControl.bind(this));
     html.find(".xp").on("click", ".xp-control", this.onClickXPControl.bind(this));
-    html.on("click", ".button-control", this.onClickButtonControl.bind(this));
+    //html.on("click", ".button-control", this.onClickButtonControl.bind(this));
   }
-
   /** @override */
   async _onDropItemCreate(itemData) {
     if (itemData.type === "race") {
@@ -287,8 +286,11 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
 
   async onClickSkillControl(event) {
     event.preventDefault();
-    const a = event.currentTarget;
-    const action = a.dataset.action;
+    const target = event.currentTarget;
+    const action = target.dataset.action;
+    const item = target.closest(".item");
+    const skillID = item?.dataset?.itemId;
+    const skill = this.actor.getEmbeddedDocument("Item", skillID);
 
     switch ( action ) {
     case "remove-all":
@@ -300,10 +302,10 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
       await this.actor.createEmbeddedDocuments("Item", this.actor.getDefaultSkills());
       break;
     case "duplicate":
-      let skillId = a.dataset.id;
-      let skill = this.actor.getEmbeddedDocument("Item", skillId);
-      
       await this.actor.createEmbeddedDocuments("Item", [{ name: game.i18n.localize("MERP1E.Item.New") + " " + skill.name, type: skill.type, data: skill.data.data }], { renderSheet: true });
+      break;
+    case "roll-maneuver":
+      game.merp1e.Merp1eRules.rollManeuver(skill);
       break;
     }
   }

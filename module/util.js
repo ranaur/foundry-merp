@@ -46,26 +46,32 @@ export function stripClassName(obj, prefix = null, suffix = null) {
   return className;
 }
 
-export function getAllSubclasses(baseClass) {
-  var globalObject = Function('return this')(); 
-  var allVars = Object.keys(globalObject);
-  var classes = allVars.filter(function (key) {
-  try {
-    var obj = globalObject[key];
-        return obj.prototype instanceof baseClass;
-    } catch (e) {
-        return false;
-    }
-  });
-  return classes;
-}
+// export function getAllSubclasses(baseClass) {
+//   var globalObject = Function('return this')(); 
+//   var allVars = Object.keys(globalObject);
+//   var classes = allVars.filter(function (key) {
+//   try {
+//     var obj = globalObject[key];
+//         return obj.prototype instanceof baseClass;
+//     } catch (e) {
+//         return false;
+//     }
+//   });
+//   return classes;
+// }
 
 export function toSnakeCase(str) {
  return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
 }
 
+export function toCamelCase(str) {
+  return str.replace(/\W+(.)/g, function(match, chr) {
+      return chr.toUpperCase();
+    });
+}
+
 export function toKebabCase(str) {
-  return str.replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`);
+  return toCamelCase(str).replace(/[A-Z]/g, letter => `-${letter.toLowerCase()}`).replace(/^-/,"");
 }
 
 export function replaceData(str, data) {
