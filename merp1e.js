@@ -71,6 +71,10 @@ Hooks.once('init', async function() {
 
   // Preload template partials.
   preloadHandlebarsTemplates();
+
+  // CTRL Handlers for Character Sheet
+  window.addEventListener('keydown', Merp1eCharacterSheet.onKeyDown.bind(this));
+  window.addEventListener('keyup', Merp1eCharacterSheet.onKeyUp.bind(this));
 });
 
 Hooks.on('renderChatLog', (app, html, data) => Merp1eChat.chatListeners(app, html, data));

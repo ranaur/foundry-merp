@@ -1,11 +1,12 @@
 import { Merp1eModifiers } from "../modifier.js";
 import { rollOpenEnded } from "../dice.js";
-import { findByID } from "../util.js";
-import { Merp1eCards, Merp1eBaseChatCard } from "./base-chat-card.js";
+import { Merp1eCards, Merp1eBaseChatCard } from "./base-chatcard.js";
 
-export class Merp1eStaticManeuverChatCard extends Merp1eBaseChatCard {
+export class Merp1eMovingManeuverChatCard extends Merp1eBaseChatCard {
+    static dummy = Merp1eCards.push(this);
+
     get title() {
-        return "Static Maneuver";
+        return "Moving Maneuver";
     }
 
     getData() {
@@ -19,18 +20,19 @@ export class Merp1eStaticManeuverChatCard extends Merp1eBaseChatCard {
             data.skill = actor.items.get(data.data.skillID);
         }
         if(!data.skill) return data;
+        data.rollTypeID = "MM";
         actor.applyEffects(data); // without actor to not apply actor modifiers
+		data.isGM = game.user.isGM;
 
         data.actor = data.skill.parent;
 
         data.data.chosenDifficulty = data.data.chosenDifficulty || "Medium";
         data.difficulties = game.merp1e.Merp1eRules.skill.difficulties;
-		data.difficultiesValues = data.difficulties.reduce((acc, dif) => { acc[dif.id] = dif.value; return acc; }, {});
 
         
         // Calculate modifiers
         data.modifiersByGroup = [];
-        data.modifiersByGroup.push(new Merp1eModifiers("smm", "Static Modifiers", game.merp1e.Merp1eRules.skill.modifiers.Movement));
+        data.modifiersByGroup.push(new Merp1eModifiers("mmm", "Moving Maneuver Modifiers", game.merp1e.Merp1eRules.skill.modifiers.Movement));
         if(data.skill?.data?.data?.reference) {
             let globalSkill = game.merp1e.Merp1eRules.skill.getAvaliableByReference(data.skill.data.data.reference);
             data.modifiersByGroup.push(new Merp1eModifiers("sgm", "Skill General Modifiers", globalSkill?.data?.data?.modifiers));
@@ -42,7 +44,6 @@ export class Merp1eStaticManeuverChatCard extends Merp1eBaseChatCard {
 
         // Calculate total bonus and roll
         data.total = data.skill.total;
-        data.total += findByID(data.difficulties, data.data.chosenDifficulty, {value:0}).value;
         data.modifiersByGroup.forEach((mg) => {
             mg.evaluate(data);
             const checked = mg.id in data.data.modifiersChecked ? data.data.modifiersChecked[mg.id] : null;
@@ -50,24 +51,31 @@ export class Merp1eStaticManeuverChatCard extends Merp1eBaseChatCard {
             data.total += mg.getTotal(checked, values);
         });
         data.total += (data.data.rollTotal || 0);
+
+        data.data.resolveResult = game.merp1e.Merp1eRules.resolveMovingManeuver(data.total, data.data.chosenDifficulty);
+
+        if(data.data.resolveResult && data.data.calcValue) {
+            data.calcResult = data.data.calcValue * data.data.resolveResult / 100;
+        } else {
+            data.calcResult = "";
+        }
         return data;
     }
 
-    async roll(event, update) {
-		// Old implementation
-		//let r = new Merp1eRollOpenEnded();
-        //r.roll();
-        //r.toMessage();
-        //this.data.rollResult = r.result;
-        //this.data.rollTotal = r.total;
+    activateListeners(html) {
+        super.activateListeners(html);
 
+        html.find('.calc-number').prop('disabled', false);
+    }
+
+    async roll(event, update) {
         let oer = await rollOpenEnded();
 
 		this.data.rollResult = oer.result;
 		this.data.rollTotal = oer.total;
-	
-        this.close(event);
+        
+        this.updateMessage(event);
+        //this.close(event);
     }
 
 }
-Merp1eCards.push(Merp1eStaticManeuverChatCard);

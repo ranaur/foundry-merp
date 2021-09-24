@@ -256,6 +256,7 @@
     "MERP1E.SkillSheet.StatBonus": "Stat Bonus",
     "MERP1E.SkillSheet.Rolltype": "Roll Type",
     "MERP1E.SkillSheet.ShowOnEverySheet": "Show on Every Sheet?",
+    "MERP1E.SkillSheet.Results": "Results",
     "MERP1E.RollType.MM": "Moving Maneuver",
     "MERP1E.RollType.SM": "Static Maneuver",
     "MERP1E.RollType.OB": "Ofensive Bonus",
@@ -277,6 +278,7 @@
     "MERP1E.SkillSheet.Modifiers": "Modifiers",
     "MERP1E.SkillSheet.ExtraBonus": "Extra Bonus",
     "MERP1E.SkillSheet.MaxRanks": "Maximum Ranks",
+    "MERP1E.SkillSheet.ReferenceExist": "Reference must be unique on all skills!",
 
     "MERP1E.Languages.Description": "Description",
     "MERP1E.Languages.Language": "Language",
@@ -522,5 +524,53 @@
     "MERP1E.ModifierEnableFunctions.isStunned": "Is Stunned?",
     "MERP1E.ModifierEnableFunctions.isDown": "Is Down?",
     "MERP1E.ModifierEnableFunctions.isLimbOut": "Is Limb Out?",
+
+    "MERP1E.RollChooser.Title": "Roll Chooser",
+    "MERP1E.RollChooser.Actor": "Actor",
+    "MERP1E.RollChooser.Skill": "Skill",
+    "MERP1E.RollChooser.RollType": "Roll Type",
+    "MERP1E.RollChooser.Roll": "Roll",
+
+    "MERP1E.MovingManeuverCard.RollButton": "Roll!",
+    "MERP1E.MovingManeuverCard.ResolveButton": "Resolve!",
+    "MERP1E.MovingManeuverCard.DifficultyLabel": "Dif.:",
+    "MERP1E.MovingManeuverCard.RollLabel": "Roll:",
+    "MERP1E.MovingManeuverCard.TotalLabel": "Total:",
+    "MERP1E.MovingManeuverCard.ResultLabel": "Result:",
+    "MERP1E.MovingManeuverCard.FumbleResult": "Fumble",
+
+    "MERP1E.StaticManeuverCard.RollButton": "Roll!",
+
+    "MERP1E.StaticManeuverCard.SkillLabel": "Skill:",
+    "MERP1E.StaticManeuverCard.DifficultyLabel": "Dif.:",
+    "MERP1E.StaticManeuverCard.RollLabel": "Roll:",
+    "MERP1E.StaticManeuverCard.TotalLabel": "Total:",
+    "MERP1E.StaticManeuverCard.ResultLabel": "Result:",
+
+    "MERP1E.StaticManeuverResult.Blunder": "Blunder",
+    "MERP1E.StaticManeuverResult.AbsoluteFailure": "Absolute Failure",
+    "MERP1E.StaticManeuverResult.Failure": "Failure",
+    "MERP1E.StaticManeuverResult.PartialSuccess": "Partial Success",
+    "MERP1E.StaticManeuverResult.NearSuccess": "Near-Success",
+    "MERP1E.StaticManeuverResult.Success": "Success",
+    "MERP1E.StaticManeuverResult.AbsolutSuccess": "Absolut Success",
+
+    "MERP1E.StaticManeuverDefaultText.Blunder": "You fail spectacularly. If possible, your static action has the opposite effect from what you intended.",
+    "MERP1E.StaticManeuverDefaultText.AbsoluteFailure": "Utter incompetence causes a mental lapse. Any static actions attempted during the next 10 min (60 rounds) will result in failure (see 05-75 below).",
+    "MERP1E.StaticManeuverDefaultText.Failure": "You have failed. You may not try again the same static action in the same place for 1 day.",
+    "MERP1E.StaticManeuverDefaultText.PartialSuccess": "If partial success is possible, you accomplish 20% of your static action. You may not try the same static action in the same place for 1 hour.",
+    "MERP1E.StaticManeuverDefaultText.NearSuccess": "If partial success is possible, you accomplish half of your static action. You may try again after 3 rounds of contemplation.",
+    "MERP1E.StaticManeuverDefaultText.Success": "Your static action is successful.",
+    "MERP1E.StaticManeuverDefaultText.AbsolutSuccess": "Your static action is successful and you get a +20 bonus to further static actions for the next 10 minutes (60 rounds).",
+
+    "MERP1E.ResistenceRollCard.ResultLabel": "Result:",
+    "MERP1E.ResistenceRollCard.Failure": "Failure",
+    "MERP1E.ResistenceRollCard.Success": "Success",
+
+
+
+    "MERP1E.MovingManeuverCard.CalculatorLabel": "Calculator:",
+    "MERP1E.MovingManeuverCard.CalculateLabel": "0",
+
     "MERP1E.X": "MERP1E"
 }

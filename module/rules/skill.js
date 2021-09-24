@@ -49,6 +49,10 @@ export class MerpSkill {
             { value: -50, label: "MERP1E.Maneuver.Stunned", enableFunction: "isStunned" }, 
             { value: -70, label: "MERP1E.Maneuver.Down", enableFunction: "isDown" }, 
             { value: -30, label: "MERP1E.Maneuver.OneLimbOut", enableFunction: "isLimbOut" }
+        ],
+        Resistence: [
+            { valueFunction: "adHoc", label: "Modification resulting from the base attack roll.", enableFunction: "always" }, 
+            { value: -50, label: "Willing target" }, 
         ]
     };
 
@@ -66,10 +70,13 @@ export class MerpSkill {
         return game.items.filter(item => (item.type == "skill" && item.data.data.group == group && item.data.data.showOnEverySheet == true) );
     }
 
-    static getAvaliableByReference(reference) {
-        const skills = game.items.filter(item => (item.type == "skill" && item.data.data.reference == reference && item.data.data.showOnEverySheet == true) );
+    static getAvaliableByReference(reference, showOnEverySheet = null) {
+        return game.items.find(item => (item.type == "skill" && item.data.data.reference == reference && (showOnEverySheet == null || item.data.data.showOnEverySheet == showOnEverySheet)) );
+        /*
+        const skills = game.items.filter(item => (item.type == "skill" && item.data.data.reference == reference && item.data.data.showOnEverySheet == showOnEverySheet) );
         console.assert(skills.length <= 1, "rules.skill.getAvaliableByReference returned more than one line for " & reference);
         return skills.length > 0 ? skills[0] : null;
+        */
     }
 
     static getAvaliable() {

@@ -1,33 +1,33 @@
 <form class="{{cssClass}}" autocomplete="off">
     <header class="sheet-header flexcol">
-        <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
+        <img class="profile-img gm-select-only" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
         <div class="header-fields">
-            <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name"/></h1>
-            <h3 class="charname"><input name="data.reference" type="text" value="{{data.data.reference}}" placeholder="Reference"/></h3>
+            <h1 class="charname"><input class="gm-select-only" name="name" type="text" value="{{item.name}}" placeholder="Name"/></h1>
+            <h3 class="charname"><input class="gm-select-only" name="data.reference" type="text" value="{{data.data.reference}}" placeholder="Reference"/></h3>
         </div>
     </header>
 
     <div class="flexcol">
         <div class="skill-group flexrow">
             <label for="skill-group">{{localize "MERP1E.SkillSheet.Group"}}</label>
-            <select name="data.group">
+            <select name="data.group" class="gm-select-only">
                 {{selectOptions rules.skill.groups selected=data.data.group localize=true nameAttr="id" labelAttr="label"}}
             </select>
         </div>
 
         <div class="skill-order flexrow">
             <label for="skill-order">{{localize "MERP1E.SkillSheet.Order"}}</label>
-            <input id="skill-order" type="number" name="data.order" value="{{data.data.order}}"/>
+            <input id="skill-order" class="gm-select-only" type="number" name="data.order" value="{{data.data.order}}"/>
         </div>
 
         <div class="skill-statbonus flexrow">
             <label for="skill-showoneverysheet">{{localize "MERP1E.SkillSheet.ShowOnEverySheet"}}</label>
-            <input id="skill-showoneverysheet" name="data.showOnEverySheet" type="checkbox" value="{{data.showOnEverySheet}}" {{checked data.data.showOnEverySheet }}/>
+            <input id="skill-showoneverysheet" class="gm-select-only" name="data.showOnEverySheet" type="checkbox" value="{{data.showOnEverySheet}}" {{checked data.data.showOnEverySheet }}/>
         </div>
 
         <div class="skill-statbonus flexrow">
             <label for="skill-statbonus">{{localize "MERP1E.SkillSheet.StatBonus"}}</label>
-            <select name="data.statBonus">
+            <select name="data.statBonus" class="gm-select-only">
                 {{#select data.data.statBonus}}
                 <option value="">{{localize "MERP1E.Stats.None"}}</option>
                 {{#each rules.stats as |stat|}}
@@ -39,30 +39,31 @@
 
         <div class="skill-rolltype flexrow">
             <label for="skill-rolltype">{{localize "MERP1E.SkillSheet.Rolltype"}}</label>
-            <select name="data.rollType">
+            <select name="data.rollType" class="gm-select-only">
                 {{selectOptions rules.rollTypes selected=data.data.rollType localize=true nameAttr="id" labelAttr="label" blank=""}}
             </select>
         </div>
         <div class="skill-rankbonusmethod flexrow">
             <label for="skill-rankbonusmethod">{{localize "MERP1E.SkillSheet.RankBonusMethod"}}</label>
-            <select name="data.rankBonusMethod">
+            <select name="data.rankBonusMethod" class="gm-select-only">
                 {{selectOptions rules.skill.rankBonusTypes selected=data.data.rankBonusMethod localize=true nameAttr="id" labelAttr="label"}}
             </select>
         </div>
 
-                    <div class="skill-extrabonus flexrow">
+        <div class="skill-extrabonus flexrow">
             <label for="skill-extrabonus">{{localize "MERP1E.SkillSheet.ExtraBonus"}}</label>
-            <input id="skill-extrabonus" type="number" name="data.extraBonus" value="{{data.data.extraBonus}}"/>
+            <input id="skill-extrabonus" class="gm-select-only" type="number" name="data.extraBonus" value="{{data.data.extraBonus}}"/>
         </div>
         <div class="skill-maxranks flexrow">
             <label for="skill-maxranks">{{localize "MERP1E.SkillSheet.MaxRanks"}}</label>
-            <input id="skill-maxranks" type="number" name="data.maxRanks" value="{{data.data.maxRanks}}"/>
+            <input id="skill-maxranks" class="gm-select-only" type="number" name="data.maxRanks" value="{{data.data.maxRanks}}"/>
         </div>
     </div>
 
     {{!-- Sheet Tab Navigation --}}
     <nav class="sheet-tabs tabs" data-group="primary">
         <a class="item" data-tab="description">{{localize "MERP1E.SkillSheet.Description"}}</a>
+        <a class="item" data-tab="results">{{localize "MERP1E.SkillSheet.Results"}}</a>
         <a class="item" data-tab="modifiers">{{localize "MERP1E.SkillSheet.Modifiers"}}</a>
     </nav>
 
@@ -106,7 +107,14 @@
                 </div>
             </div>
         </div>
-
+        {{!-- Results Tab --}}
+        <div class="tab" data-group="primary" data-tab="results">
+            {{#each results as |result|}}
+            <div class="skill-result flexrow">
+                <label for="skill-result-{{result.id}}">{{localize result.label}}</label>
+                <input id="skill-result-{{result.id}}" type="text" class="gm-select-only" name="data.staticManeuverTexts.{{result.id}}" value="{{lookup ../data.data.staticManeuverTexts result.id}}"/>
+            </div>
+            {{/each}}
+        </div>
     </section>
-
 </form>

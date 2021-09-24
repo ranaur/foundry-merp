@@ -7,15 +7,27 @@
             <div>{{skill.name}}</div>
             <div style="text-align: center;">{{formatBonus skill.total}}</div>
         </div>
-        {{!-- Difficulty --}}
+        {{!-- Attack Level --}}
         <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
-            <div>Dif.:</div>
+            <div>Attack Level:</div>
             <div>
-                <select name="chosenDifficulty">
-                    {{selectOptions difficulties selected=data.chosenDifficulty localize=true nameAttr="id" labelAttr="label"}}
-                </select>
             </div>
-            <div style="text-align: center;">{{formatBonus (lookup difficultiesValues data.chosenDifficulty)}}</div>
+            <input type="number" name="attackLevel" value="{{data.attackLevel}}"/>
+        </div>
+        {{!-- Target Level --}}
+        <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
+            <div>Target Level:</div>
+            <div>
+            </div>
+            <input type="number" name="targetLevel" value="{{data.targetLevel}}"/>
+        </div>
+
+        {{!-- Base Attack --}}
+        <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
+            <div></div>
+            <div>Result from Resistence Table
+            </div>
+            <input type="number" value="{{rrBase}}" {{ro}}/>
         </div>
 
         {{!-- Modificators --}}
@@ -57,7 +69,17 @@
                 {{/each}}
             {{/if}}
         {{/each}}
-
+        {{!-- Total --}}
+        <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
+            <div>
+            <b>Total:</b>
+            </div>
+            <div></div>
+            <div style="text-align: center; vertical-align: middle;">
+                <b>{{formatBonus total}}</b>
+                <input type="hidden" name="total" value="{{total}}" />
+            </div>
+        </div>
         {{!-- Roll --}}
         <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
             <div>Roll:</div>
@@ -78,15 +100,22 @@
                 {{/if}}
             </div>
         </div>
-        {{!-- Total --}}
-        <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
+        {{!-- Resolve --}}
+        {{#if data.rollTotal}}
+        <div class="grid grid-2col" style="grid-template-columns: 15% 75%;">
             <div>
-            <b>Total:</b>
+                {{localize "MERP1E.ResistenceRollCard.ResultLabel"}}
             </div>
-            <div></div>
+            {{log "XXX"  this}}
             <div style="text-align: center; vertical-align: middle;">
-                <b>{{formatBonus total}}</b>
+                {{#if resolveResult}}
+                    {{localize data.failureText}}
+                {{else}}
+                    {{localize data.successText}}
+                {{/if}}
             </div>
         </div>
+        {{else}}
+        {{/if}}
     </div>
 </div>

@@ -26,7 +26,7 @@ export async function rollOpenEnded(high = true, low = true) {
     const MARGIN = 5; // Normal is 5
     let r = new Roll("1D100", {async: true});
     await r.roll();
-    await r.toMessage();
+    //await r.toMessage();
 
     let total = r.total;
     let result = "".concat(r.total);

@@ -68,7 +68,7 @@ export class ArraySheetHelper {
      * @returns {Object} updated formData object.
      */
     updateObject(formData) {
-      const expandedForm = expandObject(formData).data[this.type] || {};
+      const expandedForm = expandObject(formData)?.data?.[this.type] || {};
   
       // Put everything in sequential order
       let newForm = {};

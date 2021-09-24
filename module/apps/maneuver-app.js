@@ -1,5 +1,4 @@
-//import { Merp1eChat } from "../chat.js";
-import { Merp1eStaticManeuverChatCard } from "../chat/static-maneuver-card.js";
+import { Merp1eStaticManeuverChatCard } from "../chat/static-maneuver-chatcard.js";
 
 export class Merp1eManeuverApplication extends Application {
 	constructor(options) {
@@ -7,7 +6,6 @@ export class Merp1eManeuverApplication extends Application {
 		this.rules = game.merp1e.Merp1eRules;
 		this.data = { // default
 			rollType: "SM",
-			actors: null,
 			actorID: null,
 			skill: null,
 			skillReference: null,

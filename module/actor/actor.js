@@ -582,8 +582,18 @@ export class Merp1eActor extends Actor {
   /*
    * Lookup skills in the actor.
    */
-  getSkills() {
+  getAvaliableSkills() {
     return this.items.filter( (item) => item.type == "skill" );
+  }
+
+  /**
+   * 
+   * @param {*} skillID - skillID or "MM" to get the maneuver skill for the armor being worn.
+   * @returns the skill Item.
+   */
+  getSkillByID(skillID) {
+    if(skillID == "MM") return this.getSkillMovement();
+    return this.getOwnedItem(skillID);
   }
 
   /*
@@ -594,11 +604,11 @@ export class Merp1eActor extends Actor {
   }
 
   getSkillValue(reference) {
-    return this.getSkillsByReference(reference)[0].total || 0;
+    return this.getSkillsByReference(reference)?.[0]?.total || 0;
   }
 
   getSkillMovement() {
-    return this.getSkillsByReference(this.defense.armor.skillReference)[0];
+    return this.getSkillsByReference(this.defense.armor.skillReference)?.[0];
   }
 
   /*

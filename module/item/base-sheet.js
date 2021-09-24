@@ -45,6 +45,9 @@ export class Merp1eBaseItemSheet extends ItemSheet {
 
   activateListeners(html) {
     super.activateListeners(html);
+    if(!game.user.isGM) {
+      html.find('.gm-select-only').prop('disabled', true);
+    }
   }
 }
 

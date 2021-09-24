@@ -1,4 +1,4 @@
-import { stripClassName } from "../util.js";
+import { toKebabCase, stripClassName } from "../util.js";
 
 export const Merp1eCards = [];
 
@@ -10,7 +10,7 @@ export class Merp1eBaseChatCard {
 		return new cls(data, options, messageID);
     }
 
-    constructor(data, options = {}, messageID = null) {
+	constructor(data, options = {}, messageID = null) {
 		this.options = mergeObject(this.constructor.defaultOptions, this.options);
         this.options.closed = this.options.closed || false;
 		this.data = {...data};
@@ -36,9 +36,9 @@ export class Merp1eBaseChatCard {
 
     get template() {
         const path = "systems/merp1e/templates/chat";
-        const filePrefix = stripClassName(this, null, "ChatCard").toLowerCase();
-        return `${path}/${filePrefix}-chatcard.html`;
-    }
+        const filename = toKebabCase(stripClassName(this, null, "ChatCard")) + "-chatcard.html";
+        return `${path}/${filename}`;
+	}
 
     setClass(className) {
         return;
@@ -61,7 +61,7 @@ export class Merp1eBaseChatCard {
         const chatCardClass = this.options.closed ? "chat-card-closed" : "chat-card";
         const html = $(`<form class="${chatCardClass}" data-card-class='${cardClass}' data-object='${dataObject}'>${cardHTML}</form>`);
 
-        if(this.options.closed) {
+        if(this.options.closed || !this.canUpdate) {
             html.find(':input').prop('disabled', true);
         } else { // open
             html.find(':input').addClass('chat-card');
@@ -72,10 +72,6 @@ export class Merp1eBaseChatCard {
             html.find(':checkbox').addClass('cc-checkbox');
             html.find(':text').addClass('cc-text');
             html.find('input[type=number]').addClass('cc-number');
-            if(!game.user.isGM) {
-                html.find('.gm-select-only').prop('disabled', true);
-
-            }
         }
         return html[0].outerHTML;
     }
@@ -92,12 +88,36 @@ export class Merp1eBaseChatCard {
 		card.activateListeners(html);
 	}
 
-    async _generateChatData(){
-		const html = await this._renderMessage();
+    async _generateChatData(messageID = null){
+		this.messageID = messageID;
+		if(messageID){
+			const chatMessage = game.messages.get(messageID);
+			const me = game.users.get(game.userId)
+			this.canUpdate = ChatMessage._canUpdate(game.users.get(game.userId), chatMessage, {});
+		} else {
+			this.canUpdate = true; // new message, so he is the owner
+		}
+		const html = await this._renderMessage(messageID);
+
+		// XXX: Change the update control, so it honor the actor's owner permissions better. This won't work if the actor has more than one non GM Owner
+		let actorOwnerID = game.user.id;
+		if(this?.data?.actorID && game.user.isGM) {
+			const actor = game.actors.get(this.data.actorID);
+			//const owners = game.users.filter((u) => actor.canUserModify(u) && !u.isGM);
+			const owners = game.users.filter((u) => u.character?.id == actor.id && !u.isGM);
+			if(owners.length > 0) actorOwnerID = owners[0].id;
+		}
 
 		let chatData = mergeObject({
-			user: game.user.id,
+			type: CONST.CHAT_MESSAGE_TYPES.OOC,
+			user: actorOwnerID,
 			flavor: game.i18n.localize(this.title),
+			speaker: {
+				scene: game.canvas.scene.id,
+				actor: this?.data?.actorID,
+				//token: null,
+				//alias: actor.name
+			},
 			content: html
         }, this.options);
 
@@ -115,7 +135,7 @@ export class Merp1eBaseChatCard {
 	async updateMessage(event){
 		if(Merp1eBaseChatCard.getMessageID(event.currentTarget)){
 			const chatMessage = game.messages.get(this.messageID);
-            const chatData = await this._generateChatData();
+            const chatData = await this._generateChatData(this.messageID);
 			const msg = await chatMessage.update({content: chatData.content});
 			if(msg) return await ui.chat.updateMessage(msg, false);
         } else {
@@ -132,6 +152,9 @@ export class Merp1eBaseChatCard {
 		html.on('click', '.chat-card .cc-submit', this._onSubmit.bind(this));
 		html.on('click', '.chat-card .cc-button', this._onButton.bind(this)); 
 		html.on('keydown', 'form', this._onKey.bind(this));
+		if(!game.user.isGM) {
+			html.find('.gm-select-only').prop('disabled', true);
+		}
 	}
 
     /* ************** Event Handlers ************** */
@@ -379,10 +402,4 @@ export class Merp1eBaseChatCard {
 
 }
 */
-
-Merp1eCards.push(Merp1eBaseChatCard);
-
-export class Merp1eTestChatCard extends Merp1eBaseChatCard {
-}
-Merp1eCards.push(Merp1eTestChatCard);
 

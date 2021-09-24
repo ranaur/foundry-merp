@@ -1,4 +1,4 @@
-import { Merp1eBaseChatCard } from "./chat/base-chat-card.js";
+import { Merp1eBaseChatCard } from "./chat/base-chatcard.js";
 
 export class Merp1eChat {
     /*

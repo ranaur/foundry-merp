@@ -1,5 +1,6 @@
 import { LanguageSheetHelper } from '../language-helper.js';
 import { Merp1eBaseSheet } from './base-sheet.js';
+import { Merp1eRollChooserApplication } from '../apps/roll-chooser.js';
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -122,8 +123,10 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
     if (!this.options.editable) return;
 
     // Rollable abilities.
-    html.find('.rollable').click(this._onRoll.bind(this));
+    //html.find('.rollable').click(this._onRoll.bind(this));
 
+    //html.on("keydown", this.onKeyDown.bind(this));
+    //html.on("keyup", this.onKeyUp.bind(this));
     LanguageSheetHelper.activateListeners(html, this.actor);
 
     html.find(".skills").on("click", ".skill-control", this.onClickSkillControl.bind(this));
@@ -305,7 +308,11 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
       await this.actor.createEmbeddedDocuments("Item", [{ name: game.i18n.localize("MERP1E.Item.New") + " " + skill.name, type: skill.type, data: skill.data.data }], { renderSheet: true });
       break;
     case "roll-maneuver":
-      game.merp1e.Merp1eRules.rollManeuver(skill);
+      if (event.ctrlKey) {
+        Merp1eRollChooserApplication.create({actorID: skill.parent.id, skillID : skill.id});  
+      } else {
+        game.merp1e.Merp1eRules.rollManeuver(skill);
+      }
       break;
     }
   }
@@ -430,6 +437,18 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
       }
       this.submit();
       break
+    }
+  }
+  static onKeyDown(event) {
+    if (event.which == "17") {
+      $(".skill-rolltype-choose").show();
+      $(".skill-rolltype-automatic").hide();
+    }
+  }
+  static onKeyUp(event) {
+    if (event.which == "17") {
+      $(".skill-rolltype-choose").hide();
+      $(".skill-rolltype-automatic").show();
     }
   }
 }

@@ -1,16 +1,24 @@
 import { Merp1eManeuverApplication } from '../apps/maneuver-app.js';
 import { MerpSpell, MerpSpellList } from "./spell.js";
 import { MerpSkill } from "./skill.js";
+import { TableMT2 } from "./tables/mt-2.js";
+import { TableMT1 } from "./tables/mt-1.js";
 import { TableBT1 } from "./tables/bt-1.js";
+import { TableRR1 } from "./tables/rr-1.js";
 import { findByID } from '../util.js';
-import { Merp1eStaticManeuverChatCard } from "../chat/static-maneuver-card.js";
+import { Merp1eStaticManeuverChatCard } from "../chat/static-maneuver-chatcard.js";
+import { Merp1eMovingManeuverChatCard } from "../chat/moving-maneuver-chatcard.js";
+import { Merp1eResistenceRollChatCard } from "../chat/resistence-roll-chatcard.js";
 
 export class Merp1eRules {
     static spell = MerpSpell;
     static spelllist = MerpSpellList;
     static skill = MerpSkill;
     static tables = {
-        bt1: TableBT1
+        mt2: TableMT2,
+        mt1: TableMT1,
+        bt1: TableBT1,
+        rr1: TableRR1
     };
     static stats = [
         { id: "st", label: "MERP1E.Stats.st.Name", abbr: "MERP1E.Stats.st.Abbr" }, 
@@ -22,19 +30,23 @@ export class Merp1eRules {
         { id: "ap", label: "MERP1E.Stats.ap.Name", abbr: "MERP1E.Stats.ap.Abbr" , only_value: true }
     ];
     static rollTypes = [
-        { id: "MM", label: "MERP1E.RollType.MM", abbr: "MERP1E.RollTypeAbbr.MM", rollCard: (data) => new Merp1eStaticManeuverChatCard(data) },
+        { id: "MM", label: "MERP1E.RollType.MM", abbr: "MERP1E.RollTypeAbbr.MM", rollCard: (data) => new Merp1eMovingManeuverChatCard(data) },
         { id: "SM", label: "MERP1E.RollType.SM", abbr: "MERP1E.RollTypeAbbr.SM", rollCard: (data) => new Merp1eStaticManeuverChatCard(data) },
-        { id: "RR", label: "MERP1E.RollType.RR", abbr: "MERP1E.RollTypeAbbr.RR", rollCard: (data) => new Merp1eStaticManeuverChatCard(data) },
+        { id: "RR", label: "MERP1E.RollType.RR", abbr: "MERP1E.RollTypeAbbr.RR", rollCard: (data) => new Merp1eResistenceRollChatCard(data) },
         { id: "DB", label: "MERP1E.RollType.DB", abbr: "MERP1E.RollTypeAbbr.DB", rollCard: (data) => new Merp1eStaticManeuverChatCard(data) },
         { id: "OB", label: "MERP1E.RollType.OB", abbr: "MERP1E.RollTypeAbbr.OB", rollCard: (data) => new Merp1eStaticManeuverChatCard(data) },
         { id: "SP", label: "MERP1E.RollType.SP", abbr: "MERP1E.RollTypeAbbr.SP", rollCard: (data) => new Merp1eStaticManeuverChatCard(data) }
     ];
 
-    static rollManeuver(skill) {
-        const rolltype = findByID(this.rollTypes, skill?.data?.data?.rollType, "SM");
-        if(rolltype) {
-            const card = rolltype.rollCard({skill: skill, rollTypeID: rolltype.id});
+    static rollManeuver(skill, rollTypeID = null) {
+        if(!skill) return ui.notifications.error(`Must choose a skill to roll a Maneuver!`);
+        if(!rollTypeID) rollTypeID = skill?.data?.data?.rollType;
+        const rollType = findByID(this.rollTypes, rollTypeID, "SM");
+        if(rollType) {
+            const card = rollType.rollCard({skill: skill, rollTypeID: rollType.id});
             card.sendMessage();
+        } else {
+            ui.notifications.error(`Rolltype ${rollTypeID} not found!`);
         }
     }
 
@@ -165,6 +177,46 @@ export class Merp1eRules {
         return Merp1eRules.lookupTable(Merp1eRules.tables.bt1, "Power Points", stat);
     };
 
+    static resolveResistenceRoll(attackLevel, targetLevel) {
+        if(attackLevel < 1) return null;
+        if(targetLevel < 1) return null;
+        let al = attackLevel > 15 ? 15 : attackLevel;
+        let tl = targetLevel > 15 ? 15 : targetLevel;
+        let adj = (targetLevel > 15 ? 15 - targetLevel : 0) - (attackLevel > 15 ? 15 - attackLevel : 0);
+        return Merp1eRules.tables.rr1.table[tl-1][al-1] + adj;
+    };
+
+    static resolveMovingManeuver(roll, difficulty) {
+        if(roll > 300) roll = 300;
+        return Merp1eRules.lookupTable(Merp1eRules.tables.mt1, difficulty, roll);
+    };
+
+    static resolveStaticManeuver(roll) {
+        if(roll > 300) roll = 300;
+        return Merp1eRules.lookupTable(Merp1eRules.tables.mt2, "id", roll);
+    };
+    static resolveStaticManeuverLabel(roll) {
+        if(roll > 300) roll = 300;
+        return game.i18n.localize(Merp1eRules.lookupTable(Merp1eRules.tables.mt2, "label", roll));
+    };
+    static resolveStaticManeuverText(roll, skill = null) {
+        let label;
+        
+        if(skill) {
+            const id = this.resolveStaticManeuver(roll);
+            label = skill?.data?.data?.staticManeuverTexts?.[id];
+        }
+        if(!label) {
+            if(roll > 300) roll = 300;
+            label = Merp1eRules.lookupTable(Merp1eRules.tables.mt2, "text", roll);
+        }
+        return game.i18n.localize(label);
+    }
+
+    static staticManeuverResults() {
+        return Merp1eRules.tables.mt2.toObjectArray();
+        //return Merp1eRules.tables.mt2.table.reduce((acc, row) => { acc.push({id: row[1], label: row[2], text: row[3]}); return acc;}, []);
+    }
     // Maps XP to the level
     static resolveLevel(xp) {
         const x = Math.floor(xp/10000);

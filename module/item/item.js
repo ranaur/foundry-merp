@@ -54,6 +54,7 @@ export class Merp1eItem extends Item {
     //updateData['token.displayName'] = 50;
     await this.data.update( updateData );
   }
+
 }
 
 class Merp1eRace {

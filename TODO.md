@@ -1,32 +1,41 @@
 # TODO
-Fazer o active effect (aproveita para colocar o part do skill chooser)
+game.merp1e.Merp1eRules
+game.i18n.localize("MERP1E.EffectDescription.ShieldUnset");
 
+* impedir alteração de skill por quem não é GM (colocar GM-EDITABLE)
+* Colocar um campo para "multiplicar" o resultado do MM/100
+(alterar a character sheet de forma quando criar um skill novo só deixar escolher entre os que já existem (não é new, e sim COPY))
+** retirar o conditional no skill bonus (active effect)
+** refatorar para usar o skill-chooser part em todos os cantos
+?? colocoar as condições dos skills como active effects e não array de modificators
 
-Modifier:
-* Colocar condições nos skills
-    Colocar active effect no skill para fazer bonus opcionais e puxar dos skills globais
-    Ao copiar, instanciar no ator, apagar os modificadores "globais"
-
-*    Criar active Effect de adicionar modifier em skill (o condicional)
-
-* Fazer o rolamento na tabela (static, moving)
-    escolher qual a rolltable no skill
-    colocar conditions
-        valor Fixo/Fórmula
-        opcional?
-        enableFunction
-        texto
-
-* criar um item "configuration" com active effects válidos para todo mundo
+* Criar o Background Option/Special
+* Permitir escolher um item special como configuration com active effects válidos para todo mundo
+* Permitir colocar Active Effect em Raça, Profissão e no Ator.
 * fazer com que outros lugares usem o part de skill-chooser
-* fazer os outros tipos de rolamento (MM, RR, SP, e ataque)
+* fazer os outros tipos de rolamento (SP (+100), e ataque)
+* Facer a ação (e o card) de prepare/cast spell
+* Reorganizar spells para aceitarem ActiveEffects e aplicarem no target
+* Fazer um atualizador de ficha para copiar os skills - na verdade buscar os skills sempre por referência dos padrões do jogo e sobreescrever no personagem. Assim os skills sempre estarão sincronizados.
+* Fazer com que os itens permitam fazer rolls de skills (com bonus) ou ataques, ou lançar spells
 
-* Colocar o class="userentry" em todo o resto
-* Reorganizar spell
-    * colocar só as listas e permitir criar ações favoritas?
-
+    ## New
+        Fazer um "controlador do tempo"
 
     ## Someday/Maybe
+        * Alterar a estrutura da ChatMessage para honrar a permissão do ator, e não do usuário
+            - vai precisar herdar de ChaMessage e reconfigurar no CONFIG
+            - alterar o _canUpdate para, se tiver um actorID no data, fazer 
+            - retirar o código do Merp1eBaseChatCard._generateChatData com XXX (linha 102: // XXX: Change the update control ...)
+
+        * Ver se a mensagem de chatcard pode virar um roll
+            ? talvez, para isso eu precisasse criar o DiceRoll para o open ended e assoaiar à mensagem
+
+        * Criar o flag dos maneuvers serem em whisper e só publicarem o resultado.
+
+        * Criar um equipamento "stash of coins", que controla quantidade de moedas (e peso)
+        * Colocar o class="userentry" em todo o resto
+        * colocar no resistence roll a possibilidade de escolher o ator (se estiver em uma luta, ou listar os atores da cena se for GM)
         * Melhorar os botões SceneControls#_getControlButtons
         * Refatorar o dado Open Ended:
             - Mudar a fórmula dos dados subsequentes para somar/subtrair direto
@@ -34,6 +43,7 @@ Modifier:
             - Fazer uma classe (filha da Roll)  com o dado Open Ended
             - Ou tirar o dice.js de vez (e testar com o dice3d).
             - Retirar a classe mer1eOpenEnded do dice.js ou fazer o tipo de rolamento direito.
+        * Colocar um valueFunction que permite substituir os dados (@stBonus + 10)
 
     Criar Aba de Actions:
         Colocar uma linha para rolar qualquer skill "self"
@@ -42,14 +52,12 @@ Modifier:
         Lista de spells que o personagem pode lançar.
 
     Effect:
-        *? Colocar conditions no skill?
-            * Fazer um atualizador de ficha para copiar os skills
         * Fazer novos Active Effects de Action
             ActionSkill / SkillUse
                 * cria uma action que permite rolar o skill com um eventual bonus
                 - skill
                 - bonus
-                - condicional (vários)
+                - modificadores
                 - tipo de rolamento (default o do skill): MM/SM/RR/etc.
             Attack
                 * cria uma action que permite rolar um ataque skill com um eventual bonus
@@ -58,8 +66,7 @@ Modifier:
                 - colocar tabela de ataque (e de critical)
             ActionSpell / SpellCast
                 - spells
-                - skill (base spell/directed spells)
-            
+                - skill (base spell/directed spells)            
             Quantidade de usos:
                 Daily (max, current, *renew*)
                 Charged (max, current)
@@ -69,16 +76,9 @@ Modifier:
         *   colocar uma ordem no active effect - hoje é por ordem de tipo de efeito (sequindo a effectTypes)
         *   Permitir configurar quantos itens são possíveis em cada local
 
-        ActiveEffect skill:
-            Colocar Conditional (text to show)
-
         Criar subclasses: 
             Bonus on static/moving Maneuvers (all)
             Infravision: set dark/light vision
-            stunned?
-            knocked out?
-            down?
-            bleeding?
 
     Actor:
         Aba Status:
@@ -919,6 +919,16 @@ export function registerDieModifier() {
 That's a start ^^.
 I use it in various formulas like one would a regular 'x' or 'xo' modifier.
 
+* Mostrar uma tela para os jogadores
+Can you initiate an event and have a screen pop up for another player? If a player rolls an attribute, it would open up a screen for the GM to input a TN, and then proceed with further calculations?
+
+This also interests me. Can you point some code in some system that does this, please? :slight_smile:
+Skimble — Hoje às 15:00
+@ranaur I use a socket in my code for XCard, that's a pretty straightforward example of a module, but the approach is the same for a system
+Skimble — Hoje às 15:28
+https://github.com/sk1mble/xcard
+
+See the socket:true declaration in the JSON, the game.socket.emit syntax on line 56 of XCard.js, and the hook in line 64- that sets up the hook response.
 
 # DECISIONS
 

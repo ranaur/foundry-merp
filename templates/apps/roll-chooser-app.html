@@ -1,0 +1,17 @@
+<form class="{{cssClass}} flexcol" autocomplete="off">
+    <div class="resource grid grid-2col">
+        <label class="resource-label">{{localize "MERP1E.RollChooser.Actor"}}</label>
+        <select name="data.actorID" {{ro}}>
+            {{selectOptions actors selected=actorID localize=false nameAttr="id" labelAttr="name" readOnly=actorID}}
+        </select>
+        <label class="resource-label">{{localize "MERP1E.RollChooser.Skill"}}</label>
+        {{> "systems/merp1e/templates/parts/skill-chooser.html" sheetOrder=sheetOrder name="data.skillID" readOnly=skillID selected=skillID maneuverSkill=true blank=false returnReference=false }}
+        <label class="resource-label">{{localize "MERP1E.RollChooser.RollType"}}</label>
+        <select name="data.rollType">
+            {{selectOptions rollTypes selected=rollType localize=true nameAttr="id" labelAttr="label"}}
+        </select>
+    </div>
+    <footer class="app-footer">
+        <button type="submit"><i class="fas fa-dice"></i> {{localize "MERP1E.RollChooser.Roll"}}</button>
+    </footer>
+</form>
