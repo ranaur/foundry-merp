@@ -5,30 +5,6 @@
     </div>
 </div>
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.Skill" }}</label>
-    <div class="form-fields">
-        <select name="flags.merp1e.SkillBonus.skillReference">
-            {{#unless effect.flags.merp1e.SkillBonus.skillReference}}<option></option>{{/unless}}
-            {{#each sheetOrder as | skillGroup | }}
-            <optgroup label="{{localize skillGroup.label}}">
-                {{#select ../effect.flags.merp1e.SkillBonus.skillReference}}
-                    {{#each skillGroup.skills as | skill | }}
-                    <option value="{{skill.data.data.reference}}">{{skill.name}}</option>
-                    {{/each}}
-                {{/select}} 
-            </optgroup>
-            {{/each}}
-        </select>
-    </div>
-</div>
-<div class="form-group">
-    <label>{{ localize "MERP1E.Effect.Optional" }}</label>
-    <div class="form-fields">
-        <input type="checkbox" name="flags.merp1e.SkillBonus.isOptional" {{checked effect.flags.merp1e.SkillBonus.isOptional}}/>
-        <div class="flex3">
-            {{#if effect.flags.merp1e.SkillBonus.isOptional}}
-            <input type="text" name="flags.merp1e.SkillBonus.conditionText" value="{{effect.flags.merp1e.SkillBonus.conditionText}}"/>
-            {{/if}}
-        </div>
-    </div>
+    <label class="resource-label">{{ localize "MERP1E.Effect.Skill" }}</label>
+    {{> "systems/merp1e/templates/parts/skill-chooser.html" sheetOrder=sheetOrder name="flags.merp1e.SkillBonus.skillReference" readOnly=skillID selected=effect.flags.merp1e.SkillBonus.skillReference maneuverSkill=true blank=false returnReference=true }}
 </div>

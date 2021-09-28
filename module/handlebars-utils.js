@@ -100,7 +100,7 @@ export const preloadHandlebarsTemplates = async function() {
       "systems/merp1e/templates/parts/skill-chooser.html",
       "systems/merp1e/templates/parts/realm-chooser.html",
       "systems/merp1e/templates/parts/spell-chooser.html",
-      "systems/merp1e/templates/item/parts/special-effects.html",
+      "systems/merp1e/templates/item/parts/effects.html",
       "systems/merp1e/templates/actor/parts/character-sheet-stat-line.html",
       "systems/merp1e/templates/actor/parts/character-sheet-stats.html",
       "systems/merp1e/templates/actor/parts/character-sheet-description.html",
@@ -111,6 +111,7 @@ export const preloadHandlebarsTemplates = async function() {
       "systems/merp1e/templates/actor/parts/character-sheet-xp.html",
       "systems/merp1e/templates/actor/parts/character-sheet-effects.html",
       "systems/merp1e/templates/actor/parts/character-sheet-status.html",
+      "systems/merp1e/templates/actor/parts/character-sheet-specials.html",
       "systems/merp1e/templates/actor/parts/character-sheet-spells.html"
     ];
     Merp1eEffect.registerParts(templatePaths);

@@ -2,27 +2,28 @@
 game.merp1e.Merp1eRules
 game.i18n.localize("MERP1E.EffectDescription.ShieldUnset");
 
-* impedir alteração de skill por quem não é GM (colocar GM-EDITABLE)
-* Colocar um campo para "multiplicar" o resultado do MM/100
-(alterar a character sheet de forma quando criar um skill novo só deixar escolher entre os que já existem (não é new, e sim COPY))
-** retirar o conditional no skill bonus (active effect)
-** refatorar para usar o skill-chooser part em todos os cantos
-?? colocoar as condições dos skills como active effects e não array de modificators
-
-* Criar o Background Option/Special
-* Permitir escolher um item special como configuration com active effects válidos para todo mundo
-* Permitir colocar Active Effect em Raça, Profissão e no Ator.
-* fazer com que outros lugares usem o part de skill-chooser
-* fazer os outros tipos de rolamento (SP (+100), e ataque)
-* Facer a ação (e o card) de prepare/cast spell
+* fazer a importação aceitar dados mais complexos
+* Permitir colocar Active Effect em Raça, Profissão e no Ator. (FAZER COMO UM PART)
+* Criar uma opção do sistema para escolher um item special como configuration com active effects válidos para todo mundo
+* Colocar um ícone para cada tipo de special
+* colcoar um ajuste adhoc nos rolamentos (cards)
+* Expandir o effects para listar os especiais de raça (por abir o item de raça, profissão - idem) e os Especiais que o personagem tem (background options, etc.)
+* Permitir reimportar a profissão (se for a mesma)
+* fazer os outros tipos de rolamento (SP (+100), Ataque, Base e Directed Spell Cast
+* Fazer a ação (e o card) de prepare/cast spell
 * Reorganizar spells para aceitarem ActiveEffects e aplicarem no target
-* Fazer um atualizador de ficha para copiar os skills - na verdade buscar os skills sempre por referência dos padrões do jogo e sobreescrever no personagem. Assim os skills sempre estarão sincronizados.
 * Fazer com que os itens permitam fazer rolls de skills (com bonus) ou ataques, ou lançar spells
+* impedir alteração de skill por quem não é GM nas raças e profissões (colocar classe gm-select-only)
+* Criar um equipamento "stash of coins", que controla quantidade de moedas (e peso)
+* Colocar no equipamento "wearable/yieldable" e os locais que ele permite (só editável pelo GM, mas o personagem pode vestir)
+Explorar actor.getActiveTokens() 
+* Ver como herdar RollaBle Table
 
     ## New
         Fazer um "controlador do tempo"
 
     ## Someday/Maybe
+        * Fazer com que diferentes itens herdem como diferentes classes
         * Alterar a estrutura da ChatMessage para honrar a permissão do ator, e não do usuário
             - vai precisar herdar de ChaMessage e reconfigurar no CONFIG
             - alterar o _canUpdate para, se tiver um actorID no data, fazer 
@@ -33,7 +34,6 @@ game.i18n.localize("MERP1E.EffectDescription.ShieldUnset");
 
         * Criar o flag dos maneuvers serem em whisper e só publicarem o resultado.
 
-        * Criar um equipamento "stash of coins", que controla quantidade de moedas (e peso)
         * Colocar o class="userentry" em todo o resto
         * colocar no resistence roll a possibilidade de escolher o ator (se estiver em uma luta, ou listar os atores da cena se for GM)
         * Melhorar os botões SceneControls#_getControlButtons
@@ -76,9 +76,8 @@ game.i18n.localize("MERP1E.EffectDescription.ShieldUnset");
         *   colocar uma ordem no active effect - hoje é por ordem de tipo de efeito (sequindo a effectTypes)
         *   Permitir configurar quantos itens são possíveis em cada local
 
-        Criar subclasses: 
-            Bonus on static/moving Maneuvers (all)
-            Infravision: set dark/light vision
+        Novo Efeito: 
+            Infravision: set dark/light vision no token doi personagem
 
     Actor:
         Aba Status:
@@ -97,10 +96,10 @@ game.i18n.localize("MERP1E.EffectDescription.ShieldUnset");
             Fazer com que as fichas atualizem quando mudar o flag de tipo de damage
             * better treatment of weapon/shield arm. Use the weapon at hand, and if the player is using two weapons, choose randomly/heavier ou left/righ handed.
 
-        Aba skill:
-        ?    Colocar "favorite skill" e colocar actions (skill, bonus, conditional bonus)
+        Aba Skill:
+            Colocar um botão para reimportar todos os skills.
 
-        Aba description:
+        Aba Description:
 
         Aba Equipment:
         *   Colocar usable/werable no item (marcado)
@@ -142,7 +141,7 @@ game.i18n.localize("MERP1E.EffectDescription.ShieldUnset");
 
         Aba Spells:
             Permitir preparar/Lançar os spells
-            Esconder os spells condicionalmente
+            Esconder os spells condicionalmente (ver o chatcard)
 
         Aba language:
             Padronizar o tratamento de criação/exclusão de items (aba Language, item, Spells)
@@ -318,11 +317,11 @@ for(item of game.data.actors.filter((item) => { return item.type == "character" 
 
 # Criando novo tipo de Item
 
+* Cria ./item/language-sheet.js
+* Cria ./item/language-sheet.html
 * Altera merp1e.js
   import { Merp1eLanguageSheet } from "./item/language-sheet.js";
   Items.registerSheet("merp1e", Merp1eLanguageSheet, { types: ['language'], makeDefault: true });
-* Cria ./item/language-sheet.js
-* Cria ./item/language-sheet.html
 * Altera template.json (e recarrega o mundo)
 * Criar o svg
 

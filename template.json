@@ -52,7 +52,7 @@
   }
   },
   "Item": {
-    "types": ["skill", "language", "equipment", "spell", "spelllist", "race", "profession", "backgroundOption", "feature", "damage", "xp"], 
+    "types": ["skill", "language", "equipment", "spell", "spelllist", "race", "profession", "special", "damage", "xp"], 
     "templates": {
       "base": {
         "description": ""
@@ -72,6 +72,11 @@
       "ranks": 0,
       "rankBonus": 0,
       "rankSet": {}
+    },
+    "special": {
+      "templates": ["base"],
+      "refecence": "",
+      "type": ""
     },
     "xp": {
       "templates": ["base"],
@@ -219,13 +224,6 @@
       "spellRestriction": ["profession and open", "profession and open up to 5th level", "open up to 5th level", "open up to 3rd level"],
       "professionSkillBonuses": {},
       "developmentPoints": {}
-    },
-    "backgroundOption": {
-      "templates": ["base"]
-    },
-    "feature": {
-      "templates": ["base"],
-      "skillBonuses": {}
     }
   }
 }

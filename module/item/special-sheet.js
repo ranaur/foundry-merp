@@ -1,0 +1,28 @@
+import { Merp1eActiveEffectHelper } from '../active-effect-helper.js';
+import { Merp1eBaseItemSheet } from './base-sheet.js';
+
+/**
+ * @extends {Merp1eItem}
+ */
+export class Merp1eSpecialSheet extends Merp1eBaseItemSheet {
+  /** @override */
+  getData() {
+    let sheetData = super.getData()
+    return sheetData;
+  }
+
+  /** @override */
+  _updateObject(event, formData) {
+    return this.object.update(formData);
+  }
+
+  activateListeners(html) {
+    super.activateListeners(html);
+
+    // Everything below here is only needed if the sheet is editable
+    if (!this.options.editable) return;
+
+    Merp1eActiveEffectHelper.activateListeners(html, this.item);
+  }
+}
+

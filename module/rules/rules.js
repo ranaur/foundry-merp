@@ -49,7 +49,13 @@ export class Merp1eRules {
             ui.notifications.error(`Rolltype ${rollTypeID} not found!`);
         }
     }
-
+    static special = {
+        types: [
+            { id: "Background Option", label: "MERP1E.Special.BackgorundOption", abbr: "MERP1E.SpecialAbbr.BackgorundOption", icon: "fas fa-user-plus" },
+            { id: "Feature", label: "MERP1E.Special.Feature", abbr: "MERP1E.SpecialAbbr.Feature", icon: "fas fa-notes-medical" },
+            { id: "Maneuver Success", label: "MERP1E.Special.ManeuverSuccess", abbr: "MERP1E.SpecialAbbr.ManeuverSuccess", icon: "fas fa-glasses" }
+        ]
+    };
     static profession = {
         list: {
             "Warrior": { name: "Warrior" },

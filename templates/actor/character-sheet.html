@@ -53,6 +53,7 @@
     <a class="item" data-tab="spells">{{localize "MERP1E.CharacterTab.Spells"}}</a>
     <a class="item" data-tab="equipment">{{localize "MERP1E.CharacterTab.Equipment"}}</a>
     <a class="item" data-tab="xp">{{localize "MERP1E.CharacterTab.XP"}}</a>
+    <a class="item" data-tab="specials">{{localize "MERP1E.CharacterTab.Specials"}}</a>
     <a class="item" data-tab="effects">{{localize "MERP1E.CharacterTab.Effects"}}</a>
   </nav>
 
@@ -101,6 +102,11 @@
     {{!-- Equipment Tab --}}
     <div class="tab equipment" data-group="primary" data-tab="equipment">
       {{> "systems/merp1e/templates/actor/parts/character-sheet-equipment.html" actor=actor}}
+    </div>
+
+    {{!-- Specials Tab --}}
+    <div class="tab special" data-group="primary" data-tab="specials">
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-specials.html" actor=actor}}
     </div>
 
     {{!-- Effects Tab --}}

@@ -34,13 +34,19 @@ export class Merp1eSkillSheet extends Merp1eBaseItemSheet {
 
   /** @override */
   _updateObject(event, formData) {  
-    formData = this.modifierHelper.updateObject(formData);  
+    formData = this.modifierHelper.updateObject(formData);
     const skillWithSameReference = game.merp1e.Merp1eRules.skill.getAvaliableByReference(formData?.["data.reference"]);
-    if(skillWithSameReference && this.item.id != skillWithSameReference?.id) {
-      ui.notifications.error(game.i18n.localize("MERP1E.SkillSheet.ReferenceExist"));
-      return false;
+    if(this.item.parent) { // in an actor, the reference must exist
+      if(!skillWithSameReference) {
+        ui.notifications.error(game.i18n.localize("MERP1E.SkillSheet.ReferenceMustExist"));
+        return false;
+      }
+    } else { // in the folder, the reference must be unique
+      if(skillWithSameReference && this.item.id != skillWithSameReference?.id) {
+        ui.notifications.error(game.i18n.localize("MERP1E.SkillSheet.ReferenceAlreadyExist"));
+        return false;
+      }
     }
     return this.object.update(formData);
   }
 }
-

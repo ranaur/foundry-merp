@@ -19,6 +19,7 @@ import { Merp1eEffect } from "./module/active-effect.js";
 import { Merp1eActiveEffectSheet } from "./module/active-effect-sheet.js";
 import { Merp1eMenu } from "./module/menu.js";
 import { Merp1eChat } from "./module/chat.js";
+import { Merp1eSpecialSheet } from "./module/item/special-sheet.js";
 //import { Merp1eRollOpenEnded } from "./module/dice.js";
 
 Hooks.once('init', async function() {
@@ -61,7 +62,8 @@ Hooks.once('init', async function() {
   Items.registerSheet("merp1e", Merp1eXPSheet, { types: ['xp'], makeDefault: true });
   Items.registerSheet("merp1e", Merp1eEquipmentSheet, { types: ['equipment'], makeDefault: true });
   Items.registerSheet("merp1e", Merp1eDamageSheet, { types: ['damage'], makeDefault: true });
-  
+  Items.registerSheet("merp1e", Merp1eSpecialSheet, { types: ['special'], makeDefault: true });
+
   Hooks.on('renderSceneControls', Merp1eMenu.renderMenu); // getSceneControlButtons
 
   registerSettings();

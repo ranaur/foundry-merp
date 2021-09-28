@@ -64,6 +64,7 @@
     "MERP1E.CharacterTab.Spells": "Spells",
     "MERP1E.CharacterTab.XP": "XP",
     "MERP1E.CharacterTab.Effects": "Effects",
+    "MERP1E.CharacterTab.Specials": "Specials",
     "MERP1E.Effects.Label": "Effects",
 
     "MERP1E.Stats.None": "None",
@@ -278,7 +279,8 @@
     "MERP1E.SkillSheet.Modifiers": "Modifiers",
     "MERP1E.SkillSheet.ExtraBonus": "Extra Bonus",
     "MERP1E.SkillSheet.MaxRanks": "Maximum Ranks",
-    "MERP1E.SkillSheet.ReferenceExist": "Reference must be unique on all skills!",
+    "MERP1E.SkillSheet.ReferenceMustExist": "Reference must exist in the avaliable skills!",
+    "MERP1E.SkillSheet.ReferenceAlreadyExist": "Reference must be unique on all skills!",
 
     "MERP1E.Languages.Description": "Description",
     "MERP1E.Languages.Language": "Language",
@@ -440,7 +442,6 @@
     "MERP1E.Effect.Realm": "Realm",
     "MERP1E.Effect.PPMultiplierValue": "Multiplier",
     "MERP1E.Effect.SpellAdderValue": "Spell Adder",
-    "MERP1E.Effect.Optional": "Is Optional?",
 
     "MERP1E.EffectTab.Configuration": "Configuration",
     "MERP1E.EffectTab.Details": "Details",
@@ -567,10 +568,27 @@
     "MERP1E.ResistenceRollCard.Failure": "Failure",
     "MERP1E.ResistenceRollCard.Success": "Success",
 
-
+    "MERP1E.SpecialSheet.Type": "Type",
+    "MERP1E.SpecialSheet.Reference": "Reference",
+    "MERP1E.SpecialSheet.Description": "Description",
+    "MERP1E.SpecialSheet.Effects": "Effects",
+    "MERP1E.Special.BackgorundOption": "Background Option",
+    "MERP1E.Special.Feature": "Feature",
+    "MERP1E.Special.ManeuverSuccess": "Maneuver Success",
+    "MERP1E.SpecialAbbr.BackgorundOption": "BcOp",
+    "MERP1E.SpecialAbbr.Feature": "Feat.",
+    "MERP1E.SpecialAbbr.ManeuverSuccess": "MnSc",
 
     "MERP1E.MovingManeuverCard.CalculatorLabel": "Calculator:",
     "MERP1E.MovingManeuverCard.CalculateLabel": "0",
+
+    "MERP1E.Equipment.Effects": "Effects",
+    "MERP1E.Equipment.Description": "Description",
+    "MERP1E.Equipment.Attributes": "Attributes",
+ 
+    "MERP1E.Special.Label": "Specials",
+    "MERP1E.Special.Name": "Name",
+    "MERP1E.Special.Type": "Type",
 
     "MERP1E.X": "MERP1E"
 }

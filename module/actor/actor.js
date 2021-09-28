@@ -419,6 +419,8 @@ export class Merp1eActor extends Actor {
     this.equipments = {};
     this.xps = {};
     this.damages = {};
+    this.specials = {};
+    
     for(let item of this.items) {
       switch(item.type) {
         case "language":
@@ -455,8 +457,8 @@ export class Merp1eActor extends Actor {
         case "damage":
           this.damages[item.id] = item;
           break;
-        case "backgorundOption":
-          this.spelllists[item.id] = item;
+        case "special":
+          this.specials[item.id] = item;
           break;
         default:
           this.equipments[item.id] = item;
@@ -599,16 +601,19 @@ export class Merp1eActor extends Actor {
   /*
    * Lookup a skill in the actor by a reference name. Can return an array with more than one item.
    */
-  getSkillsByReference(reference) {
-    return this.items.filter( (item) => item.type == "skill" && item.data.data.reference == reference );
+  getSkillByReference(reference) {
+    //return this.items.filter( (item) => item.type == "skill" && item.data.data.reference == reference );
+    return this.items.find( (item) => item.type == "skill" && item.data.data.reference == reference );
   }
 
   getSkillValue(reference) {
-    return this.getSkillsByReference(reference)?.[0]?.total || 0;
+    //return this.getSkillByReference(reference)?.[0]?.total || 0;
+    return this.getSkillByReference(reference)?.total || 0;
   }
 
   getSkillMovement() {
-    return this.getSkillsByReference(this.defense.armor.skillReference)?.[0];
+    //return this.getSkillByReference(this.defense.armor.skillReference)?.[0];
+    return this.getSkillByReference(this.defense.armor.skillReference);
   }
 
   /*
@@ -626,7 +631,7 @@ export class Merp1eActor extends Actor {
     let avaliableSkills = game.merp1e.Merp1eRules.skill.getAvaliable();
     let newSkills = [];
     avaliableSkills.forEach(skill => {
-      if(this.getSkillsByReference(skill.data.data.reference).length == 0) {
+      if(this.getSkillByReference(skill.data.data.reference).length == 0) {
         let item = {
           name: skill.name,
           type: 'skill',

@@ -1,0 +1,32 @@
+<div>
+    <div class="flexrow">
+        <h2 class="flex3">{{localize 'MERP1E.Special.Label'}}</h2>
+
+        <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+            <a class="item-control item-create" title="{{localize 'MERP1E.Item.New'}}" option-renderSheet=true data-type="special"><i class="fas fa-plus"></i></a>
+        </div>
+    </div>
+
+    <ol class=" grid grid-2col">
+        <li class="flexrow item-header" style="font-weight: bolder;">
+            <div>{{localize "MERP1E.Special.Name"}}</div>
+            <div>{{localize "MERP1E.Special.Type"}}</div>
+            <div></div>
+        </li>
+        <li class="flexrow item-header" style="font-weight: bolder;">
+            <div>{{localize "MERP1E.Special.Name"}}</div>
+            <div>{{localize "MERP1E.Special.Type"}}</div>
+            <div></div>
+        </li>
+        {{#each actor.specials as | special | }}
+        <li class="flexrow item" data-item-id="{{special.id}}">
+            <div class="flex3">{{special.data.name}}</div>
+            <div><i class="fab {{lookup ../specialTypesIcons special.data.data.type}}" title="{{localize (lookup ../specialTypes special.data.data.type)}}"></i></div>
+            <div class="item-controls" style="text-align:center">
+                <a class="item-control item-edit" title="{{localize 'MERP1E.Item.Edit'}}"><i class="fas fa-edit"></i></a>
+                <a class="item-control item-delete" title="{{localize 'MERP1E.Item.Delete'}}"><i class="fas fa-trash"></i></a>
+            </div>
+        </li>
+        {{/each}}
+    </ol>
+</div>

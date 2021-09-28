@@ -31,8 +31,8 @@ export class Merp1eBaseSheet extends ActorSheet {
   _onItemEdit(event) {
     event.preventDefault();
     const li = event.currentTarget.closest(".item");
-    const item = this.actor.items.get(li.dataset.itemId);
-    return item.sheet.render(true);
+    const item = this.actor.items.get(li?.dataset?.itemId);
+    return item?.sheet?.render?.(true);
   }
 
   /* -------------------------------------------- */

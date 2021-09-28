@@ -76,6 +76,8 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
     let sheetData = super.getData();
 
     sheetData.rules = game.merp1e.Merp1eRules;
+    sheetData.specialTypesIcons = game.merp1e.Merp1eRules.special.types.reduce((acc, spc) => { acc[spc.id] = spc.icon; return acc; }, {});
+    sheetData.specialTypes = game.merp1e.Merp1eRules.special.types.reduce((acc, spc) => { acc[spc.id] = spc.label; return acc; }, {});
     
     // Prepare items.
     if (this.actor.data.type == 'character') {
@@ -165,7 +167,18 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
       return;
     }
 
-    // Ignore certain statuses
+    if(itemData.type === "skill") {
+      const existingSkill = this.actor.getSkillByReference(itemData.data.reference);
+      if(existingSkill) { // update existing
+        // XXX delete any pre-existing rank/bonus?
+        itemData._id = existingSkill.id;
+        return this.actor.updateEmbeddedDocuments("Item", [itemData]);
+      } else { // create New
+        return super._onDropItemCreate(itemData);
+      }
+    }
+
+    // Ignore certain statuses on equipments XXX?
     if ( itemData.data ) { // XXX
       ["attunement", "equipped", "proficient", "prepared"].forEach(k => delete itemData.data[k]);
     }

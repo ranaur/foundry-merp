@@ -18,16 +18,16 @@
 
     {{!-- Sheet Tab Navigation --}}
     <nav class="sheet-tabs tabs" data-group="primary">
-        <a class="item" data-tab="specialEffects">{{localize "MERP1E.Effect.SpecialEffects"}}</a>
-        <a class="item" data-tab="description">Description</a>
-        <a class="item" data-tab="attributes">Attributes</a>
+        <a class="item" data-tab="effects">{{localize "MERP1E.Equipment.Effects"}}</a>
+        <a class="item" data-tab="description">{{localize "MERP1E.Equipment.Description"}}</a>
+        <a class="item" data-tab="attributes">{{localize "MERP1E.Equipment.Attributes"}}</a>
     </nav>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
-        {{!-- Special Effect --}}
-        <div class="tab" data-group="primary" data-tab="specialEffects">
-            {{> "systems/merp1e/templates/item/parts/special-effects.html" item=item}}
+        {{!-- Effectss --}}
+        <div class="tab" data-group="primary" data-tab="effects">
+            {{> "systems/merp1e/templates/item/parts/effects.html" item=item}}
         </div>
         {{!-- Old Special Tab XXX remove --}}
         <div class="tab" data-group="primary" data-tab="specialOld">
