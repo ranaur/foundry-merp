@@ -1,8 +1,11 @@
+import { Merp1eActiveEffectHelper } from '../active-effect-helper.js';
+import { Merp1eBaseItemSheet } from './base-sheet.js';
+
 /**
  * Extend the basic ItemSheet with some very simple modifications
  * @extends {ItemSheet}
  */
-export class Merp1eProfessionSheet extends ItemSheet {
+export class Merp1eProfessionSheet extends Merp1eBaseItemSheet {
 
   /** @override */
   static get defaultOptions() {
@@ -15,29 +18,19 @@ export class Merp1eProfessionSheet extends ItemSheet {
   }
 
   /** @override */
-  get template() {
-    const path = "systems/merp1e/templates/item";
-    // Return a single sheet for all item types.
-    //return `${path}/item-sheet.html`;
-    // Alternatively, you could use the following return statement to do a
-    // unique item sheet by type, like `weapon-sheet.html`.
-
-    return `${path}/${this.item.data.type}-sheet.html`;
-  }
-
-  /* -------------------------------------------- */
-
-  /** @override */
   getData() {
-    const data = super.getData();
-    data.rules = game.merp1e.Merp1eRules;
-    data.sheetOrder = game.merp1e.Merp1eRules.skill.generateSheetOrder();
-    return data;
+    const sheetData = super.getData();
+    sheetData.stats = game.merp1e.Merp1eRules.stats;
+    sheetData.realms = game.merp1e.Merp1eRules.magic.realms;
+    sheetData.professionalRestrictions = game.merp1e.Merp1eRules.magic.professionalRestrictions;
+    
+    sheetData.sheetOrder = game.merp1e.Merp1eRules.skill.generateSheetOrder();
+    return sheetData;
   }
 
   /* -------------------------------------------- */
 
-  /** @override */
+  /** @override * /
   setPosition(options = {}) {
     const position = super.setPosition(options);
     const sheetBody = this.element.find(".sheet-body");
@@ -58,34 +51,7 @@ export class Merp1eProfessionSheet extends ItemSheet {
     // Roll handlers, click handlers, etc. would go here.
     
     html.find(".skill-group-value").on("click", this.onInputSkillGroup.bind(this));
-  }
-
-  /** @override */
-  _updateObject(event, formData) {
-    for(let field of Object.keys(formData)) {
-      if(formData[field] == null) {
-        delete formData[field];
-      }
-      if(field.startsWith("data.professionSkillBonuses.") && formData[field] == 0) {
-        delete formData[field];
-      }
-    }
-
-    // Handle the free-form groups list
-    const formProfessionSkillBonuses = expandObject(formData).data.professionSkillBonuses || {};
-
-    // Remove groups which are no longer used
-    for ( let k of Object.keys(this.object.data.data.professionSkillBonuses) ) {
-      if ( !formProfessionSkillBonuses.hasOwnProperty(k) ) formProfessionSkillBonuses[`-=${k}`] = null;
-    }
-  
-    // Re-combine formData
-    formData = Object.entries(formData).filter(e => !e[0].startsWith("data.professionSkillBonuses")).reduce((obj, e) => {
-      obj[e[0]] = e[1];
-      return obj;
-    }, {"data.professionSkillBonuses": formProfessionSkillBonuses});
-  
-    return this.object.update(formData);
+    Merp1eActiveEffectHelper.activateListeners(html, this.item);
   }
 
   onInputSkillGroup(event) {

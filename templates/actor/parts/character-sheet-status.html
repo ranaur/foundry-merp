@@ -51,7 +51,7 @@
                 <div>
                     <label class="resource-label"><i class="fas fa-shield-alt"></i> {{localize 'MERP1E.Defense.Shield'}}</label>
                     <div class="flexrow">
-                        <select name="data.defense.shield.id" {{roif rules.settings.armorControlAutomatic}}>
+                        <select name="data.defense.shield.id" {{roif settings.armorControlAutomatic}}>
                             {{selectOptions rules.defense.shieldTypes selected=actor.defense.shield.id localize=true nameAttr="id" labelAttr="label"}}
                         </select>
                         <input value="{{actor.defense.shield.bonus}}" data-dtype="Number" type="number" readonly tabindex=-1/>
@@ -60,7 +60,7 @@
                 <div>
                     <label class="resource-label"><i class="fas fa-hand-paper"></i> {{localize 'MERP1E.Defense.ArmGreaves'}}</label>
                     <div class="flexrow">
-                        <select name="data.defense.armGreaves.id" {{roif rules.settings.armorControlAutomatic}}>
+                        <select name="data.defense.armGreaves.id" {{roif settings.armorControlAutomatic}}>
                             {{selectOptions rules.defense.armGreavesTypes selected=actor.defense.armGreaves.id localize=true nameAttr="id" labelAttr="label"}}
                         </select>
                         <input value="{{actor.defense.armGreaves.bonus}}" data-dtype="Number" type="number" readonly tabindex=-1/>
@@ -69,7 +69,7 @@
                 <div>
                     <label class="resource-label"><i class="fas fa-socks"></i> {{localize 'MERP1E.Defense.LegGreaves'}}</label>
                     <div class="flexrow">
-                        <select name="data.defense.legGreaves.id" {{roif rules.settings.armorControlAutomatic}}>
+                        <select name="data.defense.legGreaves.id" {{roif settings.armorControlAutomatic}}>
                             {{selectOptions rules.defense.legGreavesTypes selected=actor.defense.legGreaves.id localize=true nameAttr="id" labelAttr="label"}}
                         </select>
                         <input value="{{actor.defense.legGreaves.bonus}}" data-dtype="Number" type="number" readonly tabindex=-1/>
@@ -78,7 +78,7 @@
                 <div>
                     <label class="resource-label"><i class="fas fa-hard-hat"></i> {{localize 'MERP1E.Defense.Helm'}}</label>
                     <div class="flexrow">
-                        <select name="data.defense.helm.id" {{roif rules.settings.armorControlAutomatic}}>
+                        <select name="data.defense.helm.id" {{roif settings.armorControlAutomatic}}>
                             {{selectOptions rules.defense.helmTypes selected=actor.defense.helm.id localize=true nameAttr="id" labelAttr="label"}}
                         </select>
                         <input value="{{actor.defense.helm.bonus}}" data-dtype="Number" type="number" readonly tabindex=-1/>
@@ -87,7 +87,7 @@
                 <div>
                     <label class="resource-label"><i class="fas fa-tshirt"></i> {{localize 'MERP1E.Defense.Armor'}}</label>
                     <div class="flexrow">
-                        <select name="data.defense.armor.id" {{roif rules.settings.armorControlAutomatic}}>
+                        <select name="data.defense.armor.id" {{roif settings.armorControlAutomatic}}>
                             {{selectOptions rules.defense.armorTypes selected=actor.defense.armor.id localize=true nameAttr="id" labelAttr="label"}}
                         </select>
                         <input value="{{actor.defense.armor.bonus}}" data-dtype="Number" type="number" readonly tabindex=-1/>

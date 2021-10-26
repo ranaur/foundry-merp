@@ -1,0 +1,55 @@
+{{!-- Modifiers --}}
+<div class="modifiers">
+    {{#if (ne group.modifiers.length 0)}}
+    <div class="chat-card">
+        {{#if label}}
+        <div class="card-title grid grid-2col" style="font-weight: bold; grid-template-columns: 75% 15%; border-bottom: 1pt; border-bottom-style: solid;">
+            <div>
+                {{localize label}}
+            </div>
+            <div style="text-align: right; vertical-align: middle;">
+                {{formatBonus group.total}}
+            </div>
+        </div>
+        {{/if}}
+        <div class="card-content">
+        {{#each group.modifiers as | mod | }}
+        {{#if (or mod.enabled mod.isUserChosen)}}
+            <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
+                <div>
+                    {{#if mod.isUserChosen}}
+                        <input type="checkbox" name="modifiersChecked.{{../group.id}}.{{mod.id}}" {{checked (lookup (lookup ../data.modifiersChecked ../group.id) mod.id)}}/>
+                    {{/if}}
+                </div>
+                <div>
+                    {{localize mod.label}}
+                    {{#if mod.itemId}}
+                        {{#if mod.itemGlobal}}
+                            <span class="item" data-item-id="{{mod.itemId}}"><i class="fas fa-globe-americas" title="{{mod.itemName}}"></i></span>
+                        {{else}}
+                            <span class="item" data-item-id="{{mod.itemId}}"><a class="item-edit"><i class="fas fa-info-circle" title="{{mod.itemName}}"></i></a></span>
+                        {{/if}}
+                    {{/if}}
+                </div>
+                <div style="text-align: center; vertical-align: middle;">
+                    {{#if mod.isAdHoc}}
+                        {{#if (or (not mod.isUserChosen) (and mod.isUserChosen (lookup (lookup ../data.modifiersChecked ../group.id) mod.id)))}}
+                            <input type="number" name="modifiersValue.{{../group.id}}.{{mod.id}}" value="{{lookup (lookup ../data.modifiersValue ../group.id) mod.id}}"/>
+                        {{else}}
+                            <div></div>
+                        {{/if}}
+                    {{else}}
+                        {{#if (or (not mod.isUserChosen) (and mod.isUserChosen (lookup (lookup ../data.modifiersChecked ../group.id) mod.id)))}}
+                            {{formatBonus mod.value}}
+                        {{else}}
+                            <del>{{formatBonus mod.value}}</del>
+                        {{/if}}
+                    {{/if}}
+                </div>
+            </div>
+        {{/if}}
+        {{/each}}
+        </div>
+    </div>
+    {{/if}}
+</div>

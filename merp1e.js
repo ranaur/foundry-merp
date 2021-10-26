@@ -41,11 +41,13 @@ Hooks.once('init', async function() {
 
   CONFIG.Actor.documentClass = Merp1eActor;
   CONFIG.Item.documentClass = Merp1eItem;
-
+  // NOT USED: CONFIG.Item.documentClasses = Merp1eItem.registeredClasses;
+  
   CONFIG.ActiveEffect.sheetClass = Merp1eActiveEffectSheet;
   CONFIG.ActiveEffect.documentClass = Merp1eEffect;
   CONFIG.ActiveEffect.documentClasses = Merp1eEffect.registeredClasses;
 
+  
   //CONFIG.Dice.rolls.push(Merp1eRollOpenEnded);
 
   // Register sheet application classes
@@ -159,6 +161,19 @@ function registerSettings() {
     type: String,
     choices: { manual: "manual", automatic: "automatic" },
     default: "manual",
+    restricted: true
+	});
+
+  game.settings.register("merp1e", "globalEffect", {
+		name: "Global Effects",
+    label: "Global Effects",
+		hint: "Special item that control effects valid to all characters",
+    icon: "fas fa-globe-americas",
+		scope: "world",
+		config: true,
+    type: String,
+    choices: game.merp1e.Merp1eRules.getSpecialItems(),
+    default: "",
     restricted: true
 	});
 

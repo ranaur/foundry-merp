@@ -16,4 +16,4 @@ item/equipment.svg: https://game-icons.net/1x1/lorc/battle-gear.html
 item/damage.svg: https://game-icons.net/1x1/lorc/wrapped-heart.html
 item/experience.svg: https://game-icons.net/1x1/lorc/medal.html
 cash.svg: https://game-icons.net/1x1/lorc/cash.html
-
+item/special.svg: https://game-icons.net/1x1/delapouite/stars-stack.html

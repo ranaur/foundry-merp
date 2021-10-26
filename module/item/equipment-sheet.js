@@ -1,4 +1,4 @@
-//import { ArraySheetHelper } from '../array-sheet-helper.js';
+import { findByID } from "../util.js";
 import { Merp1eActiveEffectHelper } from '../active-effect-helper.js';
 import { Merp1eBaseItemSheet } from './base-sheet.js';
 
@@ -12,8 +12,21 @@ export class Merp1eEquipmentSheet extends Merp1eBaseItemSheet {
   /** @override */
   getData() {
     const sheetData = super.getData();
-    sheetData.spellHierarchy = sheetData.rules.spell.getSpellHierarchy();
-    sheetData.rules.skill.sheetOrder = sheetData.rules.skill.generateSheetOrder();
+    sheetData.bodyPlaces = sheetData.rules.bodyPlaces;
+    if(this.item?.parent?.locations) {
+      sheetData.locations = [ 
+        findByID(sheetData.rules.mainLocations, "carrying"),
+        findByID(sheetData.rules.mainLocations, "stored"),
+      ];
+      
+      if(sheetData.data.data.isWearable) sheetData.locations.push(findByID(sheetData.rules.mainLocations, "wearing"));
+      
+      this.item.parent.locations.forEach((loc) => { if(loc.item.id != this.object.id) sheetData.locations.push(loc); } );
+    } else {
+      sheetData.locations = null;
+    }
+    sheetData.currencies = sheetData.rules.currencies;
+    Merp1eActiveEffectHelper.getDataHelper(this.object, sheetData);
     return sheetData;
   }
 
@@ -25,22 +38,13 @@ export class Merp1eEquipmentSheet extends Merp1eBaseItemSheet {
     if (!this.options.editable) return;
 
     // Roll handlers, click handlers, etc. would go here.
-    //html.find(".list-control").on("click", ListSheetHelper.onClickControl.bind(this)); 
-    //this.effectsHelper = new ArraySheetHelper("effects", this, { name: "New Effect" });
     Merp1eActiveEffectHelper.activateListeners(html, this.item);
   }
 
   /** @override */
   _updateObject(event, formData) {
-    /*formData = ListSheetHelper.update(formData, this, "skillBonuses");
-    formData = ListSheetHelper.update(formData, this, "onUseBonuses");
-    formData = ListSheetHelper.update(formData, this, "conditionalBonuses");
-    formData = ListSheetHelper.update(formData, this, "dailySpells");
-    formData = ListSheetHelper.update(formData, this, "chargedSpells");
-    formData = ListSheetHelper.update(formData, this, "ppMultiplier");
-    formData = ListSheetHelper.update(formData, this, "spellAdder");
-    */
-    //formData = this.effectsHelper.updateObject(formData);
+    if(!formData["data.isFungible"]) formData["data.quantity"] = 1;
+
     return this.object.update(formData);
   }
 }

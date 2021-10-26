@@ -1,65 +1,68 @@
 import { Merp1eModifiers } from "../modifier.js";
 import { rollOpenEnded } from "../dice.js";
-import { Merp1eCards, Merp1eBaseChatCard } from "./base-chatcard.js";
+import { Merp1eBaseChatCard } from "./base-chatcard.js";
 
 export class Merp1eMovingManeuverChatCard extends Merp1eBaseChatCard {
-    static dummy = Merp1eCards.push(this);
+    static dummy = this.registerCard(this);
 
     get title() {
         return "Moving Maneuver";
     }
 
     getData() {
-        const data = super.getData();
+        const cardData = super.getData();
         let actor;
-        if(!data.skill) {
-            if(!data.data.actorID) return data;
-            if(!data.data.skillID) return data;
-            actor = game.actors.get(data.data.actorID);
-            if(!actor) return data;
-            data.skill = actor.items.get(data.data.skillID);
+        if(!cardData.skill) {
+            if(!cardData.data.actorID) return cardData;
+            if(!cardData.data.skillID) return cardData;
+            actor = game.actors.get(cardData.data.actorID);
+            if(!actor) return cardData;
+            cardData.skill = actor.items.get(cardData.data.skillID);
         }
-        if(!data.skill) return data;
-        data.rollTypeID = "MM";
-        actor.applyEffects(data); // without actor to not apply actor modifiers
-		data.isGM = game.user.isGM;
+        if(!cardData.skill) return cardData;
+        cardData.rollTypeID = "MM";
+        actor.applyEffects(cardData); // without actor to not apply actor modifiers
+		cardData.isGM = game.user.isGM;
 
-        data.actor = data.skill.parent;
+        cardData.actor = cardData.skill.parent;
 
-        data.data.chosenDifficulty = data.data.chosenDifficulty || "Medium";
-        data.difficulties = game.merp1e.Merp1eRules.skill.difficulties;
+        cardData.data.chosenDifficulty = cardData.data.chosenDifficulty || "Medium";
+        cardData.difficulties = game.merp1e.Merp1eRules.skill.difficulties;
 
-        
+
         // Calculate modifiers
-        data.modifiersByGroup = [];
-        data.modifiersByGroup.push(new Merp1eModifiers("mmm", "Moving Maneuver Modifiers", game.merp1e.Merp1eRules.skill.modifiers.Movement));
-        if(data.skill?.data?.data?.reference) {
-            let globalSkill = game.merp1e.Merp1eRules.skill.getAvaliableByReference(data.skill.data.data.reference);
-            data.modifiersByGroup.push(new Merp1eModifiers("sgm", "Skill General Modifiers", globalSkill?.data?.data?.modifiers));
+        cardData.skillModifiers = new Merp1eModifiers("mmm", "MERP1E.ManeuverCard.SkillModifiers", cardData.skill.data?.data?.modifiers);
+        if(cardData.skill?.data?.data?.reference) {
+            let globalSkill = game.merp1e.Merp1eRules.skill.getAvaliableByReference(cardData.skill.data.data.reference);
+            cardData.skillModifiers.add(globalSkill?.data?.data?.modifiers);
         }
-        data.modifiersByGroup.push(new Merp1eModifiers("mmm", "Skill Specific Modifiers", data.skill.data?.data?.modifiers));
-        data.modifiersByGroup.push(new Merp1eModifiers("itm", "Item Modifiers", data?.modifiers));
-        data.data.modifiersChecked = data.data.modifiersChecked || {};
-        data.data.modifiersValue = data.data.modifiersValue || {};
+
+        cardData.itemModifiers = new Merp1eModifiers("itm", "MERP1E.ManeuverCard.ItemModifiers", cardData?.modifiers);
+
+        cardData.data.modifiersChecked = cardData.data.modifiersChecked || {};
+        cardData.data.modifiersValue = cardData.data.modifiersValue || {};
 
         // Calculate total bonus and roll
-        data.total = data.skill.total;
-        data.modifiersByGroup.forEach((mg) => {
-            mg.evaluate(data);
-            const checked = mg.id in data.data.modifiersChecked ? data.data.modifiersChecked[mg.id] : null;
-            const values = mg.id in data.data.modifiersValue ? data.data.modifiersValue[mg.id] : null;
-            data.total += mg.getTotal(checked, values);
+        cardData.total = cardData.skill.total;
+        [cardData.skillModifiers, cardData.itemModifiers].forEach((mg) => {
+            mg.evaluate(cardData);
+            const checked = mg.id in cardData.data.modifiersChecked ? cardData.data.modifiersChecked[mg.id] : null;
+            const values = mg.id in cardData.data.modifiersValue ? cardData.data.modifiersValue[mg.id] : null;
+            const groupTotal = mg.getTotal(checked, values);
+            mg.total = groupTotal;
+            cardData.total += groupTotal
         });
-        data.total += (data.data.rollTotal || 0);
+        cardData.skillTotal = cardData.skill.total + cardData.skillModifiers.total;
+        cardData.total += (cardData.data.rollTotal || 0);
+        
+        cardData.resolveResult = game.merp1e.Merp1eRules.resolveMovingManeuver(cardData.total, cardData.data.chosenDifficulty)
 
-        data.data.resolveResult = game.merp1e.Merp1eRules.resolveMovingManeuver(data.total, data.data.chosenDifficulty);
-
-        if(data.data.resolveResult && data.data.calcValue) {
-            data.calcResult = data.data.calcValue * data.data.resolveResult / 100;
+        if(cardData.resolveResult && cardData.data.calcValue) {
+            cardData.calcResult = cardData.data.calcValue * cardData.resolveResult / 100;
         } else {
-            data.calcResult = "";
+            cardData.calcResult = "";
         }
-        return data;
+        return cardData;
     }
 
     activateListeners(html) {

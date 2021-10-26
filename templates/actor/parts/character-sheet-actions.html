@@ -1,23 +1,61 @@
-<div class="language">
-    <div class="flexrow">
-        <h2 class="flex3">{{localize 'MERP1E.Actions.Label'}}</h2>
+<h2 class="flexrow">
+    <div>{{localize 'MERP1E.ActionsTab.CurrentAction'}}</div>
+    <div>
+    {{#if combat.started}}
+    (round {{combat.current.round}} turn {{combat.current.turn}})
+    {{else}}
+    (not started)
+    {{/if}}
     </div>
-    <ol>
-        <li class="flexrow">
-            <div class="flex2">Name</div>
-            <div>Condition</div>
-            <div class="flex2">Item</div>
-        </li>    
-        {{#each this.actor.actions as | effectTypes effectType  | }}
-            <li style="font-weight: bolder;">{{effectType}}</ol>
-            {{#each effectTypes as | effect | }}
-            <li class="flexrow">
-                {{log effect}}
-                <div class="flex2">{{effect.name}}</div>
-                <div>{{effect.condition.conditionName}}</div>
-                <div class="flex2">{{effect.item}}</div>
-            </li>    
-            {{/each}}
+</h2>
+{{log combat}}
+<div class="flexrow">
+    <label for="data.action.action" class="resource-label">{{localize "MERP1E.ActionsTab.Action"}}</label>
+    <select class="userentry action-chooser" name="data.action.action">
+        {{#unless data.data.action.action}}<option></option>{{/unless}}
+        {{selectOptions actions selected=data.data.action.action localize=true nameAttr="id" labelAttr="name"}}
+    </select>
+</div>
+{{#if (or (eq data.data.action.action "prepareSpell")(eq data.data.action.action "castSpell"))}}
+<div class="flexrow">
+    <label for="data.action.spell" class="resource-label">{{localize "MERP1E.ActionsTab.Spell"}}</label>
+    <select class="userentry" name="data.action.preparedSpell">
+        {{#unless data.action.preparedSpell}}<option></option>{{/unless}}
+        {{#each knownSpellLists as |spellist| }}
+        <optgroup label="{{spelllist.name}}">
+            {{selectOptions spellist.knownSpells selected=../data.data.action.preparedSpell localize=false nameAttr="id" labelAttr="name"}}
+        </optgroup>
         {{/each}}
-    </ol>
+    </select>
+</div>
+<div class="flexrow">
+    <label for="data.action.roundsSpellPrepared" class="resource-label">{{localize "MERP1E.ActionsTab.RoundsSpellPrepared"}}</label>
+    <div class="action-controls flexrow" data-spell-id={{data.data.action.preparedSpell}}>
+        <input class="userentry" type="text" value="{{data.data.action.roundsSpellPrepared}} ({{formatBonus getPrepareBonus}})" data-dtype="Text" {{ro}}/>
+        {{#if (eq data.data.action.action "prepareSpell")}}
+        <a class="action-control flex0" title="{{localize 'MERP1E.Spell.Cast'}}" data-action="prepare-to-cast"><i class="fas fa-magic"></i></a>
+        {{/if}}
+    </div>
+</div>
+{{/if}}
+{{#if (or (eq data.data.action.action "missileAttack") (eq data.data.action.action "meleeAttack"))}}
+<div class="flexrow">
+    <label for="data.action." class="resource-label">{{localize "MERP1E.ActionsTab.Target"}}</label>
+    <select class="userentry" name="data.action.target">
+        {{#unless data.action.target}}<option></option>{{/unless}}
+        {{selectOptions combatants selected=data.data.action.target}}
+    </select>
+    <a class="action-control flex0" title="{{localize 'MERP1E.Spell.GetTargets'}}" data-action="get-targets"><i class="fas fa-bullseye"></i></a>
+</div>
+{{/if}}
+{{#if (eq data.data.action.action "")}}
+<div class="flexrow">
+    <label for="data.action." class="resource-label">{{localize "MERP1E.ActionsTab."}}</label>
+    <input class="userentry" type="text" name="data.action." value="{{data.action.}}" data-dtype="String"/>
+</div>
+{{/if}}
+
+<div class="flexrow">
+    <label for="data.action.description" class="resource-label">{{localize "MERP1E.ActionsTab.Description"}}</label>
+    <input class="userentry" type="text" name="data.action.description" value="{{data.data.action.description}}" data-dtype="String"/>
 </div>

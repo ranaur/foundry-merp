@@ -8,20 +8,21 @@
 
     {{!-- Sheet Tab Navigation --}}
     <nav class="sheet-tabs tabs" data-group="primary">
-        <a class="item" data-tab="statbonuses">{{localize "MERP1E.Race.StatBonuses"}}</a>
-        <a class="item" data-tab="skills">{{localize "MERP1E.Race.Skills"}}</a>
-        <a class="item" data-tab="conditional">{{localize "MERP1E.Race.Conditional"}}</a>
-        <a class="item" data-tab="languages">{{localize "MERP1E.Race.Languages"}}</a>
-        <a class="item" data-tab="description">{{localize "MERP1E.Race.Description"}}</a>
-        {{!-- <a class="item" data-tab="characteristics">{{localize "MERP1E.Race.Characteristics"}}</a> --}}
+        <a class="item" data-tab="statbonuses">{{localize "MERP1E.RaceTab.StatBonuses"}}</a>
+        <a class="item" data-tab="rrbonuses">{{localize "MERP1E.RaceTab.ResistenceRollBonuses"}}</a>
+        <a class="item" data-tab="adolescenceskillrank">{{localize "MERP1E.RaceTab.AdolescenceSkillRank"}}</a>
+        <a class="item" data-tab="languages">{{localize "MERP1E.RaceTab.Languages"}}</a>
+        <a class="item" data-tab="effects">{{localize "MERP1E.RaceTab.Effects"}}</a>
+        <a class="item" data-tab="characteristics">{{localize "MERP1E.RaceTab.Characteristics"}}</a>
+        <a class="item" data-tab="description">{{localize "MERP1E.RaceTab.Description"}}</a>
     </nav>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
-        {{!-- Skill Bonuses Tab --}}
+        {{!-- Stat Bonuses Tab --}}
         <div class="tab statbonuses" data-group="primary" data-tab="statbonuses">
             <table>
-                <thead>
+                <thead class="header">
                     <tr>
                         <td>{{localize "MERP1E.StatTable.Stats"}}</td>
                         <td>{{localize "MERP1E.StatTable.Abbr"}}</td>
@@ -29,7 +30,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {{#each rules.stats as | stat |}}
+                    {{#each stats as | stat |}}
                     {{#if (eq (default stat.only_value false) false)}}
                     <tr>
                         <td>{{localize stat.label}}</td>
@@ -41,24 +42,49 @@
                 </tbody>
             </table>
         </div>
+        {{!-- RRs Bonuses Tab --}}
+        <div class="tab rrbonuses" data-group="primary" data-tab="rrbonuses">
+            <table>
+                <thead class="header">
+                    <tr>
+                        <td>{{localize "MERP1E.Race.ResistenceRoll"}}</td>
+                        <td>{{localize "MERP1E.Race.RacialBonus"}}</td>    
+                    </tr>
+                </thead>
+                <tbody>
+                    {{#each sheetOrder as | group |}}
+                    {{#each group.skills as | skill |}}
+                    {{#if (eq skill.data.data.rollType "RR")}}
+                    <tr>
+                        <td>{{localize skill.name}}</td>
+                        <td><input type="number" name="data.skillBonuses.{{skill.data.data.reference}}" value="{{lookup ../../data.skillBonuses skill.data.data.reference}}" data-dtype="Number"/></td>
+                    </tr>
+                    {{/if}}
+                    {{/each}}
+                    {{/each}}
+                </tbody>
+            </table>
+        </div>
 
-        {{!-- Skill Bonuses Tab --}}
-        <div class="tab skillbonuses" data-group="primary" data-tab="skills">
+        {{!-- and Adolescence Skill Ranks Tab --}}
+        <div class="tab adolescenceskillrank" data-group="primary" data-tab="adolescenceskillrank">
             <div class="race-skill-table flexcol">
-                <div class="flexrow">
+                <div class="flexrow header">
                     <div>{{localize "MERP1E.Race.Skill"}}</div>
-                    <div>{{localize "MERP1E.Race.Bonus"}}</div>
+                    {{!--<div>{{localize "MERP1E.Race.Bonus"}}</div>--}}
                     <div>{{localize "MERP1E.Race.AdolescenceSkillRank"}}</div>
                 </div>
                 {{#each sheetOrder as | group |}}
                 <div class="race-skill-group">
-                    <div style="font-weight: bolder;">{{localize (concat "MERP1E.SkillGroup." group.name)}}</div>
+                    <div style="font-weight: bolder;">{{localize group.label}}</div>
                     {{#each group.skills as | skill |}}
+                    {{#if (ne skill.data.data.rankBonus "no rank")}}
                     <div class="race-skill flexrow">
-                        <div>{{localize (concat "MERP1E.Skill." skill.data.data.reference)}}</div>
-                        <input type="number" class="" name="data.skillBonuses.{{skill.data.data.reference}}" value="{{lookup ../../data.skillBonuses skill.data.data.reference}}" data-dtype="Number"/>
+                        <div>{{localize skill.name}}</div>
+                        {{!--<input type="number" class="" name="data.skillBonuses.{{skill.data.data.reference}}" value="{{lookup ../../data.skillBonuses skill.data.data.reference}}" data-dtype="Number"/>--}}
                         <input type="number" class="" name="data.adolescenceSkillRanks.{{skill.data.data.reference}}" value="{{lookup ../../data.adolescenceSkillRanks skill.data.data.reference}}" data-dtype="Number"/>
                     </div>
+                    {{/if}}
                     {{/each}}
                 </div>
                 {{/each}}
@@ -81,9 +107,9 @@
             </div>
         </div>
 
-        {{!-- Laguages Tab --}}
+        {{!-- Starting Laguages Tab --}}
         <div class="tab" data-group="primary" data-tab="languages">
-            <div class="languages">
+            <div class="languages header">
                 <header class="flexrow">
                     <span class="flex4">{{localize "MERP1E.Languages.Language"}}</span>
                     <span class="flex1">{{localize "MERP1E.Languages.Ranks"}}</span>
@@ -105,105 +131,91 @@
             </div>
         </div>
 
-        {{!-- Conditional Tab --}}
-        <div class="tab conditional" data-group="primary" data-tab="conditional">
-            <div class="list" data-array="conditionalBonuses" data-fields="skill,value,detail" data-dtype="String,Number,String">
-                <div class="list-header flexrow">
-                    <div class="list-header-text">Conditional Bonus</div>
-                    <div class="list-header-text">Value</div>
-                    <div class="list-header-text">Condition</div>
-                    <a class="list-control list-create" data-action="create" title="Add"><i class="fas fa-plus"></i></a>
-                </div>
-                <ol class="list-data">
-                    {{#each data.conditionalBonuses as | obj key |}}
-                    <li class="list-item flexrow" data-index="{{key}}">
-                        {{> "systems/merp1e/templates/parts/skill-chooser.html" field=(concat "data.conditionalBonuses." key ".skill") currentValue=obj.skill sheetOrder=../rules.skill.sheetOrder}}
-                        <input type="text" name="data.conditionalBonuses.{{key}}.value" value="{{obj.value}}" data-dtype="Number"/>
-                        <input type="text" name="data.conditionalBonuses.{{key}}.description" value="{{obj.description}}" data-dtype="String"/>
-                        <a class="list-control list-create" data-action="delete" title="Delete"><i class="fas fa-trash"></i></a>
-                    </li>
-                    {{/each}}
-                </ol>
-            </div>
+        {{!-- Effects Tab --}}
+        <div class="tab" data-group="primary" data-tab="effects">
+            {{> "systems/merp1e/templates/item/parts/effects.html" item=item}}
         </div>
-        {{!-- Characteristics Tab
+
+        {{!-- Characteristics Tab --}}
         <div class="tab" data-group="primary" data-tab="characteristics">
-            <div class="race-group">Physical Character</div>
+            <h2 class="race-group">{{localize "MERP1E.Race.PhysicalCharacter"}}</h2>
             <div>
-                <label for="data.physycalCharacter.build" class="race-label">{{localize "MERP1E.Race.Build"}}</label>
-                <input type="text" class="race-data" name="data.physycalCharacter.build" value="{{data.physycalCharacter.build}}" data-dtype="String"/>
+                <label for="data.physicalCharacter.build" class="resource-label">{{localize "MERP1E.Race.Build"}}</label>
+                <textarea class="multiline" name="data.physicalCharacter.build" cols="80" rows="5" data-dtype="String">{{data.physicalCharacter.build}}</textarea>
             </div>
             <div>
-                <label for="data.physycalCharacter.coloring" class="race-label">{{localize "MERP1E.Race.Coloring"}}</label>
-                <input type="text" class="race-data" name="data.physycalCharacter.coloring" value="{{data.physycalCharacter.coloring}}" data-dtype="String"/>
+                <label for="data.physicalCharacter.coloring" class="resource-label">{{localize "MERP1E.Race.Coloring"}}</label>
+                <textarea class="multiline" name="data.physicalCharacter.coloring" cols="80" rows="5" data-dtype="String">{{data.physicalCharacter.coloring}}</textarea>
             </div>
             <div>
-                <label for="data.physycalCharacter.endurance" class="race-label">{{localize "MERP1E.Race.Endurance"}}</label>
-                <input type="text" class="race-data" name="data.physycalCharacter.endurance" value="{{data.physycalCharacter.endurance}}" data-dtype="String"/>
+                <label for="data.physicalCharacter.endurance" class="resource-label">{{localize "MERP1E.Race.Endurance"}}</label>
+                <textarea class="multiline" name="data.physicalCharacter.endurance" cols="80" rows="5" data-dtype="String">{{data.physicalCharacter.endurance}}</textarea>
             </div>
             <div>
-                <label for="data.physycalCharacter.height" class="race-label">{{localize "MERP1E.Race.Height"}}</label>
-                <input type="text" class="race-data" name="data.physycalCharacter.height" value="{{data.physycalCharacter.height}}" data-dtype="String"/>
+                <label for="data.physicalCharacter.height" class="resource-label">{{localize "MERP1E.Race.Height"}}</label>
+                <textarea class="multiline" name="data.physicalCharacter.height" cols="80" rows="5" data-dtype="String">{{data.physicalCharacter.height}}</textarea>
             </div>
             <div>
-                <label for="data.physycalCharacter.lifespan" class="race-label">{{localize "MERP1E.Race.Lifespan"}}</label>
-                <input type="text" class="race-data" name="data.physycalCharacter.lifespan" value="{{data.physycalCharacter.lifespan}}" data-dtype="String"/>
+                <label for="data.physicalCharacter.lifespan" class="resource-label">{{localize "MERP1E.Race.Lifespan"}}</label>
+                <textarea class="multiline" name="data.physicalCharacter.lifespan" cols="80" rows="5" data-dtype="String">{{data.physicalCharacter.lifespan}}</textarea>
             </div>
             <div>
-                <label for="data.physycalCharacter.resistance" class="race-label">{{localize "MERP1E.Race.Resistance"}}</label>
-                <input type="text" class="race-data" name="data.physycalCharacter.resistance" value="{{data.physycalCharacter.resistance}}" data-dtype="String"/>
+                <label for="data.physicalCharacter.resistance" class="resource-label">{{localize "MERP1E.Race.Resistance"}}</label>
+                <textarea class="multiline" name="data.physicalCharacter.resistance" cols="80" rows="5" data-dtype="String">{{data.physicalCharacter.resistance}}</textarea>
+           </div>
+            <div>
+                <label for="data.physicalCharacter.specialAbilities" class="resource-label">{{localize "MERP1E.Race.SpecialAbilities"}}</label>
+                <textarea class="multiline" name="data.physicalCharacter.specialAbilities" cols="80" rows="5" data-dtype="String">{{data.physicalCharacter.specialAbilities}}</textarea>
+            </div>
+
+            <h2 class="race-group">{{localize "MERP1E.Race.Culture"}}</h2>
+            <div>
+                <label for="data.culture.clothingAndDecoration" class="resource-label">{{localize "MERP1E.Race.ClothingAndDecoration"}}</label>
+                <textarea class="multiline" name="data.culture.clothingAndDecoration" cols="80" rows="5" data-dtype="String">{{data.culture.clothingAndDecoration}}</textarea>
             </div>
             <div>
-                <label for="data.physycalCharacter.specialAbilities" class="race-label">{{localize "MERP1E.Race.SpecialAbilities"}}</label>
-                <input type="text" class="race-data" name="data.physycalCharacter.specialAbilities" value="{{data.physycalCharacter.specialAbilities}}" data-dtype="String"/>
-            </div>
-            <div class="race-group">Culture</div>
-            <div>
-                <label for="data.culture.clothingAndDecoration" class="race-label">{{localize "MERP1E.Race.ClothingAndDecoration"}}</label>
-                <input type="text" class="race-data" name="data.culture.clothingAndDecoration" value="{{data.culture.clothingAndDecoration}}" data-dtype="String"/>
+                <label for="data.culture.fearsAndInabilities" class="resource-label">{{localize "MERP1E.Race.FearsAndInabilities"}}</label>
+                <textarea class="multiline" name="data.culture.fearsAndInabilities" cols="80" rows="5" data-dtype="String">{{data.culture.fearsAndInabilities}}</textarea>
             </div>
             <div>
-                <label for="data.culture.fearsAndInabilities" class="race-label">{{localize "MERP1E.Race.FearsAndInabilities"}}</label>
-                <input type="text" class="race-data" name="data.culture.fearsAndInabilities" value="{{data.culture.fearsAndInabilities}}" data-dtype="String"/>
+                <label for="data.culture.lifestyle" class="resource-label">{{localize "MERP1E.Race.Lifestyle"}}</label>
+                <textarea class="multiline" name="data.culture.lifestyle" cols="80" rows="5" data-dtype="String">{{data.culture.lifestyle}}</textarea>
             </div>
             <div>
-                <label for="data.culture.lifestyle" class="race-label">{{localize "MERP1E.Race.Lifestyle"}}</label>
-                <input type="text" class="race-data" name="data.culture.lifestyle" value="{{data.culture.lifestyle}}" data-dtype="String"/>
+                <label for="data.culture.marriagePattern" class="resource-label">{{localize "MERP1E.Race.MarriagePattern"}}</label>
+                <textarea class="multiline" name="data.culture.marriagePattern" cols="80" rows="5" data-dtype="String">{{data.culture.marriagePattern}}</textarea>
             </div>
             <div>
-                <label for="data.culture.marriagePattern" class="race-label">{{localize "MERP1E.Race.MarriagePattern"}}</label>
-                <input type="text" class="race-data" name="data.culture.marriagePattern" value="{{data.culture.marriagePattern}}" data-dtype="String"/>
+                <label for="data.culture.religion" class="resource-label">{{localize "MERP1E.Race.Religion"}}</label>
+                <textarea class="multiline" name="data.culture.religion" cols="80" rows="5" data-dtype="String">{{data.culture.religion}}</textarea>
+            </div>
+            
+            <h2 class="race-group">{{localize "MERP1E.Race.OtherFactors"}}</h2>
+            <div>
+                <label for="data.otherFactors.demeanor" class="resource-label">{{localize "MERP1E.Race.Demeanor"}}</label>
+                <textarea class="multiline" name="data.otherFactors.demeanor" cols="80" rows="5" data-dtype="String">{{data.otherFactors.demeanor}}</textarea>
             </div>
             <div>
-                <label for="data.culture.religion" class="race-label">{{localize "MERP1E.Race.Religion"}}</label>
-                <input type="text" class="race-data" name="data.culture.religion" value="{{data.culture.religion}}" data-dtype="String"/>
-            </div>
-            <div class="race-group">Other Factors</div>
-            <div>
-                <label for="data.otherFactors.demeanor" class="race-label">{{localize "MERP1E.Race.Demeanor"}}</label>
-                <input type="text" class="race-data" name="data.otherFactors.demeanor" value="{{data.otherFactors.demeanor}}" data-dtype="String"/>
+                <label for="data.otherFactors.language" class="resource-label">{{localize "MERP1E.Race.Language"}}</label>
+                <textarea class="multiline" name="data.otherFactors.language" cols="80" rows="5" data-dtype="String">{{data.otherFactors.language}}</textarea>
             </div>
             <div>
-                <label for="data.otherFactors.language" class="race-label">{{localize "MERP1E.Race.Language"}}</label>
-                <input type="text" class="race-data" name="data.otherFactors.language" value="{{data.otherFactors.language}}" data-dtype="String"/>
+                <label for="data.otherFactors.prejudices" class="resource-label">{{localize "MERP1E.Race.Prejudices"}}</label>
+                <textarea class="multiline" name="data.otherFactors.prejudices" cols="80" rows="5" data-dtype="String">{{data.otherFactors.prejudices}}</textarea>
             </div>
             <div>
-                <label for="data.otherFactors.prejudices" class="race-label">{{localize "MERP1E.Race.Prejudices"}}</label>
-                <input type="text" class="race-data" name="data.otherFactors.prejudices" value="{{data.otherFactors.prejudices}}" data-dtype="String"/>
+                <label for="data.otherFactors.restrictionsOnProfessions" class="resource-label">{{localize "MERP1E.Race.RestrictionsOnProfessions"}}</label>
+                <textarea class="multiline" name="data.otherFactors.restrictionsOnProfessions" cols="80" rows="5" data-dtype="String">{{data.otherFactors.restrictionsOnProfessions}}</textarea>
             </div>
             <div>
-                <label for="data.otherFactors.restrictionsOnProfessions" class="race-label">{{localize "MERP1E.Race.RestrictionsOnProfessions"}}</label>
-                <input type="text" class="race-data" name="data.otherFactors.restrictionsOnProfessions" value="{{data.otherFactors.restrictionsOnProfessions}}" data-dtype="String"/>
-            </div>
-            <div>
-                <label for="data.otherFactors.backgroundOptions" class="race-label">{{localize "MERP1E.Race.BackgroundOptions"}}</label>
-                <input type="text" class="race-data" name="data.otherFactors.backgroundOptions" value="{{data.otherFactors.backgroundOptions}}" data-dtype="String"/>
+                <label for="data.otherFactors.backgroundOptions" class="resource-label">{{localize "MERP1E.Race.BackgroundOptions"}}</label>
+                <textarea class="multiline" name="data.otherFactors.backgroundOptions" cols="80" rows="5" data-dtype="String">{{data.otherFactors.backgroundOptions}}</textarea>
             </div>
         </div>
-        --}}
+        
         {{!-- Description Tab --}}
         <div class="tab" data-group="primary" data-tab="description">
-            {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+            {{> "systems/merp1e/templates/item/parts/description.html" data=data}}
         </div>
     </section>
 </form>

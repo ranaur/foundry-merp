@@ -1,6 +1,48 @@
 import { LanguageSheetHelper } from '../language-helper.js';
 import { Merp1eBaseSheet } from './base-sheet.js';
 import { Merp1eRollChooserApplication } from '../apps/roll-chooser.js';
+import { Merp1eEffect } from '../active-effect.js';
+import { getFuncName } from "../util.js";
+
+class Merp1eActionTab {
+  static getData(sheetData, sheet) {
+    sheetData.knownSpellLists = sheet.actor.spellcasting.getKnownSpellLists();
+    sheetData.actions = game.merp1e.Merp1eRules.actions;
+    sheetData.data.data.action ??= {};
+    sheetData.data.data.action.roundsSpellPrepared ??= 0;
+    sheetData.getPrepareBonus = sheetData.rules.spell.getPrepareBonus(sheetData.data.data.action.roundsSpellPrepared);
+    //sheetData.targets = game.user.targets;
+    sheetData.combat = sheet.actor.getCombats()?.[0]; // XXX get currnet combat?
+    sheetData.combatants = {};
+    sheetData.combat.combatants.forEach((token) => {
+      sheetData.combatants[token.id] = token.name;
+    });
+    return sheetData;
+  }
+
+  static updateObject(event, formData, sheet) {
+    return formData;
+  }
+
+  static activateListeners(html, sheet) {
+    html.find(".action").on("click", ".action-control", this.onClickActionControl.bind(sheet));
+  }
+
+  static async onClickActionControl(event) {
+    event.preventDefault();
+    const target = event.currentTarget;
+    const action = target.dataset.action;
+    const tab = target.closest(".tab");
+
+    switch ( action ) {
+    case "prepare-to-cast":
+      const chooser = tab.getElementsByClassName("action-chooser");
+      chooser[0].value = "castSpell";
+      this.submit();
+      break;
+    }
+  }
+}
 
 /**
  * Extend the basic ActorSheet with some very simple modifications
@@ -31,11 +73,16 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
 
   _prepareCharacter(sheetData) {
     if (this.actor.data.type != 'character') {
-      return sheetData
+      throw "Character sheet is trying to edit something htat is not a character";
+      return sheetData;
     }
 
     sheetData.avaliableRaces = sheetData.rules.getAvaliableRaces();
+    sheetData.actorRaceId = sheetData.rules.getItemByTypeIdName("race", this.actor.race.data?.originalId, this.actor.race.name)?.id;
+    
     sheetData.avaliableProfessions = sheetData.rules.getAvaliableProfessions();
+    sheetData.actorProfessionId = sheetData.rules.getItemByTypeIdName("profession", this.actor.profession.data?.originalId, this.actor.profession.name)?.id;
+
     if(this.actor.data.skills = null) {
       sheetData.sheetOrder ={}
     } else {
@@ -71,19 +118,64 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
     return sheetData;
   }
 
+  getEquipmentsInLocation(location) {
+    let res = [];
+    Object.values(this.actor.equipments).forEach((itm) => {
+      if(itm.data.data.location == location) {
+        res.push(itm);
+        if(itm.data.data.isContainer) {
+          let subItems = this.getEquipmentsInLocation(itm.id);
+          subItems.forEach((sbi) => res.push(sbi));
+        }
+      }
+    });
+    return res;
+  }
+
+  getEquipmentsByLocation() {
+    let res = [];
+    this.getEquipmentsInLocation("wearing").forEach((itm) => res.push(itm));
+    this.getEquipmentsInLocation("carrying").forEach((itm) => res.push(itm));
+    this.getEquipmentsInLocation("stored").forEach((itm) => res.push(itm));
+    let ids = res.reduce((acc, itm) => { acc.push(itm.id); return acc;}, []);
+    const orphans = Object.values(this.actor.equipments).filter((itm) => {
+      return !ids.includes(itm.id);
+    }).forEach((itm) => res.push(itm));;
+    return res;
+  }
     /** @override */
   getData() {
     let sheetData = super.getData();
 
+    sheetData.settings = game.merp1e.Merp1eRules.settings;
     sheetData.rules = game.merp1e.Merp1eRules;
     sheetData.specialTypesIcons = game.merp1e.Merp1eRules.special.types.reduce((acc, spc) => { acc[spc.id] = spc.icon; return acc; }, {});
     sheetData.specialTypes = game.merp1e.Merp1eRules.special.types.reduce((acc, spc) => { acc[spc.id] = spc.label; return acc; }, {});
-    
-    // Prepare items.
-    if (this.actor.data.type == 'character') {
-      sheetData = this._prepareCharacter(sheetData);
-    }
+    sheetData.effectTypesLabels = Object.values(Merp1eEffect.registeredClasses).reduce((acc, cls) => { acc[cls.effectName] = cls.label; return acc; }, {});
+    sheetData.weightType = {
+      total: "MERP1E.Location.Total",
+      wearing: "MERP1E.Location.Wearing"
+    };
 
+    sheetData.money = sheetData.rules.currencies.reduce((acc, cur) => {
+      let items = Object.values(this.actor.equipments).filter((itm) => itm.data.data.unitaryValueCurrency == cur.id && itm.value > 0 );
+      acc.push( {
+        id: cur.id,
+        name: cur.name,
+        namePlural: cur.namePlural,
+        abbr: cur.abbr,
+        unitaryValue: cur.unitaryValue,
+        items: items,
+        get total() { return this.items.reduce((acc, itm) => acc + itm.data.data.unitaryValue * itm.data.data.quantity, 0)},
+        get value() { return this.total * this.unitaryValue }
+      });
+      return acc;
+    }, []);
+    sheetData.moneyTotal = sheetData.money.reduce((acc, cur) => acc + cur.total * cur.unitaryValue, 0);
+    sheetData.moneyTotalCurrency = sheetData.money.find((cur) => cur.unitaryValue == 1);
+    sheetData.equipmentsByLocation = this.getEquipmentsByLocation();
+    sheetData = this._prepareCharacter(sheetData);
+    sheetData = Merp1eActionTab.getData(sheetData, this);
     return sheetData;
   }
 
@@ -117,6 +209,27 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
     }
   }
 
+  /**
+ * Handle editing an existing Owned Item for the Actor
+ * @param {Event} event   The originating click event
+ * @private
+ */
+  async _onItemWear(event) {
+    event.preventDefault();
+    const li = event.currentTarget.closest(".item");
+    const item = this.actor.items.get(li?.dataset?.itemId);
+    const data = { location: "wearing", originalLocation: item.data.data.location };
+    return await this.actor.updateEmbeddedDocuments("Item", [{ _id: li?.dataset?.itemId, data: data}]);
+  }
+  async _onItemUnwear(event) {
+    event.preventDefault();
+    const li = event.currentTarget.closest(".item");
+    const item = this.actor.items.get(li?.dataset?.itemId);
+    const originalLocation = item.data?.data?.originalLocation || "carrying";
+    const data = { location: originalLocation };
+    return await this.actor.updateEmbeddedDocuments("Item", [{ _id: li?.dataset?.itemId, data: data}]);
+  }
+  
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
@@ -124,46 +237,36 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
     // Everything below here is only needed if the sheet is editable
     if (!this.options.editable) return;
 
-    // Rollable abilities.
-    //html.find('.rollable').click(this._onRoll.bind(this));
-
-    //html.on("keydown", this.onKeyDown.bind(this));
-    //html.on("keyup", this.onKeyUp.bind(this));
     LanguageSheetHelper.activateListeners(html, this.actor);
 
+    html.find('.item-wear').click(this._onItemWear.bind(this));
+    html.find('.item-unwear').click(this._onItemUnwear.bind(this));
     html.find(".skills").on("click", ".skill-control", this.onClickSkillControl.bind(this));
     html.find(".spells").on("click", ".spell-control", this.onClickSpellControl.bind(this));
     html.find(".health").on("click", ".health-control", this.onClickHealthControl.bind(this));
     html.find(".xp").on("click", ".xp-control", this.onClickXPControl.bind(this));
-    //html.on("click", ".button-control", this.onClickButtonControl.bind(this));
+    Merp1eActionTab.activateListeners(html, this);
   }
+
   /** @override */
   async _onDropItemCreate(itemData) {
     if (itemData.type === "race") {
-      new Dialog({
-        title: game.i18n.localize("MERP1E.DeleteGroup"),
-        content: `You cannot drag a race. Choose from the dropdown in the actor sheet!`,
-        buttons: {
-          cancel: {
-            icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize("OK"),
-          }
-        }
-      }).render(true);
+      if(!this.isDisabledByElement("originalRaceId")) {
+        this.setValueToElement("originalRaceId", itemData._id);
+        this.submit();
+      } else {
+        ui.notifications.error(game.i18n.localize("MERP1E.Error.CannotChangeRace"));
+      }
       return;
     }
 
     if (itemData.type === "profession") {
-      new Dialog({
-        title: game.i18n.localize("MERP1E.DeleteGroup"),
-        content: `You cannot drag a profession. Choose from the dropdown in the actor sheet!`,
-        buttons: {
-          cancel: {
-            icon: '<i class="fas fa-times"></i>',
-            label: game.i18n.localize("OK"),
-          }
-        }
-      }).render(true);
+      if(!this.isDisabledByElement("originalProfessionId")) {
+        this.setValueToElement("originalProfessionId", itemData._id);
+        this.submit();
+      } else {
+        ui.notifications.error(game.i18n.localize("MERP1E.Error.CannotChangeProfession"));
+      }
       return;
     }
 
@@ -187,26 +290,6 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
     return super._onDropItemCreate(itemData);
   }
 
-  /**
-   * Handle clickable rolls.
-   * @param {Event} event   The originating click event
-   * @private
-   */
-  _onRoll(event) {
-    event.preventDefault();
-    const element = event.currentTarget;
-    const dataset = element.dataset;
-
-    if (dataset.roll) {
-      let roll = new Roll(dataset.roll, this.actor.data.data);
-      let label = dataset.label ? `Rolling ${dataset.label}` : '';
-      roll.roll().toMessage({
-        speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-        flavor: label
-      });
-    }
-  }
-
   _updateEmbeddedItems(formData) {
     // Handle the free-form groups list
     const formItems = expandObject(formData).Item || {};
@@ -225,49 +308,47 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
     return formData;
   }
 
-  _updateRace(formData) {
-    const newRaceId = formData["data.originalRaceId"] || null;
-    const raceItem = game.merp1e.Merp1eRules.getItem(newRaceId);
+  async _updateRace(formData) {
+    const globalRaceId = formData["originalRaceId"] || null;
+    const globalRaceItem = game.merp1e.Merp1eRules.getItem(globalRaceId);
+    //formData["data.originalRaceName"] = globalRaceItem.name;
 
-    if(raceItem != undefined) {
-      const newItem = { 
-        data: raceItem.data.data, 
-        img: raceItem.img, 
-        type: raceItem.type, 
-        name: raceItem.name};
-      const actorRace = this.actor.race;
-      if(actorRace.name == null) { // has no race yet, so create it
-        this.actor.createEmbeddedDocuments("Item", [newItem], {renderSheet: false})
-      } else { // already has one Embedded Document for the race, update it
-        if(this.actor.data.data.originalRaceId != newRaceId) {
-          newItem._id = actorRace.id;
-          this.actor.updateEmbeddedDocuments("Item", [newItem], {renderSheet: false})
-        }
-      }
+    if(globalRaceItem == undefined) { // race not choosen this time
+      return formData;
     }
+
+    if(this.actor.race.name == globalRaceItem.name) { // race is equal to the global item, does not neet do change. XXX
+      return formData;
+    }
+
+    if(this.actor.race.id) { // there was a race, and it changed. Delete the old one
+      await this.actor.deleteEmbeddedDocuments("Item", [this.actor.race.id]);
+    }
+
+    await this.actor.createEmbeddedDocuments('Item', [ mergeObject(globalRaceItem.toObject(), { data: { originalRaceId : globalRaceId, originalRaceName: globalRaceItem.name }}) ]);
     
     return formData;
   }
 
-  _updateProfession(formData) {
-    const newProfessionId = formData["data.originalProfessionId"] || null;
-    const professionItem = game.merp1e.Merp1eRules.getItem(newProfessionId);
-    if(professionItem != undefined) {
-      const newItem = { 
-        data: professionItem.data.data,
-        img: professionItem.img, 
-        type: professionItem.type, 
-        name: professionItem.name};
-      const actorProfession = this.actor.profession;
-      if(actorProfession.name == null) { // has no Profession yet, so create it
-        this.actor.createEmbeddedDocuments("Item", [newItem], {renderSheet: false})
-      } else { // already has one Embedded Document for the Profession, update it
-        if(this.actor.data.data.originalProfessionId != newProfessionId) {
-          newItem._id = actorProfession.id;
-          this.actor.updateEmbeddedDocuments("Item", [newItem], {renderSheet: false})
-        }
-      }
+  async _updateProfession(formData) {
+    const globalProfessionId = formData["originalProfessionId"] || null;
+    const globalProfessionItem = game.merp1e.Merp1eRules.getItem(globalProfessionId);
+    //formData["data.originalProfessionName"] = globalProfessionItem.name;
+
+    if(globalProfessionItem == undefined) { // Profession not choosen this time
+      return formData;
     }
+
+    if(this.actor.profession.name == globalProfessionItem.name) { // Profession is equal to the global item, does not neet do change. XXX
+      return formData;
+    }
+
+    if(this.actor.profession.id) { // there was a Profession, and it changed. Delete the old one
+      await this.actor.deleteEmbeddedDocuments("Item", [this.actor.profession.id]);
+    }
+
+    await this.actor.createEmbeddedDocuments('Item', [ mergeObject(globalProfessionItem.toObject(), { data: { originalProfessionId : globalProfessionId, originalProfessionName: globalProfessionItem.name }}) ]);
+    
     return formData;
   }
 
@@ -278,26 +359,17 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
   }
 
   /** @override */
-  _updateObject(event, formData) {
-    /*
-    let raceItem = game.data.items.filter(item => item.id == formData["data.raceId"]);
-    if(raceItem.length == 1) {
-      formData["data.race"] = raceItem[0];
-    }
-    let professionItem = game.data.items.filter(item => item.id == formData["data.professionId"]);
-    if(professionItem.length == 1) {
-      formData["data.profession"] = professionItem[0];
-    }
-    */
+  async _updateObject(event, formData) {
     formData = LanguageSheetHelper.updateLanguages(formData, this);
-    formData = this._updateRace(formData);
-    formData = this._updateProfession(formData);
-    formData = this._updateEmbeddedItems(formData);
+    formData = await this._updateRace(formData);
+    formData = await this._updateProfession(formData);
+    formData = await this._updateEmbeddedItems(formData);
+    formData = await Merp1eActionTab.updateObject(event, formData, this)
 
     //this.actor.health.consolidateDamage();
     //this.updateHealth();
 
-    return this.object.update(formData);
+    return await this.object.update(formData);
   }
 
   async onClickSkillControl(event) {
@@ -348,6 +420,9 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
     let value = document.getElementsByName(name)[0].value;
     if(value == "" || value == "0") return;
     this.setValueToElement(name, parseInt(value) + n);
+  }
+  isDisabledByElement(name) {
+    return document.getElementsByName(name)[0].disabled;
   }
   setValueToElement(name, n) {
     document.getElementsByName(name)[0].value = n;

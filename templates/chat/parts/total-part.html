@@ -1,0 +1,15 @@
+<div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%; border-bottom: 1pt; border-bottom-style: solid; font-weight: bold; text-transform: uppercase; font-size: 16px;">
+    <div>
+    <b>{{localize "MERP1E.ManeuverCard.TotalLabel"}}</b>
+    </div>
+    <div></div>
+    <div style="text-align: center; vertical-align: middle;">
+        {{#if data.rollTotal}}
+            <b>{{total}}</b>
+        {{else}}
+            <i class="fas fa-dice-d20"></i>
+            <i class="fas fa-dice-d20"></i>
+            {{formatBonus total}}
+        {{/if}}
+    </div>
+</div>

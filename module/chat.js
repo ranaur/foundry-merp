@@ -42,10 +42,9 @@ export class Merp1eChat {
 	// 	console.log('-->Merp1eChat.onMessage');
 	// 	console.log(`message received send&er :${data.user} message type : ${data.action} for message :${data.messageId}`);
 	// }
-
 	static chatListeners(app, html) {
 		html.on('click', '.card-title', Merp1eChat._onChatCardToggleContent.bind(this));
-		html.on('click', '.radio-switch', Merp1eChat._onChatCardRadioSwitch.bind(this));
+		//html.on('click', '.radio-switch', Merp1eChat._onChatCardRadioSwitch.bind(this));
 		/*
 		html.on('click', '.card-buttons button', Merp1eChat._onChatCardAction.bind(this));
 		// html.on('click', '.card-buttons button', Merp1eChat._onChatCardTest.bind(this));

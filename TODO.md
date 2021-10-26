@@ -1,29 +1,60 @@
-# TODO
-game.merp1e.Merp1eRules
-game.i18n.localize("MERP1E.EffectDescription.ShieldUnset");
+# Tips
+    game.merp1e.Merp1eRules
+    game.i18n.localize("MERP1E.EffectDescription.ShieldUnset");
 
-* fazer a importação aceitar dados mais complexos
-* Permitir colocar Active Effect em Raça, Profissão e no Ator. (FAZER COMO UM PART)
-* Criar uma opção do sistema para escolher um item special como configuration com active effects válidos para todo mundo
-* Colocar um ícone para cada tipo de special
-* colcoar um ajuste adhoc nos rolamentos (cards)
-* Expandir o effects para listar os especiais de raça (por abir o item de raça, profissão - idem) e os Especiais que o personagem tem (background options, etc.)
-* Permitir reimportar a profissão (se for a mesma)
-* fazer os outros tipos de rolamento (SP (+100), Ataque, Base e Directed Spell Cast
-* Fazer a ação (e o card) de prepare/cast spell
+
+# TODO
+
+* Fazer aba de ação
+    * Fazer Missle
+        * Encontrar os targets
+    (e o card) de prepare/cast spell
+    * Prepare na aba de spells
+        * Prepare marca no spell que está preparado (active effect no spelllist/ator?) e a quanto tempo
+    * Cast spell
+        * vê a quantos rounds está preparado
+        * posta um card de cast spell.
+* Fazer os outros tipos de rolamento:
+    Reorganizar o Static, Moving e RR
+
+    Ataque
+    Base Spell
+    Directed Spell Cast
 * Reorganizar spells para aceitarem ActiveEffects e aplicarem no target
+    O spelllist importaria todos os spells de dentro dela para o personagem (com os efeitos).
+    Tem que ver se faz isso faz fentido
 * Fazer com que os itens permitam fazer rolls de skills (com bonus) ou ataques, ou lançar spells
 * impedir alteração de skill por quem não é GM nas raças e profissões (colocar classe gm-select-only)
-* Criar um equipamento "stash of coins", que controla quantidade de moedas (e peso)
-* Colocar no equipamento "wearable/yieldable" e os locais que ele permite (só editável pelo GM, mas o personagem pode vestir)
-Explorar actor.getActiveTokens() 
-* Ver como herdar RollaBle Table
+* Explorar actor.getActiveTokens() => e mudar no caso de infravision
+    * fazer o infravision para alterar a visão do personagem automaticamente. 
+* Colocar um link para a tabela de fumble no caso de MM (fumble) e para o efeitos de static maneuver
+* Combat Tracker (permitir adicionar um nome)
+    Choose action fase
+        Telinha para escolherem o que fazer
+            Ação
+            Podem repetir o round anterior
+            Podem evoluir prepare para cast
+            Podem pedir auto reload de missile
+            Podem pedir para trocar de arma
+            Quem estiver de melee pode escolher quanto de parry vão dar
+        Botao para o GM mudar a fase: trava e ordenar tudo pelas ações e rola as iniciativas
+
+        Missile/Spell phase Primeiro
+        Meele phase
+        Static Maneuver
+        Movement
+
+    Quando virar o round: Upkeeping phase
+        Todo dano (stun, etc) tem o combat/ round/turn que ocorreu
+        Fase de upkeeping vê se o personagem agiu antes do dano (stun etc. para diminuir)
+
+* Fazer NPC
 
     ## New
         Fazer um "controlador do tempo"
 
     ## Someday/Maybe
-        * Fazer com que diferentes itens herdem como diferentes classes
+        * Consertar language para escolher de uma lista
         * Alterar a estrutura da ChatMessage para honrar a permissão do ator, e não do usuário
             - vai precisar herdar de ChaMessage e reconfigurar no CONFIG
             - alterar o _canUpdate para, se tiver um actorID no data, fazer 
@@ -98,6 +129,7 @@ Explorar actor.getActiveTokens()
 
         Aba Skill:
             Colocar um botão para reimportar todos os skills.
+            Colocar para esconder os skills com rank 0.
 
         Aba Description:
 
@@ -150,52 +182,18 @@ Explorar actor.getActiveTokens()
 
         Fazer uma limpeza em rules.js e seus subitens.
         
-        Fazer suporte a background options
-
     Colocar no generic-importer para importar Languages
         Usar o metadata para pegar os tipos de itens
         Pensar alguma maneira de fazer subdocumentos e ActiveEffects
-
-    Fazer features (ActiveEffects). Tipos:
-        Stat Increase (1 stat + 2)
-        Stat Increase (3 stats + 1)
-        Hobby skill rank - Increase one primary skill by 2 ranks or increase one secondary skill by 5 ranks	
-        Extra Language -  Increase one language to skill rank 5 	
-        Bonus on skill - always on
-            A special +5 bonus to any one primary skill.
-            A special +15 bonus in a secondary skill.
-            Resistence: a special +10 bonus to RR's againt one type adversity, normally Essence spells, Channeling spells, Poisons or Disease
-            Very observant: a special +10 bonus to preception and tracking
-            a special +10 to leadership and influence
-        Bonus on skill - on Item Use - (item add action with a bonus)
-            Empathy with a type of animal. Start with one pet or loyal companion of that type (e.g. falcon, hawl, weasel, cat, dog, horse, etc.) Any maneuver on or with such an animal receives a special +25 bonus.
-            +10 bonus magic item; +10 to any skill which the item is used (e.g. a +10 mace increate the mace OB by 10 when used in combat, a +10 lockpick would give a +10 bonus for picking locks, a +10 saddle would give a +10 bonus to riding, a +10 suit os armor woul
-        Infravision: ability to see sources of heat in darkness. range up to 100' (alternatively, any one sense may be enhanced in similar manner)
-        Extra spell list - Proficient with spells: start having one extra spell list (this background option may only be obtained once). The type of spell list is still limited by profession and race.
-        Bonus on skill group
-            Adept at moving maneuvers: a special +10 bonus to all moving maneuvers
-            Lightining reactions: +5 to DB and +5 to all OBs
-        Bonus per rank
-            Resistaint to pain: +3 to each D10 roll for concussion hits from body development skill development
-        Daily spell cast - item: an item which allows a spell to be cast a certain number os times a day without expending power points (see Section 4.56): a 1st level spell four times a day, a 2nd level spell thee times a day; a 3rd level spell twice a day, or a 4th level spell once a day. The player my choose the spell (4th level or loweer) and the type of the item (if the GM deems it appropriate) OR the gamemaster and the player may agree on a special magic item (e.g. a canteen that refils once a day, a rope that ties and unties itself, a backpack which is weightless regardless of contents, etc.)
-        Spell adder
-        Power Point Muitiplier
 
     Sheet: Damage
         Colocar o tipo de dano (burn, muscle, bone, etc.)
 
     Sheet: Race
-        Reler raças e colocar os bonus condicionais de skill na planilha (ActiveEffects?)
-        Importar as raças
-        Retirar as características e colocar tudo em descrição
-        Adicionar os efeitos da raça no actor
-            skill bonuses (ActiveEffects?)
-            adolescence skill rank - fazer ranks por set e colocar na tip do skill
 
     Sheet: Character
-        
-        Implementar uma parada para esconder os skills secundários que estão zerados (fazer no CSS com hidden?)
-        Implementar um tooltip mostrando a conta
+        Implementar um tooltip mostrando os efeitos
+        Permitir que o jogador reimporte a raça/profissão. Ou o GM edite.
         Fazer um tratamento melhor de spelllist.data.data.chanceOfLearning (permitir só de 20 em 20, e marcar quando aprender)
         Aba spells:
             melhorar a diferença entre spelllist e spell (CSS?)
@@ -219,16 +217,6 @@ Explorar actor.getActiveTokens()
             Fazer o cálculo de DB e AT a partir da armadura helm greaves, etc.
         Fazer os itens com peso e calcular o encumbrance (wear/not wear)
 
-        Colocar Special nos Itens:
-            Daily Spell
-            PP Multiplier (per realm)
-            Spell Adder (per realm)
-            Fixed number od uses spells (1 for potions and scrolls)
-            Stat Bonus
-            Always on Skill Bonus
-            Conditional Stat Bonus
-
-        Colocar botão de Roll
         Calacular peso por container/wear
         Fazer o "corpo", container base onde ficam as coisas que estão ativas.
 
@@ -239,34 +227,86 @@ Explorar actor.getActiveTokens()
         Deixar gastar só eles
         Transferir de um para o outro
 
-    Fazer o widget de quadradinho para os ranks
-        (mínimo (o que já tem dos níveis anteriores), máximo(2 por nível), máximo total(armor))
-        Tratar o body devel
-        (+1 +2 e zero a cada click. Click diteito aumenta, esquerdo diminui), separar em skills já existentes e novos
-
-    Fazer as background options/itens
-        Melhorar itens para ter "poderes"
-            - permitir um bonus num skill sempre (item bonus)
-            - permitir um bonus num skill quando executa pelo item
-            - permitir lançar um spell (qtd de vezes por dia)
-            - pp multiplier
-            - spell adder
-            
     Fazer os criticals
-
-    Fazer os rolls
-        SM
-        MM
-        RR
-        Attack
-        Spell
 
     Acertar o CSS
 
+    * tela de combate
+        Next round => publicar no chat um card dizendo qual o round
+        set action
+    * tela de controle de tempo
+        set date
+            configura calendar
+                no. meses
+                dias por mês
+                dias intercalados (critério)
+        set hour
+            num horas por dia
+            num minutos por horas
+        set round
+        next round
+        next turn
+        
+
 ## Débito técnico
-    [refactor] Abstrair raça e profissão em addUniqueItem/removeUniqueItem (se usar uma)
+
+    ## Item size/Max item size of container
+        * max item size (tiny, small, medium, large)
+
+    ## Places to wear
+        * Fazer teste para ver se é possível "wear" o item.
+    {{!--
+        <div class="resource flexrow">
+            <label class="resource-label">{{localize "MERP1E.Equipment.PlacesAllowedToWear"}}</label>
+            <select name="data.placesAllowedToWear" multiple size="{{bodyPlaces.length}}" {{gmonly}}>
+                {{#each bodyPlaces as | bodyPlace | }}
+                <option value="{{bodyPlace.id}}" {{#if (in bodyPlace.id ../data.data.placesAllowedToWear)}}selected{{/if}}>{{localize bodyPlace.label}}</option>
+                {{/each}}
+            </select>
+        </div>
+    --}}
+
+    /*
+    static bodyPlaces = [
+        { id: "none", label: "MERP1E.BodyPlaces.None" },
+        { id: "fingers", label: "MERP1E.BodyPlaces.Fingers", numAllowedItems: 2 },
+        { id: "mainhand", label: "MERP1E.BodyPlaces.MainHand", numAllowedItems: 1 },
+        { id: "offhand", label: "MERP1E.BodyPlaces.OffHand", numAllowedItems: 1 },
+        { id: "hands", label: "MERP1E.BodyPlaces.Hand", numAllowedItems: 1 },
+        { id: "arms", label: "MERP1E.BodyPlaces.Arm", numAllowedItems: 1 },
+        { id: "torso", label: "MERP1E.BodyPlaces.Torso", numAllowedItems: 1 },
+        { id: "back", label: "MERP1E.BodyPlaces.Back", numAllowedItems: 1 },
+        { id: "neck", label: "MERP1E.BodyPlaces.Neck", numAllowedItems: 1 },
+        { id: "head", label: "MERP1E.BodyPlaces.Head", numAllowedItems: 1 },
+        { id: "legs", label: "MERP1E.BodyPlaces.Legs", numAllowedItems: 1 },
+        { id: "feet", label: "MERP1E.BodyPlaces.Feet", numAllowedItems: 1 },
+    ];
+    */
+
+    "MERP1E.BodyPlaces.None": "None",
+    "MERP1E.BodyPlaces.Fingers": "Fingers",
+    "MERP1E.BodyPlaces.MainHand": "Main Hand",
+    "MERP1E.BodyPlaces.OffHand": "Off Hand",
+    "MERP1E.BodyPlaces.Hand": "Hand",
+    "MERP1E.BodyPlaces.Arm": "Arm",
+    "MERP1E.BodyPlaces.Back": "Back",
+    "MERP1E.BodyPlaces.Torso": "Torso",
+    "MERP1E.BodyPlaces.Neck": "Neck",
+    "MERP1E.BodyPlaces.Head": "Head",
+    "MERP1E.BodyPlaces.Legs": "Legs",
+    "MERP1E.BodyPlaces.Feet": "Feet",
+
+
+
 
 # Tricks & code
+
+## Fazer um novo card
+
+templates/chat/xxx-chatcard.html
+    (use parts, if possible)
+modules/chat/xxx-chatcard.js
+
 
 ## Fazer com que o handlebars bata com o name= dos campos
 
@@ -928,6 +968,125 @@ Skimble — Hoje às 15:28
 https://github.com/sk1mble/xcard
 
 See the socket:true declaration in the JSON, the game.socket.emit syntax on line 56 of XCard.js, and the hook in line 64- that sets up the hook response.
+
+* object comparison
+
+https://stackoverflow.com/questions/1068834/object-comparison-in-javascript
+
+function deepCompare () {
+  var i, l, leftChain, rightChain;
+
+  function compare2Objects (x, y) {
+    var p;
+
+    // remember that NaN === NaN returns false
+    // and isNaN(undefined) returns true
+    if (isNaN(x) && isNaN(y) && typeof x === 'number' && typeof y === 'number') {
+         return true;
+    }
+
+    // Compare primitives and functions.     
+    // Check if both arguments link to the same object.
+    // Especially useful on the step where we compare prototypes
+    if (x === y) {
+        return true;
+    }
+
+    // Works in case when functions are created in constructor.
+    // Comparing dates is a common scenario. Another built-ins?
+    // We can even handle functions passed across iframes
+    if ((typeof x === 'function' && typeof y === 'function') ||
+       (x instanceof Date && y instanceof Date) ||
+       (x instanceof RegExp && y instanceof RegExp) ||
+       (x instanceof String && y instanceof String) ||
+       (x instanceof Number && y instanceof Number)) {
+        return x.toString() === y.toString();
+    }
+
+    // At last checking prototypes as good as we can
+    if (!(x instanceof Object && y instanceof Object)) {
+        return false;
+    }
+
+    if (x.isPrototypeOf(y) || y.isPrototypeOf(x)) {
+        return false;
+    }
+
+    if (x.constructor !== y.constructor) {
+        return false;
+    }
+
+    if (x.prototype !== y.prototype) {
+        return false;
+    }
+
+    // Check for infinitive linking loops
+    if (leftChain.indexOf(x) > -1 || rightChain.indexOf(y) > -1) {
+         return false;
+    }
+
+    // Quick checking of one object being a subset of another.
+    // todo: cache the structure of arguments[0] for performance
+    for (p in y) {
+        if (y.hasOwnProperty(p) !== x.hasOwnProperty(p)) {
+            return false;
+        }
+        else if (typeof y[p] !== typeof x[p]) {
+            return false;
+        }
+    }
+
+    for (p in x) {
+        if (y.hasOwnProperty(p) !== x.hasOwnProperty(p)) {
+            return false;
+        }
+        else if (typeof y[p] !== typeof x[p]) {
+            return false;
+        }
+
+        switch (typeof (x[p])) {
+            case 'object':
+            case 'function':
+
+                leftChain.push(x);
+                rightChain.push(y);
+
+                if (!compare2Objects (x[p], y[p])) {
+                    return false;
+                }
+
+                leftChain.pop();
+                rightChain.pop();
+                break;
+
+            default:
+                if (x[p] !== y[p]) {
+                    return false;
+                }
+                break;
+        }
+    }
+
+    return true;
+  }
+
+  if (arguments.length < 1) {
+    return true; //Die silently? Don't know how to handle such case, please help...
+    // throw "Need two or more arguments to compare";
+  }
+
+  for (i = 1, l = arguments.length; i < l; i++) {
+
+      leftChain = []; //Todo: this can be cached
+      rightChain = [];
+
+      if (!compare2Objects(arguments[0], arguments[i])) {
+          return false;
+      }
+  }
+
+  return true;
+}
 
 # DECISIONS
 

@@ -11,16 +11,16 @@
             <div class="resource flex-group-center">
               <label class="resource-label">{{localize "MERP1E.Character.Race"}}</label>
               <div>
-                <select class="userentry" name="data.originalRaceId">
-                  {{selectOptions avaliableRaces selected=data.data.originalRaceId localize=True}}
+                <select class="userentry" name="originalRaceId">
+                  {{selectOptions avaliableRaces selected=actorRaceId localize=false}}
                 </select>
               </div>
             </div>
             <div class="resource flex-group-center">
               <label for="data.profession" class="resource-label">{{localize "MERP1E.Character.Profession"}}</label>
               <div>
-                <select class="userentry" name="data.originalProfessionId">
-                  {{selectOptions avaliableProfessions selected=data.data.originalProfessionId localize=True}}
+                <select class="userentry" name="originalProfessionId">
+                  {{selectOptions avaliableProfessions selected=actorProfessionId localize=True}}
                 </select>
               </div>
             </div>
@@ -55,6 +55,8 @@
     <a class="item" data-tab="xp">{{localize "MERP1E.CharacterTab.XP"}}</a>
     <a class="item" data-tab="specials">{{localize "MERP1E.CharacterTab.Specials"}}</a>
     <a class="item" data-tab="effects">{{localize "MERP1E.CharacterTab.Effects"}}</a>
+    <a class="item" data-tab="money">{{localize "MERP1E.CharacterTab.Money"}}</a>
+    <a class="item" data-tab="action">{{localize "MERP1E.CharacterTab.Action"}}</a>
   </nav>
 
   {{!-- Sheet Body --}}
@@ -105,13 +107,23 @@
     </div>
 
     {{!-- Specials Tab --}}
-    <div class="tab special" data-group="primary" data-tab="specials">
+    <div class="tab specials" data-group="primary" data-tab="specials">
       {{> "systems/merp1e/templates/actor/parts/character-sheet-specials.html" actor=actor}}
     </div>
 
     {{!-- Effects Tab --}}
-    <div class="tab equipment" data-group="primary" data-tab="effects">
+    <div class="tab effects" data-group="primary" data-tab="effects">
       {{> "systems/merp1e/templates/actor/parts/character-sheet-effects.html" actor=actor}}
+    </div>
+
+    {{!-- Money Tab --}}
+    <div class="tab money" data-group="primary" data-tab="money">
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-money.html" actor=actor}}
+    </div>
+
+    {{!-- Action Tab --}}
+    <div class="tab action" data-group="primary" data-tab="action">
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-actions.html" actor=actor}}
     </div>
   </section>
 </form>

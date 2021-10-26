@@ -31,6 +31,7 @@ export class Merp1eBaseItemSheet extends ItemSheet {
   getData() {
     const sheetData = super.getData();
     sheetData.rules = game.merp1e.Merp1eRules;
+    sheetData.isGM = game.user.isGM;
     return sheetData;
   }
 

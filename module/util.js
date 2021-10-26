@@ -13,7 +13,15 @@ export function copyClassFunctions(obj, className) {
     }
   }
 }
-
+/*
+_copyClassFunctions(className) {
+  for (var prop of Object.getOwnPropertyNames( className.prototype )) {
+    if (!(prop in this)) {
+        this[prop] = className.prototype[prop];
+    }
+  }
+}
+*/
 export function formatBonus(value) {
   let bonus = parseInt(value || 0);
   if(bonus >= 0) return "+" + String(bonus);
@@ -26,6 +34,10 @@ export function findByID(array, id, def) {
 
 export function max(a, b) {
   return a > b ? a : b;
+}
+
+export function min(a, b) {
+  return a < b ? a : b;
 }
 
 export function removePrefix(str, prefix) {
@@ -45,20 +57,6 @@ export function stripClassName(obj, prefix = null, suffix = null) {
   if(suffix !== null) className = removeSuffix(className, suffix);
   return className;
 }
-
-// export function getAllSubclasses(baseClass) {
-//   var globalObject = Function('return this')(); 
-//   var allVars = Object.keys(globalObject);
-//   var classes = allVars.filter(function (key) {
-//   try {
-//     var obj = globalObject[key];
-//         return obj.prototype instanceof baseClass;
-//     } catch (e) {
-//         return false;
-//     }
-//   });
-//   return classes;
-// }
 
 export function toSnakeCase(str) {
  return str.replace(/[A-Z]/g, letter => `_${letter.toLowerCase()}`);
@@ -81,4 +79,11 @@ export function replaceData(str, data) {
     res = res.replaceAll("$" + key, val);
   });
   return res;
+}
+
+export function getFuncName(fun) {
+  var ret = fun.toString();
+  ret = ret.substr(0, ret.indexOf('('));
+  ret = ret.replace('function ', '');
+  return ret;
 }

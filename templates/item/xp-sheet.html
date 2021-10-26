@@ -21,11 +21,10 @@
         <a class="item" data-tab="description">{{localize "MERP1E.Languages.Description"}}</a>
     </nav>
 
-    {{!-- Sheet Body --}}
-    <section class="sheet-body">
+    <section>
         {{!-- Description Tab --}}
         <div class="tab" data-group="primary" data-tab="description">
-            {{editor content=data.data.description target="data.description" button=true owner=owner editable=editable}}
+            {{> "systems/merp1e/templates/item/parts/description.html" data=data}}
         </div>
     </section>
 </form>

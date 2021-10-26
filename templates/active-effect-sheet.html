@@ -26,7 +26,9 @@
     {{!-- Effect Tab Navigation --}}
     <nav class="sheet-tabs tabs" data-group="primary">
         <a class="item" data-tab="configuration"><i class="fas fa-cogs"></i> {{localize "MERP1E.EffectTab.Configuration"}}</a>
+        {{#if hasConditionParameters}}
         <a class="item" data-tab="condition"><i class="fas fa-check"></i> {{localize "MERP1E.EffectTab.Condition"}}</a>
+        {{/if}}
         <a class="item" data-tab="details"><i class="fas fa-book"></i> {{localize "MERP1E.EffectTab.Details"}}</a>
         {{!-- <a class="item" data-tab="duration"><i class="fas fa-clock"></i> {{localize "MERP1E.EffectTab.Duration"}}</a> --}}
         {{!-- <a class="item" data-tab="effects"><i class="fas fa-cogs"></i> {{localize "MERP1E.EffectTab.Effects"}}</a> --}}
@@ -41,6 +43,9 @@
             {{/if}}
             {{#if (eq effect.flags.merp1e.effectType "SkillGroupBonus")}}
                 {{> "systems/merp1e/templates/effect/skill-group-bonus-item-effect-part.html" effect=effect sheetOrder=sheetOrder}}
+            {{/if}}
+            {{#if (eq effect.flags.merp1e.effectType "RollTypeBonus")}}
+                {{> "systems/merp1e/templates/effect/roll-type-bonus-item-effect-part.html" effect=effect sheetOrder=sheetOrder}}
             {{/if}}
             {{#if (eq effect.flags.merp1e.effectType "RankSkillBonus")}}
                 {{> "systems/merp1e/templates/effect/rank-skill-bonus-item-effect-part.html" effect=effect sheetOrder=sheetOrder}}
@@ -78,18 +83,21 @@
         </div>
         {{!-- Condition tab --}}
         <div class="tab" data-tab="condition">
-            {{#if (eq effect.flags.merp1e.conditionType "AlwaysOn")}}
-            <div>
-                Always on has no parameters to configure
-            </div> {{!-- XXX i18 --}}
-            {{/if}}
-            {{#if (eq effect.flags.merp1e.conditionType "OnItemCarried")}}
-            <div>
-                <label>{{ localize "MERP1E.Effect.AllowedPlaces" }}</label>
-                <input type="text" name="flags.merp1e.conditions.OnItemCarriedPlaces" value="{{effect.flags.merp1e.conditions.OnItemCarriedPlaces}}" placeholder="Anywhere"/>
+            {{#if (eq effect.flags.merp1e.conditionType "OnArmorTypes")}}
+            <div class="flexrow">
+                <label>{{localize "MERP1E.Effect.AllowedArmorTypes"}}</label>
+    
+                <div class="flexrow">
+                    {{#each rules.defense.armorTypes as | armorType |}}
+                    <div class="flexrow">
+                        <input name="flags.merp1e.conditions.OnArmorTypes.{{armorType.id}}" type="checkbox" {{checked (lookup ../effect.flags.merp1e.conditions.OnArmorTypes armorType.id)}}/>
+                        <label>{{localize armorType.abbr}}</label>
+                    </div>
+                    {{/each}}
+                </div>
             </div>
             {{/if}}
-            {{#if (eq effect.flags.merp1e.conditionType "OnArmorTypes")}}
+            {{#if (eq effect.flags.merp1e.conditionType "AttackTypes")}}
             <div class="flexrow">
                 <label>{{localize "MERP1E.Effect.AllowedArmorTypes"}}</label>
     

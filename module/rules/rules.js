@@ -4,11 +4,10 @@ import { MerpSkill } from "./skill.js";
 import { TableMT2 } from "./tables/mt-2.js";
 import { TableMT1 } from "./tables/mt-1.js";
 import { TableBT1 } from "./tables/bt-1.js";
+import { TableBT5, TableBT5Aux } from "./tables/bt-5.js";
 import { TableRR1 } from "./tables/rr-1.js";
 import { findByID } from '../util.js';
-import { Merp1eStaticManeuverChatCard } from "../chat/static-maneuver-chatcard.js";
-import { Merp1eMovingManeuverChatCard } from "../chat/moving-maneuver-chatcard.js";
-import { Merp1eResistenceRollChatCard } from "../chat/resistence-roll-chatcard.js";
+import { Merp1eStaticManeuverChatCard, Merp1eMovingManeuverChatCard, Merp1eResistenceRollChatCard, Merp1eSpecialRollChatCard } from "../chat/chatcard.js";
 
 export class Merp1eRules {
     static spell = MerpSpell;
@@ -18,8 +17,53 @@ export class Merp1eRules {
         mt2: TableMT2,
         mt1: TableMT1,
         bt1: TableBT1,
+        bt5: TableBT5,
+        bt5aux: TableBT5Aux,
         rr1: TableRR1
     };
+    /* XXX FIX for attack type */
+    /*
+    static attack = {
+        type: [ 
+            { id: "heat", label: "MERP1E.AttackType.Heat" }, 
+            { id: "cold", label: "MERP1E.AttackType.Cold" }, 
+            { id: "Eletricity", label: "MERP1E.AttackType.Eletricity" }, 
+            { id: "Impact", label: "MERP1E.AttackType.Impact" }, 
+            { id: "Crush", label: "MERP1E.AttackType.Crush" }, 
+            { id: "Slash", label: "MERP1E.AttackType.Slash" }, 
+            { id: "Puncture", label: "MERP1E.AttackType.Puncture" }, 
+            { id: "Unbalancing", label: "MERP1E.AttackType.Unbalancing" }, 
+            { id: "Grappling", label: "MERP1E.AttackType.Grappling" }
+        ]
+    };
+    */
+
+    static actions = [
+        { id: "prepareSpell", name:"MERP1E.Action.PrepareSpell" },
+        { id: "castSpell", name:"MERP1E.Action.CastSpell" },
+        { id: "missileAttack", name:"MERP1E.Action.MissileAttack" },
+        { id: "loadReload", name:"MERP1E.Action.LoadReload" },
+        { id: "MM", name:"MERP1E.Action.MovingManeuver" },
+        { id: "meleeAttack", name:"MERP1E.Action.MeleeAttack" },
+        { id: "movement", name:"MERP1E.Action.Movement" },
+        { id: "SM", name:"MERP1E.Action.StaticManeuver" },
+        { id: "other", name:"MERP1E.Action.Other" },
+    ];
+    static currencies = [
+        { id: "tp", name:"MERP1E.Currency.TP", namePlural:"MERP1E.CurrencyPlural.TP", abbr: "MERP1E.CurrencyAbbr.TP", unitaryValue: 0.001 },
+        { id: "cp", name:"MERP1E.Currency.CP", namePlural:"MERP1E.CurrencyPlural.CP", abbr: "MERP1E.CurrencyAbbr.CP", unitaryValue: 0.01 },
+        { id: "bp", name:"MERP1E.Currency.BP", namePlural:"MERP1E.CurrencyPlural.BP", abbr: "MERP1E.CurrencyAbbr.BP", unitaryValue: 0.1 },
+        { id: "sp", name:"MERP1E.Currency.SP", namePlural:"MERP1E.CurrencyPlural.SP", abbr: "MERP1E.CurrencyAbbr.SP", unitaryValue: 1 },
+        { id: "gp", name:"MERP1E.Currency.GP", namePlural:"MERP1E.CurrencyPlural.GP", abbr: "MERP1E.CurrencyAbbr.GP", unitaryValue: 10 },
+        { id: "mp", name:"MERP1E.Currency.MP", namePlural:"MERP1E.CurrencyPlural.MP", abbr: "MERP1E.CurrencyAbbr.MP", unitaryValue: 1000 },
+    ];
+
+    static mainLocations = [
+        { id: "carrying", name: "MERP1E.Location.Carrying", item: null },
+        { id: "stored", name: "MERP1E.Location.Stored", item: null },
+        { id: "wearing", name: "MERP1E.Location.Wearing", item: null }
+    ];
+
     static stats = [
         { id: "st", label: "MERP1E.Stats.st.Name", abbr: "MERP1E.Stats.st.Abbr" }, 
         { id: "ag", label: "MERP1E.Stats.ag.Name", abbr: "MERP1E.Stats.ag.Abbr" }, 
@@ -35,8 +79,16 @@ export class Merp1eRules {
         { id: "RR", label: "MERP1E.RollType.RR", abbr: "MERP1E.RollTypeAbbr.RR", rollCard: (data) => new Merp1eResistenceRollChatCard(data) },
         { id: "DB", label: "MERP1E.RollType.DB", abbr: "MERP1E.RollTypeAbbr.DB", rollCard: (data) => new Merp1eStaticManeuverChatCard(data) },
         { id: "OB", label: "MERP1E.RollType.OB", abbr: "MERP1E.RollTypeAbbr.OB", rollCard: (data) => new Merp1eStaticManeuverChatCard(data) },
-        { id: "SP", label: "MERP1E.RollType.SP", abbr: "MERP1E.RollTypeAbbr.SP", rollCard: (data) => new Merp1eStaticManeuverChatCard(data) }
+        { id: "SP", label: "MERP1E.RollType.SP", abbr: "MERP1E.RollTypeAbbr.SP", rollCard: (data) => new Merp1eSpecialRollChatCard(data) }
     ];
+
+    static getSpecialItems() {
+        return game.data.items.filter((item) => item.type == "special").reduce((acc, itm) => { acc[itm._id] = itm.name; return acc; }, { "": null });
+    }
+    static get globalEffect() {
+        const globalEffectId = game.settings.get("merp1e", "globalEffect");
+        return game.items.get(globalEffectId);
+    }
 
     static rollManeuver(skill, rollTypeID = null) {
         if(!skill) return ui.notifications.error(`Must choose a skill to roll a Maneuver!`);
@@ -53,7 +105,8 @@ export class Merp1eRules {
         types: [
             { id: "Background Option", label: "MERP1E.Special.BackgorundOption", abbr: "MERP1E.SpecialAbbr.BackgorundOption", icon: "fas fa-user-plus" },
             { id: "Feature", label: "MERP1E.Special.Feature", abbr: "MERP1E.SpecialAbbr.Feature", icon: "fas fa-notes-medical" },
-            { id: "Maneuver Success", label: "MERP1E.Special.ManeuverSuccess", abbr: "MERP1E.SpecialAbbr.ManeuverSuccess", icon: "fas fa-glasses" }
+            { id: "Maneuver Success", label: "MERP1E.Special.ManeuverSuccess", abbr: "MERP1E.SpecialAbbr.ManeuverSuccess", icon: "fas fa-glasses" },
+            { id: "Global Effects", label: "MERP1E.Special.GlobalEffects", abbr: "MERP1E.SpecialAbbr.GlobalEffects", icon: "fas fa-globe-americas" }
         ]
     };
     static profession = {
@@ -166,10 +219,10 @@ export class Merp1eRules {
             }
         }
         if(typeof column == 'string') {
-            number = table.columns.indexOf(column) + 1;
+            column = table.columns.indexOf(column) + 1;
         }
         if(Array.isArray(choosedLine)) {
-            return choosedLine[number];
+            return choosedLine[column];
         } else {
             return null;
         }
@@ -223,6 +276,22 @@ export class Merp1eRules {
         return Merp1eRules.tables.mt2.toObjectArray();
         //return Merp1eRules.tables.mt2.table.reduce((acc, row) => { acc.push({id: row[1], label: row[2], text: row[3]}); return acc;}, []);
     }
+
+    static resolveEncumbrance(characterWeight, weightCarried) {
+        let excessWeight;
+        if(weightCarried > 160) {   
+            excessWeight = weightCarried - 160;
+            weightCarried = 160;
+        } else {
+            excessWeight = 0;
+        }
+        const col = Merp1eRules.lookupTable(Merp1eRules.tables.bt5aux, "WEIGHT CARRIED", weightCarried);
+        const res = Merp1eRules.lookupTable(Merp1eRules.tables.bt5, col, characterWeight);
+        if(res == "NA") return res;
+        return res + Math.ceil(excessWeight / 10 * 5);
+    };
+
+
     // Maps XP to the level
     static resolveLevel(xp) {
         const x = Math.floor(xp/10000);
@@ -274,6 +343,10 @@ export class Merp1eRules {
         /// XXX add folder of avaliable races (config option)
         return game.items.filter(item => item.type == "race").reduce((res, race) => { res[race.id] = race.name; return res; }, { null: game.i18n.localize("MERP1E.Race.ChooseOne")});
     }
+    static getItemByTypeIdName(type, id, name) {
+        return game.items.find(item => item.type == type && item.id == id) || game.items.find(item => item.type == type && item.name == name); 
+    }
+    
     static getAvaliableLanguageByName(name) {
         /// XXX add folder of avaliable languages (config option)
         return game.items.filter(item => item.type == "language" && item.name == name );
@@ -336,4 +409,5 @@ export class Merp1eRules {
         
         console.log(rolled);
     }
+
 }

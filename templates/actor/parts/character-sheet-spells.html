@@ -1,116 +1,104 @@
-<div class="flexcol">
-  <div class="flexrow">
-      <h2 class="flex3">{{localize 'MERP1E.Realm.Label'}}</h2>
+<h2>{{localize 'MERP1E.Realm.Label'}}</h2>
+<div class="flexrow">
+  <label class="resource-label">{{localize "MERP1E.Profession.Realm"}}</label>
+  <div class="flex4">
+    {{#if (eq actor.profession.data.data.realm "any")}}
+    <select class="userentry" name="data.spellcasting.realm">
+      {{selectOptions rules.magic.realms selected=data.data.spellcasting.realm localize=true nameAttr="id" labelAttr="label"}}
+    </select>
+    {{else}}
+    <input type="text" value="{{actor.spellcasting.realm}}" data-dtype="String" {{ro}}/>
+    {{/if}}
   </div>
-  <div class="flexrow">
-    <label class="resource-label">{{localize "MERP1E.Profession.Realm"}}</label>
-    <div class="flex4">
-      {{#if (eq actor.profession.data.data.realm "any")}}
-      <select class="userentry" name="data.spellcasting.realm">
-        {{selectOptions rules.magic.realms selected=data.data.spellcasting.realm localize=true nameAttr="id" labelAttr="label"}}
-      </select>
-      {{else}}
-      <input type="text" value="{{actor.spellcasting.realm}}" data-dtype="String" {{ro}}/>
-      {{/if}}
+</div>
+
+<h2 class="flex3">
+  <div>{{localize "MERP1E.SpellCasting.Label"}}</div>
+  <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+    <a class="spellcasting-control" data-action="reset" title="{{localize 'MERP1E.Spellcasting.Reset'}}"><i class="fas fa-bolt"></i></a>
+  </div>
+</h2>
+<div class="flexrow">
+  <div class="flex4 flexrow">
+    <label class="resource-label">{{localize "MERP1E.SpellCasting.PowerPoints"}}</label>
+    <div>
+      <label class="resource-label">{{localize "MERP1E.SpellCasting.Current"}}</label>
+      <div class="flexrow">
+        {{minusButton}}
+        <input type="number" name="data.spellcasting.powerPointsCurrent" value="{{actor.spellcasting.powerPointsCurrent}}" style="max-width: 50%" data-dtype="Number" {{rw}}/>
+        {{plusButton}}
+      </div>
+    </div>
+
+    <div>
+      <label class="resource-label">{{localize "MERP1E.SpellCasting.Multiplier"}}</label>
+      <input type="number" name="data.spellcasting.powerPointsMultiplier" value="{{actor.spellcasting.powerPointsMultiplier}}" data-dtype="Number" {{roif settings.spellcastingControlAutomatic}}/>
+    </div>
+
+    <div>
+      <label class="resource-label">{{localize "MERP1E.SpellCasting.Maximum"}}</label>
+      <input type="number" name="data.spellcasting.powerPointsMaximum" value="{{actor.spellcasting.powerPointsMaximum}}" data-dtype="Number" title="{{actor.spellcasting.powerPointsPerLevel}} (PP per level) X {{actor.level}} (Level) X {{actor.spellcasting.powerPointsMultiplier}} (PP Multiplier) = {{actor.powerPointsMaximum}}" {{ro}}/>
+    </div>
+  </div>
+</div>
+<div class="flexrow">
+  <div class="flex4 flexrow">
+    <label class="resource-label">{{localize "MERP1E.SpellCasting.SpellAdder"}}</label>
+
+    <div>
+      <label class="resource-label">{{localize "MERP1E.SpellCasting.Current"}}</label>
+      <div class="flexrow">
+        {{minusButton}}
+        <input type="number" name="data.spellcasting.spellAdderCurrent" value="{{actor.spellcasting.spellAdderCurrent}}" style="max-width: 50%" data-dtype="Number" {{rw}}/>
+        {{plusButton}}
+      </div>
+    </div>
+
+    <div>
+    </div>
+
+    <div>
+      <label class="resource-label">{{localize "MERP1E.SpellCasting.Maximum"}}</label>
+      <input type="number" name="data.spellcasting.spellAdderMaximum" value="{{actor.spellcasting.spellAdderMaximum}}" data-dtype="Number" {{roif settings.spellcastingControlAutomatic}}/>
     </div>
   </div>
 </div>
 
-<div class="flexcol">
-  <div class="flexrow">
-      <h2 class="flex3">{{localize "MERP1E.SpellCasting.Label"}}</h2>
-      <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
-          <a class="spellcasting-control" data-action="reset" title="{{localize 'MERP1E.Spellcasting.Reset'}}"><i class="fas fa-bolt"></i></a>
+<h2 class="flex3"><h2>{{localize 'MERP1E.Spells.Spelllists'}}</h2></h2>
+<div>
+  <ol class="items-list">
+    <li class="item flexrow item-header">
+      <div class="item-image"></div>
+      <div class="item-name">{{localize 'MERP1E.Spells.Name'}}</div>
+      <div class="item-controls">
+        <a class="item-control item-create" title="{{localize 'MERP1E.Spells.CreateSpelllist'}}" data-type="item"><i class="fas fa-plus"></i> Add item</a>
       </div>
-  </div>
-
-  <div class="flexrow">
-    <div class="flex4 flexrow">
-      <label class="resource-label">{{localize "MERP1E.SpellCasting.PowerPoints"}}</label>
-  
-      <div>
-        <label class="resource-label">{{localize "MERP1E.SpellCasting.Current"}}</label>
-        <div class="flexrow">
-          {{minusButton}}
-          <input type="number" name="data.spellcasting.powerPointsCurrent" value="{{actor.spellcasting.powerPointsCurrent}}" style="max-width: 50%" data-dtype="Number" {{rw}}/>
-          {{plusButton}}
-        </div>
-      </div>
-      <div>
-        <label class="resource-label">{{localize "MERP1E.SpellCasting.Multiplier"}}</label>
-
-        <input type="number" name="data.spellcasting.powerPointsMultiplier" value="{{actor.spellcasting.powerPointsMultiplier}}" data-dtype="Number" {{roif rules.settings.spellcastingControlAutomatic}}/>
-      </div>
-      <div>
-        <label class="resource-label">{{localize "MERP1E.SpellCasting.Maximum"}}</label>
-        <input type="number" name="data.spellcasting.powerPointsMaximum" value="{{actor.spellcasting.powerPointsMaximum}}" data-dtype="Number" title="{{actor.spellcasting.powerPointsPerLevel}} (PP per level) X {{actor.level}} (Level) X {{actor.spellcasting.powerPointsMultiplier}} (PP Multiplier) = {{actor.powerPointsMaximum}}" {{ro}}/>
-      </div>
-    </div>
-  </div>
-  
-  <div class="flexrow">
-    <div class="flex4 flexrow">
-      <label class="resource-label">{{localize "MERP1E.SpellCasting.SpellAdder"}}</label>
-  
-      <div>
-        <label class="resource-label">{{localize "MERP1E.SpellCasting.Current"}}</label>
-        <div class="flexrow">
-          {{minusButton}}
-          <input type="number" name="data.spellcasting.spellAdderCurrent" value="{{actor.spellcasting.spellAdderCurrent}}" style="max-width: 50%" data-dtype="Number" {{rw}}/>
-          {{plusButton}}
-        </div>
-      </div>
-  
-      <div>
-      </div>
-  
-      <div>
-        <label class="resource-label">{{localize "MERP1E.SpellCasting.Maximum"}}</label>
-        <input type="number" name="data.spellcasting.spellAdderMaximum" value="{{actor.spellcasting.spellAdderMaximum}}" data-dtype="Number" {{roif rules.settings.spellcastingControlAutomatic}}/>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="flexcol">
-  <div class="flexrow">
-      <h2 class="flex3"><h2>{{localize 'MERP1E.Spells.Spelllists'}}</h2></h2>
-  </div>
-  <div>
-    <ol class="items-list">
-      <li class="item flexrow item-header">
-        <div class="item-image"></div>
-        <div class="item-name">{{localize 'MERP1E.Spells.Name'}}</div>
+    </li>
+    {{#each actor.spelllists as |spelllist|}}
+    <li class="item flexrow" data-item-id="{{spelllist.id}}">
+        <div class="item-image"><img src="{{spelllist.img}}" title="{{spelllist.name}}" width="24" height="24"/></div>
+        <h4 class="item-name flex4">{{spelllist.name}}</h4>
+        <input class="userentry" name="Item.{{spelllist.id}}.chanceOfLearning" value="{{spelllist.data.data.chanceOfLearning}}" data-dtype="Number" type="number"/>
         <div class="item-controls">
-          <a class="item-control item-create" title="{{localize 'MERP1E.Spells.CreateSpelllist'}}" data-type="item"><i class="fas fa-plus"></i> Add item</a>
+          <a class="item-control item-edit" title="{{localize 'MERP1E.Spells.EditSpelllist'}}"><i class="fas fa-edit"></i></a>
+          <a class="item-control item-delete" title="{{localize 'MERP1E.Spells.DeleteSpelllist'}}"><i class="fas fa-trash"></i></a>
         </div>
-      </li>
-      {{#each actor.spelllists as |spelllist|}}
-      <li class="item flexrow" data-item-id="{{spelllist.id}}">
-          <div class="item-image"><img src="{{spelllist.img}}" title="{{spelllist.name}}" width="24" height="24"/></div>
-          <h4 class="item-name flex4">{{spelllist.name}}</h4>
-          <input class="userentry" name="Item.{{spelllist.id}}.chanceOfLearning" value="{{spelllist.data.data.chanceOfLearning}}" data-dtype="Number" type="number"/>
+    </li>
+    {{#if (eq spelllist.data.data.chanceOfLearning 100)}}
+    <ol>
+    {{#each spelllist.data.data.spells as | spell |}}
+      <li class="item flexrow" data-item-id="{{item.id}}">
+          <div class="item-image" stype="width: 48px"></div>
+          <div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24"/></div>
+          <h4 class="item-name flex4">{{spell.level}} - {{spell.name}}</h4>
           <div class="item-controls">
-            <a class="item-control item-edit" title="{{localize 'MERP1E.Spells.EditSpelllist'}}"><i class="fas fa-edit"></i></a>
-            <a class="item-control item-delete" title="{{localize 'MERP1E.Spells.DeleteSpelllist'}}"><i class="fas fa-trash"></i></a>
+            ROLL
           </div>
       </li>
-      {{#if (eq spelllist.data.data.chanceOfLearning 100)}}
-      <ol>
-      {{#each spelllist.data.data.spells as | spell |}}
-        <li class="item flexrow" data-item-id="{{item.id}}">
-            <div class="item-image" stype="width: 48px"></div>
-            <div class="item-image"><img src="{{spell.img}}" title="{{spell.name}}" width="24" height="24"/></div>
-            <h4 class="item-name flex4">{{spell.level}} - {{spell.name}}</h4>
-            <div class="item-controls">
-              ROLL
-            </div>
-        </li>
-      {{/each}}
-      </ol>
-      {{/if}}
-      {{/each}}
+    {{/each}}
     </ol>
-  </div>
+    {{/if}}
+    {{/each}}
+  </ol>
 </div>
 

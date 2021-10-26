@@ -1,0 +1,22 @@
+<h2 class="flexrow">
+    <div>{{localize "MERP1E.MoneyTab.Money"}}</div>
+    <div>Total: $ {{moneyTotal}} {{localize moneyTotalCurrency.abbr}}</div>
+</h2>
+{{#each money as |currency|}}
+<div class="flexcol">
+    <h3 class="flexrow">
+        <div>{{localize currency.namePlural}}</div>
+        <div>Total: {{currency.total}} {{localize currency.abbr}}</div>
+    </h3>
+    <div class="grid grid-6col" style="padding-left: 16px;">
+        {{#each currency.items as |valueItem|}}
+        <div class="item flexrow" data-item-id="{{valueItem.id}}">
+            <a class="item-control item-edit" title="{{valueItem.data.data.quantity}} units worth {{valueItem.data.data.unitaryValue}} {{valueItem.data.data.unitaryValueCurrency}} each.">
+                <img src="{{valueItem.img}}" title="{{valueItem.name}}" width="16" height="16"/>
+                {{valueItem.name}}
+            </a>
+        </div>
+        {{/each}}
+    </div>
+</div>
+{{/each}}

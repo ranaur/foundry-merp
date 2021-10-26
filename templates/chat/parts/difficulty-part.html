@@ -1,0 +1,18 @@
+<div class="difficulty">
+    <div class="chat-card">
+        <div class="card-title grid grid-3col" style="font-weight: bold; grid-template-columns: 15% 60% 15%; border-bottom: 1pt; border-bottom-style: solid;">
+            <div>{{localize "MERP1E.ManeuverCard.DifficultyLabel"}}</div>
+            <div></div>
+            <div style="text-align: center;">{{#if difficultiesValues}}{{formatBonus (lookup difficultiesValues chosenDifficulty)}}{{/if}}</div>
+        </div>
+        <div class="card-content">
+            <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
+                <div></div>
+                <select name="chosenDifficulty">
+                    {{selectOptions difficulties selected=chosenDifficulty localize=true nameAttr="id" labelAttr="label"}}
+                </select>
+                <div style="text-align: center;">{{#if difficultiesValues}}{{formatBonus (lookup difficultiesValues chosenDifficulty)}}{{/if}}</div>
+            </div>
+        </div>
+    </div>
+</div>

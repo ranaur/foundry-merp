@@ -1,20 +1,64 @@
-{{!-- Owned Items Tab --}}
+<h2>{{localize "MERP1E.EquipmentsTab.Encumbrance"}}</h2>
+<div class="grid grid-3col">
+    <div class="resource flexrow">
+        <label class="resource-label">{{localize "MERP1E.EquipmentsTab.WearingWeight"}}</label>
+        <input type="text" value="{{actor.wearingWeight}}" data-dtype="Number" {{ro}}/>
+    </div>
+    <div class="resource flexrow">
+        <label class="resource-label">{{localize "MERP1E.EquipmentsTab.CarryingWeight"}}</label>
+        <input type="text" value="{{actor.carryingWeight}}" data-dtype="Number" {{ro}}/>
+    </div>
+    <div class="resource flexrow">
+        <label class="resource-label">{{localize "MERP1E.EquipmentsTab.TotalWeight"}}</label>
+        <input type="text" value="{{actor.totalWeight}}" data-dtype="Number" {{ro}}/>
+    </div>
+    <div class="resource flexrow" style="grid-column: 1 / 4">
+        <label class="resource-label">{{localize "MERP1E.EquipmentsTab.EncumbrancePenalty"}}</label>
+        <div class="flexrow">
+            {{#if (eq actor.encumbrance "NA")}}
+                {{localize "MERP1E.EquipmentsTab.Overweight"}}
+            {{else}}
+                {{localize actor.stats.st.abbr}}
+                {{formatBonus actor.stats.st.total}}
+                -
+                {{actor.encumbrance}}
+                =
+                <b>{{actor.encumbrancePenalty}}</b>
+            {{/if}}
+        </div>
+        <div class="form-fields">
+            {{radioBoxes "data.weightType" weightType checked=data.data.weightType localize=true}}
+        </div>
+    </div>
+</div>
+
+<h2>{{localize "MERP1E.EquipmentsTab.Equipments"}}</h2>
 <ol class="items-list">
     <li class="item flexrow item-header">
         <div class="item-image"></div>
-        <div class="item-name">Name</div>
+        <div class="item-name">{{localize "MERP1E.EquipmentsTab.Equipment"}}</div>
+        <div class="item-location">{{localize "MERP1E.EquipmentsTab.Location"}}</div>
+        <div class="item-weight">{{localize "MERP1E.EquipmentsTab.Weight"}}</div>
         <div class="item-controls">
             <a class="item-control item-create" title="{{localize 'MERP1E.Item.New'}}" option-renderSheet=true data-type="equipment"><i class="fas fa-plus"></i></a>
         </div>
     </li>
-    {{#each actor.equipments as |item id|}}
+    {{#each equipmentsByLocation as |item|}}
     <li class="item flexrow" data-item-id="{{item.id}}">
         <div class="item-image"><img src="{{item.img}}" title="{{item.name}}" width="24" height="24"/></div>
-        <h4 class="item-name">{{item.name}}</h4>
-        <h6>{{item.type}}</h6>
+        <h4 class="item-name"><span {{#if item.isContained}}style="padding-left: 16px"{{/if}}>{{item.name}}</span></h4>
+        <div class="item-location">{{localize item.location.name}}</div>
+        <div {{#if item.data.data.isContainer}}title="Container weight: {{item.itemWeight}} + Net Weight: {{item.netWeight}}"{{/if}}>{{item.weight}}</div>
         <div class="item-controls">
-            <a class="item-control item-edit" title="Edit Item"><i class="fas fa-edit"></i></a>
-            <a class="item-control item-delete" title="Delete Item"><i class="fas fa-trash"></i></a>
+            {{#if item.isWearable}}
+                {{#if item.isWeared }}
+                    <a class="item-control item-unwear" title="{{localize 'MERP1E.EquipmentsTab.UnwearItem'}}"><i class="fas fa-virus-slash"></i></a>
+                {{else}}
+                    <a class="item-control item-wear" title="{{localize 'MERP1E.EquipmentsTab.WearItem'}}"><i class="fas fa-virus"></i></a>
+                {{/if}}
+            {{/if}}
+            <a class="item-control item-edit" title="{{localize 'MERP1E.EquipmentsTab.EditItem'}}"><i class="fas fa-edit"></i></a>
+            <a class="item-control item-delete" title="{{localize 'MERP1E.EquipmentsTab.DeleteItem'}}"><i class="fas fa-trash"></i></a>
         </div>
     </li>
     {{/each}}

@@ -1,121 +1,50 @@
-<div class="static-maneuver">
-    {{!-- log this --}}
-    <div>Actor: {{actor.name}}</div>
-        {{!-- Skill --}}
-        <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
-            <div>Skill:</div>
-            <div>{{skill.name}}</div>
-            <div style="text-align: center;">{{formatBonus skill.total}}</div>
-        </div>
-        {{!-- Attack Level --}}
-        <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
-            <div>Attack Level:</div>
-            <div>
+<div class="resistence-roll">
+    <div class="chat-card">
+        <div class="card-title" style="font-weight: bold; border-bottom: 1pt; border-bottom-style: solid;">
+            {{!-- Base Attack --}}
+            <div class="grid grid-3col" style="grid-template-columns: 75% 15%;">
+                <div>{{localize "MERP1E.ResistenceRollCard.Level"}}</div>
+                <input style="text-align: center; vertical-align: middle;" type="number" value="{{rrBase}}" {{ro}}/>
             </div>
-            <input type="number" name="attackLevel" value="{{data.attackLevel}}"/>
         </div>
-        {{!-- Target Level --}}
-        <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
-            <div>Target Level:</div>
-            <div>
-            </div>
-            <input type="number" name="targetLevel" value="{{data.targetLevel}}"/>
-        </div>
+        <div class="card-content">
+            <div class="grid grid-4col">
+                {{!-- Attack Level --}}
+                <div>{{localize "MERP1E.ResistenceRollCard.AttackLevel"}}</div>
+                <input type="number" name="attackLevel" value="{{data.attackLevel}}"/>
 
-        {{!-- Base Attack --}}
-        <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
-            <div></div>
-            <div>Result from Resistence Table
-            </div>
-            <input type="number" value="{{rrBase}}" {{ro}}/>
-        </div>
-
-        {{!-- Modificators --}}
-        {{#each modifiersByGroup as | group | }}
-            {{#if (ne group.modifiers.length 0)}}
-                <div style="font-weight: bolder;">{{localize group.label}}</div>
-                {{#each group.modifiers as | mod | }}
-                {{#if (or mod.enabled mod.isUserChosen)}}
-                    <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
-                        <div>
-                            {{#if mod.isUserChosen}}
-                                <input type="checkbox" name="modifiersChecked.{{group.id}}.{{mod.id}}" {{checked (lookup (lookup ../../data.modifiersChecked group.id) mod.id)}}/>
-                            {{/if}}
-                        </div>
-                        <div>
-                            {{localize mod.label}}
-                            {{#if mod.itemId}}
-                            <i class="fas fa-info-circle" title="{{mod.itemName}}"></i>
-                            {{!-- could link to the item sheet --}}
-                            {{/if}}
-                        </div>
-                        <div style="text-align: center; vertical-align: middle;">
-                            {{#if mod.isAdHoc}}
-                                {{#if (or (not mod.isUserChosen) (and mod.isUserChosen (lookup (lookup ../../data.modifiersChecked group.id) mod.id)))}}
-                                    <input type="number" name="modifiersValue.{{group.id}}.{{mod.id}}" value="{{lookup (lookup ../../data.modifiersValue group.id) mod.id}}"/>
-                                {{else}}
-                                    <div></div>
-                                {{/if}}
-                            {{else}}
-                                {{#if (or (not mod.isUserChosen) (and mod.isUserChosen (lookup (lookup ../../data.modifiersChecked group.id) mod.id)))}}
-                                    {{formatBonus mod.value}}
-                                {{else}}
-                                    <del>{{formatBonus mod.value}}</del>
-                                {{/if}}
-                            {{/if}}
-                        </div>
-                    </div>
-                {{/if}}
-                {{/each}}
-            {{/if}}
-        {{/each}}
-        {{!-- Total --}}
-        <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
-            <div>
-            <b>Total:</b>
-            </div>
-            <div></div>
-            <div style="text-align: center; vertical-align: middle;">
-                <b>{{formatBonus total}}</b>
-                <input type="hidden" name="total" value="{{total}}" />
+                {{!-- Target Level --}}
+                <div>{{localize "MERP1E.ResistenceRollCard.TargetLevel"}}</div>
+                <input type="number" name="targetLevel" value="{{data.targetLevel}}"/>
             </div>
         </div>
-        {{!-- Roll --}}
-        <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
-            <div>Roll:</div>
-            <div>
-                {{#if data.rollTotal}}
-                    {{data.rollResult}}
-                {{else}}
-                    <input type="button" name="roll" value="Roll!" data-action="roll"/>
-                {{/if}}
-            </div>
-            
-            <div style="text-align: center; vertical-align: middle;">
-                {{#if data.rollTotal}}
-                    {{formatBonus data.rollTotal}}
-                {{else}}
-                    <i class="fas fa-dice-d20"></i>
-                    <i class="fas fa-dice-d20"></i>
-                {{/if}}
-            </div>
-        </div>
-        {{!-- Resolve --}}
-        {{#if data.rollTotal}}
-        <div class="grid grid-2col" style="grid-template-columns: 15% 75%;">
-            <div>
-                {{localize "MERP1E.ResistenceRollCard.ResultLabel"}}
-            </div>
-            {{log "XXX"  this}}
-            <div style="text-align: center; vertical-align: middle;">
-                {{#if resolveResult}}
-                    {{localize data.failureText}}
-                {{else}}
-                    {{localize data.successText}}
-                {{/if}}
-            </div>
-        </div>
-        {{else}}
-        {{/if}}
     </div>
+
+    {{!-- Skill --}}
+    {{> "systems/merp1e/templates/chat/parts/skill-part.html" skill=skill group=skillModifiers data=data label=group.label skillTotal=skillTotal }}
+
+    {{!-- Item Modifiers --}}
+    {{> "systems/merp1e/templates/chat/parts/modifiers-part.html" group=itemModifiers data=data label=itemModifiers.label }}
+
+    {{!-- Roll --}}
+    {{> "systems/merp1e/templates/chat/parts/roll-part.html" data=data }}
+
+    {{!-- Total --}}
+    {{> "systems/merp1e/templates/chat/parts/total-part.html" total=total }}
+
+    {{!-- Resolve --}}
+    {{#if data.rollTotal}}
+    <div class="grid grid-2col" style="grid-template-columns: 15% 75%;">
+        <div style="font-weight: bold;">
+            {{localize "MERP1E.ManeuverCard.ResultLabel"}}
+        </div>
+        <div style="font-weight: bold; text-align: center; vertical-align: middle;">
+            {{#if resolveResult}}
+                {{localize data.successText}}
+            {{else}}
+                {{localize data.failureText}}
+            {{/if}}
+        </div>
+    </div>
+    {{/if}}
 </div>

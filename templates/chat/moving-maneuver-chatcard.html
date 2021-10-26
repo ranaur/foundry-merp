@@ -1,109 +1,36 @@
 <div class="moving-maneuver">
-    {{!-- Skill --}}
-    <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
-        <div>Skill:</div>
-        <div>{{skill.name}}</div>
-        <div style="text-align: center;">{{formatBonus skill.total}}</div>
-    </div>
     {{!-- Difficulty --}}
-    <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
-        <div>{{localize "MERP1E.MovingManeuverCard.DifficultyLabel"}}</div>
-        <div>
-            <select name="chosenDifficulty">
-                {{selectOptions difficulties selected=data.chosenDifficulty localize=true nameAttr="id" labelAttr="label"}}
-            </select>
-        </div>
-        <div style="text-align: center;">-</div>
-    </div>
+    {{> "systems/merp1e/templates/chat/parts/difficulty-part.html" difficulties=difficulties chosenDifficulty=data.chosenDifficulty }}
 
-    {{!-- Modificators --}}
-    {{#each modifiersByGroup as | group | }}
-        {{#if (ne group.modifiers.length 0)}}
-            <div style="font-weight: bolder;">{{localize group.label}}</div>
-            {{#each group.modifiers as | mod | }}
-            {{#if (or mod.enabled mod.isUserChosen)}}
-                <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
-                    <div>
-                        {{#if mod.isUserChosen}}
-                            <input type="checkbox" name="modifiersChecked.{{group.id}}.{{mod.id}}" {{checked (lookup (lookup ../../data.modifiersChecked group.id) mod.id)}}/>
-                        {{/if}}
-                    </div>
-                    <div>
-                        {{localize mod.label}}
-                        {{#if mod.itemId}}
-                        <i class="fas fa-info-circle" title="{{mod.itemName}}"></i>
-                        {{!-- could link to the item sheet --}}
-                        {{/if}}
-                    </div>
-                    <div style="text-align: center; vertical-align: middle;">
-                        {{#if mod.isAdHoc}}
-                            {{#if (or (not mod.isUserChosen) (and mod.isUserChosen (lookup (lookup ../../data.modifiersChecked group.id) mod.id)))}}
-                                <input type="number" name="modifiersValue.{{group.id}}.{{mod.id}}" value="{{lookup (lookup ../../data.modifiersValue group.id) mod.id}}"/>
-                            {{else}}
-                                <div></div>
-                            {{/if}}
-                        {{else}}
-                            {{#if (or (not mod.isUserChosen) (and mod.isUserChosen (lookup (lookup ../../data.modifiersChecked group.id) mod.id)))}}
-                                {{formatBonus mod.value}}
-                            {{else}}
-                                <del>{{formatBonus mod.value}}</del>
-                            {{/if}}
-                        {{/if}}
-                    </div>
-                </div>
-            {{/if}}
-            {{/each}}
-        {{/if}}
-    {{/each}}
+    {{!-- Skill --}}
+    {{> "systems/merp1e/templates/chat/parts/skill-part.html" skill=skill group=skillModifiers data=data label=group.label skillTotal=skillTotal }}
+
+    {{!-- Item Modifiers --}}
+    {{> "systems/merp1e/templates/chat/parts/modifiers-part.html" group=itemModifiers data=data label=itemModifiers.label }}
 
     {{!-- Roll --}}
-    <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
-        <div>{{localize "MERP1E.MovingManeuverCard.RollLabel"}}</div>
-        <div>
-            {{#if data.rollTotal}}
-                {{data.rollResult}}
-            {{else}}
-                <input type="button" name="roll" value="{{localize 'MERP1E.MovingManeuverCard.RollButton'}}" data-action="roll"/>
-            {{/if}}
-        </div>
-        
-        <div style="text-align: center; vertical-align: middle;">
-            {{#if data.rollTotal}}
-                {{formatBonus data.rollTotal}}
-            {{else}}
-                <i class="fas fa-dice-d20"></i>
-                <i class="fas fa-dice-d20"></i>
-            {{/if}}
-        </div>
-    </div>
+    {{> "systems/merp1e/templates/chat/parts/roll-part.html" data=data }}
+
     {{!-- Total --}}
-    <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%; font-weight: bolder;">
-        <div>
-            {{localize "MERP1E.MovingManeuverCard.TotalLabel"}}
-        </div>
-        <div></div>
-        <div style="text-align: center; vertical-align: middle;">
-            <b>{{formatBonus total}}</b>
-            <input type="hidden" name="total" value="{{total}}" />
-        </div>
-    </div>
+    {{> "systems/merp1e/templates/chat/parts/total-part.html" total=total }}
+
     {{!-- Resolve --}}
-    {{#if data.resolveResult}}
+    {{#if resolveResult}}
     <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
-        <div>
-            {{localize "MERP1E.MovingManeuverCard.ResultLabel"}}
+        <div style="font-weight: bold;">
+            {{localize "MERP1E.ManeuverCard.ResultLabel"}}
         </div>
-        <div style="text-align: center; vertical-align: middle;">
-            {{#if (eq data.resolveResult "F")}}
+        <div style="font-weight: bold; text-align: center; vertical-align: middle;">
+            {{#if (eq resolveResult "F")}}
                 {{localize "MERP1E.MovingManeuverCard.FumbleResult"}}
             {{else}}
-                {{data.resolveResult}}
+                {{resolveResult}}
             {{/if}}
-            <input type="hidden" name="resolveResult" value="{{data.resolveResult}}" />
+            <input type="hidden" name="resolveResult" value="{{resolveResult}}" />
         </div>
         <div>
         </div>
-        {{#if (ne data.resolveResult "F")}}
+        {{#if (ne resolveResult "F")}}
         <div>
             <i class="fas fa-calculator"></i>
         </div>
@@ -117,3 +44,4 @@
     </div>
     {{/if}}
 </div>
+

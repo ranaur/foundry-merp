@@ -1,4 +1,4 @@
-<div class="language">
+<div class="effects">
     <div class="flexrow">
         <h2 class="flex3">{{localize 'MERP1E.Effects.Label'}}</h2>
 <!--
@@ -13,21 +13,31 @@
 -->
     </div>
     <ol>
-        <li class="flexrow">
-            <div class="flex2">Name</div>
-            <div>Condition</div>
-            <div class="flex2">Item</div>
-        </li>    
-        {{#each this.actor.itemEffectsByType as | effectTypes effectType  | }}
-            <li style="font-weight: bolder;">{{effectType}}</ol>
-            {{#each effectTypes as | effect | }}
-            <li class="flexrow">
-                {{log effect}}
-                <div class="flex2">{{effect.name}}</div>
-                <div>{{effect.condition.conditionName}}</div>
-                <div class="flex2">{{effect.item}}</div>
+        <ol>
+            <li class="flexrow header">
+                <div class="flex2">{{localize 'MERP1E.Effects.Name'}}</div>
+                <div>{{localize 'MERP1E.Effects.Item'}}</div>
             </li>    
-            {{/each}}
+         </ol>
+        {{#each this.actor.itemEffectsByType as | effectTypes effectType  | }}
+        <li style="font-weight: bolder;">{{localize (lookup ../effectTypesLabels effectType)}}</li>
+        <ol>
+        {{#each effectTypes as | effect | }}
+        <li class="flexrow">
+            <div class="flex2">{{effect.name}}</div>
+            <div class="item" data-item-id="{{effect.parent.id}}">
+                <img src="{{effect.parent.img}}" title="{{effect.parent.type}}{{!-- XXX i18--}}" width="16" height="16"/>
+                {{#if effect.parent.parent}}
+                <a class="item-edit">
+                {{/if}}
+                    {{effect.parent.name}}
+                {{#if effect.parent.parent}}
+                </a>
+                {{/if}}
+            </div>
+        </li>    
+        {{/each}}
+        </ol>
         {{/each}}
     </ol>
 </div>

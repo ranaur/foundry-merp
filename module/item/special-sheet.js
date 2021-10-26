@@ -7,7 +7,8 @@ import { Merp1eBaseItemSheet } from './base-sheet.js';
 export class Merp1eSpecialSheet extends Merp1eBaseItemSheet {
   /** @override */
   getData() {
-    let sheetData = super.getData()
+    let sheetData = super.getData();
+    Merp1eActiveEffectHelper.getDataHelper(this.object, sheetData);
     return sheetData;
   }
 

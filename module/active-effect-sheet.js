@@ -35,7 +35,8 @@ export class Merp1eActiveEffectSheet extends DocumentSheet {
         let sheetData = super.getData();
         sheetData.rules = game.merp1e.Merp1eRules;
         sheetData.effect = sheetData.data;
-        sheetData.effectTypes = Merp1eEffect.registeredTypes.reduce( (acc, cls) => { acc.push({ id: cls.effectName, label: cls.label }); return acc;}, []);
+        sheetData.hasConditionParameters = this.object.conditionClass.hasParameters;
+        sheetData.effectTypes = Merp1eEffect.registeredAdapters.reduce( (acc, cls) => { acc.push({ id: cls.effectName, label: cls.label }); return acc;}, []);
         sheetData.conditionTypes = Merp1eEffectCondition.registeredTypes.reduce( (acc, cls) => { acc.push({ id: cls.conditionName, label: cls.label }); return acc;}, []);
         sheetData.sheetOrder = game.merp1e.Merp1eRules.skill.generateSheetOrder();
         sheetData.shieldBaseBonus = findByID(game.merp1e.Merp1eRules.defense.shieldTypes, sheetData.effect.flags?.merp1e?.Shield?.type, "none").bonus;
@@ -51,8 +52,11 @@ export class Merp1eActiveEffectSheet extends DocumentSheet {
     }
 
     /** @override */
-    _updateObject(event, formData) {
-        if(!this.readOnly) return this.object.update(formData);
+    async _updateObject(event, formData) {
+        this.object.parent.sheet.render(true); // XXX1
+        if(this.readOnly) return;
+        
+        return await this.object.update(formData);
     }
 
     activateListeners(html) {

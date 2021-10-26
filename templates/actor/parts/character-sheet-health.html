@@ -23,7 +23,7 @@
             </div>
             <div>
                 <label class="resource-label"><i class="fas fa-heart-broken"></i> {{localize 'MERP1E.Health.HitsTaken'}}</label>
-                <input name="data.healthStatus.hitsTaken" value="{{actor.health.hitsTaken}}" data-dtype="Number" type="number" {{roif rules.settings.damageControlAutomatic}}/>
+                <input name="data.healthStatus.hitsTaken" value="{{actor.health.hitsTaken}}" data-dtype="Number" type="number" {{roif settings.damageControlAutomatic}}/>
             </div>
             <div>
                 <label class="resource-label"><i class="far fa-heart"></i> {{localize 'MERP1E.Health.HitsLeft'}}</label>
@@ -34,7 +34,7 @@
             <div class="flexcol">
                 <label class="resource-label"><i class="fas fa-tint"></i> {{localize "MERP1E.Damage.HitsPerRound"}}</label>
                 <div class="flexrow">
-                    <input class="flex3" type="number" name="data.healthStatus.hitsPerRound" value="{{actor.health.status.hitsPerRound}}" data-dtype="Number" type="number"  {{roif rules.settings.damageControlAutomatic}}/>
+                    <input class="flex3" type="number" name="data.healthStatus.hitsPerRound" value="{{actor.health.status.hitsPerRound}}" data-dtype="Number" type="number"  {{roif settings.damageControlAutomatic}}/>
                     {{#if damageControlManual}}
                     <div style="display: flex; justify-content: center; align-items: center;" class="health-control" data-action="damage-add">
                         <i title="{{localize 'MERP1E.Damage.Add'}}" class="fas fa-plus"></i>
@@ -45,7 +45,7 @@
             <div class="flexcol">
                 <label class="resource-label"><i class="fas fa-minus"></i> {{localize "MERP1E.Damage.ActivityPenalty"}}</label>
                 <div class="flexrow">
-                    <input class="flex3" type="number" name="data.healthStatus.activityPenalty" value="{{actor.health.status.activityPenalty}}" data-dtype="Number" type="number" {{roif rules.settings.damageControlAutomatic}}/>
+                    <input class="flex3" type="number" name="data.healthStatus.activityPenalty" value="{{actor.health.status.activityPenalty}}" data-dtype="Number" type="number" {{roif settings.damageControlAutomatic}}/>
                     {{#if damageControlManual}}
                     <div style="display: flex; justify-content: center; align-items: center;" class="health-control" data-step="-5" data-action="damage-add">
                         <i title="{{localize 'MERP1E.Damage.Add'}}" class="fas fa-plus"></i>
@@ -56,7 +56,7 @@
             <div class="flexcol">
                 <label class="resource-label"><i class="fas fa-ban"></i> {{localize "MERP1E.Damage.RoundsStunned"}}</label>
                 <div class="flexrow">
-                    <input class="flex3" type="number" name="data.healthStatus.roundsStunned" value="{{actor.health.status.roundsStunned}}" data-dtype="Number" type="number" {{roif rules.settings.damageControlAutomatic}}/>
+                    <input class="flex3" type="number" name="data.healthStatus.roundsStunned" value="{{actor.health.status.roundsStunned}}" data-dtype="Number" type="number" {{roif settings.damageControlAutomatic}}/>
                     {{#if damageControlManual}}
                     <div style="display: flex; justify-content: center; align-items: center;" class="health-control" data-action="damage-add">
                         <i title="{{localize 'MERP1E.Damage.Add'}}" class="fas fa-plus"></i>
@@ -67,7 +67,7 @@
             <div class="flexcol">
                 <label class="resource-label"><i class="far fa-meh"></i> {{localize "MERP1E.Damage.RoundsDown"}}</label>
                 <div class="flexrow">
-                    <input class="flex3" type="number" name="data.healthStatus.roundsDown" value="{{actor.health.status.roundsDown}}" data-dtype="Number" type="number" {{roif rules.settings.damageControlAutomatic}}/>
+                    <input class="flex3" type="number" name="data.healthStatus.roundsDown" value="{{actor.health.status.roundsDown}}" data-dtype="Number" type="number" {{roif settings.damageControlAutomatic}}/>
                     {{#if damageControlManual}}
                     <div style="display: flex; justify-content: center; align-items: center;" class="health-control" data-action="damage-add">
                         <i title="{{localize 'MERP1E.Damage.Add'}}" class="fas fa-plus"></i>
@@ -78,7 +78,7 @@
             <div class="flexcol">
                 <label class="resource-label"><i class="far fa-dizzy"></i> {{localize "MERP1E.Damage.RoundsOut"}}</label>
                 <div class="flexrow">
-                    <input class="flex3" type="number" name="data.healthStatus.roundsOut" value="{{actor.health.status.roundsOut}}" data-dtype="Number" type="number" {{roif rules.settings.damageControlAutomatic}}/>
+                    <input class="flex3" type="number" name="data.healthStatus.roundsOut" value="{{actor.health.status.roundsOut}}" data-dtype="Number" type="number" {{roif settings.damageControlAutomatic}}/>
                     {{#if damageControlManual}}
                     <div style="display: flex; justify-content: center; align-items: center;" class="health-control" data-action="damage-add">
                         <i title="{{localize 'MERP1E.Damage.Add'}}" class="fas fa-plus"></i>
@@ -89,7 +89,7 @@
             <div class="flexcol">
                 <label class="resource-label"><i class="fas fa-skull-crossbones"></i> {{localize "MERP1E.Damage.RoundsUntilDeath"}}</label>
                 <div class="flexrow">
-                    <input class="flex3" type="number" name="data.healthStatus.roundsUntilDeath" value="{{actor.health.status.roundsUntilDeath}}" data-dtype="Number" type="number" {{roif rules.settings.damageControlAutomatic}}/>
+                    <input class="flex3" type="number" name="data.healthStatus.roundsUntilDeath" value="{{actor.health.status.roundsUntilDeath}}" data-dtype="Number" type="number" {{roif settings.damageControlAutomatic}}/>
                     {{#if damageControlManual}}
                     <div style="display: flex; justify-content: center; align-items: center;" class="health-control" data-action="damage-add">
                         <i title="{{localize 'MERP1E.Damage.Add'}}" class="fas fa-plus"></i>
@@ -100,7 +100,7 @@
             <div class="flexcol">
                 <label class="resource-label"><i class="fas fa-eye-slash"></i> {{localize "MERP1E.Damage.RoundsBlinded"}}</label>
                 <div class="flexrow">
-                    <input class="flex3" type="number" name="data.healthStatus.roundsBlinded" value="{{actor.health.status.roundsBlinded}}" data-dtype="Number" type="number" {{roif rules.settings.damageControlAutomatic}}/>
+                    <input class="flex3" type="number" name="data.healthStatus.roundsBlinded" value="{{actor.health.status.roundsBlinded}}" data-dtype="Number" type="number" {{roif settings.damageControlAutomatic}}/>
                     {{#if damageControlManual}}
                     <div style="display: flex; justify-content: center; align-items: center;" class="health-control" data-action="damage-add">
                         <i title="{{localize 'MERP1E.Damage.Add'}}" class="fas fa-plus"></i>
@@ -111,7 +111,7 @@
             <div class="flexcol">
                 <label class="resource-label"><i class="fas fa-gavel"></i> {{localize "MERP1E.Damage.RoundsWeaponStuck"}}</label>
                 <div class="flexrow">
-                    <input class="flex3" type="number" name="data.healthStatus.roundsWeaponStuck" value="{{actor.health.status.roundsWeaponStuck}}" data-dtype="Number" type="number" {{roif rules.settings.damageControlAutomatic}}/>
+                    <input class="flex3" type="number" name="data.healthStatus.roundsWeaponStuck" value="{{actor.health.status.roundsWeaponStuck}}" data-dtype="Number" type="number" {{roif settings.damageControlAutomatic}}/>
                     {{#if damageControlManual}}
                     <div style="display: flex; justify-content: center; align-items: center;" class="health-control" data-action="damage-add">
                         <i title="{{localize 'MERP1E.Damage.Add'}}" class="fas fa-plus"></i>
@@ -122,7 +122,7 @@
             <div class="flexcol">
                 <label class="resource-label"><i class="fas fa-dizzy"></i> {{localize "MERP1E.Damage.UnconsciousComa"}}</label>
                 <div class="flexrow">
-                    <input class="flex3" type="number" name="data.healthStatus.unconsciousComa" value="{{actor.health.status.unconsciousComa}}" data-dtype="Number" type="number" {{roif rules.settings.damageControlAutomatic}}/>
+                    <input class="flex3" type="number" name="data.healthStatus.unconsciousComa" value="{{actor.health.status.unconsciousComa}}" data-dtype="Number" type="number" {{roif settings.damageControlAutomatic}}/>
                     {{#if damageControlManual}}
                     <div style="display: flex; justify-content: center; align-items: center;" class="health-control" data-action="damage-add">
                         <i title="{{localize 'MERP1E.Damage.Add'}}" class="fas fa-plus"></i>
@@ -132,19 +132,19 @@
             </div>
             <div class="flexcol">
                 <label class="resource-label"><i class="fas fa-wheelchair"></i> {{localize "MERP1E.Damage.Paralyzed"}}</label>
-                <select name="data.healthStatus.paralyzed" {{roif rules.settings.damageControlAutomatic}}>
+                <select name="data.healthStatus.paralyzed" {{roif settings.damageControlAutomatic}}>
                     {{selectOptions rules.health.paralyzedStatus selected=actor.health.status.paralyzed localize=true nameAttr="value" labelAttr="labelI18"}}
                 </select>
             </div>
             <div class="flexcol">
                 <label class="resource-label"><i class="fas fa-deaf"></i> {{localize "MERP1E.Damage.HearingLoss"}}</label>
-                <select name="data.healthStatus.hearingLoss" {{roif rules.settings.damageControlAutomatic}}>
+                <select name="data.healthStatus.hearingLoss" {{roif settings.damageControlAutomatic}}>
                     {{selectOptions rules.health.sideStatus selected=actor.health.status.hearingLoss localize=true nameAttr="value" labelAttr="labelI18"}}
                 </select>
             </div>
             <div class="flexcol">
                 <label class="resource-label"><i class="fas fa-eye-slash"></i> {{localize "MERP1E.Damage.EyeLoss"}}</label>
-                <select name="data.healthStatus.eyeLoss" {{roif rules.settings.damageControlAutomatic}}>
+                <select name="data.healthStatus.eyeLoss" {{roif settings.damageControlAutomatic}}>
                     {{selectOptions rules.health.sideStatus selected=actor.health.status.eyeLoss localize=true nameAttr="value" labelAttr="labelI18"}}
                 </select>
             </div>
@@ -153,11 +153,11 @@
             <div class="flexrow">
                 <label class="resource-label"><i class="far fa-hand-paper"></i> {{localize "MERP1E.Damage.Arm"}}</label>
                 <div class="flexrow">
-                    <select name="data.healthStatus.leftArm" {{roif rules.settings.damageControlAutomatic}}>
+                    <select name="data.healthStatus.leftArm" {{roif settings.damageControlAutomatic}}>
                         {{selectOptions rules.health.apendageStatus selected=actor.health.status.leftArm localize=true nameAttr="value" labelAttr="labelI18"}}
                     </select>
                     <div>/</div>
-                    <select name="data.healthStatus.rightArm" {{roif rules.settings.damageControlAutomatic}}>
+                    <select name="data.healthStatus.rightArm" {{roif settings.damageControlAutomatic}}>
                         {{selectOptions rules.health.apendageStatus selected=actor.health.status.rightArm localize=true nameAttr="value" labelAttr="labelI18"}}
                     </select>
                 </div>
@@ -165,11 +165,11 @@
             <div class="flexrow">
                 <label class="resource-label"><i class="fas fa-shoe-prints"></i> {{localize "MERP1E.Damage.Leg"}}</label>
                 <div class="flexrow">
-                    <select name="data.healthStatus.leftLeg" {{roif rules.settings.damageControlAutomatic}}>
+                    <select name="data.healthStatus.leftLeg" {{roif settings.damageControlAutomatic}}>
                         {{selectOptions rules.health.apendageStatus selected=actor.health.status.leftLeg localize=true nameAttr="value" labelAttr="labelI18"}}
                     </select>
                     <div>/</div>
-                    <select name="data.healthStatus.rightLeg" {{roif rules.settings.damageControlAutomatic}}>
+                    <select name="data.healthStatus.rightLeg" {{roif settings.damageControlAutomatic}}>
                         {{selectOptions rules.health.apendageStatus selected=actor.health.status.rightLeg localize=true nameAttr="value" labelAttr="labelI18"}}
                     </select>
                 </div>
@@ -180,7 +180,7 @@
             <input class="flex3" name="data.healthStatus.notes" value="{{actor.health.status.notes}}" data-dtype="String" type="text"/>
         </div>
     </div>
-    {{#if rules.settings.damageControlAutomatic }}
+    {{#if settings.damageControlAutomatic }}
     <div class="flexrow">
         <h2 class="flex3">{{localize 'MERP1E.Health.Damages'}}</h2>
 

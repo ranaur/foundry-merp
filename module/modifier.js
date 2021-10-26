@@ -7,7 +7,10 @@ export class Merp1eModifier {
         { id: "isStunned", label: "MERP1E.ModifierEnableFunctions.isStunned", func: (data) => data.actor?.health?.isStunned },
         { id: "isDown", label: "MERP1E.ModifierEnableFunctions.isDown", func: (data) => data.actor?.health?.isDown },
         { id: "isLimbOut", label: "MERP1E.ModifierEnableFunctions.isLimbOut", func: (data) => data.actor?.health?.isLimbOut },
+        { id: "heatFireAttack", label: "MERP1E.ModifierEnableFunctions.HeatFireAttack", func: (data) => true /* /* XXX FIX for attack type */ },
+        { id: "coldIceAttack", label: "MERP1E.ModifierEnableFunctions.ColdIceAttack", func: (data) => true /* /* XXX FIX for attack type */ }
     ];
+
     static valueFunctions = [
         { id: "constant", label: "MERP1E.ModifierValueFunctions.constant", func: (data) => data.value },
         { id: "adHoc", label: "MERP1E.ModifierValueFunctions.adHoc", func: (data) => null },
@@ -82,7 +85,7 @@ export class Merp1eModifier {
         return this.valueFunction == "adHoc";
     }
     get isUserChosen() {
-        return this.enableFunction == "userChosen";
+        return this.enableFunction in ["userChosen" || "heatFireAttack" || "coldIceAttack"]; /* XXX FIX for attack type */
     }
     get isConstant() {
         return this.valueFunction == "constant";
@@ -129,7 +132,7 @@ export class Merp1eModifiers {
         });
         return this.modifiers.reduce((acc, mod) => {
             if(mod.enabled) {
-                if(mod.enableFunction == "userChosen") {
+                if(mod.isUserChosen) {
                     if(mod.choosed) {
                         return acc + mod.value;
                     }

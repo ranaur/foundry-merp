@@ -1,17 +1,24 @@
+{{log this}}
 <form class="{{cssClass}}" autocomplete="off">
     <header class="sheet-header">
         <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
         <div class="header-fields">
             <h1 class="charname"><input name="name" type="text" value="{{item.name}}" placeholder="Name"/></h1>
-            <div class="grid grid-2col">
-              <div class="resource">
-                <label class="resource-label">Quantity</label>
-                  <input type="text" name="data.quantity" value="{{data.quantity}}" data-dtype="Number"/>
-              </div>
-              <div class="resource">
-                <label class="resource-label">Weight</label>
-                  <input type="text" name="data.weight" value="{{data.weight}}" data-dtype="Number"/>
-              </div>
+            <div class="grid grid-3col">
+                <div class="resource flexcol" style="grid-column: 1 / 3;">
+                    {{#if locations}}
+                    <label class="resource-label">{{localize "MERP1E.Equipment.Location"}}</label>
+                    <select name="data.location">
+                        {{selectOptions locations selected=data.data.location localize=true nameAttr="id" labelAttr="name"}}
+                    </select>
+                    {{/if}}
+                </div>
+                <div class="resource flexcol">
+                    {{#if data.data.isFungible}}
+                    <label class="resource-label">{{localize "MERP1E.Equipment.Quantity"}}</label>
+                    <input type="text" name="data.quantity" value="{{data.data.quantity}}" data-dtype="Number" {{roif (not data.data.isFungible)}}/>
+                    {{/if}}
+                </div>
             </div>
         </div>
     </header>
@@ -19,152 +26,76 @@
     {{!-- Sheet Tab Navigation --}}
     <nav class="sheet-tabs tabs" data-group="primary">
         <a class="item" data-tab="effects">{{localize "MERP1E.Equipment.Effects"}}</a>
+        <a class="item" data-tab="properties">{{localize "MERP1E.Equipment.Properties"}}</a>
         <a class="item" data-tab="description">{{localize "MERP1E.Equipment.Description"}}</a>
         <a class="item" data-tab="attributes">{{localize "MERP1E.Equipment.Attributes"}}</a>
     </nav>
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
-        {{!-- Effectss --}}
+        {{!-- Effects --}}
         <div class="tab" data-group="primary" data-tab="effects">
             {{> "systems/merp1e/templates/item/parts/effects.html" item=item}}
         </div>
-        {{!-- Old Special Tab XXX remove --}}
-        <div class="tab" data-group="primary" data-tab="specialOld">
-            <div class="list" data-array="skillBonuses" data-fields="skill,value,detail" data-dtype="String,Number,String">
-                <div class="list-header flexrow">
-                    <div class="list-header-text">Skill Bonuses</div>
-                    <a class="list-control list-create" data-action="create" title="Add"><i class="fas fa-plus"></i></a>
-                </div>
-                <ol class="list-data">
-                    {{#each data.skillBonuses as | skillBonus key |}}
-                    <li class="list-item flexrow" data-index="{{key}}">
-                        {{> "systems/merp1e/templates/parts/skill-chooser.html" field=(concat "data.skillBonuses." key ".skill") currentValue=skillBonus.skill sheetOrder=../rules.skill.sheetOrder}}
-                        <input type="text" name="data.skillBonuses.{{key}}.value" value="{{skillBonus.value}}" data-dtype="Number"/>
-                        <input type="text" name="data.skillBonuses.{{key}}.detail" value="{{skillBonus.detail}}" data-dtype="String"/>
-                        <a class="list-control list-create" data-action="delete" title="Delete"><i class="fas fa-trash"></i></a>
-                    </li>
-                    {{/each}}
-                </ol>
-            </div>
-            <div class="list" data-array="onUseBonuses" data-fields="skill,value,detail" data-dtype="String,Number,String">
-                <div class="list-header flexrow">
-                    <div class="list-header-text">On Use Bonuses</div>
-                    <div class="list-header-text">Bonus</div>
-                    <div class="list-header-text">Detail</div>
-                    <a class="list-control list-create" data-action="create" title="Add"><i class="fas fa-plus"></i></a>
-                </div>
-                <ol class="list-data">
-                    {{#each data.onUseBonuses as | skillBonus key |}}
-                    <li class="list-item flexrow" data-index="{{key}}">
-                        {{> "systems/merp1e/templates/parts/skill-chooser.html" field=(concat "data.onUseBonuses." key ".skill") currentValue=skillBonus.skill sheetOrder=../rules.skill.sheetOrder}}
-                        <input type="text" name="data.onUseBonuses.{{key}}.value" value="{{skillBonus.value}}" data-dtype="Number"/>
-                        <input type="text" name="data.onUseBonuses.{{key}}.detail" value="{{skillBonus.detail}}" data-dtype="String"/>
-                        <a class="list-control list-create" data-action="delete" title="Delete"><i class="fas fa-trash"></i></a>
-                    </li>
-                    {{/each}}
-                </ol>
-            </div>
-            <div class="list" data-array="conditionalBonuses" data-fields="skill,value,detail" data-dtype="String,Number,String">
-                <div class="list-header flexrow">
-                    <div class="list-header-text">Conditional Bonus</div>
-                    <div class="list-header-text">Value</div>
-                    <div class="list-header-text">Condition</div>
-                    <a class="list-control list-create" data-action="create" title="Add"><i class="fas fa-plus"></i></a>
-                </div>
-                <ol class="list-data">
-                    {{#each data.conditionalBonuses as | obj key |}}
-                    <li class="list-item flexrow" data-index="{{key}}">
-                        {{> "systems/merp1e/templates/parts/skill-chooser.html" field=(concat "data.conditionalBonuses." key ".skill") currentValue=obj.skill sheetOrder=../rules.skill.sheetOrder}}
-                        <input type="text" name="data.conditionalBonuses.{{key}}.value" value="{{obj.value}}" data-dtype="Number"/>
-                        <input type="text" name="data.conditionalBonuses.{{key}}.description" value="{{obj.description}}" data-dtype="String"/>
-                        <a class="list-control list-create" data-action="delete" title="Delete"><i class="fas fa-trash"></i></a>
-                    </li>
-                    {{/each}}
-                </ol>
-            </div>
-            <div class="list" data-array="dailySpells" data-fields="spell,usesPerDay,detail" data-dtype="String,Number,String">
-                <div class="list-header flexrow">
-                    <div class="list-header-text">Daily Spell</div>
-                    <div class="list-header-text"># Uses/day</div>
-                    <div class="list-header-text">Detail</div>
-                    <a class="list-control list-create" data-action="create" title="Add"><i class="fas fa-plus"></i></a>
-                </div>
-                <ol class="list-data">
-                    {{#each data.dailySpells as | obj key |}}
-                    <li class="list-item flexrow" data-index="{{key}}">
-                        {{> "systems/merp1e/templates/parts/spell-chooser.html" field=(concat "data.dailySpells." key ".spell.id") currentValue=obj.spell.id spellHierarchy=../spellHierarchy}}
-                        <input type="text" name="data.dailySpells.{{key}}.usesPerDay" value="{{obj.usesPerDay}}" data-dtype="Number"/>
-                        <input type="text" name="data.dailySpells.{{key}}.detail" value="{{obj.detail}}" data-dtype="String"/>
-                        <a class="list-control list-create" data-action="delete" title="Delete"><i class="fas fa-trash"></i></a>
-                    </li>
-                    {{/each}}
-                </ol>
-            </div>
-            <div class="list" data-array="chargedSpells" data-fields="spell,charges,detail" data-dtype="String,Number,String">
-                <div class="list-header flexrow">
-                    <div class="list-header-text">Spell</div>
-                    <div class="list-header-text"># Uses</div>
-                    <div class="list-header-text">Detail</div>
-                    <a class="list-control list-create" data-action="create" title="Add"><i class="fas fa-plus"></i></a>
-                </div>
-                <ol class="list-data">
-                    {{#each data.chargedSpells as | obj key |}}
-                    <li class="list-item flexrow" data-index="{{key}}">
-                        {{> "systems/merp1e/templates/parts/spell-chooser.html" field=(concat "data.chargedSpells." key ".spell.id") currentValue=obj.spell.id spellHierarchy=../spellHierarchy}}
-                        <input type="text" name="data.chargedSpells.{{key}}.charges" value="{{obj.charges}}" data-dtype="Number"/>
-                        <input type="text" name="data.chargedSpells.{{key}}.detail" value="{{obj.detail}}" data-dtype="String"/>
-                        <a class="list-control list-create" data-action="delete" title="Delete"><i class="fas fa-trash"></i></a>
-                    </li>
-                    {{/each}}
-                </ol>
-            </div>
-            <div class="list" data-array="ppMultiplier" data-fields="realm,multiplier,detail" data-dtype="String,Number,String">
-                <div class="list-header flexrow">
-                    <div class="list-header-text">Realm</div>
-                    <div class="list-header-text">Multiplier</div>
-                    <div class="list-header-text">Detail</div>
-                    <a class="list-control list-create" data-action="create" title="Add"><i class="fas fa-plus"></i></a>
-                </div>
-                <ol class="list-data">
-                    {{#each data.ppMultiplier as | obj key |}}
-                    <li class="list-item flexrow" data-index="{{key}}">
-                        {{> "systems/merp1e/templates/parts/realm-chooser.html" field=(concat "data.ppMultiplier." key ".realm") currentValue=obj.realm realms=../rules.spell.realms}}
-                        <input type="text" name="data.ppMultiplier.{{key}}.multiplier" value="{{obj.multiplier}}" data-dtype="Number"/>
-                        <input type="text" name="data.ppMultiplier.{{key}}.detail" value="{{obj.detail}}" data-dtype="String"/>
-                        <a class="list-control list-create" data-action="delete" title="Delete"><i class="fas fa-trash"></i></a>
-                    </li>
-                    {{/each}}
-                </ol>
-            </div>
-            <div class="list" data-array="spellAdder" data-fields="realm,adder,detail" data-dtype="String,Number,String">
-                <div class="list-header flexrow">
-                    <div class="list-header-text">Realm</div>
-                    <div class="list-header-text">Spell Adder</div>
-                    <div class="list-header-text">Detail</div>
-                    <a class="list-control list-create" data-action="create" title="Add"><i class="fas fa-plus"></i></a>
-                </div>
-                <ol class="list-data">
-                    {{#each data.spellAdder as | obj key |}}
-                    <li class="list-item flexrow" data-index="{{key}}">
-                        {{> "systems/merp1e/templates/parts/realm-chooser.html" field=(concat "data.spellAdder." key ".realm") currentValue=obj.realm realms=../rules.spell.realms}}
-                        <input type="text" name="data.spellAdder.{{key}}.adder" value="{{obj.adder}}" data-dtype="Number"/>
-                        <input type="text" name="data.spellAdder.{{key}}.detail" value="{{obj.detail}}" data-dtype="String"/>
-                        <a class="list-control list-create" data-action="delete" title="Delete"><i class="fas fa-trash"></i></a>
-                    </li>
-                    {{/each}}
-                </ol>
-            </div>
-        </div>
 
-        {{!-- Description Tab --}}
-        <div class="tab" data-group="primary" data-tab="description">
-            {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+        {{!-- Properties --}}
+        <div class="tab" data-group="primary" data-tab="properties">
+            <h2>{{localize "MERP1E.Equipment.WeightAndQuantity"}}</h2>
+            <div class="resource flexrow">
+                <label class="resource-label">{{localize "MERP1E.Equipment.TotalWeight"}}</label>
+                <input type="text" name="weight" value="{{item.weight}}" data-dtype="Number" {{ro}}/>
+            </div>
+            <div class="resource flexrow">
+                <label class="resource-label">{{localize "MERP1E.Equipment.UnitaryWeight"}}</label>
+                <input class="userentry" type="text" name="data.unitaryWeight" value="{{data.data.unitaryWeight}}" data-dtype="Number" {{gmonly}}/>
+            </div>
+            <div class="resource flexrow">
+                <label class="resource-label">{{localize "MERP1E.Equipment.IsFungible"}}</label>
+                <input type="checkbox" name="data.isFungible" {{checked data.data.isFungible}} data-dtype="Boolean" {{gmonly}}/>
+            </div>
+            <h2>{{localize "MERP1E.Equipment.Value"}}</h2>
+            <div class="resource flexrow">
+                <label class="resource-label">{{localize "MERP1E.Equipment.UnitaryValue"}}</label>
+                <div class="flexrow">
+                    <input class="userentry" type="text" name="data.unitaryValue" value="{{data.data.unitaryValue}}" data-dtype="Number" {{gmonly}}/>
+                    <select class="userentry" name="data.unitaryValueCurrency" {{gmonly}}>
+                        {{#unless data.data.unitaryValueCurrency}}<option></option>{{/unless}}
+                        {{selectOptions currencies selected=data.data.unitaryValueCurrency localize=true nameAttr="id" labelAttr="abbr"}}
+                    </select>
+                </div>
+            </div>
+            <h2>{{localize "MERP1E.Equipment.Wearable"}}</h2>
+            <div class="resource flexrow">
+                <label class="resource-label">{{localize "MERP1E.Equipment.IsWearable"}}</label>
+                <input type="checkbox" name="data.isWearable" {{checked data.data.isWearable}} data-dtype="Boolean" {{gmonly}}/>
+            </div>
+            {{#if data.data.isWearable}}
+            <div class="resource flexrow">
+                <label class="resource-label">{{localize "MERP1E.Equipment.IsWeightlessWhenWeared"}}</label>
+                <input type="checkbox" name="data.isWeightlessWhenWeared" {{checked data.data.isWeightlessWhenWeared}} data-dtype="Boolean" {{gmonly}}/>
+            </div>
+            {{/if}}
+            <h2>{{localize "MERP1E.Equipment.Container"}}</h2>
+            <div class="resource flexrow">
+                <label class="resource-label">{{localize "MERP1E.Equipment.IsContainer"}}</label>
+                <input type="checkbox" name="data.isContainer" {{checked data.data.isContainer}} data-dtype="Boolean" {{gmonly}}/>
+            </div>
+            {{#if data.data.isContainer}}
+            <div class="resource flexrow">
+                <label class="resource-label">{{localize "MERP1E.Equipment.ContainerMaxWeight"}}</label>
+                <input type="text" name="data.containerMaxWeight" value="{{data.data.containerMaxWeight}}" data-dtype="Number"/>
+            </div>
+            {{/if}}
         </div>
 
         {{!-- Attributes Tab --}}
         <div class="tab attributes" data-group="primary" data-tab="attributes">
             {{!-- As you add new fields, add them in here! --}}
+        </div>
+
+        {{!-- Description Tab --}}
+        <div class="tab" data-group="primary" data-tab="description">
+            {{> "systems/merp1e/templates/item/parts/description.html" data=data}}
         </div>
     </section>
 </form>

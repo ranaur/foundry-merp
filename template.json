@@ -15,15 +15,6 @@
             "leggreaves": false
         }
       },
-      "stats": {
-        "st": { "value": null, "special": 0 },
-        "ag": { "value": null, "special": 0 },
-        "co": { "value": null, "special": 0 },
-        "ig": { "value": null, "special": 0 },
-        "it": { "value": null, "special": 0 },
-        "pr": { "value": null, "special": 0 },
-        "ap": { "value": null, "special": 0 }
-      },
       "choosedRealm": null,
       "money": {
         "gp": 0,
@@ -35,15 +26,7 @@
     },
     "character": {
       "templates": ["base", "realm", "defense"],
-      "stats": {
-        "st": { "value": null, "special": 0 },
-        "ag": { "value": null, "special": 0 },
-        "co": { "value": null, "special": 0 },
-        "ig": { "value": null, "special": 0 },
-        "it": { "value": null, "special": 0 },
-        "pr": { "value": null, "special": 0 },
-        "ap": { "value": null, "special": 0 }
-      },
+      "stats": {},
       "xp": { "effective": 0 }
     },
     "npc": {
@@ -55,7 +38,8 @@
     "types": ["skill", "language", "equipment", "spell", "spelllist", "race", "profession", "special", "damage", "xp"], 
     "templates": {
       "base": {
-        "description": ""
+        "description": "",
+        "gmnotes": ""
       }
     },
     "skill": {
@@ -115,14 +99,16 @@
     "equipment": {
       "templates": ["base"],
       "quantity": 1,
-      "weight": 0,
-      "skillBonuses": {},
-      "onUseBonuses": {},
-      "dailySpells": {},
-      "chargedSpells": {},
-      "fixedUsesSpells": {},
-      "ppMultiplier": {},
-      "spellAdder": {}
+      "unitaryWeight": 0,
+      "unitaryValue": 0,
+      "unitaryValueCurrency": "gp",
+      "isFungible": false,
+      "isWearable": false,
+      "isWearing": false,
+      "isWeightlessWhenWeared": false,
+      "isContainer": false,
+      "containerMaxWeight": 1,
+      "location": "carrying"
     },
     "spell": {
       "templates": ["base"],
@@ -130,7 +116,7 @@
       "areaofeffect": "",
       "duration": "",
       "range": "",
-      "class": ["E", "F", "P", "U", "I"],
+      "class": "",
       "concentration": false,
       "instantaneous": false
     },
@@ -221,7 +207,7 @@
       "templates": ["base"],
       "primeStat": "",
       "realm": "",
-      "spellRestriction": ["profession and open", "profession and open up to 5th level", "open up to 5th level", "open up to 3rd level"],
+      "spellsAllowed": "",
       "professionSkillBonuses": {},
       "developmentPoints": {}
     }

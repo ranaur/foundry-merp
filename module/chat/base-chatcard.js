@@ -10,6 +10,10 @@ export class Merp1eBaseChatCard {
 		return new cls(data, options, messageID);
     }
 
+	static registerCard(me) {
+		return Merp1eCards.push(me);
+	}
+	
 	constructor(data, options = {}, messageID = null) {
 		this.options = mergeObject(this.constructor.defaultOptions, this.options);
         this.options.closed = this.options.closed || false;
@@ -49,8 +53,9 @@ export class Merp1eBaseChatCard {
         this.updateMessage(event);
     }
 
-    getData() {
-        return { data: expandObject(this.data) };
+	getData() {
+		this.data.isGM = game.user.isGM;
+		return { data: expandObject(this.data) };
     }
 
     async _renderMessage() {
@@ -141,7 +146,7 @@ export class Merp1eBaseChatCard {
         } else {
             return await this.sendMessage();
         }
-}
+	}
 
     /* * overridable * */
 	activateListeners(html) {

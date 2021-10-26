@@ -27,13 +27,14 @@
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
-        {{!-- Description Tab --}}
-        <div class="tab" data-group="primary" data-tab="description">
-            {{editor content=data.data.description target="data.description" button=true owner=owner editable=editable}}
-        </div>
         {{!-- Special Tab --}}
         <div class="tab" data-group="primary" data-tab="effects">
             {{> "systems/merp1e/templates/item/parts/effects.html" item=item}}
+        </div>
+
+        {{!-- Description Tab --}}
+        <div class="tab" data-group="primary" data-tab="description">
+            {{> "systems/merp1e/templates/item/parts/description.html" data=data}}
         </div>
     </section>
 </form>

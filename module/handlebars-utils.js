@@ -43,6 +43,20 @@ export const registerHandlebarsHelpers = async function() {
     });
     
     // read only if - makes an input read only iuf parameter is true
+    Handlebars.registerHelper('isGM', function() {
+        return game.user.isGM;
+    });
+
+    // read only if - makes an input read only iuf parameter is true
+    Handlebars.registerHelper('gmonly', function() {
+        return new Handlebars.SafeString(game.user.isGM ? "class='userentry'" : "readonly tabindex=-1 aria-disabled='true'");
+    });
+    
+    Handlebars.registerHelper('in', function(data, array) {
+        return array.find((val) => val == data) == data;
+    });
+    
+    // read only if - makes an input read only iuf parameter is true
     Handlebars.registerHelper('rw', function(cssClass) {
         return new Handlebars.SafeString(`class='userentry ${cssClass}'`);
     });
@@ -100,13 +114,21 @@ export const preloadHandlebarsTemplates = async function() {
       "systems/merp1e/templates/parts/skill-chooser.html",
       "systems/merp1e/templates/parts/realm-chooser.html",
       "systems/merp1e/templates/parts/spell-chooser.html",
+      "systems/merp1e/templates/item/parts/description.html",
       "systems/merp1e/templates/item/parts/effects.html",
+      "systems/merp1e/templates/chat/parts/difficulty-part.html",
+      "systems/merp1e/templates/chat/parts/skill-part.html",
+      "systems/merp1e/templates/chat/parts/total-part.html",
+      "systems/merp1e/templates/chat/parts/roll-part.html",
+      "systems/merp1e/templates/chat/parts/modifiers-part.html",
       "systems/merp1e/templates/actor/parts/character-sheet-stat-line.html",
       "systems/merp1e/templates/actor/parts/character-sheet-stats.html",
       "systems/merp1e/templates/actor/parts/character-sheet-description.html",
       "systems/merp1e/templates/actor/parts/character-sheet-languages.html",
       "systems/merp1e/templates/actor/parts/character-sheet-skills.html",
       "systems/merp1e/templates/actor/parts/character-sheet-health.html",
+      "systems/merp1e/templates/actor/parts/character-sheet-money.html",
+      "systems/merp1e/templates/actor/parts/character-sheet-actions.html",
       "systems/merp1e/templates/actor/parts/character-sheet-equipment.html",
       "systems/merp1e/templates/actor/parts/character-sheet-xp.html",
       "systems/merp1e/templates/actor/parts/character-sheet-effects.html",

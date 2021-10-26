@@ -153,6 +153,7 @@
                 <input name="data.initial.notes" value="{{data.data.initial.notes}}" data-dtype="String" type="text" {{roif data.data.applied}}/>
             </div>
         </div>
+
         {{!-- Current Tab --}}
         {{#if data.data.applied}}
         <div class="tab" data-group="primary" data-tab="current">
@@ -254,9 +255,10 @@
             </div>
         </div>
         {{/if}}
+
         {{!-- Description Tab --}}
         <div class="tab" data-group="primary" data-tab="description">
-            {{editor content=data.data.description target="data.description" button=true owner=owner editable=editable}}
+            {{> "systems/merp1e/templates/item/parts/description.html" data=data}}
         </div>
     </section>
 </form>

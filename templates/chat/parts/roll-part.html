@@ -1,0 +1,25 @@
+<div class="roll">
+    <div class="chat-card">
+        <div class="card-title grid grid-3col" style="font-weight: bold; grid-template-columns: 15% 60% 15%; border-bottom: 1pt; border-bottom-style: solid;">
+            <div>{{localize "MERP1E.ManeuverCard.RollLabel"}}</div>
+            <div style="text-align: center; vertical-align: middle;">
+                {{#if data.rollTotal}}
+                    {{data.rollResult}}
+                {{else}}
+                    <input type="button" name="roll" value="{{localize 'MERP1E.ManeuverCard.RollButton'}}" data-action="roll"/>
+                {{/if}}
+            </div>
+            
+            <div style="text-align: center; vertical-align: middle;">
+                {{#if data.rollTotal}}
+                    {{formatBonus data.rollTotal}}
+                {{else}}
+                    <i class="fas fa-dice-d20"></i>
+                    <i class="fas fa-dice-d20"></i>
+                {{/if}}
+            </div>
+        </div>
+        <div class="card-content">
+        </div>
+    </div>
+</div>

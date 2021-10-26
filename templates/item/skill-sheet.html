@@ -69,10 +69,6 @@
 
     {{!-- Sheet Body --}}
     <section class="sheet-body">
-        {{!-- Description Tab --}}
-        <div class="tab" data-group="primary" data-tab="description">
-            {{editor content=data.data.description target="data.description" button=true owner=owner editable=editable}}
-        </div>
         {{!-- Modifiers Tab --}}
         <div class="tab" data-group="primary" data-tab="modifiers">
             <div class="modifiers">
@@ -107,6 +103,7 @@
                 </div>
             </div>
         </div>
+
         {{!-- Results Tab --}}
         <div class="tab" data-group="primary" data-tab="results">
             {{#each results as |result|}}
@@ -115,6 +112,11 @@
                 <input id="skill-result-{{result.id}}" type="text" class="gm-select-only" name="data.staticManeuverTexts.{{result.id}}" value="{{lookup ../data.data.staticManeuverTexts result.id}}"/>
             </div>
             {{/each}}
+        </div>
+
+        {{!-- Description Tab --}}
+        <div class="tab" data-group="primary" data-tab="description">
+            {{> "systems/merp1e/templates/item/parts/description.html" data=data}}
         </div>
     </section>
 </form>

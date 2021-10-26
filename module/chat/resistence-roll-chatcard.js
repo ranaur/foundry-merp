@@ -1,61 +1,64 @@
 import { Merp1eModifiers } from "../modifier.js";
 import { rollOpenEnded } from "../dice.js";
-import { findByID } from "../util.js";
-import { Merp1eCards, Merp1eBaseChatCard } from "./base-chatcard.js";
+import { Merp1eBaseChatCard } from "./base-chatcard.js";
 
 export class Merp1eResistenceRollChatCard extends Merp1eBaseChatCard {
-    static dummy = Merp1eCards.push(this);
+    static dummy = this.registerCard(this);
 
     get title() {
         return "Resistence Roll";
     }
 
     getData() {
-        const data = super.getData();
+        const cardData = super.getData();
         let actor;
-        if(!data.skill) {
-            if(!data.data.actorID) return data;
-            if(!data.data.skillID) return data;
-            actor = game.actors.get(data.data.actorID);
-            if(!actor) return data;
-            data.skill = actor.items.get(data.data.skillID);
+        if(!cardData.skill) {
+            if(!cardData.data.actorID) return cardData;
+            if(!cardData.data.skillID) return cardData;
+            actor = game.actors.get(cardData.data.actorID);
+            if(!actor) return cardData;
+            cardData.skill = actor.items.get(cardData.data.skillID);
         }
-        if(!data.skill) return data;
-        data.rollTypeID = "RR";
-        actor.applyEffects(data); // without actor to not apply actor modifiers
+        if(!cardData.skill) return cardData;
+        cardData.rollTypeID = "RR";
+        actor.applyEffects(cardData); // without actor to not apply actor modifiers
 
-        data.actor = data.skill.parent;
-        data.data.targetLevel = data.data.targetLevel || actor.level;
-        data.rrBase = game.merp1e.Merp1eRules.resolveResistenceRoll(parseInt(data.data.attackLevel), parseInt(data.data.targetLevel));
+        cardData.actor = cardData.skill.parent;
+        cardData.data.attackLevel ??= 1;
+        cardData.data.targetLevel ??= actor.level;
+        cardData.rrBase = game.merp1e.Merp1eRules.resolveResistenceRoll(parseInt(cardData.data.attackLevel), parseInt(cardData.data.targetLevel));
         
         // Calculate modifiers
-        data.modifiersByGroup = [];
-        data.modifiersByGroup.push(new Merp1eModifiers("rrm", "Resistence Roll Modifiers", game.merp1e.Merp1eRules.skill.modifiers.Resistence));
-        if(data.skill?.data?.data?.reference) {
-            let globalSkill = game.merp1e.Merp1eRules.skill.getAvaliableByReference(data.skill.data.data.reference);
-            data.modifiersByGroup.push(new Merp1eModifiers("sgm", "Skill General Modifiers", globalSkill?.data?.data?.modifiers));
+        cardData.skillModifiers = new Merp1eModifiers("mmm", "MERP1E.ManeuverCard.SkillModifiers", cardData.skill.data?.data?.modifiers);
+        if(cardData.skill?.data?.data?.reference) {
+            let globalSkill = game.merp1e.Merp1eRules.skill.getAvaliableByReference(cardData.skill.data.data.reference);
+            cardData.skillModifiers.add(globalSkill?.data?.data?.modifiers);
         }
-        data.modifiersByGroup.push(new Merp1eModifiers("mmm", "Skill Specific Modifiers", data.skill.data?.data?.modifiers));
-        data.modifiersByGroup.push(new Merp1eModifiers("itm", "Item Modifiers", data?.modifiers));
-        data.data.modifiersChecked = data.data.modifiersChecked || {};
-        data.data.modifiersValue = data.data.modifiersValue || {};
 
+        cardData.itemModifiers = new Merp1eModifiers("itm", "MERP1E.ManeuverCard.ItemModifiers", cardData?.modifiers);
+
+        cardData.data.modifiersChecked = cardData.data.modifiersChecked || {};
+        cardData.data.modifiersValue = cardData.data.modifiersValue || {};
+        
         // Calculate total bonus and roll
-        data.total = data.skill.total;
-        data.modifiersByGroup.forEach((mg) => {
-            mg.evaluate(data);
-            const checked = mg.id in data.data.modifiersChecked ? data.data.modifiersChecked[mg.id] : null;
-            const values = mg.id in data.data.modifiersValue ? data.data.modifiersValue[mg.id] : null;
-            data.total += mg.getTotal(checked, values);
+        cardData.total = cardData.skill.total;
+        [cardData.skillModifiers, cardData.itemModifiers].forEach((mg) => {
+            mg.evaluate(cardData);
+            const checked = mg.id in cardData.data.modifiersChecked ? cardData.data.modifiersChecked[mg.id] : null;
+            const values = mg.id in cardData.data.modifiersValue ? cardData.data.modifiersValue[mg.id] : null;
+            const groupTotal = mg.getTotal(checked, values);
+            mg.total = groupTotal;
+            cardData.total += groupTotal
         });
-        data.total += (data.data.rollTotal || 0);
+        cardData.skillTotal = cardData.skill.total + cardData.skillModifiers.total;
+        cardData.total += (cardData.data.rollTotal || 0);
+ 
+        cardData.data.failureText ??= "MERP1E.ResistenceRollCard.Failure";
+        cardData.data.successText ??= "MERP1E.ResistenceRollCard.Success";
 
-        data.data.failureText ??= "MERP1E.ResistenceRollCard.Failure";
-        data.data.successText ??= "MERP1E.ResistenceRollCard.Success";
+        cardData.resolveResult = cardData.total >= cardData.rrBase;
 
-        data.resolveResult = data.total >= data.rrBase;
-
-        return data;
+        return cardData;
     }
 
     async roll(event, update) {
@@ -64,8 +67,8 @@ export class Merp1eResistenceRollChatCard extends Merp1eBaseChatCard {
 		this.data.rollResult = oer.result;
 		this.data.rollTotal = oer.total;
 	
-        //this.updateMessage(event);
-        this.close(event);
+        this.updateMessage(event);
+        //this.close(event);
     }
 }
 

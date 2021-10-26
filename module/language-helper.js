@@ -17,7 +17,8 @@ export class LanguageSheetHelper {
     const name = `New ${type.capitalize()}`;
     // Prepare the item object.
     const itemData = {
-      type: type
+      type: type,
+      name: name
     };
     // Remove the type from the dataset since it's in the itemData.type prop.
     //delete itemData.data["type"];
@@ -25,14 +26,14 @@ export class LanguageSheetHelper {
     return this.createEmbeddedDocuments("Item", [itemData], {renderSheet: true, render: false});
   }
   static languageEdit(event) {
-    const itemId = $(event.currentTarget).parents(".item").data("itemId");
+    const itemId = $(event.currentTarget).parents(".language-list-item").data("itemId");
 
     const item = this.getEmbeddedDocument("Item", itemId);
 
     item.sheet.render(true);
   }
   static languageDelete(event) {
-    const li = $(event.currentTarget).parents(".item");
+    const li = $(event.currentTarget).parents(".language-list-item");
     const itemId = li.data("itemId");
 
     this.deleteEmbeddedDocuments("Item", [itemId]);

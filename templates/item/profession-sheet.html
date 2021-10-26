@@ -7,20 +7,21 @@
                 <div class="resource">
                     <label class="resource-label">{{localize "MERP1E.ProfessionSheet.PrimeStat"}}</label>
                     <select name="data.primeStat">
-                        {{selectOptions rules.stats selected=data.data.primeStat localize=true nameAttr="id" labelAttr="label" blank=""}}
+                        {{selectOptions stats selected=data.data.primeStat localize=true nameAttr="id" labelAttr="label" blank=""}}
                     </select>
                 </div>
                 <div class="resource">
                     <label class="resource-label">{{localize "MERP1E.ProfessionSheet.Realm"}}</label>
                     <select name="data.realm">
                         <option value="any">{{localize "MERP1E.Realm.Any"}}</option>
-                        {{selectOptions rules.magic.realms selected=data.data.realm localize=true nameAttr="id" labelAttr="label"}}
+                        {{selectOptions realms selected=data.data.realm localize=true nameAttr="id" labelAttr="label"}}
                     </select>
                 </div>
                 <div class="resource">
                     <label class="resource-label">{{localize "MERP1E.ProfessionSheet.MaxSpellLevel"}}</label>
                     <select name="data.spellsAllowed">
-                        {{selectOptions rules.magic.professionalRestrictions selected=data.data.spellsAllowed localize=true nameAttr="id" labelAttr="label" blank=""}}
+                        {{#unless data.data.spellsAllowed}}<option></option>{{/unless}}
+                        {{selectOptions professionalRestrictions selected=data.data.spellsAllowed localize=true nameAttr="id" labelAttr="label"}}
                     </select>
                 </div>
             </div>
@@ -31,6 +32,7 @@
     <nav class="sheet-tabs tabs" data-group="primary">
         <a class="item" data-tab="professionalskillbonuses">{{localize "MERP1E.ProfessionSheet.ProfessionalSkillBonuses"}}</a>
         <a class="item" data-tab="devpoints">{{localize "MERP1E.ProfessionSheet.DevPoints"}}</a>
+        <a class="item" data-tab="effects">{{localize "MERP1E.RaceTab.Effects"}}</a>
         <a class="item" data-tab="description">{{localize "MERP1E.ProfessionSheet.Description"}}</a>
     </nav>
 
@@ -41,7 +43,7 @@
             <div class="skill-groups">
                 {{#each sheetOrder as | group |}}
                 <div class="skill-group">
-                  <div class="skill-group-header" style="font-weight:bolder">{{localize (concat "MERP1E.SkillGroup." group.name)}} (
+                  <div class="skill-group-header" style="font-weight:bolder">{{localize group.label}} (
                     <a class="skill-group-value" group="{{group.id}}">0</a>
                     <a class="skill-group-value" group="{{group.id}}">1</a>
                     <a class="skill-group-value" group="{{group.id}}">2</a>
@@ -59,7 +61,7 @@
                 {{/each}}
               </div>
         </div>
-        {{!-- Description Tab --}}
+        {{!-- Development Points Tab --}}
         <div class="tab" data-group="primary" data-tab="devpoints">
             <div class="devpoints-groups">
                 {{#each sheetOrder as | group |}}
@@ -82,9 +84,15 @@
                 </div>
               </div>
         </div>
+
+        {{!-- Effects Tab --}}
+        <div class="tab" data-group="primary" data-tab="effects">
+            {{> "systems/merp1e/templates/item/parts/effects.html" item=item}}
+        </div>
+
         {{!-- Description Tab --}}
         <div class="tab" data-group="primary" data-tab="description">
-            {{editor content=data.description target="data.description" button=true owner=owner editable=editable}}
+            {{> "systems/merp1e/templates/item/parts/description.html" data=data}}
         </div>
     </section>
 </form>

@@ -1,4 +1,7 @@
 export class GenericImporter extends FormApplication {
+  LINE_SEPARATOR = "\n";
+  FIELD_SEPARATOR = "\t";
+
   /** @override */
   static get defaultOptions() {
     return mergeObject(super.defaultOptions, {
@@ -11,15 +14,14 @@ export class GenericImporter extends FormApplication {
 
   /** @override */
   async getData(options) {
-    let data;
-    let files = [];
-
-    return {
-      data,
-      files,
-      cssClass : "generic-importer-window"
+    const sheetData = {
+      cssClass : "generic-importer-window",
+      itemTypes: Item.metadata.types,
+      actorTypes: Actor.metadata.types,
+      data: {},
+      file: []
     };
-  
+    return sheetData;
   }
 
   /** @override */
@@ -29,92 +31,120 @@ export class GenericImporter extends FormApplication {
     html.find(".dialog-button").on("click",this._dialogButton.bind(this));
   }
 
+  /*get form() {
+    return $("form.generic-importer-window")[0];
+  }*/
+
+  get importType() {
+    return this.form.elements["import-type"].value;
+  }
+
+  get files() {
+    return this.form.data.files;
+  }
+
+  async getFileLines() {
+    let file;
+    if (this.files.length) {
+      file = await GenericImporterHelper.readBlobFromFile(this.files[0]);
+      file = file.replace(/(\r)/gm, ""); // remove CRLF
+    }
+    return file.split(this.LINE_SEPARATOR);
+  }
+
   async _dialogButton(event) {
     event.preventDefault();
     event.stopPropagation();
     const a = event.currentTarget;
     const action = a.dataset.button;
     
-    if(action === "import") {
-      let importFilename;
-      const form = $("form.generic-importer-window")[0];
-      const type = form.elements["import-type"].value;
+    return await this[action]?.(event);
+  }
 
-      let file;
-      if (form.data.files.length) {
-        importFilename = form.data.files[0].name;
-        file = await GenericImporterHelper.readBlobFromFile(form.data.files[0]);
-        file = file.replace(/(\r)/gm, "");
-      }
-      const lines = file.split("\n");
-      let headerLine = [];
-      for(let idx = 0; idx < lines.length; idx++) {
-        let line = lines[idx];
-        let row = line.split("\t");
-        if(idx == 0) {
-          headerLine = row;
-        } else {
-          if(row.length == headerLine.length) { 
+  buildActiveEffect(aeLine) {
+    const aeFields = aeLine.split(EFFECT_FIELD_SEPARATOR);
 
-            let config = {
-              type: type,
-              folder: null
-            };
-            for(let colIdx = 0; colIdx < headerLine.length; colIdx++) {
-              let key = headerLine[colIdx];
-              let value = row[colIdx];
-              // if field is folder, search for a folder with the name and return the id
-              if(key == "folder") {
-/*                let search = game.folders.getName(value); //game.folders.entries.filter((item) => { return item.data.name == value } );
-                if(search) {
-                  value = search.data._id;
-                } else { 
-                  
-                  let folder = await Folder.create({
-                    color: "",
-                    name: value,
-                    parent: null,
-                    sorting: "a",
-                    type: "Item"
-                  });
-                  value = folder.data._id;
-                */
-                let folder = await this.getFolder(value);
-                value = folder.data._id;
-              }
-              if(key[0] == "@") { // make a lookup on item
-                key = key.substring(1); // strip '@'
-                let entity = game.items.getName(value);
-                if(entity) {
-                  value = entity.id;
-                } else {
-                  value = null;
-                }
-                
-              }
-              if(value != null && value != "") config[key] = value;
-              if(value == "true") config[key] = true;
-              if(value == "false") config[key] = false;
-            }
-            //this._create(data);
-            config = await expandObject(config);
-            
-            //let item = game.items.getName(config.name);
-            let item = game.items.filter((item) => { return item.data.name == config.name && item.data.folder == config.folder});
-            if(item.length > 0) {
-              console.log(`Updating ${config.name}`)
-              Item.updateDocuments([mergeObject(item[0].data, config)]);
-            } else {
-              console.log(`Creating ${config.name}`)
-              Item.createDocuments([config]);
-            }
-          }
-        }
-      }
-      console.log(`End import`);
+    const aeType = aeFields?.[0];
+    switch(aeType) {
+
     }
   }
+  async import() {
+    const lines = await this.getFileLines();
+
+    let headerLine = [];
+    for(let idx = 0; idx < lines.length; idx++) {
+      let line = lines[idx];
+      let row = line.split(this.FIELD_SEPARATOR);
+      if(idx == 0) {
+        headerLine = row;
+      } else {
+        if(row.length != headerLine.length) continue;
+        let config = {
+          type: this.importType,
+          folder: null
+        };
+        for(let colIdx = 0; colIdx < headerLine.length; colIdx++) {
+          let key = headerLine[colIdx];
+          let value = row[colIdx];
+
+          // if field is folder, search for a folder with the name and return the id
+          if(key == "folder") {
+            let folder = await this.getFolder(value);
+            value = folder?.data._id;
+          }
+          if(key == "activeEffects") {
+            value = value.split(this.EFFECT_SEPARATOR);
+          }
+          if(key[0] == "@") { // make a lookup on item
+            key = key.substring(1); // strip '@'
+            let entity = game.items.getName(value);
+            if(entity) {
+              value = entity.id;
+            } else {
+              value = null;
+            }
+            
+          }
+
+          if(value != null && value != "") config[key] = value;
+          if(value == "true") config[key] = true;
+          if(value == "false") config[key] = false;
+        }
+
+        config = await expandObject(config);
+            
+        const activeEffectsJSON = config.activeEffects;
+        delete config.activeEffect;
+        let documents;
+        let item = game.items.find((item) => { return item.data.name == config.name && item.data.folder == config.folder});
+        if(item) {
+          console.log(`Updating ${config.name}`)
+          const updateData = { data: config, _id: item.id };
+          documents = await Item.updateDocuments([updateData]);
+          if(activeEffectsJSON) {
+            // delete Active effects to override
+            const actveEffects = item.getEmbeddedCollection("ActiveEffects");
+            const activeEffectsIDs = actveEffects?.reduce((acc, ae) => {acc.push[ae.id]; return acc; }, []);
+            
+            Item.deleteEmbeddedDocuments("ActiveEffects", activeEffectsIDs);
+          }
+        } else {
+          console.log(`Creating ${config.name}`)
+          documents = await Item.createDocuments([config]);
+        }
+        if(activeEffectsJSON) {
+          activeEffects = JSON.parse(activeEffectsJSON);
+          if(!Array.isArray(activeEffects)) activeEffects = [activeEffects];
+          documents[0].createEmbeddedDocuments("ActiveEffect", aeData);
+        }
+      }
+    }
+    ui.notifications.info(`End of import`);
+  }
+
   async getFolder(path) {
+    if(!path) return null;
     let folders = path.split("\\");
     let lastFolder = null;
     for(let folder of folders) {

@@ -4,16 +4,15 @@
     <div>
       <label for="entity-type-actor">Actor</label> 
       <input type="radio" name="entity-type-actor" value="actor" disabled/>
-      <label for="entity-type-actor">Item</label> 
+      <label for="entity-type-item">Item</label> 
       <input type="radio" name="entity-type-item" value="item" checked/>
     </div>
-    <div>
-      <select style="text-align:center" name="import-type" id="import-file">
-        <option></option>
-        <option value="profession">Professions</option>
-        <option value="skill">Skills</option>
-        <option value="spell">Spell</option>
-        <option value="spelllist">Spell List</option>
+    <div style="text-align:center">
+      <select name="import-type" id="import-file">
+        {{#unless import-type}}<option></option>{{/unless}}
+        {{#each itemTypes as | itemType | }}
+        <option value="{{itemType}}">{{itemType}}</option>
+        {{/each}}
       </select>
     </div>
     <div>

@@ -1,0 +1,33 @@
+<div class="special-roll">
+    {{!-- Difficulty --}}
+    {{> "systems/merp1e/templates/chat/parts/difficulty-part.html" difficulties=difficulties chosenDifficulty=data.chosenDifficulty difficultiesValues=difficultiesValues }}
+
+    {{!-- Skill --}}
+    {{> "systems/merp1e/templates/chat/parts/skill-part.html" skill=skill group=skillModifiers data=data label=group.label skillTotal=skillTotal }}
+
+    {{!-- Item Modifiers --}}
+    {{> "systems/merp1e/templates/chat/parts/modifiers-part.html" group=itemModifiers data=data label=itemModifiers.label }}
+
+    {{!-- Roll --}}
+    {{> "systems/merp1e/templates/chat/parts/roll-part.html" data=data }}
+
+    {{!-- Total --}}
+    {{> "systems/merp1e/templates/chat/parts/total-part.html" total=total }}
+
+    {{!-- Resolve --}}
+    {{#if data.rollTotal}}
+    <div class="grid grid-3col" style="grid-template-columns: 15% 75%;">
+        <div style="font-weight: bold;">
+            {{localize "MERP1E.ManeuverCard.ResultLabel"}}
+        </div>
+        <div style="font-weight: bold; text-align: center; vertical-align: middle;">
+            {{localize resolveResult}}
+        </div>
+        <div>
+        </div>
+        <div>
+            {{!-- localize resolveText --}}
+        </div>
+    </div>
+    {{/if}}
+</div>

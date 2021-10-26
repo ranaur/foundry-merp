@@ -13,7 +13,7 @@
             </div>
             <div>
                 <label class="resource-label">{{localize 'MERP1E.XP.Awarded'}}</label>
-                <input name="data.xp.awarded" type="number" value="{{actor.xp.awarded}}" data-dtype="Number" type="number" {{roif rules.settings.xpControlAutomatic}}/>
+                <input name="data.xp.awarded" type="number" value="{{actor.xp.awarded}}" data-dtype="Number" type="number" {{roif settings.xpControlAutomatic}}/>
             </div>
             <div>
                 <label class="resource-label">{{localize 'MERP1E.XP.NextLevel'}}</label>
@@ -21,7 +21,7 @@
             </div>
         </div>
     </div>
-    {{#if rules.settings.xpControlAutomatic }}
+    {{#if settings.xpControlAutomatic }}
     <div class="flexrow">
         <h2 class="flex3">{{localize 'MERP1E.XP.AwardedXPs'}}</h2>
 

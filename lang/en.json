@@ -3,6 +3,9 @@
     "MERP1E.Item.New": "New",
     "MERP1E.Item.Edit": "Edit",
     "MERP1E.Item.Delete": "Delete",
+    "MERP1E.Item.Description": "Description",
+    "MERP1E.Item.GMNotes": "GM Notes",
+
     "MERP1E.ItemType.Skill": "Skill",
     "MERP1E.ItemType.Spelllist": "Spelllist",
     "MERP1E.ItemType.Spell": "Spell",
@@ -65,8 +68,34 @@
     "MERP1E.CharacterTab.XP": "XP",
     "MERP1E.CharacterTab.Effects": "Effects",
     "MERP1E.CharacterTab.Specials": "Specials",
-    "MERP1E.Effects.Label": "Effects",
+    "MERP1E.CharacterTab.Money": "Money",
+    "MERP1E.CharacterTab.Action": "Action",
 
+    "MERP1E.ActionsTab.CurrentAction": "Current Action",
+    "MERP1E.ActionsTab.Description": "Description",
+    "MERP1E.ActionsTab.Action": "Action",
+    "MERP1E.ActionsTab.Spell": "Spell",
+    "MERP1E.ActionsTab.Target": "Target",
+    "MERP1E.ActionsTab.RoundsSpellPrepared": "Rounds Prepared",
+
+    "MERP1E.Action.PrepareSpell": "Prepare Spell",
+    "MERP1E.Action.CastSpell": "Cast Spell",
+    "MERP1E.Action.MissileAttack": "Missile Attack",
+    "MERP1E.Action.LoadReload": "Load/Reload",
+    "MERP1E.Action.MovingManeuver": "Moving Maneuver",
+    "MERP1E.Action.MeleeAttack": "Melee Attack",
+    "MERP1E.Action.Movement": "Movement",
+    "MERP1E.Action.StaticManeuver": "Static Maneuver",
+    "MERP1E.Action.Other": "Other",
+
+    "MERP1E.MoneyTab.Money": "Money",
+
+    "MERP1E.Effects.Label": "Effects",
+    "MERP1E.Effects.Name": "Name",
+    "MERP1E.Effects.Condition": "Condition",
+    "MERP1E.Effects.ItemType": "Item Type",
+    "MERP1E.Effects.Item": "Item",
+    
     "MERP1E.Stats.None": "None",
     "MERP1E.Stats.st.Name": "Strength",
     "MERP1E.Stats.st.Abbr": "ST",
@@ -217,19 +246,28 @@
     "MERP1E.Realm.Channeling": "Channeling",
     "MERP1E.Realm.Any": "Any",
 
-    "MERP1E.Race.Languages": "Languages",
-    "MERP1E.Race.StatBonuses": "Stat Bonuses",
-    "MERP1E.Race.Skills": "Skills",
-    "MERP1E.Race.Description": "Description",
-    "MERP1E.Race.Characteristics" : "Characteristics",
+    "MERP1E.RaceTab.StatBonuses": "Stats",
+    "MERP1E.RaceTab.ResistenceRollBonuses": "RRs",
+    "MERP1E.RaceTab.AdolescenceSkillRank": "Ranks",
+    "MERP1E.RaceTab.Languages": "Languages",
+    "MERP1E.RaceTab.Effects": "Effects",
+    "MERP1E.RaceTab.Characteristics": "Characteristics",
+    "MERP1E.RaceTab.Description": "Description",
+
+    "MERP1E.Race.PhysicalCharacter": "Physical Character",
+    "MERP1E.Race.Culture": "Culture",
+    "MERP1E.Race.OtherFactors": "Other Factors",
 
     "MERP1E.Race.RacialBonus": "Racial Bonus",
+
+    "MERP1E.Race.ResistenceRoll": "Resistence Roll",
+
 
     "MERP1E.Race.ChooseOne": "Choose one",
     "MERP1E.Race.Skill": "Skill",
     "MERP1E.Race.Bonus": "Bonus",
     "MERP1E.Race.Conditional": "Conditional",
-    "MERP1E.Race.AdolescenceSkillRank": "Adolescence Skill Rank",
+    "MERP1E.Race.AdolescenceSkillRank": "Skill Ranks",
     "MERP1E.Race.OtherAdolescenceRanks": "Other",
     "MERP1E.Race.AdolescenceLanguages": "Adolescence Languages",
     "MERP1E.Race.AdolescenceSpellListChance": "Spell List Chance",
@@ -369,6 +407,7 @@
 
     "MERP1E.EffectDescription.SkillBonus": "$BONUS on skills with reference $REFERENCE",
     "MERP1E.EffectDescription.SkillGroupBonus": "$BONUS on skills of group $GROUP",
+    "MERP1E.EffectDescription.RollTypeBonus": "$BONUS on all $ROLLTYPEs",
     "MERP1E.EffectDescription.RankSkillBonus": "$BONUS per rank on skills with reference $REFERENCE",
     "MERP1E.EffectDescription.ShieldUnset": "Shield Effect unset",
     "MERP1E.EffectDescription.ArmGreavesUnset": "Arm Greaves Effect unset",
@@ -403,10 +442,13 @@
     "MERP1E.Effect.AllowedArmorTypes": "Armor Types",
     "MERP1E.Effect.Modifier": "Modifier",
     "MERP1E.Effect.RollType": "Roll Type",
-
+    "MERP1E.Effect.RollTypeBonus": "Bonus",
+    
     "MERP1E.Effect.New": "New Effect",
+    "MERP1E.EffectType.NotConfigured": "Not Configured",
     "MERP1E.EffectType.SkillBonus": "Skill Bonus",
     "MERP1E.EffectType.SkillGroupBonus": "Skill Group Bonus",
+    "MERP1E.EffectType.RollTypeBonus": "Roll Type Bonus",
     "MERP1E.EffectType.RankSkillBonus": "Skill Rank Bonus",
     "MERP1E.EffectType.Shield": "Shield",
     "MERP1E.EffectType.ArmGreaves": "Arm Greaves",
@@ -450,8 +492,11 @@
     "MERP1E.EffectTab.Condition": "Condition",
 
     "MERP1E.EffectCondition.AlwaysOn": "Always On",
-    "MERP1E.EffectCondition.OnItemCarried": "On Item Carried",
+    "MERP1E.EffectCondition.OnItemWeared": "On Item Weared",
     "MERP1E.EffectCondition.OnArmorTypes": "On Armor Types",
+    "MERP1E.ModifierEnableFunctions.HeatFireAttack": "Heat/Fire Attacks",
+    "MERP1E.ModifierEnableFunctions.ColdIceAttack": "Cold/Ice Attacks",
+    
     "MERP1E.EffectCondition.X": "X",
     
     "MERP1E.Defense.Defense": "Defense",
@@ -532,21 +577,18 @@
     "MERP1E.RollChooser.RollType": "Roll Type",
     "MERP1E.RollChooser.Roll": "Roll",
 
-    "MERP1E.MovingManeuverCard.RollButton": "Roll!",
-    "MERP1E.MovingManeuverCard.ResolveButton": "Resolve!",
-    "MERP1E.MovingManeuverCard.DifficultyLabel": "Dif.:",
-    "MERP1E.MovingManeuverCard.RollLabel": "Roll:",
-    "MERP1E.MovingManeuverCard.TotalLabel": "Total:",
-    "MERP1E.MovingManeuverCard.ResultLabel": "Result:",
     "MERP1E.MovingManeuverCard.FumbleResult": "Fumble",
 
-    "MERP1E.StaticManeuverCard.RollButton": "Roll!",
+    "MERP1E.ManeuverCard.RollButton": "Roll!",
+    "MERP1E.ManeuverCard.SkillLabel": "Skill:",
+    "MERP1E.ManeuverCard.DifficultyLabel": "Difficulty.:",
+    "MERP1E.ManeuverCard.RollLabel": "Roll:",
+    "MERP1E.ManeuverCard.TotalLabel": "Total:",
 
-    "MERP1E.StaticManeuverCard.SkillLabel": "Skill:",
-    "MERP1E.StaticManeuverCard.DifficultyLabel": "Dif.:",
-    "MERP1E.StaticManeuverCard.RollLabel": "Roll:",
-    "MERP1E.StaticManeuverCard.TotalLabel": "Total:",
-    "MERP1E.StaticManeuverCard.ResultLabel": "Result:",
+    "MERP1E.ManeuverCard.ItemModifiers": "Item Modifiers:",
+    "MERP1E.ManeuverCard.SkillModifiers": "Skill Modifiers:",
+
+    "MERP1E.ManeuverCard.ResultLabel": "Result:",
 
     "MERP1E.StaticManeuverResult.Blunder": "Blunder",
     "MERP1E.StaticManeuverResult.AbsoluteFailure": "Absolute Failure",
@@ -564,31 +606,125 @@
     "MERP1E.StaticManeuverDefaultText.Success": "Your static action is successful.",
     "MERP1E.StaticManeuverDefaultText.AbsolutSuccess": "Your static action is successful and you get a +20 bonus to further static actions for the next 10 minutes (60 rounds).",
 
-    "MERP1E.ResistenceRollCard.ResultLabel": "Result:",
+    "MERP1E.ResistenceRollCard.AttackLevel": "Attack Level:",
+    "MERP1E.ResistenceRollCard.TargetLevel": "Target Level:",
+    "MERP1E.ResistenceRollCard.Level": "Resistence Level",
     "MERP1E.ResistenceRollCard.Failure": "Failure",
     "MERP1E.ResistenceRollCard.Success": "Success",
 
+    "MERP1E.SpecialRoll.Title": "Special Roll",
+    "MERP1E.SpecialRoll.Success": "Success",
+    "MERP1E.SpecialRoll.Failure": "Failure",
+    
     "MERP1E.SpecialSheet.Type": "Type",
     "MERP1E.SpecialSheet.Reference": "Reference",
     "MERP1E.SpecialSheet.Description": "Description",
     "MERP1E.SpecialSheet.Effects": "Effects",
+
     "MERP1E.Special.BackgorundOption": "Background Option",
     "MERP1E.Special.Feature": "Feature",
     "MERP1E.Special.ManeuverSuccess": "Maneuver Success",
+    "MERP1E.Special.GlobalEffects": "Global Effect",
+
     "MERP1E.SpecialAbbr.BackgorundOption": "BcOp",
     "MERP1E.SpecialAbbr.Feature": "Feat.",
     "MERP1E.SpecialAbbr.ManeuverSuccess": "MnSc",
+    "MERP1E.SpecialAbbr.GlobalEffects": "GlEf",
 
     "MERP1E.MovingManeuverCard.CalculatorLabel": "Calculator:",
     "MERP1E.MovingManeuverCard.CalculateLabel": "0",
 
+    "MERP1E.Equipment.Properties": "Properties",
     "MERP1E.Equipment.Effects": "Effects",
     "MERP1E.Equipment.Description": "Description",
     "MERP1E.Equipment.Attributes": "Attributes",
- 
+    "MERP1E.Equipment.TotalWeight": "Total Weight",
+    "MERP1E.Equipment.Value": "Value",
+
+    "MERP1E.Equipment.IsCarrying": "Is Carrying?",
+    "MERP1E.Equipment.IsWearing": "Is wearing?",
+    
+    "MERP1E.Equipment.WeightAndQuantity": "Weight And Quantity",
+    "MERP1E.Equipment.UnitaryWeight": "Unitary Weight",
+    "MERP1E.Equipment.UnitaryValue": "Unitary Value",
+    "MERP1E.Equipment.UnitaryValueCurrency": "Unitary Value Currency",
+    "MERP1E.Equipment.Quantity": "Quantity",
+    "MERP1E.Equipment.IsFungible": "Is fungible?",
+    
+    "MERP1E.Equipment.Wearable": "Wearable",
+    "MERP1E.Equipment.IsWearable": "Is wearable?",
+    "MERP1E.Equipment.IsWeightlessWhenWeared": "Is weightless when weared?",
+    "MERP1E.Equipment.PlacesAllowedToWear": "Places Allowed To Wear",
+
+    "MERP1E.Equipment.Location": "Location",
+    "MERP1E.Location.Total": "Total",
+    "MERP1E.Location.Wearing": "Wearing",
+    "MERP1E.Location.Carrying": "Carrying",
+    "MERP1E.Location.Stored": "Stored",
+    
+    "MERP1E.Equipment.Container": "Container",
+    "MERP1E.Equipment.IsContainer": "Is container?",
+    "MERP1E.Equipment.ContainerName": "Container name",
+    "MERP1E.Equipment.ContainerMaxWeight": "Max weight",
+    
+    "MERP1E.Currency.TP": "Tin Piece",
+    "MERP1E.Currency.CP": "Copper Piece",
+    "MERP1E.Currency.BP": "Bronze Piece",
+    "MERP1E.Currency.SP": "Silver Piece",
+    "MERP1E.Currency.GP": "Gold Piece",
+    "MERP1E.Currency.MP": "Mithril Piece",
+    "MERP1E.CurrencyPlural.TP": "Tin Pieces",
+    "MERP1E.CurrencyPlural.CP": "Copper Pieces",
+    "MERP1E.CurrencyPlural.BP": "Bronze Pieces",
+    "MERP1E.CurrencyPlural.SP": "Silver Pieces",
+    "MERP1E.CurrencyPlural.GP": "Gold Pieces",
+    "MERP1E.CurrencyPlural.MP": "Mithril Pieces",
+
+    "MERP1E.CurrencyAbbr.TP": "TP",
+    "MERP1E.CurrencyAbbr.CP": "CP",
+    "MERP1E.CurrencyAbbr.BP": "BP",
+    "MERP1E.CurrencyAbbr.SP": "SP",
+    "MERP1E.CurrencyAbbr.GP": "GP",
+    "MERP1E.CurrencyAbbr.MP": "MP",
+
     "MERP1E.Special.Label": "Specials",
     "MERP1E.Special.Name": "Name",
     "MERP1E.Special.Type": "Type",
+
+    "MERP1E.AttackType.Heat": "Heat",
+    "MERP1E.AttackType.Cold": "Cold",
+    "MERP1E.AttackType.Eletricity": "Eletricity",
+    "MERP1E.AttackType.Impact": "Impact",
+    "MERP1E.AttackType.Crush": "Crush",
+    "MERP1E.AttackType.Slash": "Slash",
+    "MERP1E.AttackType.Puncture": "Puncture",
+    "MERP1E.AttackType.Unbalancing": "Unbalancing",
+    "MERP1E.AttackType.Grappling": "Grappling",
+
+    "MERP1E.Error.CannotChangeRace": "You cannot change the race at this time.",
+    "MERP1E.Error.CannotChangeProfession": "You cannot change the profession at this time.",
+
+    "MERP1E.EquipmentsTab.Equipment": "Equipment",
+    "MERP1E.EquipmentsTab.Location": "Location",
+    "MERP1E.EquipmentsTab.Weight": "Weight",
+    "MERP1E.EquipmentsTab.Encumbrance": "Encumbrance",
+    "MERP1E.EquipmentsTab.WearingWeight": "Wearing Weight",
+    "MERP1E.EquipmentsTab.CarryingWeight": "Carrying Weight",
+    "MERP1E.EquipmentsTab.TotalWeight": "Total Weight",
+    "MERP1E.EquipmentsTab.EncumbrancePenalty": "Encumbrance Penalty",
+    "MERP1E.EquipmentsTab.Overweight": "Overweight",
+    "MERP1E.EquipmentsTab.WeightType": "Type",
+    "MERP1E.EquipmentsTab.Equipments": "Equipments",
+    "MERP1E.EquipmentsTab.UnwearItem": "Unwear Item",
+    "MERP1E.EquipmentsTab.WearItem": "Wear Item",
+    "MERP1E.EquipmentsTab.EditItem": "Edit Item",
+    "MERP1E.EquipmentsTab.DeleteItem": "Delete Item",
+
+    "MERP1E.Equipments.DeleteConfirmationTitle": "Delete Confirmation", 
+    "MERP1E.Equipments.DeleteConfirmationText": "This equipment is a container and has itens. Delete them?", 
+
+    "MERP1E.Yes": "Yes", 
+    "MERP1E.No": "No", 
 
     "MERP1E.X": "MERP1E"
 }

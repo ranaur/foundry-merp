@@ -21,6 +21,17 @@ export class MerpSpell {
         }
         return res;
     }
+    static prepareTable = {
+        0: -30,
+        1: -15,
+        2: 0,
+        3: +10,
+        4: +20,
+    };
+    static getPrepareBonus(rounds) {
+        if(rounds > 4) rounds = 4;
+        return this.prepareTable[rounds];
+    }
 };
 export class MerpSpellList {
     static restrictions = {
