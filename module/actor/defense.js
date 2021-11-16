@@ -20,11 +20,15 @@ export class Merp1eDefense {
     }
   
     get skill() {
-      return this.actor.getSkillValue(game.merp1e.Merp1eRules.skill.DEFENSIVE_BONUS) || 0;
+      return this.actor.getSkillByReference(game.merp1e.Merp1eRules.skill.DEFENSIVE_BONUS);
     }
   
-    get bonus() { 
-      return this.skill + (this.shield?.bonus || 0) + (this.armGreaves?.bonus || 0) + (this.legGreaves?.bonus || 0) + (this.helm?.bonus || 0) + (this.armor?.bonus || 0);
+    get modifiers() {
+      return this.skill.modifiers;
+    }
+    
+    get total() { 
+      return this.skill.total + (this.shield?.bonus || 0) + (this.armGreaves?.bonus || 0) + (this.legGreaves?.bonus || 0) + (this.helm?.bonus || 0) + (this.armor?.bonus || 0);
     }
   }
   

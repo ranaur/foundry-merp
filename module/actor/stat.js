@@ -27,10 +27,11 @@ export class Merp1eStat {
   }
   
   export class Merp1eStats {
-      static createStats(actor) {
+    constructor(actor) {
+        this.actor = actor;
         const stats = actor.data.data.stats;
         if(!stats) {
-            return game.merp1e.Merp1eRules.stats.reduce((acc, stat) => { acc[statId] = new Merp1eStat(actor, statId, stat); return acc; }, {});
+            return game.merp1e.Merp1eRules.stats.reduce((acc, stat) => { acc[stat.id] = new Merp1eStat(actor, stat.id, stat); return acc; }, {});
         } else {
             return Object.keys(stats).reduce((acc, statId) => { acc[statId] = new Merp1eStat(actor, statId, stats[statId]); return acc; }, {});
         }

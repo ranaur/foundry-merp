@@ -1,12 +1,14 @@
 import { min } from "../util.js";
-import { Merp1eEffect } from "../active-effect.js";
+import { Merp1eItemEffect } from "../effect/item-effects.js";
 import { Merp1eDefense } from "./defense.js";
 import { Merp1eXP } from "./xp.js";
 import { Merp1eHealth } from "./health.js";
 import { Merp1eSpellCasting } from "./spellcasting.js";
 import { Merp1eStats } from "./stat.js";
 import { Merp1eRules } from "../rules/rules.js";
+import { Merp1eAction } from "./action.js";
 
+import { Merp1eInjury } from "./injury.js"
 /**
  * Extend the base Actor entity by defining a custom roll data structure which is ideal for the Simple system.
  * @extends {Actor}
@@ -41,6 +43,18 @@ export class Merp1eActor extends Actor {
 
     if (createData.type === "character") {
       await this.data.update({ "items": this.getDefaultSkills() });
+      await this.data.update({
+        "items": [{
+          "name": game.i18n.localize("MERP1E.XP.Initial"),
+          "type": "xp",
+          "data": {
+            "description": "See section 3.4, page 28",
+            "gmnotes": "",
+            "refecence": game.i18n.localize("MERP1E.XP.Initial"),
+            "value": 10000
+            }
+          }]
+      });
     }
   }
 
@@ -49,18 +63,20 @@ export class Merp1eActor extends Actor {
    */
   /** @override */
   createEmbeddedDocuments(embeddedName, dataArray, options) {
-    for(let data of dataArray) {
-		  switch(data.type) {
-		    case 'skill':
-          data.data.ranks = 0;
-          data.data.rankBonus = 0;
-          data.data.rankSet = {};
-          data.data.group = data.data.group || "Secondary";
-//        case 'damage':
-//          data.data.current = duplicate(data.data.initial || {});
-          break;
-        case 'equipment':
-          data.data.location = "carrying";
+    if(embeddedName == "Item") {
+      for(let data of dataArray) {
+        switch(data.type) {
+          case 'skill':
+            data.data.ranks = 0;
+            data.data.rankBonus = 0;
+            data.data.rankSet = {};
+            data.data.group = data.data.group || "Secondary";
+  //        case 'damage':
+  //          data.data.current = duplicate(data.data.initial || {});
+            break;
+          case 'equipment':
+            data.data.location = "carrying";
+        }
       }
     }
     
@@ -81,36 +97,42 @@ export class Merp1eActor extends Actor {
     }
   }
 
-  applyEffects(data = { actor: this }) {
+  applyActorEffects() {
+    this.effects.forEach(efc => {
+      efc.apply(this);
+    });
+  }
+
+  applyItemEffects(data = { actor: this }) {
     this.itemEffectsByType = {}
 
     // Add global Effect, if exist
     if(game.merp1e.Merp1eRules.globalEffect) {
       for(let effect of game.merp1e.Merp1eRules.globalEffect.effects) {
-        let effectType = effect.getFlag("merp1e", "effectType");
-        if(!(effectType in this.itemEffectsByType)) {
-          this.itemEffectsByType[effectType] = [];
+        let effectName = effect.getFlag("merp1e", "effectName");
+        if(!(effectName in this.itemEffectsByType)) {
+          this.itemEffectsByType[effectName] = [];
         }
-        this.itemEffectsByType[effectType].push(effect);
+        this.itemEffectsByType[effectName].push(effect);
       }
     }
 
     // Add all actor's items
     for(let item of this.items) {
       for(let effect of item.effects) {
-        let effectType = effect.getFlag("merp1e", "effectType");
-        if(!(effectType in this.itemEffectsByType)) {
-          this.itemEffectsByType[effectType] = [];
+        let effectName = effect.getFlag("merp1e", "effectName");
+        if(!(effectName in this.itemEffectsByType)) {
+          this.itemEffectsByType[effectName] = [];
         }
-        this.itemEffectsByType[effectType].push(effect);
+        this.itemEffectsByType[effectName].push(effect);
       }
     }
 
     // Apply each effect
-    for(let effectClass of Merp1eEffect.registeredAdapters) {
-      let effectType = effectClass.effectName;
-      if(effectType in this.itemEffectsByType) {
-        for(let effect of this.itemEffectsByType[effectType]) {
+    for(let effectClass of Merp1eItemEffect.registeredAdapters) {
+      let effectName = effectClass.effectName;
+      if(effectName in this.itemEffectsByType) {
+        for(let effect of this.itemEffectsByType[effectName]) {
           effect.applyEffect(data);
         }
       }
@@ -134,7 +156,7 @@ export class Merp1eActor extends Actor {
     this.equipments = {};
     this.locations = [];
     this.xps = {};
-    this.damages = {};
+    //this.damages = {};
     this.specials = {};
     
     for(let item of this.items) {
@@ -155,9 +177,9 @@ export class Merp1eActor extends Actor {
         case "xp":
           this.xps[item.id] = item;
           break;
-        case "damage":
-          this.damages[item.id] = item;
-          break;
+        //case "damage":
+        //  this.damages[item.id] = item;
+        //  break;
         case "special":
           this.specials[item.id] = item;
           break;
@@ -204,17 +226,20 @@ export class Merp1eActor extends Actor {
       roundsBlinded: 0
     };
 
-    this.stats = Merp1eStats.createStats(this);
+    this.stats = new Merp1eStats(this);
     this.defense = new Merp1eDefense(this);
     this.xp = new Merp1eXP(this);
     this.health = new Merp1eHealth(this);
     this.spellcasting = new Merp1eSpellCasting(this);
+    this.action = new Merp1eAction(this);
+    this.injury = new Merp1eInjury(this);
 
     this.race = this._processUniqueItem("race", {name: null});
     this.profession = this._processUniqueItem("profession", {name: null});;
 
     await this._processItems();
-    await this.applyEffects();
+    await this.applyItemEffects();
+    await this.applyActorEffects();
   }
 
   /* --------------------------------------------------
@@ -283,11 +308,19 @@ export class Merp1eActor extends Actor {
   }
 
   get characterWeight() {
-    return this.data.data.description.weight;
+    return this.data.data?.description?.weight;
   }
 
   _getWeightByLocation(location) {
-    return Object.values(this.equipments).reduce((acc, eqp) => { if(eqp.data.data.location == location) { return acc + eqp.weight; } else { return acc; } }, 0);
+    return Object.values(this.equipments).reduce((acc, eqp) => {
+      if(eqp.data.data.location == "wearing" && eqp.data.data.isWeightlessWhenWeared) return acc;
+      
+      if(eqp.data.data.location == location) {
+        return acc + eqp.weight;
+      } else {
+        return acc;
+      }
+    }, 0);
   }
   get carryingWeight() {
     return this._getWeightByLocation("carrying");
@@ -313,4 +346,7 @@ export class Merp1eActor extends Actor {
     return min(0, stBonus - enc);
   }
 
+  get defensiveBonusSkill() {
+    return this.getSkillByReference("DefensiveBonus");
+  }
 }

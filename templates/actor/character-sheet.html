@@ -47,43 +47,24 @@
     <a class="item" data-tab="stats">{{localize "MERP1E.CharacterTab.Stats"}}</a>
     <a class="item" data-tab="skills">{{localize "MERP1E.CharacterTab.Skills"}}</a>
     <a class="item" data-tab="languages">{{localize "MERP1E.CharacterTab.Languages"}}</a>
+    <a class="item" data-tab="spells">{{localize "MERP1E.CharacterTab.Spells"}}</a>
+    <a class="item" data-tab="specials">{{localize "MERP1E.CharacterTab.Specials"}}</a>
+    <a class="item" data-tab="equipments">{{localize "MERP1E.CharacterTab.Equipments"}}</a>
+    <a class="item" data-tab="injuries">{{localize "MERP1E.CharacterTab.Injuries"}}</a>
     <a class="item" data-tab="health">{{localize "MERP1E.CharacterTab.Health"}}</a>
     <a class="item" data-tab="status">{{localize "MERP1E.CharacterTab.Status"}}</a>
-    <a class="item" data-tab="description">{{localize "MERP1E.CharacterTab.Description"}}</a>
-    <a class="item" data-tab="spells">{{localize "MERP1E.CharacterTab.Spells"}}</a>
-    <a class="item" data-tab="equipment">{{localize "MERP1E.CharacterTab.Equipment"}}</a>
     <a class="item" data-tab="xp">{{localize "MERP1E.CharacterTab.XP"}}</a>
-    <a class="item" data-tab="specials">{{localize "MERP1E.CharacterTab.Specials"}}</a>
-    <a class="item" data-tab="effects">{{localize "MERP1E.CharacterTab.Effects"}}</a>
     <a class="item" data-tab="money">{{localize "MERP1E.CharacterTab.Money"}}</a>
-    <a class="item" data-tab="action">{{localize "MERP1E.CharacterTab.Action"}}</a>
+    <a class="item" data-tab="actions">{{localize "MERP1E.CharacterTab.Actions"}}</a>
+    <a class="item" data-tab="effects">{{localize "MERP1E.CharacterTab.Effects"}}</a>
+    <a class="item" data-tab="description">{{localize "MERP1E.CharacterTab.Description"}}</a>
   </nav>
 
   {{!-- Sheet Body --}}
   <section class="sheet-body">
-    {{!-- Stats Tab --}}
-    <div class="tab stats" data-group="primary" data-tab="stats">
-      {{> "systems/merp1e/templates/actor/parts/character-sheet-stats.html" actor=actor}}
-    </div>
-    
-    {{!-- Skills Tab --}}
-    <div class="tab skills" data-group="primary" data-tab="skills">
-      {{> "systems/merp1e/templates/actor/parts/character-sheet-skills.html" actor=actor}}
-    </div>
-
-    {{!-- Language Tab --}}
-    <div class="tab languages" data-group="primary" data-tab="languages">
-      {{> "systems/merp1e/templates/actor/parts/character-sheet-languages.html" actor=actor}}
-    </div>
-
-    {{!-- Health & Damage Tab --}}
-    <div class="tab health" data-group="primary" data-tab="health">
-      {{> "systems/merp1e/templates/actor/parts/character-sheet-health.html" actor=actor}}
-    </div>
-
-    {{!-- Health & Damage Tab --}}
-    <div class="tab status" data-group="primary" data-tab="status">
-      {{> "systems/merp1e/templates/actor/parts/character-sheet-status.html" actor=actor}}
+    {{!-- Actions Tab --}}
+    <div class="tab actions" data-group="primary" data-tab="actions">
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-actions.html" actor=actor}}
     </div>
 
     {{!-- Description Tab --}}
@@ -91,29 +72,29 @@
       {{> "systems/merp1e/templates/actor/parts/character-sheet-description.html" actor=actor}}
     </div>
 
-    {{!-- Spell Tab --}}
-    <div class="tab spells" data-group="primary" data-tab="spells">
-      {{> "systems/merp1e/templates/actor/parts/character-sheet-spells.html" actor=actor}}
-    </div>
-
-    {{!-- XP Tab --}}
-    <div class="tab xp" data-group="primary" data-tab="xp">
-      {{> "systems/merp1e/templates/actor/parts/character-sheet-xp.html" actor=actor}}
-    </div>
-
-    {{!-- Equipment Tab --}}
-    <div class="tab equipment" data-group="primary" data-tab="equipment">
-      {{> "systems/merp1e/templates/actor/parts/character-sheet-equipment.html" actor=actor}}
-    </div>
-
-    {{!-- Specials Tab --}}
-    <div class="tab specials" data-group="primary" data-tab="specials">
-      {{> "systems/merp1e/templates/actor/parts/character-sheet-specials.html" actor=actor}}
-    </div>
-
     {{!-- Effects Tab --}}
     <div class="tab effects" data-group="primary" data-tab="effects">
       {{> "systems/merp1e/templates/actor/parts/character-sheet-effects.html" actor=actor}}
+    </div>
+
+    {{!-- Equipments Tab --}}
+    <div class="tab equipments" data-group="primary" data-tab="equipments">
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-equipments.html" actor=actor}}
+    </div>
+
+    {{!-- Injury Tab --}}
+    <div class="tab injuries" data-group="primary" data-tab="injuries">
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-injuries.html" actor=actor}}
+    </div>
+
+    {{!-- Health & Damage Tab --}}
+    <div class="tab health" data-group="primary" data-tab="health">
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-health.html" actor=actor}}
+    </div>
+
+    {{!-- Languages Tab --}}
+    <div class="tab languages" data-group="primary" data-tab="languages">
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-languages.html" actor=actor}}
     </div>
 
     {{!-- Money Tab --}}
@@ -121,10 +102,37 @@
       {{> "systems/merp1e/templates/actor/parts/character-sheet-money.html" actor=actor}}
     </div>
 
-    {{!-- Action Tab --}}
-    <div class="tab action" data-group="primary" data-tab="action">
-      {{> "systems/merp1e/templates/actor/parts/character-sheet-actions.html" actor=actor}}
+    {{!-- Skills Tab --}}
+    <div class="tab skills" data-group="primary" data-tab="skills">
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-skills.html" actor=actor}}
     </div>
+
+    {{!-- Specials Tab --}}
+    <div class="tab specials" data-group="primary" data-tab="specials">
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-specials.html" actor=actor}}
+    </div>
+
+    {{!-- Spells Tab --}}
+    <div class="tab spells" data-group="primary" data-tab="spells">
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-spells.html" actor=actor}}
+    </div>
+
+    {{!-- Stats Tab --}}
+    <div class="tab stats" data-group="primary" data-tab="stats">
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-stats.html" actor=actor}}
+    </div>
+    
+    {{!-- Status Tab --}}
+    <div class="tab status" data-group="primary" data-tab="status">
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-status.html" actor=actor}}
+    </div>
+
+    {{!-- XP Tab --}}
+    <div class="tab xp" data-group="primary" data-tab="xp">
+      {{> "systems/merp1e/templates/actor/parts/character-sheet-xp.html" actor=actor}}
+    </div>
+
+
   </section>
 </form>
 

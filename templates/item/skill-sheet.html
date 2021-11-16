@@ -71,6 +71,14 @@
     <section class="sheet-body">
         {{!-- Modifiers Tab --}}
         <div class="tab" data-group="primary" data-tab="modifiers">
+            {{> "systems/merp1e/templates/parts/modifiers-table.html"
+                modifiers = data.flags.merp1e.modifiers
+                modifiersRoot = "flags.merp1e.modifiers"
+                modifierValueFunctions = modifierValueFunctions
+                modifierEnableFunctions = modifierEnableFunctions }}
+        </div>
+
+        <div class="tab" data-group="primary" data-tab="modifiersOLD">
             <div class="modifiers">
                 <header class="flexrow">
                     <span class="flex2">{{localize "MERP1E.Modifiers.ValueFunction"}}</span>

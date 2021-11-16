@@ -1,5 +1,6 @@
 import { formatBonus } from "./util.js";
-import { Merp1eEffect } from "./active-effect.js";
+import { Merp1eItemEffect } from "./effect/item-effects.js";
+import { Merp1eInjuryEffect } from "./effect/injury-effects.js";
 
 export const registerHandlebarsHelpers = async function() {
     // If you need to add Handlebars helpers, here are a few useful examples:
@@ -55,10 +56,13 @@ export const registerHandlebarsHelpers = async function() {
     Handlebars.registerHelper('in', function(data, array) {
         return array.find((val) => val == data) == data;
     });
-    
+
+    Handlebars.registerHelper('le', (v1, v2) => v1 <= v2);
+    Handlebars.registerHelper('ge', (v1, v2) => v1 >= v2);
+
     // read only if - makes an input read only iuf parameter is true
-    Handlebars.registerHelper('rw', function(cssClass) {
-        return new Handlebars.SafeString(`class='userentry ${cssClass}'`);
+    Handlebars.registerHelper('rw', function() {
+        return new Handlebars.SafeString(`class='userentry'`);
     });
 
     Handlebars.registerHelper('formatBonus', function(value) {
@@ -111,32 +115,38 @@ export const registerHandlebarsHelpers = async function() {
 export const preloadHandlebarsTemplates = async function() {
     // Define template paths to load
     const templatePaths = [
-      "systems/merp1e/templates/parts/skill-chooser.html",
-      "systems/merp1e/templates/parts/realm-chooser.html",
-      "systems/merp1e/templates/parts/spell-chooser.html",
-      "systems/merp1e/templates/item/parts/description.html",
-      "systems/merp1e/templates/item/parts/effects.html",
-      "systems/merp1e/templates/chat/parts/difficulty-part.html",
-      "systems/merp1e/templates/chat/parts/skill-part.html",
-      "systems/merp1e/templates/chat/parts/total-part.html",
-      "systems/merp1e/templates/chat/parts/roll-part.html",
-      "systems/merp1e/templates/chat/parts/modifiers-part.html",
+      "systems/merp1e/templates/actor/parts/character-sheet-actions.html",
+      "systems/merp1e/templates/actor/parts/character-sheet-description.html",
+      "systems/merp1e/templates/actor/parts/character-sheet-effects.html",
+      "systems/merp1e/templates/actor/parts/character-sheet-equipments.html",
+      "systems/merp1e/templates/actor/parts/character-sheet-health.html",
+      "systems/merp1e/templates/actor/parts/character-sheet-injuries.html",
+      "systems/merp1e/templates/actor/parts/character-sheet-languages.html",
+      "systems/merp1e/templates/actor/parts/character-sheet-money.html",
+      "systems/merp1e/templates/actor/parts/character-sheet-skills.html",
+      "systems/merp1e/templates/actor/parts/character-sheet-specials.html",
+      "systems/merp1e/templates/actor/parts/character-sheet-spells.html",
       "systems/merp1e/templates/actor/parts/character-sheet-stat-line.html",
       "systems/merp1e/templates/actor/parts/character-sheet-stats.html",
-      "systems/merp1e/templates/actor/parts/character-sheet-description.html",
-      "systems/merp1e/templates/actor/parts/character-sheet-languages.html",
-      "systems/merp1e/templates/actor/parts/character-sheet-skills.html",
-      "systems/merp1e/templates/actor/parts/character-sheet-health.html",
-      "systems/merp1e/templates/actor/parts/character-sheet-money.html",
-      "systems/merp1e/templates/actor/parts/character-sheet-actions.html",
-      "systems/merp1e/templates/actor/parts/character-sheet-equipment.html",
-      "systems/merp1e/templates/actor/parts/character-sheet-xp.html",
-      "systems/merp1e/templates/actor/parts/character-sheet-effects.html",
       "systems/merp1e/templates/actor/parts/character-sheet-status.html",
-      "systems/merp1e/templates/actor/parts/character-sheet-specials.html",
-      "systems/merp1e/templates/actor/parts/character-sheet-spells.html"
+      "systems/merp1e/templates/actor/parts/character-sheet-xp.html",
+      "systems/merp1e/templates/chat/parts/difficulty-part.html",
+      "systems/merp1e/templates/chat/parts/modifiers-part.html",
+      "systems/merp1e/templates/chat/parts/roll-part.html",
+      "systems/merp1e/templates/chat/parts/skill-part.html",
+      "systems/merp1e/templates/chat/parts/target-part.html",
+      "systems/merp1e/templates/chat/parts/total-part.html",
+      "systems/merp1e/templates/item/parts/description.html",
+      "systems/merp1e/templates/item/parts/effects.html",
+      "systems/merp1e/templates/parts/modifiers-table.html",
+      "systems/merp1e/templates/parts/modifiers-line.html",
+      "systems/merp1e/templates/parts/modifier-line.html",
+      "systems/merp1e/templates/parts/realm-chooser.html",
+      "systems/merp1e/templates/parts/skill-chooser.html",
+      "systems/merp1e/templates/parts/spell-chooser.html",
     ];
-    Merp1eEffect.registerParts(templatePaths);
+    Merp1eItemEffect.registerParts(templatePaths);
+    Merp1eInjuryEffect.registerParts(templatePaths);
 
     // Load the template parts
     return loadTemplates(templatePaths);

@@ -1,3 +1,5 @@
+import { findByID } from "../util.js";
+
 export class Merp1eSpellCasting {
     constructor(actor) {
       this.actor = actor;
@@ -34,9 +36,9 @@ export class Merp1eSpellCasting {
       let professionRealm = this.actor.profession?.data?.data?.realm || null;
       if( professionRealm == null) return null;
   
-      if( professionRealm == "any") return this.actor.data.data.spellcasting.realm; // chosen realm
+      if( professionRealm == "any") professionRealm = this.actor.data.data.spellcasting.realm; // choosen realm
   
-      return professionRealm;
+      return findByID(game.merp1e.Merp1eRules.magic.realms, professionRealm, null);
     }
   
     get spellAdderMaximum() {
@@ -65,9 +67,7 @@ export class Merp1eSpellCasting {
   
     get powerPointsPerLevel() {
       if(this.realm == null) return 0;
-      let realm = game.merp1e.Merp1eRules.magic.realms.find((r) => r.id == this.realm);
-      let realmStat = realm?.stat;
-      let realmStatValue = this.actor.stats[realmStat]?.value || 0;
+      let realmStatValue = this.actor.stats[this.realm?.stat]?.value || 0;
       return game.merp1e.Merp1eRules.resolvePowerPointsPerLevel(realmStatValue);
     }  
   

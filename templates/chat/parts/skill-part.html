@@ -2,14 +2,14 @@
     <div class="card-title grid grid-3col" style="font-weight: bold; grid-template-columns: 15% 60% 15%; border-bottom: 1pt; border-bottom-style: solid;">
         <div>{{localize "MERP1E.ManeuverCard.SkillLabel"}}</div>
         <div></div>
-        <div style="text-align: center;">{{formatBonus skill.total}}</div>
+        <div style="text-align: center;">{{formatBonus skillTotal}}</div>
     </div>
     <div class="card-content">
         <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
             <div></div>
             <div>{{skill.name}}</div>
-            <div style="text-align: center;">{{formatBonus skillTotal}}</div>
+            <div style="text-align: center;">{{formatBonus skill.total}}</div>
         </div>
-        {{> "systems/merp1e/templates/chat/parts/modifiers-part.html" group=skillModifiers data=data }}    
+        {{> "systems/merp1e/templates/chat/parts/modifiers-part.html" group=group data=data }}    
     </div>
 </div>

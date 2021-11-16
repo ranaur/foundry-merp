@@ -1,6 +1,5 @@
 import { Merp1eBaseItemSheet } from './base-sheet.js';
-import { ArraySheetHelper } from '../array-sheet-helper.js';
-import { Merp1eModifier } from '../modifier.js';
+import { Merp1eModifier, Merp1eModifiersHelper } from '../modifier.js';
 
 /**
  * Extend the basic ItemSheet with some very simple modifications
@@ -9,15 +8,21 @@ import { Merp1eModifier } from '../modifier.js';
 export class Merp1eSkillSheet extends Merp1eBaseItemSheet {
   modifierHelper = null;
   
-  /** @override */
+  constructor(table, options) {
+    super(table, options);
+    this.modifierHelper = new Merp1eModifiersHelper("flags.merp1e.modifiers");
+  }
+
+/** @override */
   getData() {
-    const data = super.getData();
-    data.enableFunctions = Merp1eModifier.enableFunctions;
-    data.valueFunctions = Merp1eModifier.valueFunctions;
-    data.results = game.merp1e.Merp1eRules.staticManeuverResults();
-    data.data.data.staticManeuverTexts ??= {};
-    data.results.forEach((row) => { data.data.data.staticManeuverTexts[row.id] ??= row.text }); // fill defaults
-    return data;
+    const sheetData = super.getData();
+    sheetData.enableFunctions = Merp1eModifier.enableFunctions;
+    sheetData.valueFunctions = Merp1eModifier.valueFunctions;
+    sheetData.results = game.merp1e.Merp1eRules.staticManeuverResults();
+    sheetData.data.data.staticManeuverTexts ??= {};
+    sheetData.results.forEach((row) => { sheetData.data.data.staticManeuverTexts[row.id] ??= row.text }); // fill defaults
+    this.modifierHelper.getData(sheetData);
+    return sheetData;
   }
 
   /** @override */
@@ -27,14 +32,13 @@ export class Merp1eSkillSheet extends Merp1eBaseItemSheet {
     // Everything below here is only needed if the sheet is editable
     if (!this.options.editable) return;
 
-    // Roll handlers, click handlers, etc. would go here.
-    this.modifierHelper = new ArraySheetHelper("modifiers", this, { value: 0, optional: true, label: "New Modifier" });
-    this.modifierHelper.activateListeners(html);
+    this.modifierHelper.activateListeners(html, this);
   }
 
   /** @override */
   _updateObject(event, formData) {  
     formData = this.modifierHelper.updateObject(formData);
+
     const skillWithSameReference = game.merp1e.Merp1eRules.skill.getAvaliableByReference(formData?.["data.reference"]);
     if(this.item.parent) { // in an actor, the reference must exist
       if(!skillWithSameReference) {
@@ -47,6 +51,7 @@ export class Merp1eSkillSheet extends Merp1eBaseItemSheet {
         return false;
       }
     }
+
     return this.object.update(formData);
   }
 }

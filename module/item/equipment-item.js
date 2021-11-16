@@ -12,17 +12,21 @@ export class Merp1eEquipmentItem extends Merp1eItem {
             return 0;
         }
     }
+
     get itemWeight() {
         return (this.data?.data?.quantity || 1) * (this.data?.data?.unitaryWeight || 0);
     }
+
     get weight() {
         return this.itemWeight + this.netWeight;
     }
+
     get isWearable() { return this.data.data.isWearable; }
 
     get isWeared()  {
         return this.data.data.location == "wearing";
     }
+
     get location()  {
         if(!this.parent) return null;
 

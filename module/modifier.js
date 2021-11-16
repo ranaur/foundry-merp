@@ -24,7 +24,7 @@ export class Merp1eModifier {
             valueFunction: "constant",
             value: 0,
             choosed: false,
-            label: "MERP1E.Modifier.unknown"
+            label: ""
         };
     }
 
@@ -65,6 +65,7 @@ export class Merp1eModifier {
             }
         }
     }
+
     evaluate(data) {
         data.id = this.id;
         data.choosed = this.choosed;
@@ -81,23 +82,26 @@ export class Merp1eModifier {
         }
         return true;
     }
+
     get isAdHoc() {
         return this.valueFunction == "adHoc";
     }
+
     get isUserChosen() {
-        return this.enableFunction in ["userChosen" || "heatFireAttack" || "coldIceAttack"]; /* XXX FIX for attack type */
+        return ["userChosen", "heatFireAttack", "coldIceAttack"].includes(this.enableFunction); /* XXX FIX for attack type */
     }
+
     get isConstant() {
         return this.valueFunction == "constant";
     }
 
 }
 export class Merp1eModifiers {
-    constructor(id, label, modifierData) {
+    constructor(id, label, modifiersData) {
         this.id = id;
         this.label = label;
         this.modifiers = [];
-        this.add(modifierData);
+        this.add(modifiersData);
     }
     
     /**
@@ -108,9 +112,9 @@ export class Merp1eModifiers {
         return this.modifiers.reduce((acc, mod) => { acc[mod.id] = mod.value; return acc; }, {});
     }
 
-    add(modifierData) {
-        if(!modifierData) return;
-        Object.values(modifierData).forEach((mod) => {
+    add(modifiersData) {
+        if(!modifiersData) return;
+        Object.values(modifiersData).forEach((mod) => {
             mod.id = mod.id || this.id + ":" + this.modifiers.length;
             this.modifiers.push(new Merp1eModifier(mod));
         });
@@ -121,14 +125,15 @@ export class Merp1eModifiers {
         this.modifiers.forEach((mod) => mod.evaluate(data));
     }
 
-    getTotal(choosedModifiers, values) {
+    getTotal(choosedModifiers, choosedValues) {
         if(choosedModifiers) Object.entries(choosedModifiers).forEach(([id, choosed]) => {
             const mod = findByID(this.modifiers, id);
             if(mod) mod.choosed = choosed;
         });
-        if(values) Object.entries(values).forEach(([id, value]) => {
+
+        if(choosedValues) Object.entries(choosedValues).forEach(([id, value]) => {
             const mod = findByID(this.modifiers, id);
-            if(mod) mod.value = parseInt(value);
+            if(mod) mod.value = parseInt(value) || 0;
         });
         return this.modifiers.reduce((acc, mod) => {
             if(mod.enabled) {
@@ -142,6 +147,72 @@ export class Merp1eModifiers {
             }
             return acc;
         }, 0);
-    
+    }
+}
+
+export class Merp1eModifiersHelper {
+    constructor(modifiersRoot) {
+        this.modifiersRoot = modifiersRoot;
+    }
+
+    async onClick(event, sheet) {
+        event.preventDefault();
+        const a = event.currentTarget;
+        const list = a.closest('ol');
+
+        switch ( a.dataset.action ) {
+            case "create":
+                const newModifierHTML = await renderTemplate( "systems/merp1e/templates/parts/modifiers-line.html", {
+                    modifierData: Merp1eModifier.defaultOptions,
+                    modifierPath: this.modifiersRoot + "." + (list.childElementCount - 1),
+                    modifierValueFunctions: Merp1eModifier.valueFunctions,
+                    modifierEnableFunctions: Merp1eModifier.enableFunctions
+                });
+
+                let newElement = document.createElement("li");
+                var att = document.createAttribute("class");
+                att.value = "table-result modifier flexrow";
+                newElement.setAttributeNode(att); ;
+                newElement.innerHTML = newModifierHTML;
+          
+                list.appendChild(newElement);
+                //return await sheet.submit();
+                break;
+            case "delete":
+                const listItem = a.closest('.modifier');
+                list.removeChild(listItem);
+                //return await sheet.submit();
+                break;
+        }
+    }
+
+    activateListeners(html, document) {
+        html.find(".modifiers-control").click(ev => {
+            this.onClick(ev, document)
+        });
+    }   
+
+    getData(sheetData) {
+        sheetData.modifierValueFunctions = Merp1eModifier.valueFunctions;
+        sheetData.modifierEnableFunctions = Merp1eModifier.enableFunctions;
+        sheetData.modifiersRoot = this.modifiersRoot;
+    }
+
+    updateObject(formData) {
+        const modifiersData = Object.keys(formData).reduce((acc, key) => {
+            if(key.startsWith(this.modifiersRoot)) acc[key.substr(this.modifiersRoot.length + 1)] = formData[key];
+            return acc;
+        }, {});
+        const modifiers = Object.values(expandObject(modifiersData));
+        
+        // remove entries
+        formData = Object.entries(formData).filter(e => !e[0].startsWith(this.modifiersRoot)).reduce((obj, e) => {
+            obj[e[0]] = e[1];
+            return obj;
+          }, {});
+        // save as array
+        formData[this.modifiersRoot] = modifiers;
+
+        return formData;
     }
 }

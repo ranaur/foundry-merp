@@ -9,11 +9,11 @@ export class Merp1eSpecialRollChatCard extends Merp1eRollChatCard {
 
     get rollTypeID() { return "SP"; }
 
-    resolveResult(total) {
+    resolveResult(firstDice, total, data) {
         return total > 100 ? "MERP1E.SpecialRoll.Success" : "MERP1E.SpecialRoll.Failure"
     }
     
-    resolveText(total, data) {
+    resolveText(firstDice, total, data) {
         return total > 100 ? "MERP1E.SpecialRoll.Success" : "MERP1E.SpecialRoll.Failure";
     }
 }

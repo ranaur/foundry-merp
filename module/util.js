@@ -28,8 +28,8 @@ export function formatBonus(value) {
   else return String(bonus);
 }
 
-export function findByID(array, id, def) {
-  return array.filter((a) => a.id == id)[0] || array.filter((a) => a.id == def)[0] || def;
+export function findByID(array, id, def = null, field = "id") {
+  return array.filter((a) => a[field] == id)[0] || array.filter((a) => a[field] == def)[0] || def;
 }
 
 export function max(a, b) {
@@ -87,3 +87,4 @@ export function getFuncName(fun) {
   ret = ret.replace('function ', '');
   return ret;
 }
+

@@ -1,146 +1,24 @@
-import { copyClassFunctions, findByID, formatBonus, toKebabCase, replaceData } from "./util.js";
-import { Merp1eEffectCondition } from "./active-effect-condition.js";
-import { Merp1eModifier } from "./modifier.js";
+import { findByID, formatBonus, replaceData } from "../util.js";
+import { Merp1eModifier } from "../modifier.js";
+import { Merp1eAttack } from "../attack.js";
+import { Merp1eEffect, Merp1eEffectAdapter } from "./base-effects.js";
 
-export class Merp1eEffect extends ActiveEffect {
+export class Merp1eItemEffect extends Merp1eEffect {
     static registeredAdapters = []; // filled by a dummy on each subclass
-
-    static registerParts(templates) {
-        this.registeredAdapters.forEach((effect) => templates.push(effect.templatePart));
-    }
-
-    static get registeredClasses() {
-        return this.registeredAdapters.reduce((acc, cls) => { acc[cls.effectName] = cls; return acc; }, {})
-    }
-
-    constructor(data, context) {
-        // // From Carter_DC
-        // //useless in the present case but cool
-        // //creates a derived class for specific item types
-        // if ( data?.flags?.merp1e?.effectType in CONFIG.ActiveEffect.documentClasses && !context?.isExtendedClass) {
-        //     // specify our custom item subclass here
-        //     // when the constructor for the new class will call it's super(),
-        //     // the isExtendedClass flag will be true, thus bypassing this whole process
-        //     // and resume default behavior
-        //     return new CONFIG.ActiveEffect.documentClasses[data?.flags?.merp1e?.effectType](data,{...{isExtendedClass: true}, ...context});
-        // }    
-        //default behavior, just call super and do random item inits.
-        super(data, context);
-    }
-
-    prepareBaseData() {
-        this.data.flags = mergeObject(this.data.flags, { merp1e: { conditionType: this.data.flags.merp1e?.conditionType || "AlwaysOn" } });
-        this.data.icon ??= "icons/svg/aura.svg";
-        super.prepareBaseData();
-    }
-
-    prepareDerivedData() {
-        //let effectType = this.data.flags.merp1e?.effectType || null;
-        //let effectClass = Merp1eActiveEffect.effectTypes.reduce((acc, cls) => { return (cls.effectName == effectType) ? cls : acc }, null);
-        //if (effectClass != null) copyClassFunctions(this, effectClass);
-
-        super.prepareDerivedData();
-    }
-
-    get conditionClass() {
-        let conditionType = this.data.flags.merp1e?.conditionType;
-        return Merp1eEffectCondition.registeredTypes.find((cls) => cls.conditionName == conditionType);
-    }
-
-    get condition() {
-        return new this.conditionClass;
-    }
-    
-    get effectType() {
-        return this.getFlag("merp1e", "effectType");
-    }
-
-    get effectAdapter() {
-        if(this.effectType)
-        return new CONFIG.ActiveEffect.documentClasses[this.effectType](this);
-    }
-
-    get name() {
-        return this.effectAdapter?.generateDescription?.() ||  game.i18n.localize("MERP1E.Effect.New");
-    }
-
-    get priority() {
-        return this.condition?.priority || 100;
-    }
-
-    static get defaultConfig() {
-        return {
-            transfer: false
-        };
-    }
-
-    /** @override */
-    apply(actor, change) {
-        // disable
-    }
-
-    /* Methods that should be overloaded */
-    /**
-     * Apply the effect on actor
-     */
-    applyEffect(data) {
-        if(!this.condition.isActive(this, data?.actor)) return;
-
-        return this.effectAdapter?.applyEffect(data);
-    }
-
-    /**
-     * Remove all effects for this type
-     */
-    static removeEffects(actor) {
-        Object.values(actor.skills).forEach(skill => {
-            skill.itemBonuses = skill.itemBonuses.filter((item) => item?.effectName != this.constructor.effectName);
-        });
-    }
 }
 
-class Merp1eEffectAdapter {
-    static effectType = "EffectAdapter";
-    static effectName = "NotConfigured";
-
-    static get label() {
-        return "MERP1E.EffectType." + this.effectName;
-    }
-
-    static get templatePart() {
-        const path = "systems/merp1e/templates/effect";
-        const filename = toKebabCase(this.effectName + this.effectType) + "-part.html";
-        return `${path}/${filename}`;
-    }
-
-    constructor(effect) {
-        this._effect = effect;
-    }
-
-    getEffectFlag(name) {
-        return this._effect.getFlag("merp1e",this.constructor.effectName+"."+name)
-        // return this._effect.data.flags?.merp1e?.[this.constructor.effectName]?.[name]
-    }
-
-    setEffectFlag(name, value) {
-        return this._effect.setFlag("merp1e",this.constructor.effectName+"."+name, value);
-        // const newData = {};
-        // newData[`merp1e.${this.constructor.effectName}.${name}`] = value;
-        // this._effect.data.flags = mergeObject(this.data.flags, expandObject(newData));        
-    }
-
-    get parent() {
-        return this._effect.parent;
-    }
-}
-
-class Merp1eItemEffectAdapter extends Merp1eEffectAdapter {
-    static effectType = "ItemEffect";
+export class Merp1eItemEffectAdapter extends Merp1eEffectAdapter {
+    static get adapterType() {
+        return "ItemEffect"
+    };
+    static get adapterName() {
+        return this.name.replace("Merp1eItemEffect", "");
+    };
 }
 
 class Merp1eItemEffectSkillBonus extends Merp1eItemEffectAdapter {
-    static dummy = Merp1eEffect.registeredAdapters.push(this)
-    static effectName = "SkillBonus";
+    static dummy = Merp1eItemEffect.registeredAdapters.push(this)
+    //static adapterName = "SkillBonus";
 
     generateDescription() {
         if (this.value == 0 || this.skillReference == null) {
@@ -166,21 +44,25 @@ class Merp1eItemEffectSkillBonus extends Merp1eItemEffectAdapter {
         if(!data.actor) return;
         Object.values(data.actor.skills).forEach(skill => {
             if (skill.data.data.reference == this.skillReference) {
-                skill.addItemBonus(this?.parent?.id, this.constructor.effectName, this.value);
+                skill.addItemBonus(this?.parent?.id, this.constructor.adapterName, this.value);
             }
         });
     }
 
-    removeEffects(actor) {
+    static getData(sheetData) {
+        sheetData.sheetOrder = game.merp1e.Merp1eRules.skill.generateSheetOrder();
+    }
+
+    static removeEffects(actor) {
         Object.values(actor.skills).forEach(skill => {
-            skill.itemBonuses = skill.itemBonuses.filter((item) => item?.effectName != this.constructor.effectName);
+            skill.itemBonuses = skill.itemBonuses.filter((item) => item?.adapterName != this.constructor.adapterName);
         });
     }
 }
 
 class Merp1eItemEffectSkillGroupBonus extends Merp1eItemEffectAdapter {
-    static dummy = Merp1eEffect.registeredAdapters.push(this)
-    static effectName = "SkillGroupBonus";
+    static dummy = Merp1eItemEffect.registeredAdapters.push(this)
+    //static adapterName = "SkillGroupBonus";
 
     generateDescription() {
         if (this.value == 0 || this.skillGroup == null) {
@@ -206,21 +88,25 @@ class Merp1eItemEffectSkillGroupBonus extends Merp1eItemEffectAdapter {
         if(!data.actor) return;
         Object.values(data.actor.skills).forEach(skill => {
             if (skill.data.data.group == this.skillGroup) {
-                skill.addItemBonus(this?.parent?.id, this.constructor.effectName, this.value);
+                skill.addItemBonus(this?.parent?.id, this.constructor.adapterName, this.value);
             }
         });
     }
 
-    removeEffects(actor) {
+    static getData(sheetData) {
+        sheetData.sheetOrder = game.merp1e.Merp1eRules.skill.generateSheetOrder();
+    }
+
+    static removeEffects(actor) {
         Object.values(actor.skills).forEach(skill => {
-            skill.itemBonuses = skill.itemBonuses.filter((item) => item?.effectName != this.constructor.effectName);
+            skill.itemBonuses = skill.itemBonuses.filter((item) => item?.adapterName != this.constructor.adapterName);
         });
     }
 }
 
 class Merp1eItemEffectRollTypeBonus extends Merp1eItemEffectAdapter {
-    static dummy = Merp1eEffect.registeredAdapters.push(this)
-    static effectName = "RollTypeBonus";
+    static dummy = Merp1eItemEffect.registeredAdapters.push(this)
+    //static adapterName = "RollTypeBonus";
 
     generateDescription() {
         if (this.value == 0 || this.rollType == null) {
@@ -242,19 +128,23 @@ class Merp1eItemEffectRollTypeBonus extends Merp1eItemEffectAdapter {
         return this.getEffectFlag("rollType");
     }
     
+    static getData(sheetData) {
+        sheetData.rollTypes = game.merp1e.Merp1eRules.rollTypes;
+    }
+
     applyEffect(data) {
         if(!data.actor) return;
         Object.values(data.actor.skills).forEach(skill => {
             if (skill?.data?.data?.rollTypeID == this.rollType) {
-                skill.addItemBonus(this?.parent?.id, this.constructor.effectName, this.value);
+                skill.addItemBonus(this?.parent?.id, this.constructor.adapterName, this.value);
             }
         });
     }
 }
 
 class Merp1eItemEffectRankSkillBonus extends Merp1eItemEffectAdapter {
-    static dummy = Merp1eEffect.registeredAdapters.push(this)
-    static effectName = "RankSkillBonus";
+    static dummy = Merp1eItemEffect.registeredAdapters.push(this)
+    //static adapterName = "RankSkillBonus";
 
     generateDescription() {
         if (this.value == 0 || this.skillReference == null) {
@@ -280,21 +170,25 @@ class Merp1eItemEffectRankSkillBonus extends Merp1eItemEffectAdapter {
         if(!data.actor) return;
         Object.values(data.actor.skills).forEach(skill => {
             if (skill.data.data.reference == this.skillReference) {
-                skill.addItemBonus(this?.parent?.id, this.constructor.effectName, this.value * skill.data.data.ranks);
+                skill.addItemBonus(this?.parent?.id, this.constructor.adapterName, this.value * skill.data.data.ranks);
             }
         });
     }
 
-    removeEffects(actor) {
+    static getData(sheetData) {
+        sheetData.sheetOrder = game.merp1e.Merp1eRules.skill.generateSheetOrder();
+    }
+
+    static removeEffects(actor) {
         Object.values(actor.skills).forEach(skill => {
-            skill.itemBonuses = skill.itemBonuses.filter((item) => item?.effectName != this.constructor.effectName);
+            skill.itemBonuses = skill.itemBonuses.filter((item) => item?.adapterName != this.constructor.adapterName);
         });
     }
 }
 
 class Merp1eItemEffectShield extends Merp1eItemEffectAdapter {
-    static dummy = Merp1eEffect.registeredAdapters.push(this)
-    static effectName = "Shield";
+    static dummy = Merp1eItemEffect.registeredAdapters.push(this)
+    //static adapterName = "Shield";
 
     get type() {
         return this.getEffectFlag("type");
@@ -326,14 +220,19 @@ class Merp1eItemEffectShield extends Merp1eItemEffectAdapter {
             }
         }
     }
-    removeEffects(actor) {
+
+    static getData(sheetData) {
+        sheetData.shieldBaseBonus = findByID(game.merp1e.Merp1eRules.defense.shieldTypes, sheetData.effect.flags?.merp1e?.Shield?.type, "none").bonus;
+    }
+
+    static removeEffects(actor) {
         actor.defense.shield = duplicate(findByID(game.merp1e.Merp1eRules.defense.shieldTypes, "none", "none"));
     }
 }
 
 class Merp1eItemEffectArmGreaves extends Merp1eItemEffectAdapter {
-    static dummy = Merp1eEffect.registeredAdapters.push(this)
-    static effectName = "ArmGreaves";
+    static dummy = Merp1eItemEffect.registeredAdapters.push(this)
+    //static adapterName = "ArmGreaves";
 
     get type() { return this.getEffectFlag("type"); }
     get extraBonus() {
@@ -362,14 +261,19 @@ class Merp1eItemEffectArmGreaves extends Merp1eItemEffectAdapter {
             }
         }
     }
-    removeEffects(actor) {
+
+    static getData(sheetData) {
+        sheetData.armGreavesBaseBonus = findByID(game.merp1e.Merp1eRules.defense.armGreavesTypes, sheetData.effect.flags?.merp1e?.ArmGreaves?.type, "none").bonus;
+    }
+
+    static removeEffects(actor) {
         actor.defense.armGreaves = duplicate(findByID(game.merp1e.Merp1eRules.defense.armGreavesTypes, "none", "none"));
     }
 }
 
 class Merp1eItemEffectLegGreaves extends Merp1eItemEffectAdapter {
-    static dummy = Merp1eEffect.registeredAdapters.push(this)
-    static effectName = "LegGreaves";
+    static dummy = Merp1eItemEffect.registeredAdapters.push(this)
+    //static adapterName = "LegGreaves";
 
     get type() { return this.getEffectFlag("type"); }
     get extraBonus() {
@@ -398,14 +302,19 @@ class Merp1eItemEffectLegGreaves extends Merp1eItemEffectAdapter {
             }
         }
     }
-    removeEffects(actor) {
+
+    static getData(sheetData) {
+        sheetData.legGreavesBaseBonus = findByID(game.merp1e.Merp1eRules.defense.legGreavesTypes, sheetData.effect.flags?.merp1e?.LegGreaves?.type, "none").bonus;
+    }
+
+    static removeEffects(actor) {
         actor.defense.legGreaves = duplicate(findByID(game.merp1e.Merp1eRules.defense.legGreavesTypes, "none", "none"));
     }
 }
 
 class Merp1eItemEffectHelm extends Merp1eItemEffectAdapter {
-    static dummy = Merp1eEffect.registeredAdapters.push(this)
-    static effectName = "Helm";
+    static dummy = Merp1eItemEffect.registeredAdapters.push(this)
+    //static adapterName = "Helm";
 
     get type() { return this.getEffectFlag("type"); }
     get extraBonus() {
@@ -435,14 +344,18 @@ class Merp1eItemEffectHelm extends Merp1eItemEffectAdapter {
         }
     }
 
-    removeEffects(actor) {
+    static getData(sheetData) {
+        sheetData.helmBaseBonus = findByID(game.merp1e.Merp1eRules.defense.helmTypes, sheetData.effect.flags?.merp1e?.Helm?.type, "none").bonus;
+    }
+
+    static removeEffects(actor) {
         actor.defense.helm = duplicate(findByID(game.merp1e.Merp1eRules.defense.helmTypes, "none", "none"));
     }
 }
 
 class Merp1eItemEffectArmor extends Merp1eItemEffectAdapter {
-    static dummy = Merp1eEffect.registeredAdapters.push(this)
-    static effectName = "Armor";
+    static dummy = Merp1eItemEffect.registeredAdapters.push(this)
+    //static adapterName = "Armor";
 
     get type() { return this.getEffectFlag("type"); }
     get extraBonus() {
@@ -472,14 +385,18 @@ class Merp1eItemEffectArmor extends Merp1eItemEffectAdapter {
         }
     }
 
-    removeEffects(data) {
+    static getData(sheetData) {
+        sheetData.armorBaseBonus = findByID(game.merp1e.Merp1eRules.defense.armorTypes, sheetData.effect.flags?.merp1e?.Armor?.type, "no").bonus;
+    }
+
+    static removeEffects(data) {
         data.actor.defense.armor = duplicate(findByID(game.merp1e.Merp1eRules.defense.armorTypes, "none", "none"));
     }
 }
 
 class Merp1eItemEffectPPMultiplier extends Merp1eItemEffectAdapter {
-    static dummy = Merp1eEffect.registeredAdapters.push(this)
-    static effectName = "PPMultiplier";
+    static dummy = Merp1eItemEffect.registeredAdapters.push(this)
+    //static adapterName = "PPMultiplier";
 
     get value() { return this.getEffectFlag("value") || 1; }
 
@@ -499,15 +416,15 @@ class Merp1eItemEffectPPMultiplier extends Merp1eItemEffectAdapter {
 
     applyEffect(data) {
         if(!data.actor) return;
-        if (this.realm == "Any" || this.realm == data.actor.spellcasting.realm) {
+        if (this.realm == "Any" || this.realm == data.actor.spellcasting.realm?.id) {
             data.actor.spellcasting.powerPointsMultiplier = data.actor.spellcasting.powerPointsMultiplier * this.value;
         }
     }
 }
 
 class Merp1eItemEffectSpellAdder extends Merp1eItemEffectAdapter {
-    static dummy = Merp1eEffect.registeredAdapters.push(this)
-    static effectName = "SpellAdder";
+    static dummy = Merp1eItemEffect.registeredAdapters.push(this)
+    //static adapterName = "SpellAdder";
 
     get value() { return this.getEffectFlag("value") || 0; }
 
@@ -526,7 +443,7 @@ class Merp1eItemEffectSpellAdder extends Merp1eItemEffectAdapter {
 
     applyEffect(data) {
         if(!data.actor) return;
-        if (this.realm == "Any" || this.realm == data.actor.spellcasting.realm) {
+        if (this.realm == "Any" || this.realm == data.actor.spellcasting.realm?.id) {
             data.actor.spellcasting.spellAdderMaximum = data.actor.spellcasting.spellAdderMaximum + this.value;
         }
     }
@@ -544,11 +461,19 @@ class Merp1eItemModifier extends Merp1eItemEffectAdapter {
             itemGlobal: this.parent?.data?.data?.type == "Global Effects",
         });
     }
+
+    applyEffect(data) { // the modifier adapter uses applyModifier
+        return;
+    }
+
+    getModifier(data) { 
+        return false;
+    }
 }
 
 class Merp1eItemEffectSkillModifier extends Merp1eItemModifier {
-    static dummy = Merp1eEffect.registeredAdapters.push(this)
-    static effectName = "SkillModifier";
+    static dummy = Merp1eItemEffect.registeredAdapters.push(this)
+    //static adapterName = "SkillModifier";
 
     get value() { return this.getEffectFlag("value") || 0; }
     get valueFunction() { return this.getEffectFlag("valueFunction"); }
@@ -569,17 +494,21 @@ class Merp1eItemEffectSkillModifier extends Merp1eItemModifier {
         });
     }
 
-    applyEffect(data) {
+    static getData(sheetData) {
+        sheetData.sheetOrder = game.merp1e.Merp1eRules.skill.generateSheetOrder();
+    }
+
+    getModifier(data) {
         if (data?.skill?.data?.data?.reference == this.skillReference) {
-            data.modifiers = data.modifiers || [];
-            data.modifiers.push(this.createModifier());
+            return this.createModifier();
         }
+        return false;
     }
 }
 
 class Merp1eItemEffectSkillGroupModifier extends Merp1eItemModifier {
-    static dummy = Merp1eEffect.registeredAdapters.push(this)
-    static effectName = "SkillGroupModifier";
+    static dummy = Merp1eItemEffect.registeredAdapters.push(this)
+    //static adapterName = "SkillGroupModifier";
 
     get value() { return this.getEffectFlag("value") || 0; }
     get valueFunction() { return this.getEffectFlag("valueFunction"); }
@@ -600,17 +529,21 @@ class Merp1eItemEffectSkillGroupModifier extends Merp1eItemModifier {
         });
     }
 
-    applyEffect(data) {
+    static getData(sheetData) {
+        sheetData.sheetOrder = game.merp1e.Merp1eRules.skill.generateSheetOrder();
+    }
+
+    getModifier(data) {
         if (data?.skill?.data?.data?.group == this.skillGroup) {
-            data.modifiers = data.modifiers || [];
-            data.modifiers.push(this.createModifier());
+            return this.createModifier();
         }
+        return false;
     }
 }
 
 class Merp1eItemEffectRollTypeModifier extends Merp1eItemModifier {
-    static dummy = Merp1eEffect.registeredAdapters.push(this)
-    static effectName = "RollTypeModifier";
+    static dummy = Merp1eItemEffect.registeredAdapters.push(this)
+    //static adapterName = "RollTypeModifier";
 
     get value() { return this.getEffectFlag("value") || 0; }
     get valueFunction() { return this.getEffectFlag("valueFunction"); }
@@ -627,14 +560,179 @@ class Merp1eItemEffectRollTypeModifier extends Merp1eItemModifier {
 
         return replaceData(game.i18n.localize("MERP1E.EffectDescription.RollTypeModifier"),
         {
-            ROLLTYPE: this.rollType
+            ROLLTYPE: this.rollType,
+            LABEL: this.label
+        });
+    }
+
+    static getData(sheetData) {
+        sheetData.rollTypes = game.merp1e.Merp1eRules.rollTypes;
+    }
+
+    getModifier(data) {
+        if (data?.data?.rollTypeID == this.rollType) {
+            return this.createModifier();
+        }
+        return false;
+    }
+}
+
+class Merp1eItemEffectAttackTypeModifier extends Merp1eItemModifier {
+    static dummy = Merp1eItemEffect.registeredAdapters.push(this)
+    //static adapterName = "AttackTypeModifier";
+
+    get value() { return this.getEffectFlag("value") || 0; }
+    get valueFunction() { return this.getEffectFlag("valueFunction"); }
+    get enableFunction() { return this.getEffectFlag("enableFunction"); }
+    get label() { return this.getEffectFlag("label"); }
+
+    get attackType() {
+        return this.getEffectFlag("attackType");
+    }
+
+    generateDescription() {
+        if (this.valueFunction == undefined || this.enableFunction == undefined || this.label == undefined) return game.i18n.localize("MERP1E.Effect.NotConfigured");
+        // don't care about this.value
+
+        return replaceData(game.i18n.localize("MERP1E.EffectDescription.AttackModifier"),
+        {
+            ATTACKTYPE: game.i18n.localize(findByID(game.merp1e.Merp1eRules.attack.types, this.attackType, "")?.label),
+            LABEL: this.label
+        });
+    }
+
+    static getData(sheetData) {
+        sheetData.attackTypes = game.merp1e.Merp1eRules.attack.types;
+    }
+
+    getModifier(data) {
+        if (data?.data?.attackType == this.attackType) {
+            return this.createModifier();
+        }
+        return false;
+   }
+}
+
+
+export class Merp1eItemEffectAttack extends Merp1eItemEffectAdapter {
+    static dummy = Merp1eItemEffect.registeredAdapters.push(this)
+    //static adapterName = "Attack";
+
+    static getData(sheetData) {
+        sheetData.attackTables = game.merp1e.Merp1eRules.attack.getAvaliableTables();
+        sheetData.attackMaximumSizes = game.merp1e.Merp1eRules.attack.maxResults;
+        const sheetOrder = game.merp1e.Merp1eRules.skill.generateSheetOrder();
+        sheetData.weaponSkills = findByID(sheetOrder, "Weapon", null)?.skills;
+        sheetData.avaliableCriticalSizes = game.merp1e.Merp1eRules.attack.criticalSizes;
+        sheetData.avaliableCriticals = game.merp1e.Merp1eRules.attack.criticalTypes;
+        sheetData.armorTypes = game.merp1e.Merp1eRules.defense.armorTypes;
+        sheetData.attackTypes = game.merp1e.Merp1eRules.attack.types;
+    }
+
+    get action() { 
+        const armorModification = {};
+        game.merp1e.Merp1eRules.defense.armorTypes.forEach((armorType) => {
+            armorModification[armorType.id] = this.getEffectFlag(`ArmorModification.${armorType.id}`);
+        });
+
+        const actionData = {
+            tableReference: this.getEffectFlag("table"),
+            maximumSize: this.getEffectFlag("maximumSize"),
+            skillReference: this.getEffectFlag("skillReference"),
+            canUseShield: this.getEffectFlag("canUseShield"),
+            fumbleNumber: this.getEffectFlag("fumbleNumber"),
+            fumbleCrit: this.getEffectFlag("fumbleCrit"),
+            primaryCrit: this.getEffectFlag("primaryCrit"),
+            primaryCritMax: this.getEffectFlag("primaryCritMax"),
+            secondaryCrit: this.getEffectFlag("secondaryCrit"),
+            secondaryCritMax: this.getEffectFlag("secondaryCritMax"),
+            isTwoHanded: this.getEffectFlag("isTwoHanded"),
+            attackType: this.getEffectFlag("attackType"),
+            baseRange: this.getEffectFlag("baseRange"),
+            roundsLoad: this.getEffectFlag("roundsLoad"),
+            roundsReload: this.getEffectFlag("roundsReload"),
+            loadReloadPenalty: this.getEffectFlag("loadReloadPenalty"),
+            meleeRange: this.getEffectFlag("meleeRange"),
+            bonus: this.getEffectFlag("bonus") || 0,
+            armorModification: armorModification
+        };
+
+        if (!actionData.tableId == undefined) return undefined;
+        if (!actionData.skillReference == undefined) return undefined;
+        if (!actionData.fumbleNumber == undefined) return undefined;
+        if (!actionData.primaryCrit == undefined) return undefined;
+
+        return actionData;
+    }
+
+    generateDescription() {
+        const attackInfo = this.action;
+
+        if (!attackInfo == undefined) return game.i18n.localize("MERP1E.Effect.NotConfigured");
+
+        return replaceData(game.i18n.localize("MERP1E.EffectDescription.Attack"), {
+            TYPE: game.i18n.localize(findByID(game.merp1e.Merp1eRules.attack.types, attackInfo.attackType, "???")?.label),
+            BONUS: attackInfo.bonus < 0 ? attackInfo.bonus : "+" + attackInfo.bonus,
         });
     }
 
     applyEffect(data) {
-        if (data?.data?.rollTypeID == this.rollType) {
-            data.modifiers = data.modifiers || [];
-            data.modifiers.push(this.createModifier());
-        }
+        if(!data.actor) return;
+
+        const attackInfo = this.action;
+
+        if (!attackInfo == undefined) return;
+
+        data.actor.attacks.push(new Merp1eAttack(this.action, this._effect));
+    }
+
+    static removeEffects(actor) {
+        actor.attacks = [];
     }
 }
+
+export class Merp1eItemEffectSkillManeuver extends Merp1eItemEffectAdapter {
+    static dummy = Merp1eItemEffect.registeredAdapters.push(this)
+    //static adapterName = "SkillManeuver";
+
+    static getData(sheetData) {
+        const sheetOrder = game.merp1e.Merp1eRules.skill.generateSheetOrder();
+    }
+
+    get action() { 
+        const actionData = {
+            skillReference: this.getEffectFlag("skillReference"),
+            bonus: this.getEffectFlag("bonus") || 0
+        };
+
+        if (!actionData.skillReference == undefined) return undefined;
+
+        return actionData;
+    }
+
+    generateDescription() {
+        const actionData = this.action;
+
+        if (!actionData == undefined) return game.i18n.localize("MERP1E.Effect.NotConfigured");
+
+        return replaceData(game.i18n.localize("MERP1E.EffectDescription.StaticManeuver"), {
+            SKILL: actionData.skillReference,
+            BONUS: actionData.bonus < 0 ? actionData.bonus : "+" + actionData.bonus,
+        });
+    }
+
+    applyEffect(data) {
+        if(!data.actor) return;
+
+        const actionData = this.action;
+
+        if (!actionData == undefined) return;
+
+        data.actor.actions.push(new Merp1eAction(actionData, this._effect));
+    }
+
+    static removeEffects(actor) {
+        actor.actions = [];
+    }
+}
+

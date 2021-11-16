@@ -1,0 +1,15 @@
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.Skill" }}</label>
+    <div class="form-fields">
+        <select name="flags.merp1e.Skill.skillReference">
+            {{#unless effect.flags.merp1e.Skill.skillReference}}<option></option>{{/unless}}
+            {{selectOptions weaponSkills selected=effect.flags.merp1e.Skill.skillReference localize=false nameAttr="reference" labelAttr="name"}}
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.Bonus" }}</label>
+    <div class="form-fields">
+        <input type="number" name="flags.merp1e.Skill.bonus" value="{{effect.flags.merp1e.Skill.bonus}}" placeholder="0"/>
+    </div>
+</div>

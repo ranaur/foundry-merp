@@ -1,0 +1,22 @@
+<form class="{{cssClass}}" autocomplete="off">
+    <input type="hidden" name="flags.merp1e.effectType" value="InjuryEffect"/>
+    <input type="hidden" name="flags.merp1e.adapterName" value="{{effect.flags.merp1e.adapterName}}"/>
+
+    <section class="sheet-body">
+        {{!-- Configuration Tab --}}
+        <div>
+            {{#if (eq effect.flags.merp1e.adapterName "Hits")}}
+                {{> "systems/merp1e/templates/effect/hits-injury-effect-part.html" effect=effect sheetOrder=sheetOrder}}
+            {{/if}}
+            {{#if (eq effect.flags.merp1e.adapterName "Heal")}}
+                {{> "systems/merp1e/templates/effect/hits-injury-effect-part.html" effect=effect sheetOrder=sheetOrder}}
+            {{/if}}
+            {{#if (eq effect.flags.merp1e.adapterName "HitsPerRound")}}
+                {{> "systems/merp1e/templates/effect/hits-per-round-injury-effect-part.html" effect=effect sheetOrder=sheetOrder}}
+            {{/if}}
+            {{#if (eq effect.flags.merp1e.adapterName "Penalty")}}
+                {{> "systems/merp1e/templates/effect/penalty-injury-effect-part.html" effect=effect sheetOrder=sheetOrder}}
+            {{/if}}
+        </div>
+    </section>
+</form>

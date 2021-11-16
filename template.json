@@ -13,6 +13,35 @@
             "helm": false,
             "armgreaves": false,
             "leggreaves": false
+        },
+        "description": {
+          "height": 0,
+          "weight": 0,
+          "hair": "",
+          "eyes": "",
+          "demeanor": "",
+          "special": "",
+          "notes": ""
+        },
+        "healthStatus": {
+          "hitsTaken": 0,
+          "hitsPerRound": 0,
+          "activityPenalty": 0,
+          "roundsStunned": 0,
+          "roundsDown": 0,
+          "roundsOut": 0,
+          "roundsUntilDeath": 0,
+          "roundsBlinded": 0,
+          "roundsWeaponStuck": 0,
+          "unconsciousComa": 0,
+          "paralyzed": "0",
+          "hearingLoss": "0",
+          "eyeLoss": "0",
+          "leftArm": "0",
+          "rightArm": "0",
+          "leftLeg": "0",
+          "rightLeg": "0",
+          "notes": ""
         }
       },
       "choosedRealm": null,
@@ -25,7 +54,7 @@
       }
     },
     "character": {
-      "templates": ["base", "realm", "defense"],
+      "templates": ["base", "realm", "defense", "description", "health"], 
       "stats": {},
       "xp": { "effective": 0 }
     },

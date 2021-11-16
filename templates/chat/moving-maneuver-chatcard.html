@@ -15,7 +15,7 @@
     {{> "systems/merp1e/templates/chat/parts/total-part.html" total=total }}
 
     {{!-- Resolve --}}
-    {{#if resolveResult}}
+    {{#if data.rollTotal}}
     <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
         <div style="font-weight: bold;">
             {{localize "MERP1E.ManeuverCard.ResultLabel"}}

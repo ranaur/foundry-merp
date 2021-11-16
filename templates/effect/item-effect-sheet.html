@@ -8,9 +8,10 @@
             </div>
             <div class="resource">
                 <label class="resource-label">{{localize "MERP1E.Effect.Type" }}</label>
-                <select name="flags.merp1e.effectType">
-                    {{#unless effect.flags.merp1e.effectType}}<option></option>{{/unless}}
-                    {{selectOptions effectTypes selected=effect.flags.merp1e.effectType localize=true nameAttr="id" labelAttr="label"}}
+                <input type="hidden" name="flags.merp1e.effectType" value="ItemEffect"/>
+                <select name="flags.merp1e.adapterName">
+                    {{#unless effect.flags.merp1e.adapterName}}<option></option>{{/unless}}
+                    {{selectOptions itemAdapterTypes selected=effect.flags.merp1e.adapterName localize=true nameAttr="id" labelAttr="label"}}
                 </select>
             </div>
             <div class="resource">
@@ -38,47 +39,53 @@
     <section class="sheet-body">
         {{!-- Configuration Tab --}}
         <div class="tab" data-group="primary" data-tab="configuration">
-            {{#if (eq effect.flags.merp1e.effectType "SkillBonus")}}
+            {{#if (eq effect.flags.merp1e.adapterName "SkillBonus")}}
                 {{> "systems/merp1e/templates/effect/skill-bonus-item-effect-part.html" effect=effect sheetOrder=sheetOrder}}
             {{/if}}
-            {{#if (eq effect.flags.merp1e.effectType "SkillGroupBonus")}}
+            {{#if (eq effect.flags.merp1e.adapterName "SkillGroupBonus")}}
                 {{> "systems/merp1e/templates/effect/skill-group-bonus-item-effect-part.html" effect=effect sheetOrder=sheetOrder}}
             {{/if}}
-            {{#if (eq effect.flags.merp1e.effectType "RollTypeBonus")}}
+            {{#if (eq effect.flags.merp1e.adapterName "RollTypeBonus")}}
                 {{> "systems/merp1e/templates/effect/roll-type-bonus-item-effect-part.html" effect=effect sheetOrder=sheetOrder}}
             {{/if}}
-            {{#if (eq effect.flags.merp1e.effectType "RankSkillBonus")}}
+            {{#if (eq effect.flags.merp1e.adapterName "RankSkillBonus")}}
                 {{> "systems/merp1e/templates/effect/rank-skill-bonus-item-effect-part.html" effect=effect sheetOrder=sheetOrder}}
             {{/if}}
-            {{#if (eq effect.flags.merp1e.effectType "Shield")}}
+            {{#if (eq effect.flags.merp1e.adapterName "Shield")}}
                 {{> "systems/merp1e/templates/effect/shield-item-effect-part.html" effect=effect rules=rules}}
             {{/if}}
-            {{#if (eq effect.flags.merp1e.effectType "ArmGreaves")}}
+            {{#if (eq effect.flags.merp1e.adapterName "ArmGreaves")}}
                 {{> "systems/merp1e/templates/effect/arm-greaves-item-effect-part.html" effect=effect rules=rules}}
             {{/if}}
-            {{#if (eq effect.flags.merp1e.effectType "LegGreaves")}}
+            {{#if (eq effect.flags.merp1e.adapterName "LegGreaves")}}
                 {{> "systems/merp1e/templates/effect/leg-greaves-item-effect-part.html" effect=effect rules=rules}}
             {{/if}}
-            {{#if (eq effect.flags.merp1e.effectType "Helm")}}
+            {{#if (eq effect.flags.merp1e.adapterName "Helm")}}
                 {{> "systems/merp1e/templates/effect/helm-item-effect-part.html" effect=effect rules=rules}}
             {{/if}}
-            {{#if (eq effect.flags.merp1e.effectType "Armor")}}
+            {{#if (eq effect.flags.merp1e.adapterName "Armor")}}
                 {{> "systems/merp1e/templates/effect/armor-item-effect-part.html" effect=effect rules=rules}}
             {{/if}}
-            {{#if (eq effect.flags.merp1e.effectType "PPMultiplier")}}
+            {{#if (eq effect.flags.merp1e.adapterName "PPMultiplier")}}
                 {{> "systems/merp1e/templates/effect/p-p-multiplier-item-effect-part.html" effect=effect rules=rules}}
             {{/if}}
-            {{#if (eq effect.flags.merp1e.effectType "SpellAdder")}}
+            {{#if (eq effect.flags.merp1e.adapterName "SpellAdder")}}
                 {{> "systems/merp1e/templates/effect/spell-adder-item-effect-part.html" effect=effect rules=rules}}
             {{/if}}
-            {{#if (eq effect.flags.merp1e.effectType "SkillModifier")}}
+            {{#if (eq effect.flags.merp1e.adapterName "SkillModifier")}}
                 {{> "systems/merp1e/templates/effect/skill-modifier-item-effect-part.html" effect=effect rules=rules}}
             {{/if}}
-            {{#if (eq effect.flags.merp1e.effectType "SkillGroupModifier")}}
+            {{#if (eq effect.flags.merp1e.adapterName "SkillGroupModifier")}}
                 {{> "systems/merp1e/templates/effect/skill-group-modifier-item-effect-part.html" effect=effect rules=rules}}
             {{/if}}
-            {{#if (eq effect.flags.merp1e.effectType "RollTypeModifier")}}
+            {{#if (eq effect.flags.merp1e.adapterName "RollTypeModifier")}}
                 {{> "systems/merp1e/templates/effect/roll-type-modifier-item-effect-part.html" effect=effect rules=rules}}
+            {{/if}}
+            {{#if (eq effect.flags.merp1e.adapterName "AttackTypeModifier")}}
+                {{> "systems/merp1e/templates/effect/attack-type-modifier-item-effect-part.html" effect=effect rules=rules}}
+            {{/if}}
+            {{#if (eq effect.flags.merp1e.adapterName "Attack")}}
+                {{> "systems/merp1e/templates/effect/attack-item-effect-part.html" effect=effect rules=rules}}
             {{/if}}
         </div>
         {{!-- Condition tab --}}
@@ -256,7 +263,7 @@
 
     <section class="tab" data-tab="wfrp">
         <div class="form-group">
-            <label class="label-text">{{localize "EFFECT.EffectType"}}</label>
+            <label class="label-text">{{localize "EFFECT.adapterName"}}</label>
             <select class="effect-type" {{#if disableTrigger}} disabled {{/if}}>
               {{#select effect.flags.wfrp4e.effectTrigger}}
               <option value=""></option>

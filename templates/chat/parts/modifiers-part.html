@@ -34,7 +34,7 @@
                 <div style="text-align: center; vertical-align: middle;">
                     {{#if mod.isAdHoc}}
                         {{#if (or (not mod.isUserChosen) (and mod.isUserChosen (lookup (lookup ../data.modifiersChecked ../group.id) mod.id)))}}
-                            <input type="number" name="modifiersValue.{{../group.id}}.{{mod.id}}" value="{{lookup (lookup ../data.modifiersValue ../group.id) mod.id}}"/>
+                            <input type="number" name="modifiersValue.{{../group.id}}.{{mod.id}}" value="{{lookup (lookup ../data.modifiersValue ../group.id) mod.id}}" data-dtype="Number"/>
                         {{else}}
                             <div></div>
                         {{/if}}

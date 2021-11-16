@@ -5,15 +5,21 @@ export class Merp1eActiveEffectHelper extends ActiveEffect {
         event.preventDefault();
         const a = event.currentTarget;
         const li = a.closest("li");
-        const effect = li.dataset.effectId ? owner.effects.get(li.dataset.effectId) : null;
+        const effect = li?.dataset?.effectId ? owner.effects.get(li.dataset.effectId) : null;
         switch ( a.dataset.action ) {
             case "create":
                 return await owner.createEmbeddedDocuments("ActiveEffect", [{
                     label: game.i18n.localize("Merp1e.ActiveEffect.New"),
                     origin: owner.uuid,
-                    "duration.rounds": li.dataset.effectType === "temporary" ? 1 : undefined,
-                    disabled: li.dataset.effectType === "inactive",
+                    disabled: false,
                     transfer: false,
+                    flags: { 
+                        merp1e: { 
+                            effectType: a.dataset.effectType,
+                            adapterName: a.dataset.adapterName,
+                        }
+                    },
+                    canChangeAdapter: a.dataset.adapterName ? true: false
                 }], { renderSheet: true });
             case "edit":
                 let shouldEdit = !owner.isOwned;

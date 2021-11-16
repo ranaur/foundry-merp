@@ -1,7 +1,9 @@
-import { Merp1eEffect } from "./active-effect.js"
-import { Merp1eEffectCondition } from "./active-effect-condition.js";
-import { findByID } from "./util.js";
-import { Merp1eModifier } from "./modifier.js"
+import { Merp1eItemEffect } from "./item-effects.js"
+import { Merp1eInjuryEffect } from "./injury-effects.js"
+import { Merp1eEffectCondition } from "./condition.js";
+import { toKebabCase } from "../util.js";
+//import { findByID } from "./util.js";
+import { Merp1eModifier } from "../modifier.js"
 
 export class Merp1eActiveEffectSheet extends DocumentSheet {
     /** @override */
@@ -25,8 +27,9 @@ export class Merp1eActiveEffectSheet extends DocumentSheet {
         //return `${path}/item-sheet.html`;
         // Alternatively, you could use the following return statement to do a
         // unique item sheet by type, like `weapon-sheet.html`.
+        const effectTypeKebab = toKebabCase(this.object.effectType);
 
-        return `${path}/active-effect-sheet.html`;
+        return `${path}/effect/${effectTypeKebab}-sheet.html`;
     }
 
 
@@ -36,18 +39,22 @@ export class Merp1eActiveEffectSheet extends DocumentSheet {
         sheetData.rules = game.merp1e.Merp1eRules;
         sheetData.effect = sheetData.data;
         sheetData.hasConditionParameters = this.object.conditionClass.hasParameters;
-        sheetData.effectTypes = Merp1eEffect.registeredAdapters.reduce( (acc, cls) => { acc.push({ id: cls.effectName, label: cls.label }); return acc;}, []);
+        
+        sheetData.itemAdapterTypes = Merp1eItemEffect.registeredAdapters.reduce( (acc, cls) => { acc.push({ id: cls.adapterName, label: cls.label }); return acc;}, []);
+        sheetData.damageAdapterTypes = Merp1eInjuryEffect.registeredAdapters.reduce( (acc, cls) => { acc.push({ id: cls.adapterName, label: cls.label }); return acc;}, []);
         sheetData.conditionTypes = Merp1eEffectCondition.registeredTypes.reduce( (acc, cls) => { acc.push({ id: cls.conditionName, label: cls.label }); return acc;}, []);
-        sheetData.sheetOrder = game.merp1e.Merp1eRules.skill.generateSheetOrder();
-        sheetData.shieldBaseBonus = findByID(game.merp1e.Merp1eRules.defense.shieldTypes, sheetData.effect.flags?.merp1e?.Shield?.type, "none").bonus;
-        sheetData.armGreavesBaseBonus = findByID(game.merp1e.Merp1eRules.defense.armGreavesTypes, sheetData.effect.flags?.merp1e?.ArmGreaves?.type, "none").bonus;
-        sheetData.legGreavesBaseBonus = findByID(game.merp1e.Merp1eRules.defense.legGreavesTypes, sheetData.effect.flags?.merp1e?.LegGreaves?.type, "none").bonus;
-        sheetData.helmBaseBonus = findByID(game.merp1e.Merp1eRules.defense.helmTypes, sheetData.effect.flags?.merp1e?.Helm?.type, "none").bonus;
+        
         sheetData.modifierEnableFunctions = Merp1eModifier.enableFunctions;
         sheetData.modifierValueFunctions = Merp1eModifier.valueFunctions;
-        sheetData.rollTypes = game.merp1e.Merp1eRules.rollTypes;
-        
-        //sheetData.armorBaseBonus = findByID(game.merp1e.Merp1eRules.defense.armorTypes, sheetData.effect.flags?.merp1e?.Armor?.type, "no").bonus;
+
+        // GAMBIARRA XXX
+        if(!sheetData.effect.flags.merp1e.adapterName) {
+            sheetData.effect.flags.merp1e.adapterName = sheetData.effect.flags.merp1e.effectType;
+            sheetData.effect.flags.merp1e.effectType = "ItemEffect";
+        }
+        // END OF GAMBIARRA XXX
+        this.object.effectClass?.getData(sheetData);
+
         return sheetData;
     }
 

@@ -15,15 +15,21 @@ import { Merp1eSpellSheet } from "./module/item/spell-sheet.js";
 import { Merp1eSpelllistSheet } from "./module/item/spelllist-sheet.js";
 import { Merp1eRules } from "./module/rules/rules.js";
 import { preloadHandlebarsTemplates, registerHandlebarsHelpers } from "./module/handlebars-utils.js";
-import { Merp1eEffect } from "./module/active-effect.js";
-import { Merp1eActiveEffectSheet } from "./module/active-effect-sheet.js";
+import { Merp1eEffect } from "./module/effect/base-effects.js";
+import { Merp1eInjuryEffect } from "./module/effect/injury-effects.js";
+import { Merp1eItemEffect } from "./module/effect/item-effects.js";
+import { Merp1eActiveEffectSheet } from "./module/effect/effect-sheet.js";
 import { Merp1eMenu } from "./module/menu.js";
 import { Merp1eChat } from "./module/chat.js";
 import { Merp1eSpecialSheet } from "./module/item/special-sheet.js";
 //import { Merp1eRollOpenEnded } from "./module/dice.js";
+import { Merp1eCombat } from "./module/combat/combat.js";
+import { Merp1eCombatTracker } from "./module/combat/combatTracker.js";
+import { Merp1eRollTable } from "./module/rolltable/rolltable.js";
+import { Merp1eRollTableConfig } from "./module/rolltable/rolltableConfig.js";
 
 Hooks.once('init', async function() {
-
+  game.templatesPath = "systems/merp1e/templates/"
   game.merp1e = {
     Merp1eActor,
     Merp1eItem,
@@ -34,10 +40,12 @@ Hooks.once('init', async function() {
    * Set an initiative formula for the system
    * @type {String}
    */
-  CONFIG.Combat.initiative = {
-    formula: "1d20",
-    decimals: 2
-  };
+  CONFIG.Combat.documentClass = Merp1eCombat;
+  //CONFIG.Combat.entityClass = Merp1eCombat;
+  CONFIG.ui.combat = Merp1eCombatTracker;
+
+  CONFIG.RollTable.documentClass = Merp1eRollTable;
+  CONFIG.RollTable.sheetClass = Merp1eRollTableConfig;
 
   CONFIG.Actor.documentClass = Merp1eActor;
   CONFIG.Item.documentClass = Merp1eItem;
@@ -45,8 +53,13 @@ Hooks.once('init', async function() {
   
   CONFIG.ActiveEffect.sheetClass = Merp1eActiveEffectSheet;
   CONFIG.ActiveEffect.documentClass = Merp1eEffect;
-  CONFIG.ActiveEffect.documentClasses = Merp1eEffect.registeredClasses;
-
+  CONFIG.ActiveEffect.documentClasses = {
+    InjuryEffect: Merp1eInjuryEffect,
+    ItemEffect: Merp1eItemEffect
+  };
+  //CONFIG.ActiveEffect.adapterClasses = {
+  //  ItemEffect: Merp1eItemEffect.registeredAdapterClasses
+  //};
   
   //CONFIG.Dice.rolls.push(Merp1eRollOpenEnded);
 

@@ -2,7 +2,7 @@
     <td>{{localize statLabel.label}}</td>
     <td>({{localize statLabel.abbr}})</td>
     <td><input class="userentry" name="data.stats.{{stat.id}}.value" value='{{stat.value}}' min="1" max="102" type="number" data-dtype="Number"/></td>
-    {{#if stat.only_value}}
+    {{#if statLabel.only_value}}
     <td colspan="3"></td>
     {{else}}
     <td><input class="bonus" value='{{formatBonus stat.bonuses.stat}}' placeholder="0" type="text" data-dtype="Number" readonly tabindex=-1/></td>

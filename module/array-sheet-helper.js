@@ -55,7 +55,7 @@ export class ArraySheetHelper {
      * @param {Object} app          The form application object.
      * @private
      */
-    async listDeleteItem(event, app) {
+    async listDeleteItem(event, sheet) {
       const a = event.currentTarget;
       let listItem = a.closest(`.${this.type}-list-item`);
   

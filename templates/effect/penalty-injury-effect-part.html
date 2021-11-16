@@ -1,0 +1,14 @@
+<div>
+    NOT IMPLEMETED
+</div>
+
+
+<div class="form-group">
+    <label>{{ localize "Type" }}</label>
+    <div class="form-fields">
+        <select name="flags.merp1e.Injury.type">
+            {{#unless effect.flags.merp1e.Injury.type}}<option></option>{{/unless}}
+            {{selectOptions injuryTypes selected=effect.flags.merp1e.Injury.type localize=true nameAttr="id" labelAttr="label"}}
+        </select>
+    </div>
+</div>

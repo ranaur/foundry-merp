@@ -1,4 +1,83 @@
 <h2 class="flexrow">
+    <div>{{localize 'MERP1E.ActionTab.Attacks'}}</div>
+</h2>
+<div class="flexrow">
+    <ol class="items-list">
+        <li class="item flexrow item-header">
+            <div class="item-image"></div>
+            <div class="item-name">{{localize "MERP1E.EquipmentsTab.Equipment"}}</div>
+            <div class="item-type"></div>
+            <div class="item-controls">
+                <a class="item-control item-create" title="{{localize 'MERP1E.Item.New'}}" option-renderSheet=true data-type="equipment"><i class="fas fa-plus"></i></a>
+            </div>
+        </li>
+        {{#each attacks as | attack |}}
+        <li class="item attack flexrow" data-item-id="{{attack.item.id}}" data-effect-id="{{attack.effect.id}}">
+            <div class="item-image"><img src="{{attack.item.img}}" title="{{attack.item.name}}" width="24" height="24"/></div>
+            <h4 class="item-name">{{attack.item.name}}</span></h4>
+            <div class="item-type">
+                {{#if attack.isUnsheathed}}
+                    {{#if attack.isMissile}}
+                        <a class="action-control" title="{{localize 'MERP1E.Action.MissileAttack'}}" data-action="missile-attack">
+                            <i class="fas fa-crosshairs"></i>
+                        </a>
+                    {{else}}
+                        <a class="action-control" title="{{localize 'MERP1E.Action.MeleeAttack'}}" data-action="melee-attack">
+                            <i class="fas fa-cut"></i>
+                        </a>
+                        {{#if attack.canThrow}}
+                        <a class="action-control" title="{{localize 'MERP1E.Action.ThrowAttack'}}" data-action="throw-attack">
+                            <i class="far fa-dot-circle"></i>
+                        </a>
+                        {{/if}}
+                    {{/if}}
+                {{/if}}
+            </div>
+            
+            <div class="item-controls action-controls">
+                {{#if attack.isTwoHanded }}
+                    {{#if attack.isUnsheathedBothHands}}
+                        <a class="action-control" title="{{localize 'MERP1E.ActionTab.Sheathe'}}" data-action="sheathe">
+                            <i class="fas fa-hand-paper" style="transform: scaleX(-1);"></i>
+                            <i class="fas fa-hand-paper"></i>
+                        </a>
+                    {{else}}
+                        <a class="action-control" title="{{localize 'MERP1E.ActionTab.Unsheathe'}}" data-place="both hands" data-action="unsheathe">
+                            <i class="far fa-hand-paper" style="transform: scaleX(-1);"></i>
+                            <i class="far fa-hand-paper"></i>
+                        </a>
+                    {{/if}}
+                {{else}} {{!-- one handed --}}
+                    {{#if attack.isUnsheathedNonDominantHand }}
+                        <a class="action-control" title="{{localize 'MERP1E.ActionTab.Sheathe'}}" data-action="sheathe">
+                            <i class="fas fa-hand-paper" style="transform: scaleX(-1);"></i>
+                        </a>
+                    {{else}}
+                        <a class="action-control" title="{{localize 'MERP1E.ActionTab.Unsheathe'}}" data-place="non-dominant hand" data-action="unsheathe">
+                            <i class="far fa-hand-paper" style="transform: scaleX(-1);"></i>
+                        </a>
+                    {{/if}}
+                    {{#if attack.isUnsheathedDominantHand }}
+                        <a class="action-control" title="{{localize 'MERP1E.ActionTab.Sheathe'}}" data-action="sheathe">
+                            <i class="fas fa-hand-paper"></i>
+                        </a>
+                    {{else}}
+                        <a class="action-control" title="{{localize 'MERP1E.ActionTab.Unsheathe'}}" data-place="dominant hand" data-action="unsheathe">
+                            <i class="far fa-hand-paper"></i>
+                        </a>
+                    {{/if}}
+                {{/if}}
+                {{#if (eq attack.item.type "equipment") }}
+                    <a class="action-control" title="{{localize 'MERP1E.Action.Drop'}}" data-action="drop"><i class="fas fa-angle-double-down"></i></a>
+                {{/if}}
+                <a class="item-control item-edit" title="{{localize 'MERP1E.ActionTab.EditItem'}}"><i class="fas fa-edit"></i></a>
+            </div>
+        </li>
+        {{/each}}
+    </ol>
+</div>
+
+<h2 class="flexrow">
     <div>{{localize 'MERP1E.ActionsTab.CurrentAction'}}</div>
     <div>
     {{#if combat.started}}
@@ -8,7 +87,6 @@
     {{/if}}
     </div>
 </h2>
-{{log combat}}
 <div class="flexrow">
     <label for="data.action.action" class="resource-label">{{localize "MERP1E.ActionsTab.Action"}}</label>
     <select class="userentry action-chooser" name="data.action.action">
@@ -48,13 +126,6 @@
     <a class="action-control flex0" title="{{localize 'MERP1E.Spell.GetTargets'}}" data-action="get-targets"><i class="fas fa-bullseye"></i></a>
 </div>
 {{/if}}
-{{#if (eq data.data.action.action "")}}
-<div class="flexrow">
-    <label for="data.action." class="resource-label">{{localize "MERP1E.ActionsTab."}}</label>
-    <input class="userentry" type="text" name="data.action." value="{{data.action.}}" data-dtype="String"/>
-</div>
-{{/if}}
-
 <div class="flexrow">
     <label for="data.action.description" class="resource-label">{{localize "MERP1E.ActionsTab.Description"}}</label>
     <input class="userentry" type="text" name="data.action.description" value="{{data.data.action.description}}" data-dtype="String"/>

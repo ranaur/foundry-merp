@@ -1,0 +1,33 @@
+<h2>Heal</h2>
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.Formula" }}</label>
+    <div class="form-fields">
+        <input type="text" name="flags.merp1e.Heal.formula" value="{{effect.flags.merp1e.Heal.formula}}"/>
+    </div>
+</div>
+{{#if this.effect.applied}}
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.Applied" }}</label>
+    <div class="form-fields">
+        {{this.effect.appliedAtText}}
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.InitialValue" }}</label>
+    <div class="form-fields">
+        <input type="number" name="flags.merp1e.Heal.initialValue" value="{{effect.flags.merp1e.Heal.initialValue}}" {ro}}/>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.CurrentValue" }}</label>
+    <div class="form-fields">
+        <input type="number" name="flags.merp1e.Heal.currentValue" value="{{effect.flags.merp1e.Heal.currentValue}}" {roif }}/>
+    </div>
+</div>
+{{else}}
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.NotApplied" }}</label>
+    <div class="form-fields">
+    </div>
+</div>
+{{/if}}

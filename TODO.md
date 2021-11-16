@@ -2,8 +2,43 @@
     game.merp1e.Merp1eRules
     game.i18n.localize("MERP1E.EffectDescription.ShieldUnset");
 
+    Fazer o resto das raças (depois de Noldor)
 
 # TODO
+Filme:
+    Mostrar os detalhas de raça, profissão
+    Mostrar os efeitos
+    Money
+* Fazer os efeityos de heal
+* Refazer Heath & Damage da ficha e deixar o damage item para critical
+* Fazer InjuryEffects e HealingEffects
+    * Hits/Heal
+        * Formula
+        * hits
+        * onApply
+        * applied at
+
+* Fazer o efeito de hit / heal
+    ...permitir que o efeito role um dado (formula)
+* Fazer com o Injury Active Effect tenha um OnApply pra cada um
+* Implementar o treat/heal
+    ... hits per round: bandage, tourniquete, heal in X days
+    ...heal hits per round
+    ...activity penalty tem heal in X days
+    Eles terão o original e o atual
+    ...Implementar o OnTimeInterval/OnRound
+* Como escolher quem será o target.
+    * Buscar a lista dos combatentes
+    * Buscar a lista dos targets
+    * Permitir só um target
+    * Pedir para o cara clicar no target
+* Fazer com que os parries venham da ficha (na aba action)
+* Testar item que aumenta DB (colocar no Dwarf A)
+* Continuar o rolamento do critical
+* Aplicar o dano/critical
+* Calcular o XP
+* Fazer com que o target seja escolhido pelo mouse
+* Corrigit o skill do throw
 
 * Fazer aba de ação
     * Fazer Missle
@@ -14,10 +49,179 @@
     * Cast spell
         * vê a quantos rounds está preparado
         * posta um card de cast spell.
-* Fazer os outros tipos de rolamento:
-    Reorganizar o Static, Moving e RR
 
-    Ataque
+* Refactoring do dano
+    * Criar um tipo de item CriticalStrike
+        - descrição
+            ? table (heat, cold, grappling&ambalancing, crush, etc.)
+            ? roll on table
+        - referência (tabela, pág, num
+        ? location
+        - Effects
+            1) Extra Damage/Hits Taken
+            2) Activity Penalty (damage type: bone, muscle, organ, etc.)
+            3) Stun N rounds
+            4) Break/Useless/Sever/Destroy
+                - Hand (L/R)
+                - Arm (L/R)
+                - Upper Leg (L/R)
+                - Lower Leg (L/R)
+                - Eye (L/R)
+                - Ear (L/R)
+                - Nose
+            - Break Shield
+            - Coma/Unconscious
+                - duration: rounds, days, indefinite
+            - Knock Down: N rounds
+            - Paralyzed
+                - Shoulder Down
+                - Neck Down
+                - duration:
+                    - duration: rounds, days, indefinite
+                    - while with shield
+                    - for the combat
+            - Dies in X rounds
+                - Dies Immediately (0 rounds?)
+            - hits/round (location)
+                - duration:
+            - Weapon Struck
+            - Weapon Break
+            - Shield Break
+            - Destroy Footwear
+            - Destroy back itens
+            - Destroy armor (fuse)
+            - A Critical on target
+            - A Critical on attacker
+            - Mute
+                - duration
+            - Blind
+                - duration
+            - Knock X feets away
+            - Drop weapon
+                - X Feets away
+            - Damage Attacker
+            - Pin Attacker
+            
+
+
+
+* Fazer o calendário (CalendarApp)
+    game.time.advance(-10)
+    game.time.worldTime
+        Setar o dia/mês/ano
+        Configurar o calendário
+        Setar/adiantar/atrasar o relógio
+        Próximo round/turno/dia
+
+
+* Fazer os outros tipos de rolamento:
+    * Fazer overload de RollableTable
+        Fazer com que os active effects usem o mesmo part
+        Fazer com que o active effect adicione um grupo de modifiers?
+        Colocar o Modifiers no skill?
+        Colocar um campo descrevendo as colunas
+        Fazer o tratamento do Modifier no Chatcard
+        @ Permitir colocar Type (attack table, maneuver Table, etc.)
+        @ Permitir colocar reference (e mudar a busca)
+        Ajustar os chatcards
+
+    * Colocar Maximum Attack Size no Attack-Effect
+    * Processar o Critical Máximo e o Secondary Critical
+
+    * No controle de quais spells mostrar, levar em conta o limite da profissão (warrior até o 3o, rogue 50, etc.)
+        character-sheet-spells.html
+            {{#if (le spell.level ../../actor.level)}} deve ser algo mais sofisticado, perguntando pro spell se ele "pode" ser lancádo pelo ator.
+
+    * ?fazer o wear funcionar dentro do container (na scabard weared aceita, se for carried, não )
+
+    * Conditions
+        : flank Attack
+        : rear Attack
+        : distance
+        : Defender surprised.*					
+        : Defender stunned or down.*					
+        : For each 10' that the attacker has moved.					
+        : If attacker drawing, changing weapons, or unslinging a shield.					
+        : If attacker has taken over half of his hits.					
+
+    Actor:
+        Aba action:
+            Implementar Melee
+                Adicionar um combo de target
+                    Combo com os targets no combate
+                    Botão para buxar quem ele marcou como target (ou colocar um hook na hora de escolher o target)
+                Mapear na tabela de Ataque
+                Tratar os criticals (rolar novamente)
+                Implementar de aplicar o critical no target
+            Implementar Throw/MIssile
+                No throw o objeto, 
+                    ** mudar o skill para throw
+                    ** se for um objeto fungível, procura um item com mesmo nome (droppped) e adiciona lá, diminuindo a quantidade do item original (arma)
+                    ** se não for, mudar o lugar para stored/dropped
+            Fazer o mesmo com o Spell em Directed Spells (isMIssile vai virar, attack typoe: Melee/Throw, Missile, Spell)
+
+            Permitir colocar o escudo (se tiver)
+
+            Armas de missile devem ter load/reload/unload
+                * Listar todos os objetos com propriedade de flechas
+                * Colocar ammonition type no tipo de ataque da arma
+             
+             
+             (o mesmo vai ser com os spells aprendidos)
+        Implementar um container dropped e adicionar um texto com location
+            Criar um método drop que coloca o item como dropped e no location coloca a cena/célula
+             
+    Ataque:
+        Tables:
+            Range Table
+    OK      Attack Tables
+            Critical Tables
+
+    OK  Effect:
+            Attack:
+                Attack Table
+                Maximum attack size
+                Skill
+                Can Use with Shield?
+
+                Weapon Bonus, Critical Table
+                Fumble Number
+                Fumble Crit? none => A-E
+                Primary Crit
+                Secondary Crit
+                (Throw/Missile) Base Range 
+                Missile Weapon?
+                #rounds Load
+                #rounds Reload
+                load/reload Penalty
+                Melee Range
+                Armor Modification
+                    PL, CH, RL, SL, NO
+
+        * Fazer as tabelas de Critical (gerando Item Damage)
+            * Roll de critical deve poder alterar o resultado pelo Ambush
+
+        CARD:
+            Attacant:
+                Weapon => Table, Skill, Weapon Bonus, Critical Table
+                Offensive Bonus
+                Parry
+            Target:
+                Defensive Bonus
+                Parry
+            Bonus/Penalty:
+            
+            ROLL:
+
+            Result:
+                Damage, Critical
+
+            If Critical:
+                Second Roll
+                Result
+
+        Ver a distância do alvo (target) e usar a tabela de distância.
+
     Base Spell
     Directed Spell Cast
 * Reorganizar spells para aceitarem ActiveEffects e aplicarem no target
@@ -1108,3 +1312,241 @@ Why do skills have reference?
 			</div>
 		</div>
 ```
+
+
+### ActiveEffect
+
+<!--
+        <div>
+            <h2>Category & Localization</h2>
+            <div class="form-group">
+                <label>{{ localize "Location" }}</label>
+                <div class="form-fields">
+                    <select name="flags.merp1e.Injury.location">
+                        {{#unless effect.flags.merp1e.Injury.location}}<option></option>{{/unless}}
+                        {{selectOptions injuryLocations selected=effect.flags.merp1e.Injury.location localize=true nameAttr="id" labelAttr="label"}}
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        {{!-- Duration Tab --}}
+        <div>
+            <h2>Duration</h2>
+            <div class="form-group">
+                <label>{{ localize "Type" }}</label>
+                <div class="form-fields">
+                    <select name="flags.merp1e.duration">
+                        {{selectOptions injuryDurations selected=effect.flags.merp1e.duration localize=true nameAttr="id" labelAttr="label"}}
+                    </select>
+                </div>
+            </div>
+            <hr/>
+            {{#if (eq effect.flags.merp1e.duration "time")}}
+            <div class="form-group">
+                <label>{{ localize "EFFECT.DurationSecs" }}</label>
+                <div class="form-fields">
+                    <input type="number" name="duration.seconds" value="{{ effect.duration.seconds }}"/>
+                </div>
+            </div>
+                {{#if effect.applied}}
+                <hr/>
+                <div class="form-group">
+                    <label>{{ localize "EFFECT.StartTime" }}</label>
+                    <div class="form-fields">
+                        <input type="number" name="duration.startTime" value="{{ effect.duration.startTime }}"/>
+                    </div>
+                </div>
+                {{/if}}
+            {{/if}}
+            {{#if (eq effect.flags.merp1e.duration "combat")}}
+            <div class="form-group">
+                <label>{{ localize "EFFECT.DurationTurns" }}</label>
+                <div class="form-fields">
+                    <label>{{ localize "COMBAT.Rounds" }}</label>
+                    <input type="number" name="duration.rounds" value="{{ effect.duration.rounds }}"/>
+                    <label>{{ localize "COMBAT.Turns" }}</label>
+                    <input type="number" name="duration.turns" value="{{ effect.duration.turns }}"/>
+                </div>
+            </div>
+                {{#if effect.applied}}
+                <hr/>
+                <div class="form-group">
+                    <label>{{ localize "EFFECT.Combat" }}</label>
+                    <div class="form-fields">
+                        <input type="text" name="duration.combat" value="{{ effect.duration.combat }}" disabled/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>{{ localize "EFFECT.StartTurns" }}</label>
+                    <div class="form-fields">
+                        <label>{{ localize "COMBAT.Round" }}</label>
+                        <input type="number" name="duration.startRound" value="{{ effect.duration.startRound }}"/>
+                        <label>{{ localize "COMBAT.Turn" }}</label>
+                        <input type="number" name="duration.startTurn" value="{{ effect.duration.startTurn }}"/>
+                    </div>
+                </div>
+                {{/if}}
+            {{/if}}
+        </div>
+
+        {{!-- Details Tab --}}
+        <div class="tab flexcol" data-group="primary" data-tab="details">
+            <div>
+                <label>{{ localize "EFFECT.Label" }}</label>
+                <div class="form-fields">
+                    <input type="text" name="label" value="{{ effect.label }}"/>
+                </div>
+            </div>
+    
+            <div>
+                <label>{{ localize "EFFECT.Icon" }}</label>
+                <div class="form-fields">
+                    {{filePicker target="icon" type="image"}}
+                    <input class="image" type="text" name="icon" placeholder="path/image.png" value="{{effect.icon}}"/>
+                </div>
+            </div>
+    
+            <div>
+                <label>{{ localize "EFFECT.IconTint" }}</label>
+                <div class="form-fields">
+                    <input class="color" type="text" name="tint" value="{{effect.tint}}"/>
+                    <input type="color" value="{{effect.tint}}" data-edit="tint"/>
+                </div>
+            </div>
+    
+            <div>
+                <label>{{ localize "EFFECT.Disabled" }}</label>
+                <input type="checkbox" name="disabled" {{ checked effect.disabled }}/>
+            </div>
+    
+            {{#if isActorEffect}}
+            <div class="form-group">
+                <label>{{ localize "EFFECT.Origin" }}</label>
+                <div class="form-fields">
+                    <input type="text" name="origin" value="{{ effect.origin }}" disabled/>
+                </div>
+            </div>
+            {{/if}}
+    
+            {{!--#if isItemEffect --}}
+            <div class="form-group">
+                <label>{{ localize "EFFECT.Transfer" }}</label>
+                <div class="form-fields">
+                    <input type="checkbox" name="transfer" {{checked effect.transfer}}/>
+                </div>
+            </div>
+            {{!-- /if --}}
+        </div>
+    </section>
+--> 
+<!--
+    <section class="tab" data-tab="details">
+    </section>
+
+
+    <section class="tab" data-tab="effects">
+        <header class="effect-change effects-header flexrow">
+            <div class="key">{{ localize "EFFECT.ChangeKey" }}</div>
+            <div class="mode">{{ localize "EFFECT.ChangeMode" }}</div>
+            <div class="value">{{ localize "EFFECT.ChangeValue" }}</div>
+            <div class="effect-controls">
+                <a class="effect-control" data-action="add"><i class="far fa-plus-square"></i></a>
+            </div>
+        </header>
+        <ol class="changes-list">
+            {{#each effect.changes as |change i|}}
+            <li class="effect-change flexrow" data-index="{{i}}">
+                <div class="key">
+                    <input type="text" name="changes.{{i}}.key" value="{{change.key}}"/>
+                </div>
+                <div class="mode">
+                    <select name="changes.{{i}}.mode" data-dtype="Number">
+                        {{selectOptions ../modes selected=change.mode}}
+                    </select>
+                </div>
+                <div class="value">
+                    <input type="text" name="changes.{{i}}.value" value="{{change.value}}"/>
+                </div>
+                <div class="effect-controls">
+                    <a class="effect-control" data-action="delete"><i class="fas fa-trash"></i></a>
+                </div>
+            </li>
+            {{/each}}
+        </ol>
+    </section>
+
+    <section class="tab" data-tab="wfrp">
+        <div class="form-group">
+            <label class="label-text">{{localize "EFFECT.adapterName"}}</label>
+            <select class="effect-type" {{#if disableTrigger}} disabled {{/if}}>
+              {{#select effect.flags.wfrp4e.effectTrigger}}
+              <option value=""></option>
+              {{#each effectTriggers as |label key|}}
+              <option value="{{key}}">{{label}}</option>
+              {{/each}}
+              {{/select}}
+            </select>
+        </div>
+
+        {{#if showEditor}}
+        <textarea name="flags.wfrp4e.script" placeholder="{{placeholder}}">{{effect.flags.wfrp4e.script}}</textarea>
+        {{/if}}
+
+        {{#if (eq effect.flags.wfrp4e.effectTrigger "dialogChoice")}}
+            <div class="form-group">
+                <label class="label-text">{{localize "Description"}}</label>
+                <input name="flags.wfrp4e.effectData.description" value="{{effect.flags.wfrp4e.effectData.description}}" data-dtype="String"/>
+            </div>
+
+            <div class="form-group">
+                <label class="label-text">{{localize "Modifier"}}</label>
+                <input name="flags.wfrp4e.effectData.modifier" value="{{effect.flags.wfrp4e.effectData.modifier}}"data-dtype="Number"/>
+            </div>
+
+            <div class="form-group">
+                <label class="label-text">{{localize "DIALOG.SLBonus"}}</label>
+                <input name="flags.wfrp4e.effectData.slBonus" value="{{effect.flags.wfrp4e.effectData.slBonus}}"data-dtype="Number"/>
+            </div>
+
+            <div class="form-group">
+                <label class="label-text">{{localize "DIALOG.SuccessBonus"}}</label>
+                <input name="flags.wfrp4e.effectData.successBonus" value="{{effect.flags.wfrp4e.effectData.successBonus}}"data-dtype="Number"/>
+            </div>
+
+            <div class="form-group">
+                <label class="label-text">{{localize "DIALOG.DifficultyStep"}}</label>
+                <input name="flags.wfrp4e.effectData.difficultyStep" value="{{effect.flags.wfrp4e.effectData.difficultyStep}}"data-dtype="Number"/>
+            </div>
+        {{/if}}
+        <div class="form-group">
+            <label class="label-text">{{localize "EFFECT.EffectApplication"}}</label>
+            <select class="effect-application" name="flags.wfrp4e.effectApplication">
+              {{#select effect.flags.wfrp4e.effectApplication}}
+              {{#each effectApplication as |label key|}}
+              <option value="{{key}}">{{label}}</option>
+              {{/each}}
+              {{/select}}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>{{ localize "EFFECT.HideEffect" }}</label>
+            <div class="form-fields">
+                <input type="checkbox" name="flags.wfrp4e.hide" {{checked effect.flags.wfrp4e.hide}}/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>{{ localize "EFFECT.PreventDuplicate" }}</label>
+            <div class="form-fields">
+                <input type="checkbox" name="flags.wfrp4e.preventDuplicateEffects" {{checked effect.flags.wfrp4e.preventDuplicateEffects}}/>
+            </div>
+        </div>
+
+        {{!-- Description Tab --}}
+        <div class="tab" data-group="primary" data-tab="description">
+            {{editor content=data.data.description target="data.description" button=true owner=owner editable=editable}}
+        </div>
+    </section>
+-->

@@ -1,0 +1,25 @@
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.AttackType" }}</label>
+    <div class="form-fields">
+        <select name="flags.merp1e.AttackTypeModifier.attackType">
+            {{selectOptions attackTypes selected=effect.flags.merp1e.AttackTypeModifier.attackType localize=true nameAttr="id" labelAttr="label" blank=""}}
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.Modifier" }}</label>
+    <div class="form-fields flexrow">
+        <div class="flex2 flexrow">
+            <select name="flags.merp1e.AttackTypeModifier.valueFunction">
+                {{selectOptions modifierValueFunctions selected=effect.flags.merp1e.AttackTypeModifier.valueFunction localize=true nameAttr="id" labelAttr="label"}}
+            </select>
+            {{#if (eq effect.flags.merp1e.AttackTypeModifier.valueFunction "constant")}}
+            <input name="flags.merp1e.AttackTypeModifier.value" value="{{effect.flags.merp1e.AttackTypeModifier.value}}" type="number" data-dtype="Number"/>
+            {{/if}}
+        </div>
+        <input class="flex3" name="flags.merp1e.AttackTypeModifier.label" value="{{effect.flags.merp1e.AttackTypeModifier.label}}" type="text" data-dtype="String"/>
+        <select name="flags.merp1e.AttackTypeModifier.enableFunction" class="flex1">
+            {{selectOptions modifierEnableFunctions selected=effect.flags.merp1e.AttackTypeModifier.enableFunction localize=true nameAttr="id" labelAttr="label" blank=""}}
+        </select>
+    </div>
+</div>

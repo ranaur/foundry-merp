@@ -7,12 +7,178 @@ import { TableBT1 } from "./tables/bt-1.js";
 import { TableBT5, TableBT5Aux } from "./tables/bt-5.js";
 import { TableRR1 } from "./tables/rr-1.js";
 import { findByID } from '../util.js';
-import { Merp1eStaticManeuverChatCard, Merp1eMovingManeuverChatCard, Merp1eResistenceRollChatCard, Merp1eSpecialRollChatCard } from "../chat/chatcard.js";
+import { Merp1eStaticManeuverChatCard, Merp1eMovingManeuverChatCard, Merp1eResistenceRollChatCard, Merp1eSpecialRollChatCard, Merp1eAttackChatCard } from "../chat/chatcard.js";
+
+export class Merp1eTable {
+    constructor(tableReference) {
+        //Object.assign(this, tableData);
+        this.reference = tableReference;
+    }
+
+    static createTable(reference) {
+        const table = new Merp1eRealTable(reference);
+        if(!table) {
+            return new Merp1eMockTable(reference);
+        }
+        return table;
+    }
+}
+
+class Merp1eRealTable extends Merp1eTable {
+    constructor(tableReference) {
+        super(tableReference);
+        this.rolltable = game.tables.find((t) => t.reference == tableReference);
+        if(!this.rolltable) return undefined;
+    }
+
+    lookupTable(firstDice, total, column) {
+        return this.rolltable.lookupTable(firstDice, total, column);
+    }
+
+    get name() {
+        return this.rolltable.name;
+    }
+}
+
+class Merp1eMockTable extends Merp1eTable {
+    static mockTables = [
+        { id: "at1", tableReference: "AT-1", label: "MERP1E.AttackTable.1HSlashing", description: "Page 70" },
+        { id: "at2", tableReference: "AT-2", label: "MERP1E.AttackTable.1HConcussion", description: "Page 70" },
+        { id: "at3", tableReference: "AT-3", label: "MERP1E.AttackTable.2Handed", description: "Page 70" },
+        { id: "at4", tableReference: "AT-4", label: "MERP1E.AttackTable.Missile", description: "Page 70" },
+        { id: "at5", tableReference: "AT-5", label: "MERP1E.AttackTable.ToothClaw", description: "Page 68" },
+        { id: "at6", tableReference: "AT-6", label: "MERP1E.AttackTable.GrapplingUmbalancing", description: "Page 68" },
+        { id: "at7", tableReference: "AT-7", label: "MERP1E.AttackTable.BoltSpell", description: "Page 74" },
+        { id: "at8", tableReference: "AT-8", label: "MERP1E.AttackTable.BallSpell", description: "Page 74" },
+    ];
+
+    constructor(tableReference) {
+        super(tableReference);
+        this.type = "mockTable";
+        this.mocktable = findByID(Merp1eMockTable.mockTables, tableReference, null);
+    }
+
+    lookupTable(firstDice, total, column) {
+        return { type: "text", text: this?.mocktable?.description || "???" };
+    }
+
+    get name() {
+        return game.i18n.localize(this.mocktable.label);
+    }
+}
+
+class Merp1eAttack {
+    static criticalSizes = [
+            { id: "A", label: "MERP1E.criticalSize.A", adjustment: -20 },
+            { id: "B", label: "MERP1E.criticalSize.B", adjustment: -10 },
+            { id: "C", label: "MERP1E.criticalSize.C", adjustment: 0 },
+            { id: "D", label: "MERP1E.criticalSize.D", adjustment: 10 },
+            { id: "E", label: "MERP1E.criticalSize.E", adjustment: 20 },
+            { id: "T", label: "MERP1E.criticalSize.T", adjustment: 50 }
+    ];
+    static criticalTypes = [ 
+        { id: "heat", label: "MERP1E.CriticalType.Heat", tableReference: "CT-6", reference: "Page 75" }, 
+        { id: "cold", label: "MERP1E.CriticalType.Cold", tableReference: "CT-7", reference: "Page 75" }, 
+        { id: "eletricity", label: "MERP1E.CriticalType.Eletricity", tableReference: "CT-8", reference: "Page 75" }, 
+        { id: "impact", label: "MERP1E.CriticalType.Impact", tableReference: "CT-9", reference: "Page 75" }, 
+        { id: "crush", label: "MERP1E.CriticalType.Crush", tableReference: "CT-1", reference: "Page 75" }, 
+        { id: "slash", label: "MERP1E.CriticalType.Slash", tableReference: "CT-2", reference: "Page 72" }, 
+        { id: "puncture", label: "MERP1E.CriticalType.Puncture", tableReference: "CT-3", reference: "Page 72" }, 
+        { id: "unbalancing", label: "MERP1E.CriticalType.Unbalancing", tableReference: "CT-4", reference: "Page 72" }, 
+        { id: "grappling", label: "MERP1E.CriticalType.Grappling", tableReference: "CT-5", reference: "Page 73" }, 
+        { id: "large", label: "MERP1E.CriticalType.Large", tableReference: "CT-10", reference: "Page 73" }, 
+        { id: "huge", label: "MERP1E.CriticalType.Huge", tableReference: "CT-11", reference: "Page 73" }, 
+    ];
+    static types = [
+            { id: "missileAttack", label: "MERP1E.Attack.MissileAttack" },
+            { id: "meleeAttack", label: "MERP1E.Attack.MeleeAttack" },
+            { id: "spellAttack", label: "MERP1E.Attack.SpellAttack" },
+    ];
+    static maxResults = [
+        { id: "no", max: 150, label: "MERP1E.MaxResults.No" },
+        { id: "small", max: 105, label: "MERP1E.MaxResults.Small" },
+        { id: "medium", max: 120, label: "MERP1E.MaxResults.Medium" },
+        { id: "large", max: 135, label: "MERP1E.MaxResults.Large" },
+        { id: "huge", max: 150, label: "MERP1E.MaxResults.Huge" },
+        { id: "shock", max: 90, label: "MERP1E.MaxResults.Shock" },
+        { id: "water", max: 110, label: "MERP1E.MaxResults.Water" },
+        { id: "ice", max: 130, label: "MERP1E.MaxResults.Ice" },
+        { id: "fire", max: 150, label: "MERP1E.MaxResults.Fire" },
+        { id: "lightning", max: 150, label: "MERP1E.MaxResults.Lightning" }
+    ];
+
+    static rollAttack(attackData) {
+        return new Merp1eAttackChatCard(attackData).sendMessage();
+    }
+
+    static resolveAttack(firstDice, total, defenderArmorType, tableReference, fumbleNumber, maximumResult = 150) {
+        const table = Merp1eTable.createTable(tableReference);
+
+        if(firstDice <= fumbleNumber) return { type: "fumble", text: "F" };
+        if(total <= fumbleNumber) total = fumbleNumber + 1;
+
+        if(typeof maximumResult === "string") {
+            maximumResult = findByID(game.merp1e.Merp1eRules.attack.maxResults, maximumResult, 150);
+        }
+        if(total > maximumResult) total = maximumResult;
+
+        const result = table.lookupTable(firstDice, total, defenderArmorType);
+        if(result.type == "result") {
+            if(result.text == "F") {
+                result.type = "fumble";
+            } else {
+                if(result.text.slice(-1).match(/[A-Z]/i) ) {
+                    result.type = "critical";
+                    result.critical = result.text.slice(-1);
+                    result.damage = parseInt(result.text.substring(0, result.text.length - 1));
+                } else {
+                    const damage = parseInt(result.text);
+                    if(damage == 0) {
+                        result.type = "miss";
+                    } else {
+                        result.type = "damage";
+                        result.damage = damage;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    static getAvaliableTables() {
+        const attackTables = game.tables.filter((tbl) => tbl.type.id == "attackTable").reduce((acc, tbl) => { acc.push({ reference: tbl.reference, name: tbl.shortname, type: tbl.type, table: tbl }); return acc }, []);
+        Merp1eMockTable.mockTables.forEach((dtb) => {
+            const attackTable = attackTables.find((tbl) => tbl.reference == dtb.tableReference);
+            if(!attackTable) {
+                res.push(
+                    { reference: dtb.reference, name: game.i18n.localize(dtb.label), type: "mockTable" }
+                );
+            }
+        } );
+        return attackTables;
+    }
+    static createTable(reference) {
+        return Merp1eTable.createTable(reference);
+    }
+    static getPossibleTargets(actorId) {
+        if(!game.combat.started) return [];
+        return game.combat.combatants.reduce((acc,ctt) => { acc.push(ctt); return acc;}, []);
+    }
+}
+
+class Merp1eMovingManeuverTable {
+    static resolve(firstDice, total, column) {
+        firstDice = firstDice; // ignore firstDice, there is no UM in the table
+        if(total > 300) total = 300;
+        return Merp1eRules.lookupTable(Merp1eRules.tables.mt1, column, total);
+    }
+}
 
 export class Merp1eRules {
     static spell = MerpSpell;
     static spelllist = MerpSpellList;
     static skill = MerpSkill;
+    static attack = Merp1eAttack;
     static tables = {
         mt2: TableMT2,
         mt1: TableMT1,
@@ -21,23 +187,53 @@ export class Merp1eRules {
         bt5aux: TableBT5Aux,
         rr1: TableRR1
     };
-    /* XXX FIX for attack type */
-    /*
-    static attack = {
-        type: [ 
-            { id: "heat", label: "MERP1E.AttackType.Heat" }, 
-            { id: "cold", label: "MERP1E.AttackType.Cold" }, 
-            { id: "Eletricity", label: "MERP1E.AttackType.Eletricity" }, 
-            { id: "Impact", label: "MERP1E.AttackType.Impact" }, 
-            { id: "Crush", label: "MERP1E.AttackType.Crush" }, 
-            { id: "Slash", label: "MERP1E.AttackType.Slash" }, 
-            { id: "Puncture", label: "MERP1E.AttackType.Puncture" }, 
-            { id: "Unbalancing", label: "MERP1E.AttackType.Unbalancing" }, 
-            { id: "Grappling", label: "MERP1E.AttackType.Grappling" }
+    static injury = {
+        types: [ // IHT3RecoveryTabl
+            { id: 'burn', label: 'MERP1E.Injury.Burn', recovery: { light: 3, medium: 10, severe: 25 } }, 
+            { id: 'tissue', label: 'MERP1E.Injury.Tissue', recovery: { light: 3, medium: 10, severe: 25 } }, 
+            { id: 'bone', label: 'MERP1E.Injury.Bone', recovery: { light: 5, medium: 15, severe: 35 } }, 
+            { id: 'muscle', label: 'MERP1E.Injury.Muscle', recovery: { light: 5, medium: 15, severe: 35 } }, 
+            { id: 'tendon', label: 'MERP1E.Injury.Tendon', recovery: { light: 5, medium: 15, severe: 35 } }, 
+            { id: 'head', label: 'MERP1E.Injury.Head', recovery: { light: 14, medium: 60, severe: 180 } }, 
+            { id: 'internalOrgans', label: 'MERP1E.Injury.InternalOrgans', recovery: { light: 14, medium: 60, severe: 180 } }, 
+          ],
+        locations: [
+            { id: "hand", label: "MERP1E.BodyPart.hand", bodyGroup: "arm", paired: true }, 
+            { id: "arm", label: "MERP1E.BodyPart.arm", bodyGroup: "arm", paired: true }, 
+            { id: "forearm", label: "MERP1E.BodyPart.forearm", bodyGroup: "arm", paired: true }, 
+            { id: "elbow", label: "MERP1E.BodyPart.elbow", bodyGroup: "arm", paired: true }, 
+            { id: "upperLeg", label: "MERP1E.BodyPart.upperLeg", bodyGroup: "leg", paired: true }, 
+            { id: "thigh", label: "MERP1E.BodyPart.thigh", bodyGroup: "leg", paired: true }, 
+            { id: "knee", label: "MERP1E.BodyPart.knee", bodyGroup: "leg", paired: true }, 
+            { id: "lowerLeg", label: "MERP1E.BodyPart.lowerLeg", bodyGroup: "leg", paired: true }, 
+            { id: "hips", label: "MERP1E.BodyPart.hips", bodyGroup: "torso", paired: false }, 
+            { id: "calf", label: "MERP1E.BodyPart.calf", bodyGroup: "leg", paired: true }, 
+            { id: "chest", label: "MERP1E.BodyPart.chest", bodyGroup: "torso", paired: false }, 
+            { id: "side", label: "MERP1E.BodyPart.side", bodyGroup: "torso", paired: false }, 
+            { id: "abdomen", label: "MERP1E.BodyPart.abdomen", bodyGroup: "torso", paired: false }, 
+            { id: "forehead", label: "MERP1E.BodyPart.forehead", bodyGroup: "head", paired: false }, 
+            { id: "temple", label: "MERP1E.BodyPart.temple", bodyGroup: "head", paired: false }, 
+            { id: "neck", label: "MERP1E.BodyPart.neck", bodyGroup: "head", paired: false }, 
+            { id: "eye", label: "MERP1E.BodyPart.eye", bodyGroup: "head", paired: true }, 
+            { id: "ear", label: "MERP1E.BodyPart.ear", bodyGroup: "eye", paired: true }, 
+            { id: "nose", label: "MERP1E.BodyPart.nose", bodyGroup: "nose", paired: false}, 
+            { id: "lungs", label: "MERP1E.BodyPart.lungs", bodyGroup: "organs", paired: false }, 
+            { id: "heart", label: "MERP1E.BodyPart.heart", bodyGroup: "organs", paired: false }, 
+            { id: "kidneys", label: "MERP1E.BodyPart.kidneys", bodyGroup: "organs", paired: false }, 
+            { id: "brain", label: "MERP1E.BodyPart.brain", bodyGroup: "head", paired: false }, 
+            { id: "head", label: "MERP1E.BodyPart.head", bodyGroup: "head", paired: false }, 
+        ],
+        categories: [
+            { id: "light", label: "Light" } ,
+            { id: "medium", label: "Medium" },
+            { id: "severe", label: "Severe" }
+        ],
+        durations: [
+            { id: "indefinite", label: "Indefinite" },
+            { id: "combat", label: "Combat" },
+            { id: "time", label: "Time" }
         ]
     };
-    */
-
     static actions = [
         { id: "prepareSpell", name:"MERP1E.Action.PrepareSpell" },
         { id: "castSpell", name:"MERP1E.Action.CastSpell" },
@@ -59,9 +255,10 @@ export class Merp1eRules {
     ];
 
     static mainLocations = [
+        { id: "wearing", name: "MERP1E.Location.Wearing", item: null },
         { id: "carrying", name: "MERP1E.Location.Carrying", item: null },
         { id: "stored", name: "MERP1E.Location.Stored", item: null },
-        { id: "wearing", name: "MERP1E.Location.Wearing", item: null }
+        { id: "dropped", name: "MERP1E.Location.Dropped", item: null },
     ];
 
     static stats = [
@@ -71,20 +268,22 @@ export class Merp1eRules {
         { id: "ig", label: "MERP1E.Stats.ig.Name", abbr: "MERP1E.Stats.ig.Abbr" }, 
         { id: "it", label: "MERP1E.Stats.it.Name", abbr: "MERP1E.Stats.it.Abbr" }, 
         { id: "pr", label: "MERP1E.Stats.pr.Name", abbr: "MERP1E.Stats.pr.Abbr" }, 
-        { id: "ap", label: "MERP1E.Stats.ap.Name", abbr: "MERP1E.Stats.ap.Abbr" , only_value: true }
+        { id: "ap", label: "MERP1E.Stats.ap.Name", abbr: "MERP1E.Stats.ap.Abbr", only_value: true }
     ];
+
     static rollTypes = [
         { id: "MM", label: "MERP1E.RollType.MM", abbr: "MERP1E.RollTypeAbbr.MM", rollCard: (data) => new Merp1eMovingManeuverChatCard(data) },
         { id: "SM", label: "MERP1E.RollType.SM", abbr: "MERP1E.RollTypeAbbr.SM", rollCard: (data) => new Merp1eStaticManeuverChatCard(data) },
         { id: "RR", label: "MERP1E.RollType.RR", abbr: "MERP1E.RollTypeAbbr.RR", rollCard: (data) => new Merp1eResistenceRollChatCard(data) },
-        { id: "DB", label: "MERP1E.RollType.DB", abbr: "MERP1E.RollTypeAbbr.DB", rollCard: (data) => new Merp1eStaticManeuverChatCard(data) },
-        { id: "OB", label: "MERP1E.RollType.OB", abbr: "MERP1E.RollTypeAbbr.OB", rollCard: (data) => new Merp1eStaticManeuverChatCard(data) },
+        { id: "DB", label: "MERP1E.RollType.DB", abbr: "MERP1E.RollTypeAbbr.DB" },
+        { id: "OB", label: "MERP1E.RollType.OB", abbr: "MERP1E.RollTypeAbbr.OB" },
         { id: "SP", label: "MERP1E.RollType.SP", abbr: "MERP1E.RollTypeAbbr.SP", rollCard: (data) => new Merp1eSpecialRollChatCard(data) }
     ];
 
     static getSpecialItems() {
         return game.data.items.filter((item) => item.type == "special").reduce((acc, itm) => { acc[itm._id] = itm.name; return acc; }, { "": null });
     }
+
     static get globalEffect() {
         const globalEffectId = game.settings.get("merp1e", "globalEffect");
         return game.items.get(globalEffectId);
@@ -95,6 +294,9 @@ export class Merp1eRules {
         if(!rollTypeID) rollTypeID = skill?.data?.data?.rollType;
         const rollType = findByID(this.rollTypes, rollTypeID, "SM");
         if(rollType) {
+            if(!rollType.rollCard) {
+                return ui.notifications.error(`Rolltype ${rollTypeID} cannot be rolled in this manner!`);
+            }
             const card = rollType.rollCard({skill: skill, rollTypeID: rollType.id});
             card.sendMessage();
         } else {
@@ -121,13 +323,13 @@ export class Merp1eRules {
     }; // XXX make a lookkup on item directory
     static magic = {
         realms: [
-            { id: "Essence", label: "MERP1E.Realm.Essence", stat: "ig" },
-            { id: "Channeling", label: "MERP1E.Realm.Channeling", stat: "it" },
+            { id: "essence", label: "MERP1E.Realm.Essence", stat: "ig" },
+            { id: "channeling", label: "MERP1E.Realm.Channeling", stat: "it" },
         ],
         realmsAny: [
-            { id: "Any", label: "MERP1E.Realm.Any" },
-            { id: "Essence", label: "MERP1E.Realm.Essence", stat: "ig" },
-            { id: "Channeling", label: "MERP1E.Realm.Channeling", stat: "it" }, // XXX copy from realm on constructor (remove static)
+            { id: "any", label: "MERP1E.Realm.Any" },
+            { id: "essence", label: "MERP1E.Realm.Essence", stat: "ig" },
+            { id: "channeling", label: "MERP1E.Realm.Channeling", stat: "it" }, // XXX copy from realm on constructor (remove static)
         ],
         professionalRestrictions: [
             { id: "profession and open", label: "MERP1E.SpellsAllowed.ProfessionOpen" },
@@ -146,11 +348,11 @@ export class Merp1eRules {
 
     static defense = {
         armorTypes: [
-            { id: "no", label: "MERP1E.ArmorType.no.Name", abbr: "MERP1E.ArmorType.no.Abbr", bonus: 0, skillReference: "NoArmor" },
-            { id: "sl", label: "MERP1E.ArmorType.sl.Name", abbr: "MERP1E.ArmorType.sl.Abbr", bonus: 0, skillReference: "SoftLeather" },
-            { id: "rl", label: "MERP1E.ArmorType.rl.Name", abbr: "MERP1E.ArmorType.rl.Abbr", bonus: 0, skillReference: "RigidLeather" },
-            { id: "ch", label: "MERP1E.ArmorType.ch.Name", abbr: "MERP1E.ArmorType.ch.Abbr", bonus: 0, skillReference: "Chain" },
-            { id: "pl", label: "MERP1E.ArmorType.pl.Name", abbr: "MERP1E.ArmorType.pl.Abbr", bonus: 0, skillReference: "Plate" }
+            { id: "no", label: "MERP1E.ArmorType.no.Name", abbr: "MERP1E.ArmorType.no.Abbr", bonus: 0, skillReference: "NoArmor", attackPos: 4 },
+            { id: "sl", label: "MERP1E.ArmorType.sl.Name", abbr: "MERP1E.ArmorType.sl.Abbr", bonus: 0, skillReference: "SoftLeather", attackPos: 3 },
+            { id: "rl", label: "MERP1E.ArmorType.rl.Name", abbr: "MERP1E.ArmorType.rl.Abbr", bonus: 0, skillReference: "RigidLeather", attackPos: 2 },
+            { id: "ch", label: "MERP1E.ArmorType.ch.Name", abbr: "MERP1E.ArmorType.ch.Abbr", bonus: 0, skillReference: "Chain", attackPos: 1 },
+            { id: "pl", label: "MERP1E.ArmorType.pl.Name", abbr: "MERP1E.ArmorType.pl.Abbr", bonus: 0, skillReference: "Plate", attackPos: 0 }
         ],
         armGreavesTypes: Merp1eRules.defenseTypes,
         legGreavesTypes: Merp1eRules.defenseTypes,
@@ -245,10 +447,10 @@ export class Merp1eRules {
         return Merp1eRules.tables.rr1.table[tl-1][al-1] + adj;
     };
 
-    static resolveMovingManeuver(roll, difficulty) {
-        if(roll > 300) roll = 300;
-        return Merp1eRules.lookupTable(Merp1eRules.tables.mt1, difficulty, roll);
-    };
+    static resolveMovingManeuver(firstDice, total, difficulty) {
+        return Merp1eMovingManeuverTable.resolve(firstDice, total, difficulty);
+    }
+        
 
     static resolveStaticManeuver(roll) {
         if(roll > 300) roll = 300;
@@ -271,7 +473,6 @@ export class Merp1eRules {
         }
         return game.i18n.localize(label);
     }
-
     static staticManeuverResults() {
         return Merp1eRules.tables.mt2.toObjectArray();
         //return Merp1eRules.tables.mt2.table.reduce((acc, row) => { acc.push({id: row[1], label: row[2], text: row[3]}); return acc;}, []);
@@ -291,6 +492,41 @@ export class Merp1eRules {
         return res + Math.ceil(excessWeight / 10 * 5);
     };
 
+    static getRolltableByDescription(description) {
+        return game.rolltables.find((rt) => rt.data.description == description );
+    }
+
+    static getMaxResult(sizeId) {
+        return findById(this.attack.maxResults, sizeId, 150);
+    }
+
+    static resolveAttackTable(tableId, roll, total, armorId, sizeId = null) {
+        const table = findByID(this.attack.tables, tableId, null);
+        if(!table) return null;
+        const rollTable = this.getRolltableByDescription(table.tableReference);
+        if(!rollTable) { // table not found
+            return table;
+        }
+
+        let resultLine;
+        // handle UM
+        const rollResultLine = rollTable.getResultsForRoll(roll);
+        if(rollResultLine.substr(rollResultLine.length - 4) == "(UM)") {
+            resultLine = rollResultLine.substr(0, rollResultLine.length - 4);
+        } else {
+            total = min(total, this.getMaxResult(sizeId));
+            resultLine = rollTable.getResultsForRoll(total);
+        }
+
+        // Parse Armor
+        const results = resultLine.split(",");
+        const armor = findById(this.armorTypes, armorId, null);
+        if(!armor){
+            throw `Invalid armor type "${armorId}""`;
+        }
+
+        return results[armor.attackPos];
+    }
 
     // Maps XP to the level
     static resolveLevel(xp) {
@@ -357,11 +593,11 @@ export class Merp1eRules {
     static getActors() {
         return game.actors.filter(actor => { return actor.type == "character" && actor.permission == CONST.ENTITY_PERMISSIONS.OWNER; });
     }
-    static generateSheetOrder(skills = null) {
+/*    static generateSheetOrder(skills = null) {
         console.error("rules.generateSheetOrder should not be used. Use generateSheetOrder.skill.generateSheetOrder instead!");
-        return Merp1eRules.generateSheetOrder(skills);
+        return MerpSkill.generateSheetOrder(skills);
     }
-    
+*/  
     static settings = {
         get damageControl() {
             return game.settings.get("merp1e", "damageControl");

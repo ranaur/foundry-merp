@@ -1,4 +1,4 @@
-import { Merp1eActiveEffectHelper } from '../active-effect-helper.js';
+import { Merp1eActiveEffectHelper } from '../effect/effect-helper.js';
 import { Merp1eBaseItemSheet } from './base-sheet.js';
 
 /**

@@ -1,22 +1,25 @@
 import { Merp1eModifiers } from "../modifier.js";
 import { rollOpenEnded } from "../dice.js";
-import { findByID } from "../util.js";
 import { Merp1eBaseChatCard } from "./base-chatcard.js";
+import { Merp1eItemEffect } from "../effect/item-effects.js";
+import { Merp1eTable } from "../rules/rules.js";
 
 export class Merp1eRollChatCard extends Merp1eBaseChatCard {
     // overload
     get title() {
-        return "Roll ChatCard";
+        throw "Abstract Class: must implement method!";
     }
 
-    get rollTypeID() { return "XX"; }
+    get rollTypeID() { 
+        throw "Abstract Class: must implement method!";
+    }
 
-    resolveResult(total) {
-        return game.merp1e.Merp1eRules.resolveStaticManeuverLabel(total); // XXX
+    resolveResult(total, data) {
+        throw "Abstract Class: must implement method!";
     }
     
     resolveText(total, data) {
-        return game.merp1e.Merp1eRules.resolveStaticManeuverText(total, data.skill);
+        throw "Abstract Class: must implement method!";
     }
     //    
 
@@ -32,44 +35,99 @@ export class Merp1eRollChatCard extends Merp1eBaseChatCard {
 	}
 
 	_getDataDifficulty(cardData) {
-        cardData.data.chosenDifficulty = cardData.data.chosenDifficulty || "Medium";
+        if(!cardData.data.chosenDifficulty) return;
         cardData.difficulties = game.merp1e.Merp1eRules.skill.difficulties;
-		cardData.difficultiesValues = cardData.difficulties.reduce((acc, dif) => { acc[dif.id] = dif.value; return acc; }, {});
 	}
 
 	_getDataModifiers(cardData) {
-        cardData?.actor?.applyEffects(cardData); // without actor to not apply actor modifiers
+            // get skill modifiers
+		cardData.skillModifiers = new Merp1eModifiers("skl", "MERP1E.ManeuverCard.SkillModifiers", cardData.skill.modifiers);
 
-		cardData.skillModifiers = new Merp1eModifiers("mmm", "MERP1E.ManeuverCard.SkillModifiers", cardData.skill.data?.data?.modifiers);
-        if(cardData.skill?.data?.data?.reference) {
-            let globalSkill = game.merp1e.Merp1eRules.skill.getAvaliableByReference(cardData.skill.data.data.reference);
-            cardData.skillModifiers.add(globalSkill?.data?.data?.modifiers);
-        }
+        cardData.itemModifiers = new Merp1eModifiers("itm", "MERP1E.ManeuverCard.ItemModifiers", Merp1eItemEffect.getModifiers(cardData));
 
-        cardData.itemModifiers = new Merp1eModifiers("itm", "MERP1E.ManeuverCard.ItemModifiers", cardData?.modifiers);
+        cardData.tableModifiers = new Merp1eModifiers("tbl", "MERP1E.ManeuverCard.TableModifiers", cardData?.table?.modifiers);
 
         cardData.data.modifiersChecked = cardData.data.modifiersChecked || {};
         cardData.data.modifiersValue = cardData.data.modifiersValue || {};
 	}
 	
-    _getDataTotal(cardData) {
-        // Calculate total bonus and roll
-        cardData.total = cardData?.skill.total;
-        cardData.total += findByID(cardData.difficulties, cardData.data.chosenDifficulty, {value:0}).value;
-        [cardData.skillModifiers, cardData.itemModifiers].forEach((mg) => {
-            mg.evaluate(cardData);
-            const checked = mg.id in cardData.data.modifiersChecked ? cardData.data.modifiersChecked[mg.id] : null;
-            const values = mg.id in cardData.data.modifiersValue ? cardData.data.modifiersValue[mg.id] : null;
+    _calculateSkillTotal(skill, difficultiesValues, skillModifiers, itemModifiers, contextData) {
+        const skillTotal = skill.total;
+        const difficultyTotal = difficultiesValues?.[contextData.data?.chosenDifficulty] || 0;
+        const rollTotal = (contextData.data.rollTotal || 0);
+
+        [skillModifiers, itemModifiers].forEach((mg) => {
+            mg.evaluate(contextData);
+            const checked = contextData?.data?.modifiersChecked?.[mg.id];
+            const values = contextData?.data?.modifiersValue?.[mg.id];
             const groupTotal = mg.getTotal(checked, values);
             mg.total = groupTotal;
-            cardData.total += groupTotal
+            skillTotal += groupTotal
         });
-        cardData.skillTotal = cardData.skill.total + cardData.skillModifiers.total;
-        cardData.total += (cardData.data.rollTotal || 0);
+        
+        return {
+            skillTotal: skillTotal,
+            difficultyTotal: difficultyTotal,
+            rollTotal: rollTotal,
+            skillModifiersTotal: skillModifiers.total,
+            itemModifiersTotal: itemModifiers.total,
+            grandTotal: skillTotal + difficultyTotal + rollTotal + skillModifiers.total + itemModifiers.total
+        };
+    }
+    calculateTotal(contextData) {
+        // Calculate total bonus and roll
+        contextData.total = contextData?.skill.total;
+        contextData.total += contextData.difficultiesValues?.[contextData.data.chosenDifficulty] || 0;
+        [contextData.tableModifiers, contextData.skillModifiers, contextData.itemModifiers].forEach((mg) => {
+            mg.evaluate(contextData);
+            const checked = mg.id in contextData.data.modifiersChecked ? contextData.data.modifiersChecked[mg.id] : null;
+            const values = mg.id in contextData.data.modifiersValue ? contextData.data.modifiersValue[mg.id] : null;
+            const groupTotal = mg.getTotal(checked, values);
+            mg.total = groupTotal;
+            contextData.total += groupTotal
+        });
+        contextData.skillTotal = contextData.skill.total + contextData.skillModifiers.total;
+        contextData.total += (contextData.data.rollTotal || 0);
+    }
+    
+    _getTableModifiers(cardData) {
+        cardData.table = Merp1eTable.createTable(cardData?.data.tableReference)
+
+        cardData.tableModifiers = new Merp1eModifiers("itm", "MERP1E.ManeuverCard.ItemModifiers", cardData?.table?.modifiers);
     }
 
     getData() {
         const cardData = super.getData();
+        /** 
+         * cardData main values:
+         *  Input: 
+         *    .data.actorID => Id of the actor doing the roll
+	     *    .data.skillID => Id of the skill doing the roll
+         *    .data.tableReference => table reference
+         *    .data.chosenDifficulty => difficulty choosen by the player
+         *    .data.modifiersChecked => list of checked modifiers
+         *    .data.modifiersValue => list of ad-hoc values
+		 *    .data.rollResult => text describing the roll
+		 *    .data.rollTotal => sum of the dices (for open ended)
+         *    .data.rollDices => array with the dices rolled
+         *    .data.actionData => data specific for the action
+         * 
+         * Output:
+         *    .skill => skill item (from skillID)
+		 *    .actor => actor item (from actorID)
+         *    .rollTypeID => derived the type of the card(maneuver) asked 
+         *    .difficulties => list of difficulties to fill the dropdown
+         *    .skillModifiers => modifiers from skills (character and global)
+         *         .total
+         *    .itemModifiers => modifiers from active itens
+         *         .total
+         *    .table => table (mock or not)
+         *    .tableModifiers => modifiers from the table
+         *         .total
+         *    .total => everything added up
+         *    .resolveResult => short description of the result 
+         *    .resolveText => long description of the result
+         */
 
         this._getDataActorSkill(cardData);
 
@@ -79,11 +137,14 @@ export class Merp1eRollChatCard extends Merp1eBaseChatCard {
 
         this._getDataModifiers(cardData);
 
-        this._getDataTotal(cardData);
+        this._getTableModifiers(cardData);
 
-        cardData.resolveResult = this.resolveResult(cardData.total);
-        cardData.resolveText = this.resolveText(cardData.total, cardData);
+        this.calculateTotal(cardData);
 
+        if(cardData.data.rollResult) {
+            cardData.resolveResult = this.resolveResult(cardData.data.rollDices[0], cardData.total, cardData);
+            cardData.resolveText = this.resolveText(cardData.data.rollDices[0], cardData.total, cardData);
+        }
         return cardData;
     }
 
@@ -92,6 +153,7 @@ export class Merp1eRollChatCard extends Merp1eBaseChatCard {
 
 		this.data.rollResult = oer.result;
 		this.data.rollTotal = oer.total;
+        this.data.rollDices = oer.dices;
 
         this.updateMessage(event);
         //this.close(event);

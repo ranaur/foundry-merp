@@ -24,11 +24,13 @@ export function rollOpenEndedSync(high = true, low = true) {
 
 export async function rollOpenEnded(high = true, low = true) {
     const MARGIN = 5; // Normal is 5
+    const dices = [];
     let r = new Roll("1D100", {async: true});
     await r.roll();
     //await r.toMessage();
 
     let total = r.total;
+    dices.push(r.total);
     let result = "".concat(r.total);
     console.log("first dice: " + r.total);
     let open = 0;
@@ -38,12 +40,13 @@ export async function rollOpenEnded(high = true, low = true) {
         let nr = new Roll("1D100", {async: true});
         await nr.roll();
         await nr.toMessage();
+        dices.push(nr.total);
         console.log("other dice: " + nr.total);
         total += nr.total * open;
         result = result.concat(open > 0 ? " + " : " - ").concat(nr.total);
         if(nr.total <= (100 - MARGIN)) open = 0;
     }
-    return { result: result, total: total };
+    return { result: result, total: total, dices: dices };
 }
 
 

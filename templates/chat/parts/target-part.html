@@ -1,0 +1,24 @@
+<div class="chat-card">
+    <div class="card-title grid grid-3col" style="font-weight: bold; grid-template-columns: 15% 60% 15%; border-bottom: 1pt; border-bottom-style: solid;">
+        <div>{{localize "MERP1E.ManeuverCard.Target"}}</div>
+        <div></div>
+        <div style="text-align: center;">{{formatBonus targetDBTotal}}</div>
+    </div>
+    <div class="">
+        <div class="grid grid-3col" style="grid-template-columns: 15% 75%;">
+            <div></div>
+            <select name="targetId">
+                {{selectOptions targets selected=choosenTarget localize=false nameAttr="id" labelAttr="name"}}
+            </select>
+            <div style="text-align: center;"></div>
+        </div>
+    </div>
+    <div class="card-content">
+        <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
+            <div></div>
+            <div>{{targetSkill.name}}</div>
+            <div style="text-align: center;">{{formatBonus targetDB}}</div>
+        </div>
+        {{> "systems/merp1e/templates/chat/parts/modifiers-part.html" group=targetSkillModifiers data=data }}    
+    </div>
+</div>

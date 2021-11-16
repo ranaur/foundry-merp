@@ -1,0 +1,25 @@
+{{!-- Parameters = examples
+    modifierData = effect.flags.merp1e.RollTypeModifier
+    modifierPath = "flags.merp1e.RollTypeModifier"
+    modifierValueFunctions = Merp1eModifier.valueFunctions;
+    modifierEnableFunctions = Merp1eModifier.enableFunctions;
+--}}
+</style>
+<div class="modifier-value flexrow" style="text-align: center; margin-right: 5px; margin-left: 5px;">
+    <select name="{{modifierPath}}.valueFunction" style="height: 27px;">
+        {{selectOptions modifierValueFunctions selected=(lookup modifierData 'valueFunction') localize=true nameAttr="id" labelAttr="label"}}
+    </select>
+    {{#if (eq (lookup modifierData 'valueFunction') "constant")}}
+    
+    <input style="margin-left: 5px;" name="{{modifierPath}}.value" value="{{lookup modifierData 'value'}}" type="number" data-dtype="Number"/>
+    
+    {{/if}}
+</div>
+<div class="modifier-label" style="width: 100%; height: 28px; margin-right: 5px;">
+    <input name="{{modifierPath}}.label" value="{{lookup modifierData 'label'}}" type="text" data-dtype="String"/>
+</div>
+<div class="modifier-enable" style="flex: 0 0 50px; text-align: center; margin-right: 5px;">
+    <select name="{{modifierPath}}.enableFunction" class="flex1">
+        {{selectOptions modifierEnableFunctions selected=(lookup modifierData 'enableFunction') localize=true nameAttr="id" labelAttr="label" blank=""}}
+    </select>
+</div>
