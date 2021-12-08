@@ -1,16 +1,185 @@
-<h2>Hits Per Round</h2>
+<h2>{{localize "MERP1E.Injury.HitsPerRound"}}</h2>
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.Hits" }}</label>
+    <label>{{ localize "MERP1E.EffectInjury.Formula" }}</label>
     <div class="form-fields">
-        <input type="number" name="flags.merp1e.HitsPerRound.value" value="{{effect.flags.merp1e.HitsPerRound.value}}" placeholder="0"/>
+        <input type="text" name="flags.merp1e.HitsPerRound.formula" value="{{effect.flags.merp1e.HitsPerRound.formula}}" {{roif this.isApplied}}/>
     </div>
 </div>
 <div class="form-group">
-    <label>{{ localize "Category" }}</label>
+    <label>{{ localize "MERP1E.Effect.Description" }}</label>
     <div class="form-fields">
-        <select name="flags.merp1e.HitsPerRound.category">
+        <input type="text" name="flags.merp1e.Hits.description" value="{{effect.flags.merp1e.Hits.description}}" {{rw}}/>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.Location.Label" }}</label>
+    <div class="form-fields">
+        <select name="flags.merp1e.HitsPerRound.location" {{rw}}>
+            <option value="">{{localize "MERP1E.BodyPart.unspecified"}}</option>
+            {{selectOptions injuryLocations selected=effect.flags.merp1e.HitsPerRound.location localize=true nameAttr="id" labelAttr="label"}}
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.Category.Label" }}</label>
+    <div class="form-fields">
+        <select name="flags.merp1e.HitsPerRound.category" {{rw}}>
             <option value="">{{localize "Default"}} ({{defaultCategory}})</option>
             {{selectOptions injuryCategories selected=effect.flags.merp1e.HitsPerRound.category localize=true nameAttr="id" labelAttr="label"}}
         </select>
     </div>
 </div>
+{{#if this.isApplied}}
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.Applied" }}</label>
+    <div class="form-fields">
+        {{appliedText}}
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.InitialValue" }}</label>
+    <div class="form-fields">
+        <input type="number" name="flags.merp1e.HitsPerRound.initialValue" value="{{effect.flags.merp1e.HitsPerRound.initialValue}}" {{ro}}/>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.CurrentValue" }}</label>
+    <div class="form-fields">
+        <input type="number" name="flags.merp1e.HitsPerRound.currentValue" value="{{effect.flags.merp1e.HitsPerRound.currentValue}}" {{rw}}/>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.EffectiveValue" }}</label>
+    <div class="form-fields">
+        <input type="number" name="flags.merp1e.HitsPerRound.effectiveValue" value="{{this.document.effectAdapter.effectiveValue}}" {{ro}}/>
+    </div>
+</div>
+
+{{!-- Treatment --}}
+<h2 class="flexrow">
+    <div class="flex3">{{localize "MERP1E.EffectInjury.Treatment"}}</div>
+    <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+        {{#if (eq effect.flags.merp1e.HitsPerRound.currentValue 0)}}
+            <div><a class="injury-control" data-action="delete"><i class="fas fa-trash" title="{{localize 'MERP1E.EffectAction.Delete'}}"></i></a></div>
+        {{/if}}
+        {{#if isTreated}}
+            {{#if (eq effect.flags.merp1e.HitsPerRound.treatment "tourniquet")}}
+                <a class="injury-control" data-action="loosentourniquet"><i class="fas fa-heartbeat" title="{{localize 'MERP1E.EffectAction.LoosenTourniquet'}}"></i></a>
+            {{/if}}
+            {{#if (eq effect.flags.merp1e.HitsPerRound.treatment "loosenTourniquet")}}
+                <a class="injury-control" data-action="treat"><i class="fas fa-stethoscope" title="{{localize 'MERP1E.EffectAction.Treat'}}"></i></a>
+            {{/if}}
+            <a class="injury-control" data-action="undotreat"><i class="fas fa-heart-broken" title="{{localize 'MERP1E.EffectAction.UndoTreatment'}}"></i></a>
+        {{else}}
+            <a class="injury-control" data-action="treat"><i class="fas fa-stethoscope" title="{{localize 'MERP1E.EffectAction.Treat'}}"></i></a>
+        {{/if}}
+    </div>
+</h2>
+{{#if isTreated}}
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.Treatment" }}</label>
+    <div class="form-fields">
+        <div class="flexrow">
+            <div class="flex4">
+                <input type="text" value="{{localize (getFieldByID treatments effect.flags.merp1e.HitsPerRound.treatment)}}" {{ro}}/>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.Treated" }}</label>
+    <div class="form-fields">
+        {{treatedText}}
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.HealsIn" }}</label>
+    <div class="form-fields">
+        <div class="flexrow">
+            <div class="flex4"><input type="number" name="flags.merp1e.HitsPerRound.HealsIn" value="{{effect.flags.merp1e.HitsPerRound.HealsIn}}" {{rw}}/></div>
+            <select name="flags.merp1e.HitsPerRound.HealsInTimeFrame" {{rw}}>
+                <option value=""></option>
+                {{selectOptions timeframe selected=effect.flags.merp1e.HitsPerRound.HealsInTimeFrame localize=true nameAttr="id" labelAttr="label"}}
+            </select>
+        </div>
+    </div>
+</div>
+{{#if (eq effect.flags.merp1e.HitsPerRound.HealingCycle "day")}}
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.HealingRate" }}</label>
+    <div class="form-fields">
+        <div class="flexrow">
+            <span class="">{{localize "MERP1E.EffectInjury.HealsFirstDay"}}</span>
+            <input type="number" value="{{effect.flags.merp1e.HitsPerRound.HealsFirstDay}}" {{ro}}/>
+        </div>
+        <div class="flexrow">
+            <span class="">{{localize "MERP1E.EffectInjury.HealsPerDay"}}</span>
+            <input type="number" value="{{effect.flags.merp1e.HitsPerRound.HealsPerDay}}" {{ro}}/>
+        </div>
+    </div>
+</div>
+{{/if}}
+{{#if (eq effect.flags.merp1e.HitsPerRound.HealingCycle "hour")}}
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.HealingRate" }}</label>
+    <div class="form-fields">
+        <div class="flexrow">
+            <span class="">{{localize "MERP1E.EffectInjury.HealsFirstHour"}}</span>
+            <input type="number" value="{{effect.flags.merp1e.HitsPerRound.HealsFirstHour}}" {{ro}}/>
+        </div>
+        <div class="flexrow">
+            <span class="">{{localize "MERP1E.EffectInjury.HealsPerHour"}}</span>
+            <input type="number" value="{{effect.flags.merp1e.HitsPerRound.HealsPerHour}}" {{ro}}/>
+        </div>
+    </div>
+</div>
+{{/if}}
+<h2 class="flexrow">
+    <div class="flex3">{{localize "MERP1E.EffectInjury.Healing"}}</div>
+    <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+        {{healingTotal}}
+    </div>
+    <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+        <div><a class="injury-control" data-action="doRound" title="{{localize 'MERP1E.EffectAction.Round'}}"><i class="far fa-hourglass"></i></a></div>
+        <div><a class="injury-control" data-action="doHour" title="{{localize 'MERP1E.EffectAction.Hour'}}"><i class="far fa-clock"></i></a></div>
+        <div><a class="injury-control" data-action="doDay" title="{{localize 'MERP1E.EffectAction.Day'}}"><i class="far fa-calendar-plus"></i></a></div>
+    </div>
+</h2>
+<div class="grid grid-8col">
+    {{#each effect.flags.merp1e.HitsPerRound.naturalRecovery as | nr | }}
+    <div class="flexrow" style="border: 1px solid; padding: 2px; text-align: center;" title="{{nr.appliedAtText}}">
+        {{nr.value}}
+    </div>
+    {{/each}}
+</div>
+{{/if}} {{!-- this.effect.treatedAt --}}
+
+{{!-- HEALING OLD --}}
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.Healing" }}</label>
+    <div class="form-fields">
+        <div class="flexrow">
+            <div class="flex4"><input type="number" name="flags.merp1e.HitsPerRound.toHeal" value="{{effect.flags.merp1e.HitsPerRound.toHeal}}" {{rw}}/></div>
+            <div class="flex1"><a class="injury-control" data-action="heal">{{localize 'MERP1E.EffectAction.Heal'}}</a></div>
+        </div>
+    </div>
+</div>
+<h2 class="flexrow">
+    <div class="flex3">{{localize "MERP1E.EffectInjury.Bleeds"}}</div>
+    <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+        {{bleedTotal}}
+    </div>
+    <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+        <div><a class="injury-control" data-action="doRound" title="{{localize 'MERP1E.EffectAction.Round'}}"><i class="far fa-hourglass"></i></a></div>
+        <div><a class="injury-control" data-action="doHour" title="{{localize 'MERP1E.EffectAction.Hour'}}"><i class="far fa-clock"></i></a></div>
+        <div><a class="injury-control" data-action="doDay" title="{{localize 'MERP1E.EffectAction.Day'}}"><i class="far fa-calendar-plus"></i></a></div>
+    </div>
+</h2>
+<div class="grid grid-8col">
+    {{#each effect.flags.merp1e.HitsPerRound.bleeds as | bleed | }}
+    <div class="flexrow" style="border: 1px solid; padding: 2px; text-align: center;" title="{{bleed.appliedAtText}}">
+        {{bleed.hits}}
+    </div>
+    {{/each}}
+</div>
+{{/if}}

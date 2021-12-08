@@ -1,5 +1,5 @@
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.AttackType" }}</label>
+    <label>{{ localize "MERP1E.EffectAttack.Type" }}</label>
     <div class="form-fields">
         <select name="flags.merp1e.Attack.attackType">
             {{selectOptions attackTypes selected=effect.flags.merp1e.Attack.attackType localize=true nameAttr="id" labelAttr="label"}}
@@ -7,7 +7,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.AttackTable" }}</label>
+    <label>{{ localize "MERP1E.EffectAttack.Table" }}</label>
     <div class="form-fields">
         <select name="flags.merp1e.Attack.table">
             {{#unless effect.flags.merp1e.Attack.table}}<option></option>{{/unless}}
@@ -16,7 +16,7 @@
     </div>
 </div>
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.AttackMaximumSize" }}</label>
+    <label>{{ localize "MERP1E.EffectAttack.MaximumSize" }}</label>
     <div class="form-fields">
         <select name="flags.merp1e.Attack.maximumSize">
             {{selectOptions attackMaximumSizes selected=effect.flags.merp1e.Attack.maximumSize localize=true nameAttr="id" labelAttr="label"}}
@@ -24,57 +24,57 @@
     </div>
 </div>
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.AttackSkill" }}</label>
+    <label>{{ localize "MERP1E.EffectAttack.Skill" }}</label>
     <div class="form-fields">
         <select name="flags.merp1e.Attack.skillReference">
-            {{#unless effect.flags.merp1e.Attack.skillReference}}<option>{{localize "MERP1E.Effect.DefaultSkill"}}</option>{{/unless}}
+            {{#unless effect.flags.merp1e.Attack.skillReference}}<option>{{localize "MERP1E.EffectAttack.DefaultSkill"}}</option>{{/unless}}
             {{selectOptions weaponSkills selected=effect.flags.merp1e.Attack.skillReference localize=false nameAttr="reference" labelAttr="name"}}
         </select>
     </div>
 </div>
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.AttackCanUseShield" }}</label>
+    <label>{{ localize "MERP1E.EffectAttack.CanUseShield" }}</label>
     <div class="form-fields">
         <input type="checkbox" name="flags.merp1e.Attack.canUseShield" {{checked effect.flags.merp1e.Attack.canUseShield}}/>
     </div>
 </div>
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.AttackFumbleNumber" }}</label>
+    <label>{{ localize "MERP1E.EffectAttack.FumbleNumber" }}</label>
     <div class="form-fields">
         <input type="number" name="flags.merp1e.Attack.fumbleNumber" value="{{effect.flags.merp1e.Attack.fumbleNumber}}" placeholder="0"/>
     </div>
 </div>
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.AttackFumbleCrit" }}</label>
+    <label>{{ localize "MERP1E.EffectAttack.FumbleCrit" }}</label>
     <div class="form-fields">
         <select name="flags.merp1e.Attack.fumbleCrit">
-            {{#unless effect.flags.merp1e.Attack.FumbleCrit}}<option>{{localize "MERP1E.Effect.AttackCritNone"}}</option>{{/unless}}
+            {{#unless effect.flags.merp1e.Attack.FumbleCrit}}<option>{{localize "MERP1E.EffectAttack.CritNone"}}</option>{{/unless}}
             {{selectOptions avaliableCriticalSizes selected=effect.flags.merp1e.Attack.fumbleCrit localize=true nameAttr="id" labelAttr="label"}}
         </select>
     </div>
 </div>
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.AttackPrimaryCrit" }}</label>
+    <label>{{ localize "MERP1E.EffectAttack.PrimaryCrit" }}</label>
     <div class="form-fields">
         <select name="flags.merp1e.Attack.primaryCrit">
             {{#unless effect.flags.merp1e.Attack.primaryCrit}}<option></option>{{/unless}}
             {{selectOptions avaliableCriticals selected=effect.flags.merp1e.Attack.primaryCrit localize=true nameAttr="id" labelAttr="label"}}
         </select>
-        {{localize "MERP1E.Effect.AttackCritMax"}}
+        {{localize "MERP1E.EffectAttack.CritMax"}}
         <select name="flags.merp1e.Attack.primaryCritMax">
             {{selectOptions avaliableCriticalSizes selected=effect.flags.merp1e.Attack.primaryCritMax localize=true nameAttr="id" labelAttr="label"}}
         </select>
     </div>
 </div>
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.AttackSecondaryCrit" }}</label>
+    <label>{{ localize "MERP1E.EffectAttack.SecondaryCrit" }}</label>
     <div class="form-fields">
         <select name="flags.merp1e.Attack.secondaryCrit">
-            {{#unless effect.flags.merp1e.Attack.FumbleCrit}}<option value="">{{localize "MERP1E.Effect.AttackCritNone"}}</option>{{/unless}}
+            {{#unless effect.flags.merp1e.Attack.FumbleCrit}}<option value="">{{localize "MERP1E.EffectAttack.CritNone"}}</option>{{/unless}}
             {{selectOptions avaliableCriticals selected=effect.flags.merp1e.Attack.secondaryCrit localize=true nameAttr="id" labelAttr="label"}}
         </select>
         {{#if effect.flags.merp1e.Attack.secondaryCrit}}
-        {{localize "MERP1E.Effect.AttackCritMax"}}
+        {{localize "MERP1E.EffectAttack.CritMax"}}
         <select name="flags.merp1e.Attack.secondaryCritMax">
             {{selectOptions avaliableCriticalSizes selected=effect.flags.merp1e.Attack.primaryCritMax localize=true nameAttr="id" labelAttr="label"}}
         </select>
@@ -82,16 +82,16 @@
     </div>
 </div>
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.AttackTwoHanded" }}</label>
+    <label>{{ localize "MERP1E.EffectAttack.TwoHanded" }}</label>
     <div class="form-fields">
         <input type="checkbox" name="flags.merp1e.Attack.isTwoHanded" {{checked effect.flags.merp1e.Attack.isTwoHanded}}/>
     </div>
 </div>
 <div class="form-group">
     {{#if (eq effect.flags.merp1e.Attack.attackType "missileAttack")}}
-    <label>{{ localize "MERP1E.Effect.AttackMissileBaseRange" }}</label>
+    <label>{{ localize "MERP1E.EffectAttack.MissileBaseRange" }}</label>
     {{else}}
-    <label>{{ localize "MERP1E.Effect.AttackThrowBaseRange" }}</label>
+    <label>{{ localize "MERP1E.EffectAttack.ThrowBaseRange" }}</label>
     {{/if}}
     <div class="form-fields">
         <input type="number" name="flags.merp1e.Attack.baseRange" value="{{effect.flags.merp1e.Attack.baseRange}}"/>
@@ -99,39 +99,39 @@
 </div>
 {{#if (eq effect.flags.merp1e.Attack.attackType "missileAttack")}}
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.AttackRoundsLoad" }}</label>
+    <label>{{ localize "MERP1E.EffectAttack.RoundsLoad" }}</label>
     <div class="form-fields">
         <input type="number" name="flags.merp1e.Attack.roundsLoad" value="{{effect.flags.merp1e.Attack.roundsLoad}}" placeholder="0"/>
     </div>
 </div>
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.AttackRoundsReload" }}</label>
+    <label>{{ localize "MERP1E.EffectAttack.RoundsReload" }}</label>
     <div class="form-fields">
         <input type="number" name="flags.merp1e.Attack.roundsReload" value="{{effect.flags.merp1e.Attack.roundsReload}}" placeholder="0"/>
     </div>
 </div>
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.AttackLoadReloadPenalty" }}</label>
+    <label>{{ localize "MERP1E.EffectAttack.LoadReloadPenalty" }}</label>
     <div class="form-fields">
         <input type="number" name="flags.merp1e.Attack.loadReloadPenalty" value="{{effect.flags.merp1e.Attack.loadReloadPenalty}}" placeholder="0"/>
     </div>
 </div>
 {{else}}
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.AttackMeleeRange" }}</label>
+    <label>{{ localize "MERP1E.EffectAttack.MeleeRange" }}</label>
     <div class="form-fields">
         <input type="number" name="flags.merp1e.Attack.meleeRange" value="{{effect.flags.merp1e.Attack.meleeRange}}"/>
     </div>
 </div>
 {{/if}}
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.AttackBonus" }}</label>
+    <label>{{ localize "MERP1E.EffectAttack.Bonus" }}</label>
     <div class="form-fields">
         <input type="number" name="flags.merp1e.Attack.bonus" value="{{effect.flags.merp1e.Attack.bonus}}" placeholder="0"/>
     </div>
 </div>
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.AttackArmorModifications" }}</label>
+    <label>{{ localize "MERP1E.EffectAttack.ArmorModifications" }}</label>
     <div class="flexcol">
         {{#each armorTypes as | armorType | }}
         <div class="form-fields flexrow">

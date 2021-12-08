@@ -1,9 +1,9 @@
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.Skill" }}</label>
+    <label>{{ localize "MERP1E.EffectItem.Skill" }}</label>
     {{> "systems/merp1e/templates/parts/skill-chooser.html" sheetOrder=sheetOrder name="flags.merp1e.SkillModifier.skillReference" readOnly=(eq actorID null) selected=effect.flags.merp1e.SkillModifier.skillReference maneuverSkill=true blank=true returnReference=true}}
 </div>
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.Modifier" }}</label>
+    <label>{{ localize "MERP1E.EffectItem.Modifier" }}</label>
     <div class="form-fields flexrow">
         <div class="flex2 flexrow">
             <select name="flags.merp1e.SkillModifier.valueFunction">

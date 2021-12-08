@@ -1,14 +1,140 @@
-<div>
-    NOT IMPLEMETED
-</div>
-
-
+<h2>{{localize "MERP1E.Injury.Penalty"}}</h2>
 <div class="form-group">
-    <label>{{ localize "Type" }}</label>
+    <label>{{ localize "MERP1E.EffectInjury.Formula" }}</label>
     <div class="form-fields">
-        <select name="flags.merp1e.Injury.type">
-            {{#unless effect.flags.merp1e.Injury.type}}<option></option>{{/unless}}
-            {{selectOptions injuryTypes selected=effect.flags.merp1e.Injury.type localize=true nameAttr="id" labelAttr="label"}}
+        <input type="text" name="flags.merp1e.Penalty.formula" value="{{effect.flags.merp1e.Penalty.formula}}" {{roif this.isApplied}}/>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.Description" }}</label>
+    <div class="form-fields">
+        <input type="text" name="flags.merp1e.Penalty.description" value="{{effect.flags.merp1e.Penalty.description}}" {{rw}}/>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.Location.Label" }}</label>
+    <div class="form-fields">
+        <select name="flags.merp1e.Penalty.location" {{rw}}>
+            <option value="">{{localize "MERP1E.BodyPart.unspecified"}}</option>
+            {{selectOptions injuryLocations selected=effect.flags.merp1e.Penalty.location localize=true nameAttr="id" labelAttr="label"}}
         </select>
     </div>
 </div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.Category.Label" }}</label>
+    <div class="form-fields">
+        <select name="flags.merp1e.Penalty.category" {{rw}}>
+            <option value="">{{localize "Default"}} ({{defaultCategory}})</option>
+            {{selectOptions injuryCategories selected=effect.flags.merp1e.Penalty.category localize=true nameAttr="id" labelAttr="label"}}
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.InjuryType" }}</label>
+    <div class="form-fields">
+        <select name="flags.merp1e.Penalty.type" {{rw}}>
+            <option value=""></option>
+            {{selectOptions injuryTypes selected=effect.flags.merp1e.Penalty.type localize=true nameAttr="id" labelAttr="label"}}
+        </select>
+    </div>
+</div>
+
+{{#if this.isApplied}}
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.Applied" }}</label>
+    <div class="form-fields">
+        {{this.effect.appliedText}}
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.InitialValue" }}</label>
+    <div class="form-fields">
+        <input type="number" name="flags.merp1e.Penalty.initialValue" value="{{effect.flags.merp1e.Penalty.initialValue}}" {{ro}}/>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.CurrentValue" }}</label>
+    <div class="form-fields">
+        <input type="number" name="flags.merp1e.Penalty.currentValue" value="{{effect.flags.merp1e.Penalty.currentValue}}" {{rw}}/>
+    </div>
+</div>
+
+{{!-- Treatment --}}
+<h2 class="flexrow">
+    <div class="flex3">{{localize "MERP1E.EffectInjury.Treatment"}}</div>
+    <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+        {{#if (eq effect.flags.merp1e.Penalty.effectiveValue 0)}}
+            <div><a class="injury-control" data-action="delete"><i class="fas fa-trash" title="{{localize 'MERP1E.EffectAction.Delete'}}"></i></a></div>
+        {{/if}}
+        <a class="injury-control" data-action="treat"><i class="fas fa-stethoscope" title="{{localize 'MERP1E.EffectAction.Treat'}}"></i></a>
+    </div>
+</h2>
+{{#if isTreated}}
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.Treated" }}</label>
+    <div class="form-fields">
+        {{treatedText}}
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.HealsIn" }}</label>
+    <div class="form-fields">
+        <div class="flexrow">
+            <div class="flex4"><input type="number" name="flags.merp1e.Penalty.HealsIn" value="{{effect.flags.merp1e.Penalty.HealsIn}}" {{rw}}/></div>
+            <select name="flags.merp1e.Penalty.HealsInTimeFrame" {{rw}}>
+                <option value=""></option>
+                {{selectOptions timeframe selected=effect.flags.merp1e.Penalty.HealsInTimeFrame localize=true nameAttr="id" labelAttr="label"}}
+            </select>
+        </div>
+    </div>
+</div>
+{{#if (eq effect.flags.merp1e.Penalty.HealingCycle "day")}}
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.HealingRate" }}</label>
+    <div class="form-fields">
+        <div class="flexrow">
+            <span class="">{{localize "MERP1E.EffectInjury.HealsFirstDay"}}</span>
+            <input type="number" value="{{effect.flags.merp1e.Penalty.HealsFirstDay}}" {{ro}}/>
+        </div>
+        <div class="flexrow">
+            <span class="">{{localize "MERP1E.EffectInjury.HealsPerDay"}}</span>
+            <input type="number" value="{{effect.flags.merp1e.Penalty.HealsPerDay}}" {{ro}}/>
+        </div>
+    </div>
+</div>
+{{/if}}
+{{#if (eq effect.flags.merp1e.Penalty.HealingCycle "hour")}}
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.HealingRate" }}</label>
+    <div class="form-fields">
+        <div class="flexrow">
+            <span class="">{{localize "MERP1E.EffectInjury.HealsFirstHour"}}</span>
+            <input type="number" value="{{effect.flags.merp1e.Penalty.HealsFirstHour}}" {{ro}}/>
+        </div>
+        <div class="flexrow">
+            <span class="">{{localize "MERP1E.EffectInjury.HealsPerHour"}}</span>
+            <input type="number" value="{{effect.flags.merp1e.Penalty.HealsPerHour}}" {{ro}}/>
+        </div>
+    </div>
+</div>
+{{/if}}
+<h2 class="flexrow">
+    <div class="flex3">{{localize "MERP1E.EffectInjury.Healing"}}</div>
+    <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+        {{healingTotal}}
+    </div>
+    <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+        <div><a class="injury-control" data-action="doRound" title="{{localize 'MERP1E.EffectAction.Round'}}"><i class="far fa-hourglass"></i></a></div>
+        <div><a class="injury-control" data-action="doHour" title="{{localize 'MERP1E.EffectAction.Hour'}}"><i class="far fa-clock"></i></a></div>
+        <div><a class="injury-control" data-action="doDay" title="{{localize 'MERP1E.EffectAction.Day'}}"><i class="far fa-calendar-plus"></i></a></div>
+    </div>
+</h2>
+<div class="grid grid-8col">
+    {{#each effect.flags.merp1e.Penalty.naturalRecovery as | nr | }}
+    <div class="flexrow" style="border: 1px solid; padding: 2px; text-align: center;" title="{{nr.appliedAtText}}">
+        {{nr.value}}
+    </div>
+    {{/each}}
+</div>
+{{/if}} {{!-- this.effect.treatedAt --}}
+{{/if}} {{!-- this.isApplied --}}

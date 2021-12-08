@@ -187,53 +187,153 @@ export class Merp1eRules {
         bt5aux: TableBT5Aux,
         rr1: TableRR1
     };
+    
     static injury = {
+        statuses: [
+            { id: "knockedout", label: "MERP1E.Statuses.KnockedOut", effectName: "KnockedOut" },
+            { id: "knockeddown", label: "MERP1E.Statuses.KnockedDown", effectName: "KnockedDown" },
+            { id: "stunned", label: "MERP1E.Statuses.Stunned", effectName: "Stun" },
+        ],
         types: [ // IHT3RecoveryTabl
-            { id: 'burn', label: 'MERP1E.Injury.Burn', recovery: { light: 3, medium: 10, severe: 25 } }, 
-            { id: 'tissue', label: 'MERP1E.Injury.Tissue', recovery: { light: 3, medium: 10, severe: 25 } }, 
-            { id: 'bone', label: 'MERP1E.Injury.Bone', recovery: { light: 5, medium: 15, severe: 35 } }, 
-            { id: 'muscle', label: 'MERP1E.Injury.Muscle', recovery: { light: 5, medium: 15, severe: 35 } }, 
-            { id: 'tendon', label: 'MERP1E.Injury.Tendon', recovery: { light: 5, medium: 15, severe: 35 } }, 
-            { id: 'head', label: 'MERP1E.Injury.Head', recovery: { light: 14, medium: 60, severe: 180 } }, 
-            { id: 'internalOrgans', label: 'MERP1E.Injury.InternalOrgans', recovery: { light: 14, medium: 60, severe: 180 } }, 
-          ],
+            { id: 'burn', label: 'MERP1E.InjuryType.Burn', recovery: { light: 3, medium: 10, severe: 25 } }, 
+            { id: 'tissue', label: 'MERP1E.InjuryType.Tissue', recovery: { light: 3, medium: 10, severe: 25 } }, 
+            { id: 'bone', label: 'MERP1E.InjuryType.Bone', recovery: { light: 5, medium: 15, severe: 35 } }, 
+            { id: 'muscle', label: 'MERP1E.InjuryType.Muscle', recovery: { light: 5, medium: 15, severe: 35 } }, 
+            { id: 'tendon', label: 'MERP1E.InjuryType.Tendon', recovery: { light: 5, medium: 15, severe: 35 } }, 
+            { id: 'head', label: 'MERP1E.InjuryType.Head', recovery: { light: 14, medium: 60, severe: 180 } }, 
+            { id: 'internalOrgan', label: 'MERP1E.InjuryType.InternalOrgan', recovery: { light: 14, medium: 60, severe: 180 } }, 
+        ],
         locations: [
-            { id: "hand", label: "MERP1E.BodyPart.hand", bodyGroup: "arm", paired: true }, 
-            { id: "arm", label: "MERP1E.BodyPart.arm", bodyGroup: "arm", paired: true }, 
-            { id: "forearm", label: "MERP1E.BodyPart.forearm", bodyGroup: "arm", paired: true }, 
-            { id: "elbow", label: "MERP1E.BodyPart.elbow", bodyGroup: "arm", paired: true }, 
-            { id: "upperLeg", label: "MERP1E.BodyPart.upperLeg", bodyGroup: "leg", paired: true }, 
-            { id: "thigh", label: "MERP1E.BodyPart.thigh", bodyGroup: "leg", paired: true }, 
-            { id: "knee", label: "MERP1E.BodyPart.knee", bodyGroup: "leg", paired: true }, 
-            { id: "lowerLeg", label: "MERP1E.BodyPart.lowerLeg", bodyGroup: "leg", paired: true }, 
-            { id: "hips", label: "MERP1E.BodyPart.hips", bodyGroup: "torso", paired: false }, 
-            { id: "calf", label: "MERP1E.BodyPart.calf", bodyGroup: "leg", paired: true }, 
-            { id: "chest", label: "MERP1E.BodyPart.chest", bodyGroup: "torso", paired: false }, 
-            { id: "side", label: "MERP1E.BodyPart.side", bodyGroup: "torso", paired: false }, 
-            { id: "abdomen", label: "MERP1E.BodyPart.abdomen", bodyGroup: "torso", paired: false }, 
-            { id: "forehead", label: "MERP1E.BodyPart.forehead", bodyGroup: "head", paired: false }, 
-            { id: "temple", label: "MERP1E.BodyPart.temple", bodyGroup: "head", paired: false }, 
-            { id: "neck", label: "MERP1E.BodyPart.neck", bodyGroup: "head", paired: false }, 
-            { id: "eye", label: "MERP1E.BodyPart.eye", bodyGroup: "head", paired: true }, 
-            { id: "ear", label: "MERP1E.BodyPart.ear", bodyGroup: "eye", paired: true }, 
-            { id: "nose", label: "MERP1E.BodyPart.nose", bodyGroup: "nose", paired: false}, 
-            { id: "lungs", label: "MERP1E.BodyPart.lungs", bodyGroup: "organs", paired: false }, 
-            { id: "heart", label: "MERP1E.BodyPart.heart", bodyGroup: "organs", paired: false }, 
-            { id: "kidneys", label: "MERP1E.BodyPart.kidneys", bodyGroup: "organs", paired: false }, 
-            { id: "brain", label: "MERP1E.BodyPart.brain", bodyGroup: "head", paired: false }, 
-            { id: "head", label: "MERP1E.BodyPart.head", bodyGroup: "head", paired: false }, 
+            { id: "hand", label: "MERP1E.BodyPart.Hand", bodyGroup: "arm", antecessor: "arm" }, 
+            { id: "arm", label: "MERP1E.BodyPart.Arm", bodyGroup: "arm", antecessor: "elbow" }, 
+            { id: "elbow", label: "MERP1E.BodyPart.Elbow", bodyGroup: "arm", antecessor: "forearm" }, 
+            { id: "forearm", label: "MERP1E.BodyPart.Forearm", bodyGroup: "arm" }, 
+
+            { id: "foot", label: "MERP1E.BodyPart.Foot", bodyGroup: "leg", antecessor: "calf" }, 
+            { id: "calf", label: "MERP1E.BodyPart.Calf", bodyGroup: "leg", antecessor: "lowerLeg" }, 
+            { id: "lowerLeg", label: "MERP1E.BodyPart.LowerLeg", bodyGroup: "leg", antecessor: "knee" }, 
+            { id: "knee", label: "MERP1E.BodyPart.Knee", bodyGroup: "leg", antecessor: "thigh" }, 
+            { id: "thigh", label: "MERP1E.BodyPart.Thigh", bodyGroup: "leg", antecessor: "upperLeg" }, 
+            { id: "upperLeg", label: "MERP1E.BodyPart.UpperLeg", bodyGroup: "leg", antecessor: "" }, 
+
+            { id: "hips", label: "MERP1E.BodyPart.Hips", bodyGroup: "torso" }, 
+            { id: "chest", label: "MERP1E.BodyPart.Chest", bodyGroup: "torso" }, 
+            { id: "side", label: "MERP1E.BodyPart.Side", bodyGroup: "torso" }, 
+            { id: "abdomen", label: "MERP1E.BodyPart.Abdomen", bodyGroup: "torso" },
+
+            { id: "forehead", label: "MERP1E.BodyPart.Forehead", bodyGroup: "head" }, 
+            { id: "temple", label: "MERP1E.BodyPart.Temple", bodyGroup: "head" }, 
+            { id: "neck", label: "MERP1E.BodyPart.Neck", bodyGroup: "head" }, 
+            { id: "eye", label: "MERP1E.BodyPart.Eye", bodyGroup: "eye" }, 
+            { id: "ear", label: "MERP1E.BodyPart.Ear", bodyGroup: "ear" }, 
+            { id: "nose", label: "MERP1E.BodyPart.Nose", bodyGroup: "nose"}, 
+            { id: "lungs", label: "MERP1E.BodyPart.Lungs", bodyGroup: "organs" }, 
+            { id: "heart", label: "MERP1E.BodyPart.Heart", bodyGroup: "organs" }, 
+            { id: "kidneys", label: "MERP1E.BodyPart.Kidneys", bodyGroup: "organs" }, 
+            { id: "brain", label: "MERP1E.BodyPart.Brain", bodyGroup: "head" }, 
+            { id: "head", label: "MERP1E.BodyPart.Head", bodyGroup: "head" }, 
+        ],
+
+        bodyGroups: [
+            { id: "arm", label: "MERP1E.BodyGroup.Arm", paired: true, icon: 'far fa-hand-paper', statuses: [ "useless", "broken", "severed"] },
+            { id: "leg", label: "MERP1E.BodyGroup.Leg", paired: true, icon: 'fas fa-shoe-prints', statuses: [ "useless", "broken", "severed"] },
+            { id: "torso", label: "MERP1E.BodyGroup.Torso", paired: false, icon: 'fas fa-male', statuses: [ "damaged" ] },
+            { id: "head", label: "MERP1E.BodyGroup.Head", paired: false, icon: 'far fa-user', statuses: [ "fractured" ]},
+            { id: "eye", label: "MERP1E.BodyGroup.Eye", paired: true, icon: 'fas fa-eye', statuses: [ "destroyed" ] },
+            { id: "ear", label: "MERP1E.BodyGroup.Ear", paired: true, icon: 'fas fa-deaf', statuses: [ "destroyed" ] },
+            { id: "nose", label: "MERP1E.BodyGroup.Nose", paired: false, icon: 'fas fa-user', statuses: [ "destroyed" ] },
+            { id: "organs", label: "MERP1E.BodyGroup.Organs", paired: false, icon: 'far fa-lungs', statuses: [ "destroyed" ] }
         ],
         categories: [
-            { id: "light", label: "Light" } ,
-            { id: "medium", label: "Medium" },
-            { id: "severe", label: "Severe" }
+            { id: "light", label: "MERP1E.InjuryCategory.Light", abbr: "MERP1E.InjuryCategoryAbbr.Light", icon: 'far fa-star' } ,
+            { id: "medium", label: "MERP1E.InjuryCategory.Medium", abbr: "MERP1E.InjuryCategoryAbbr.Medium", icon: 'fas fa-star-half-alt' },
+            { id: "severe", label: "MERP1E.InjuryCategory.Severe", abbr: "MERP1E.InjuryCategoryAbbr.Severe", icon: 'fas fa-star' }
         ],
         durations: [
             { id: "indefinite", label: "Indefinite" },
             { id: "combat", label: "Combat" },
             { id: "time", label: "Time" }
+        ],
+        locationStatuses: [
+            { id: "ok",  label: "MERP1E.InjuryStatuses.Ok" },
+            { id: "useless",  label: "MERP1E.InjuryStatuses.Useless" },
+            { id: "broken",  label: "MERP1E.InjuryStatuses.Broken" },
+            { id: "severed", label: "MERP1E.InjuryStatuses.Severed" },
+            { id: "damaged", label: "MERP1E.InjuryStatuses.Damaged" },
+            { id: "fractured", label: "MERP1E.InjuryStatuses.Fractured" },
+            { id: "destroyed", label: "MERP1E.InjuryStatuses.Destroyed" },
         ]
     };
+    static sides = [
+        { id: "right", label: "MERP1E.Side.Right" },
+        { id: "left", label: "MERP1E.Side.Left" }
+    ];
+    static _processLocations() {
+        // create bodyGroupsBilateral, locationsBilateral and fill locations in bodyGroup
+        this.injury.bodyGroupsBilateral = [];
+        this.injury.bodyGroups.forEach( (bg) => {
+            bg.locations = [];
+
+            if(bg.paired) {
+                this.injury.bodyGroupsBilateral.push({
+                    id: bg.id + "-left", 
+                    label: bg.label + "Left", 
+                    icon: bg.icon,
+                    locations: [],
+                    statuses: bg.statuses
+                });
+
+                this.injury.bodyGroupsBilateral.push({
+                    id: bg.id + "-right", 
+                    label: bg.label + "Right", 
+                    icon: bg.icon,
+                    locations: [],
+                    statuses: bg.statuses
+                });
+            } else {
+                this.injury.bodyGroupsBilateral.push({
+                    id: bg.id, 
+                    label: bg.label, 
+                    icon: bg.icon,
+                    locations: [],
+                    statuses: bg.statuses
+                });
+            }
+        });
+
+        this.injury.locationsBilateral = [];
+        this.injury.locations.forEach( (lct) => {
+            const bg = findByID(this.injury.bodyGroups, lct.bodyGroup);
+            bg.locations.push(lct);
+
+            if(bg.paired) {
+                const left = {
+                    id: lct.id + "-left", 
+                    label: lct.label + "Left",
+                    bodyGroup: lct.bodyGroup + "-left",
+                    antecessor: lct.antecessor + "-left"
+                };
+
+                const right = {
+                    id: lct.id + "-right", 
+                    label: lct.label + "Right",
+                    bodyGroup: lct.bodyGroup + "-right",
+                    antecessor: lct.antecessor + "-right"
+                };
+                this.injury.locationsBilateral.push(left);
+                this.injury.locationsBilateral.push(right);
+
+                findByID(this.injury.bodyGroupsBilateral, bg.id + "-left").locations.push(left);
+                findByID(this.injury.bodyGroupsBilateral, bg.id + "-right").locations.push(right);
+            } else {
+                this.injury.locationsBilateral.push(lct);
+                findByID(this.injury.bodyGroupsBilateral, bg.id).locations.push(lct);
+            }
+        });
+        return;
+    }
+    static dummy = Merp1eRules._processLocations();
+
     static actions = [
         { id: "prepareSpell", name:"MERP1E.Action.PrepareSpell" },
         { id: "castSpell", name:"MERP1E.Action.CastSpell" },
@@ -278,6 +378,16 @@ export class Merp1eRules {
         { id: "DB", label: "MERP1E.RollType.DB", abbr: "MERP1E.RollTypeAbbr.DB" },
         { id: "OB", label: "MERP1E.RollType.OB", abbr: "MERP1E.RollTypeAbbr.OB" },
         { id: "SP", label: "MERP1E.RollType.SP", abbr: "MERP1E.RollTypeAbbr.SP", rollCard: (data) => new Merp1eSpecialRollChatCard(data) }
+    ];
+
+    static timeframes = [
+        { id: "seconds", label: "MERP1E.TimeFrame.Seconds", abbr: "MERP1E.TimeFrameAbbr.Seconds", seconds: 1 },
+        { id: "rounds", label: "MERP1E.TimeFrame.Rounds", abbr: "MERP1E.TimeFrameAbbr.Rounds", seconds: 10 },
+        { id: "minutes", label: "MERP1E.TimeFrame.Minutes", abbr: "MERP1E.TimeFrameAbbr.Minutes", seconds: 60 },
+        { id: "hours", label: "MERP1E.TimeFrame.Hours", abbr: "MERP1E.TimeFrameAbbr.Hours", seconds: 3600 },
+        { id: "days", label: "MERP1E.TimeFrame.Days", abbr: "MERP1E.TimeFrameAbbr.Days", seconds: 3600 * 24 },
+        { id: "weeks", label: "MERP1E.TimeFrame.Weeks", abbr: "MERP1E.TimeFrameAbbr.Weeks", seconds: 3600 * 24 * 7 },
+        { id: "months", label: "MERP1E.TimeFrame.Months", abbr: "MERP1E.TimeFrameAbbr.Months", seconds: 3600 * 24 * 30 },
     ];
 
     static getSpecialItems() {

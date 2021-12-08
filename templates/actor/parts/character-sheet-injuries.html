@@ -1,98 +1,249 @@
 <div class="health-statuses flexcol">
+    {{!-- HITS ----------------------------------------- --}}
     <h2 class="flexrow">
-        <div class="flex3">Hits and Damage</div>
+        <div class="flex3">{{localize "MERP1E.InjuryTab.Hits"}}</div>
         <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
             {{actor.injury.hits.taken}}
         </div>
         <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
-            <a class="effect-control" data-action="create" data-effect-type="InjuryEffect" data-adapter-name="Hits" title="{{localize 'MERP1E.Effect.Create'}}">
-                <i class="fas fa-plus" title="{{localize 'MERP1E.Effect.Add'}}"></i>
+            <a class="effect-control" data-action="create" data-effect-type="InjuryEffect" data-adapter-name="Hits" title="{{localize 'MERP1E.Effect.New'}}">
+                <i class="fas fa-heart-broken" title="{{localize 'MERP1E.Effect.Add'}}"></i>
+            </a>
+            <a class="effect-control" data-action="create" data-effect-type="InjuryEffect" data-adapter-name="Heal" title="{{localize 'MERP1E.Effect.New'}}">
+                <i class="fas fa-medkit" title="{{localize 'MERP1E.Effect.Heal'}}"></i>
             </a>
         </div>
     </h2>
     <div class="resources grid grid-4col">
         <div>
             <label class="resource-label"><i class="fas fa-skull"></i> {{localize 'MERP1E.Health.MaximumHPDie'}}</label>
-            <input id="maximumHPDie" value="{{actor.injury.hits.maximumHPDie}}" data-dtype="Number" type="number" readonly tabindex=-1/>
+            <input id="maximumHPDie" value="{{actor.injury.hits.maximumToDie}}" data-dtype="Number" type="number" readonly tabindex=-1/>
         </div>
         <div>
             <label class="resource-label"><i class="fas fa-heart"></i> {{localize 'MERP1E.Health.MaximumHPOut'}}</label>
-            <input id="maximumHPOut" value="{{actor.injury.hits.maximumHPOut}}" data-dtype="Number" type="number" readonly tabindex=-1/>
+            <input id="maximumHPOut" value="{{actor.injury.hits.maximumToPassOut}}" data-dtype="Number" type="number" readonly tabindex=-1/>
         </div>
         <div>
             <label class="resource-label"><i class="fas fa-heart-broken"></i> {{localize 'MERP1E.Health.HitsTaken'}}</label>
-            <input name="data.healthStatus.hitsTaken" value="{{actor.injury.hits.taken}}" data-dtype="Number" type="number" {{roif settings.damageControlAutomatic}}/>
+            <input name="data.healthStatus.hitsTaken" value="{{actor.injury.hitsTaken}}" data-dtype="Number" type="number" {{roif settings.damageControlAutomatic}}/>
         </div>
         <div>
             <label class="resource-label"><i class="far fa-heart"></i> {{localize 'MERP1E.Health.HitsLeft'}}</label>
-            <input id="hitsLeft" value="{{actor.injury.hitsleft}}" data-dtype="Number" type="number" readonly tabindex=-1/>
+            <input id="hitsLeft" value="{{actor.injury.hits.left}}" data-dtype="Number" type="number" readonly tabindex=-1/>
         </div>
-    </div>
-    <h4>{{localize "Individual Hits"}}</h4>
-    <div class="flexrow flex10">
-        {{#each actor.injury.hits.injuries as | injury | }}
-        <li data-effect-id="{{injury.id}}" class="flexrow">
-            <span>{{injury.hitsValue}}</span>
-            <span>
-                <a class="effect-control" title="{{localize 'MERP1E.Item.Edit'}}" data-action="edit"><i class="fas fa-edit"></i></a>
-                <a class="effect-control" title="{{localize 'MERP1E.Item.Delete'}}" data-action="delete"><i class="fas fa-trash"></i></a>
-            </span>
-        </li>
-        {{/each}}
     </div>
 
+    <div style="margin-left: 10px; margin-right: 10px;">
+        <h3>{{localize "MERP1E.InjuryTab.IndividualHits"}}</h3>
+        <div class="grid grid-6col">
+            {{#each actor.injury.hits.injuries as | injury | }}
+            <li data-effect-id="{{injury.id}}" class="flexrow" style="border: 1px solid; padding: 2px; text-align: center;">
+                <div>
+                    {{#if (eq injury.effectName "Hits")}}
+                    <span><i class="fas fa-heart-broken" title="{{localize 'MERP1E.Injury.Hits'}}"></i></span>
+                    {{else}}
+                    <span><i class="fas fa-medkit" title="{{localize 'MERP1E.Injury.Heal'}}"></i></span>
+                    {{/if}}
+                </div>
+                <div>
+                    <span>{{injury.hitsValue}}</span>
+                </div>
+                <div>
+                    <span>
+                        <a class="effect-control" title="{{localize 'MERP1E.Item.Edit'}}" data-action="edit"><i class="fas fa-edit"></i></a>
+                        <a class="effect-control" title="{{localize 'MERP1E.Item.Delete'}}" data-action="delete"><i class="fas fa-trash"></i></a>
+                    </span>
+                </div>
+            </li>
+            {{/each}}
+            {{#each actor.injury.hitsPerRound.injuries as | injury | }}
+            <li data-effect-id="{{injury.id}}" class="flexrow" style="border: 1px solid; padding: 2px;  text-align: center;">
+                <div>
+                    <span><i class="fas fa-tint" title="{{localize 'MERP1E.Injury.HitsPerRound'}}"></i></span>
+                </div>
+                <div>
+                    <span>{{injury.hitsValue}}</span>
+                </div>
+                <div>
+                </div>
+            </li>
+            {{/each}}
+        </div>
+    </div>
+
+    {{!-- HITS PER ROUND ----------------------------------------- --}}
     <h2 class="flexrow">
-        <div class="flex3">Hits per Round</div>
+        <div class="flex3">{{localize "MERP1E.InjuryTab.HitsPerRound"}}</div>
         <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
-            {{actor.injury.hitsPerRound.total}}
+            {{actor.injury.hitsPerRound.effective}}
+            ({{actor.injury.hitsPerRound.current}})
         </div>
         <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
-            <a class="effect-control" data-action="create" data-effect-type="InjuryEffect" data-adapter-name="HitsPerRound" title="{{localize 'MERP1E.Effect.Create'}}">
+            <a class="effect-control" data-action="create" data-effect-type="InjuryEffect" data-adapter-name="HitsPerRound" title="{{localize 'MERP1E.Effect.New'}}">
                 <i class="fas fa-plus" title="{{localize 'MERP1E.Effect.Add'}}"></i>
             </a>
         </div>
     </h2>
-    <div class="flexcol">
+
+    <div class="grid grid-6col">
         {{#each actor.injury.hitsPerRound.injuries as | injury | }}
-        <li data-effect-id="{{injury.id}}" class="flexrow">
-            <div>{{injury.effectAdapter.value}}</div>
-            <div>{{injury.effectAdapter.category}}</div>
-            <div>{{injury.effectAdapter.location}}</div>
-            <div>{{injury.effectAdapter.type}}</div>
-            <div>{{injury.effectAdapter.appliedText}}</div>
-            <div>{{injury.effectAdapter.durationText}}</div>
+        <li data-effect-id="{{injury.id}}" class="flexrow" style="border: 1px solid; padding: 2px; text-align: center;">
+            <div>
+                <span><i class="fas fa-tint" title="{{localize 'MERP1E.Injury.HitsPerRound'}}"></i></span>
+            </div>
+            <div>
+                {{injury.effectAdapter.effectiveValue}}
+                ({{injury.effectAdapter.currentValue}})
+            </div>
             <div>
                 <a class="effect-control" title="{{localize 'MERP1E.Item.Edit'}}" data-action="edit"><i class="fas fa-edit"></i></a>
-                <a class="item-control" title="XXX" data-action="view-origin" data-origin-id="{{injury.originId}}"><i class="fas fa-search"></i></a>
-                <a class="item-control" title="XXX" data-action="heal" data-origin-id="{{injury.originId}}"><i class="fas fa-stethoscope"></i></a>
             </div>
         </li>
         {{/each}}
     </div>
+
+    {{!-- ACTIVITY PENALTY ----------------------------------------- --}}
     <h2 class="flexrow">
-        <div class="flex3">Activity Penalty</div>
+        <div class="flex3">{{localize "MERP1E.InjuryTab.ActivityPenalty"}}</div>
         <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
             {{actor.injury.penalty.total}}
         </div>
         <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
-            <a class="effect-control" data-action="create" data-effect-type="InjuryEffect" data-adapter-name="Penalty" title="{{localize 'MERP1E.Effect.Create'}}">
+            <a class="effect-control" data-action="create" data-effect-type="InjuryEffect" data-adapter-name="Penalty" title="{{localize 'MERP1E.Effect.New'}}">
                 <i class="fas fa-plus" title="{{localize 'MERP1E.Effect.Add'}}"></i>
             </a>
         </div>
     </h2>
-    <div class="flexrow" data-effect-id="{{injury.id}}">
+    <div class="grid grid-6col">
         {{#each actor.injury.penalty.injuries as | injury | }}
-        <div>{{injury.effectAdapter.value}}</div>
-        <div>{{injury.effectAdapter.category}}</div>
-        <div>{{injury.effectAdapter.location}}</div>
-        <div>{{injury.effectAdapter.type}}</div>
-        <div>{{injury.effectAdapter.appliedText}}</div>
-        <div>{{injury.effectAdapter.durationText}}</div>
-        <div>
-            <a class="effect-control" title="{{localize 'MERP1E.Item.Edit'}}" data-action="edit"><i class="fas fa-edit"></i></a>
-            <a class="item-control" title="XXX" data-action="view-origin" data-origin-id="{{injury.originId}}"><i class="fas fa-search"></i></a>
-            <a class="effect-control" title="XXX" data-action="heal"><i class="fas fa-stethoscope"></i></a>
-        </div>
+        <li data-effect-id="{{injury.id}}" class="flexrow" style="border: 1px solid; padding: 2px; text-align: center;">
+            <div>{{injury.effectAdapter.currentValue}}</div>
+            <div>
+                <a class="effect-control" title="{{localize 'MERP1E.Item.Edit'}}" data-action="edit"><i class="fas fa-edit"></i></a>
+                <a class="effect-control" title="{{localize 'MERP1E.Item.Edit'}}" data-action="delete"><i class="fas fa-trash"></i></a>
+            </div>
+        </li>
         {{/each}}
     </div>
+
+    {{!-- STATUSES ----------------------------------------- --}}
+    <h2 class="flexrow">
+        <div class="flex3">{{localize "MERP1E.InjuryTab.Statuses"}}</div>
+        <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+            {{localize actor.injury.status.currentLabel}}
+        </div>
+    </h2>
+    {{#each statuses as | status | }}
+    <div class="form-group">
+        <label>{{ localize status.label }}</label>
+        <div class="form-fields flex flexrow">
+            <div class="flex4">
+                {{#if (ge (lookup (lookup (lookup ../actor.injury.status status.id) "injuries") "length") 1)}}
+                (
+                {{#each (lookup (lookup ../actor.injury.status status.id) "injuries") as | injury injuryIdx | }}
+                <span>
+                    {{#if (gt injuryIdx 0)}} + {{/if}}
+                </span>
+                <span data-effect-id="{{injury.id}}">
+                    <a class="effect-control" title="{{localize 'MERP1E.Item.Edit'}}" data-action="edit">{{injury.effectAdapter.currentValue}}</a>
+                </span>
+                {{/each}}
+                ) =
+                {{/if}}
+            </div>
+            <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow flex0">
+                <h3>{{lookup (lookup ../actor.injury.status status.id) "total"}}</h3>
+                <a class="effect-control" data-action="create" data-effect-type="InjuryEffect" data-adapter-name="{{status.effectName}}" title="{{localize 'MERP1E.Effect.New'}}">
+                    <i class="fas fa-plus" title="{{localize 'MERP1E.Effect.Add'}}"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+    {{!-- InjuryByLocation ----------------------------------------- --}}
+    <h2 class="flexrow">
+        <div class="flex">{{localize "MERP1E.InjuryTab.ByLocation"}}</div>
+        <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow flex3">
+            {{#each actor.injury.bylocation.statuses as | status | }}
+            {{localize status.label}}
+            {{/each}}
+        </div>
+        <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow flex0">
+            <a class="effect-control" data-action="create" data-effect-type="InjuryEffect" data-adapter-name="ByLocation" title="{{localize 'MERP1E.Effect.New'}}">
+                <i class="fas fa-plus" title="{{localize 'MERP1E.Effect.Add'}}"></i>
+            </a>
+        </div>
+    </h2>
+    <table>
+        <thead style="border: 1px solid black;">
+            <tr>
+                <th>{{localize 'Body Part'}}</th>
+                <th>{{localize 'Left'}}</th>
+                <th>{{localize 'Right'}}</th>
+            </tr>
+        </thead>
+        <tbody style="border: 1px solid black; justify-content: center; align-items: center; text-align: center;">
+            {{#each bodyGroups as | bodygroup | }}
+            <tr>
+                <td>{{ localize bodygroup.label }} 
+                    {{#if bodygroup.paired}}
+                        ({{lookup (lookup ../actor.injury.bylocation (concat bodygroup.id "-left")) "worstStatus"}}
+                        /
+                        {{lookup (lookup ../actor.injury.bylocation (concat bodygroup.id "-right")) "worstStatus"}})
+                    {{else}}
+                        ({{lookup (lookup ../actor.injury.bylocation bodygroup.id) "worstStatus"}})
+                    {{/if}}
+                </td>
+                {{#if bodygroup.paired}}
+                    <td>
+                        {{#each (lookup (lookup ../actor.injury.bylocation (concat bodygroup.id "-left")) "injuries") as | injury injuryIdx | }}
+                        <span>
+                            {{#if (gt injuryIdx 0)}} + {{/if}}
+                        </span>
+                        <span data-effect-id="{{injury.id}}">
+                            <a class="effect-control" title="{{localize 'MERP1E.Item.Edit'}}" data-action="edit">{{localize injury.effectAdapter.currentLabel}}</a>
+                        </span>
+                        {{/each}}
+                    </td>
+                    <td>
+                        {{#each (lookup (lookup ../actor.injury.bylocation (concat bodygroup.id "-right")) "injuries") as | injury injuryIdx | }}
+                        <span>
+                            {{#if (gt injuryIdx 0)}} + {{/if}}
+                        </span>
+                        <span data-effect-id="{{injury.id}}">
+                            <a class="effect-control" title="{{localize 'MERP1E.Item.Edit'}}" data-action="edit">{{localize injury.effectAdapter.currentLabel}}</a>
+                        </span>
+                        {{/each}}
+                    </td>
+                {{else}}
+                    <td colspan="2">
+                        {{#each (lookup (lookup ../actor.injury.bylocation bodygroup.id) "injuries") as | injury injuryIdx | }}
+                        <span>
+                            {{#if (gt injuryIdx 0)}} + {{/if}}
+                        </span>
+                        <span data-effect-id="{{injury.id}}">
+                            <a class="effect-control" title="{{localize 'MERP1E.Item.Edit'}}" data-action="edit">{{localize injury.effectAdapter.currentLabel}}</a>
+                        </span>
+                        {{/each}}
+                    </td>
+                {{/if}}
+            </tr>
+            {{/each}}
+        </tbody>
+        <tfoot style="border: 1px solid black; justify-content: center; align-items: center; text-align: center;">
+            <tr>
+                <td>{{ localize "None" }}</td>
+                <td colspan="2">
+                    {{#each actor.injury.bylocation.orphans as | injury injuryIdx | }}
+                    <span>
+                        {{#if (gt injuryIdx 0)}} - {{/if}}
+                    </span>
+                    <span data-effect-id="{{injury.id}}">
+                        <a class="effect-control" title="{{localize 'MERP1E.Item.Edit'}}" data-action="edit"><i class="fas fa-edit"></i></a>
+                    </span>
+                    {{/each}}
+                </td>
+            </tr>
+        </tfoot>
+    </table>
 </div>

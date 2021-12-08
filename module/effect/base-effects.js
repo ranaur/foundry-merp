@@ -80,6 +80,10 @@ export class Merp1eEffect extends ActiveEffect {
         return this.condition?.priority || 100;
     }
 
+    updateObject(event, formData) {
+        return this.effectAdapter?.updateObject?.(event, formData);
+    }
+
     static get defaultConfig() {
         return {
             transfer: false

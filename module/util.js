@@ -88,3 +88,22 @@ export function getFuncName(fun) {
   return ret;
 }
 
+export function confirmDialog(title, text, okFunc) {
+  let d = new Dialog({
+    title: game.i18n.localize(title),
+    content: game.i18n.localize(text),
+    buttons: {
+     ok: {
+      icon: '<i class="fas fa-check"></i>',
+      label: game.i18n.localize("OK"),
+      callback: okFunc,
+     },
+     cancel: {
+      icon: '<i class="far fa-times"></i>',
+      label: game.i18n.localize("Cancel")
+     }
+    },
+    default: "cancel"
+   });
+   d.render(true);
+}

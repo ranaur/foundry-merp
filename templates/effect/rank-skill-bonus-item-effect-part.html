@@ -1,10 +1,10 @@
 <div class="form-group">
-    <label class="resource-label">{{ localize "MERP1E.Effect.RankSkillBonus" }}</label>
+    <label class="resource-label">{{ localize "MERP1E.EffectItem.RankSkillBonus" }}</label>
     <div class="form-fields">
         <input type="number" name="flags.merp1e.RankSkillBonus.value" value="{{effect.flags.merp1e.RankSkillBonus.value }}"/>
     </div>
 </div>
 <div class="form-group">
-    <label class="resource-label">{{ localize "MERP1E.Effect.Skill" }}</label>
+    <label class="resource-label">{{ localize "MERP1E.EffectItem.Skill" }}</label>
     {{> "systems/merp1e/templates/parts/skill-chooser.html" sheetOrder=sheetOrder name="flags.merp1e.RankSkillBonus.skillReference" readOnly=skillID selected=effect.flags.merp1e.RankSkillBonus.skillReference maneuverSkill=false blank=false returnReference=true }}
 </div>

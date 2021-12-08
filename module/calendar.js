@@ -1,13 +1,13 @@
 export class Merp1eCalendar {
     static ReckoningOfMerp = [
-        "Yestarë", 1
+        "Yestarë", 1,
         "Narwain", 
         "Ninui", 
         "Gwaeron", 
         "Gwirith", 
-        "Lothron" 
-        "Nórui" 
-        "Loénde", 1
+        "Lothron",
+        "Nórui",
+        "Loénde", 1,
         "Cerveth", 
         "Úrui", 
         "Ivanneth", 
@@ -22,7 +22,7 @@ export class Merp1eCalendar {
         { name: "Tuilë", numDays: 54, sindarin: "Ethuil" },
         { name: "Lairë", numDays: 72, sindarin: "Laer" },
         { name: "Yávië", numDays: 54, sindarin: "Iavas" },
-        { name: "Enderi", numDays: 3, leap: [1 12, 144*3 ] },
+        { name: "Enderi", numDays: 3, leap: [1, 12, 144*3 ] },
         { name: "Enderi", numDays: 6, leap: [12, 144*3 ] },
         { name: "Quellë", numDays: 54, sindarin: "Firith" },
         { name: "Hrívë", numDays: 72, sindarin: "Rhîw" },

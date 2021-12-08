@@ -9,6 +9,7 @@ import { Merp1eRules } from "../rules/rules.js";
 import { Merp1eAction } from "./action.js";
 
 import { Merp1eInjury } from "./injury.js"
+
 /**
  * Extend the base Actor entity by defining a custom roll data structure which is ideal for the Simple system.
  * @extends {Actor}
@@ -349,4 +350,16 @@ export class Merp1eActor extends Actor {
   get defensiveBonusSkill() {
     return this.getSkillByReference("DefensiveBonus");
   }
+
+  async advanceRound() {
+    this.injury.status.advanceRound();
+  }
+
+  async advanceHour() {
+    console.error("NEXT HOUR!")
+  }
+  async advanceDay() {
+    console.error("NEXT DAY!")
+  }
+
 }

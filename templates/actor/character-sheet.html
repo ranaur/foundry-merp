@@ -1,7 +1,14 @@
 <form class="{{cssClass}} flexcol actor" autocomplete="off">
   {{!-- Sheet Header --}}
   <header class="sheet-header">
-      <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
+      <div style="max-width: 120px;">
+        <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}" height="100" width="100"/>
+        <div class="flexrow" style="width: 100px; display: flex; justify-content: center; align-items: center; text-align: center">
+          <span><a class="actor-control" data-action="advanceRound" title="{{localize 'MERP1E.EffectAction.Round'}}"><i class="far fa-hourglass"></i></a></span>
+          <span><a class="actor-control" data-action="advanceHour" title="{{localize 'MERP1E.EffectAction.Hour'}}"><i class="far fa-clock"></i></a></span>
+          <span><a class="actor-control" data-action="advanceDay" title="{{localize 'MERP1E.EffectAction.Day'}}"><i class="far fa-calendar-plus"></i></a></span>
+        </div>
+      </div>
       <div class="header-fields">
           <h1 class="charname"><input name="name" type="text" value="{{actor.name}}" placeholder="Name"/></h1>
           {{!-- The grid classes are defined in scss/global/_grid.scss. To use,
@@ -88,9 +95,11 @@
     </div>
 
     {{!-- Health & Damage Tab --}}
+    {{!-- disabled
     <div class="tab health" data-group="primary" data-tab="health">
       {{> "systems/merp1e/templates/actor/parts/character-sheet-health.html" actor=actor}}
     </div>
+    --}}
 
     {{!-- Languages Tab --}}
     <div class="tab languages" data-group="primary" data-tab="languages">

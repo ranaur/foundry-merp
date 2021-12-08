@@ -1,44 +1,60 @@
 # Tips
     game.merp1e.Merp1eRules
     game.i18n.localize("MERP1E.EffectDescription.ShieldUnset");
+    console.log(game.merp1e.Merp1eRules.injury.types.reduce((acc, item) => { const x = item.label.split(".")[2]; acc.push(`"${item.label}": "${x}",`); return acc; }, []).join("\n"));
+    console.log(game.merp1e.Merp1eRules.timeframes.reduce((acc, item) => { const x = item.label.split(".")[2]; acc.push(`"${item.abbr}": "${x}",`); return acc; }, []).join("\n"));
 
-    Fazer o resto das raças (depois de Noldor)
+    Fazer o resto das raças (depois de Noldor)\
+    Postar sobre em https://www.youtube.com/watch?v=qj43xV1Edto
 
 # TODO
-Filme:
+
+## Publicar
+
+* Fazer as durations para qualquer efeito (duration)
+* Permitir editar o initial baseado em uma opção do sistema
+    Colocar os totais como campos do ator (editáveis dependendo da configuração)
+* Aplicar a penalidade nos rolamentos (modifier, ou geral)
+* Fazer Die in X rounds
+* Fazer death/soul departure
+    * Soul Departed
+    * Stat Deterioration
+    * Preserved
+
+* Implementar o OnTimeInterval/OnRound
+
+## Futuro
+
+* Fazer filmes para mostrar as capacidades:
     Mostrar os detalhas de raça, profissão
     Mostrar os efeitos
     Money
-* Fazer os efeityos de heal
-* Refazer Heath & Damage da ficha e deixar o damage item para critical
-* Fazer InjuryEffects e HealingEffects
-    * Hits/Heal
-        * Formula
-        * hits
-        * onApply
-        * applied at
 
-* Fazer o efeito de hit / heal
-    ...permitir que o efeito role um dado (formula)
-* Fazer com o Injury Active Effect tenha um OnApply pra cada um
-* Implementar o treat/heal
-    ... hits per round: bandage, tourniquete, heal in X days
-    ...heal hits per round
-    ...activity penalty tem heal in X days
-    Eles terão o original e o atual
-    ...Implementar o OnTimeInterval/OnRound
-* Como escolher quem será o target.
-    * Buscar a lista dos combatentes
-    * Buscar a lista dos targets
-    * Permitir só um target
-    * Pedir para o cara clicar no target
-* Fazer com que os parries venham da ficha (na aba action)
-* Testar item que aumenta DB (colocar no Dwarf A)
-* Continuar o rolamento do critical
-* Aplicar o dano/critical
-* Calcular o XP
-* Fazer com que o target seja escolhido pelo mouse
-* Corrigit o skill do throw
+
+* Fazer combate:
+
+    * Auto naming do encounter
+    scene.name/id/number
+    encounter number
+    world date
+    real date
+    #participants/pcs/npcs
+
+    * Como escolher quem será o target.
+        * Buscar a lista dos combatentes
+        * Buscar a lista dos targets
+        * Permitir só um target
+        * Pedir para o cara clicar no target
+        * Fazer com que o target seja escolhido pelo mouse
+    * Fazer com que os parries venham da ficha (na aba action)
+    * Testar item que aumenta DB (colocar no Dwarf A)
+    * Continuar o rolamento do critical
+    * Aplicar o dano/critical
+
+* Aplicar XP:
+    * Calcular o XP
+
+* Corrigir o skill do throw
 
 * Fazer aba de ação
     * Fazer Missle
@@ -988,13 +1004,13 @@ export class Merp1eEquipmentSheet extends Merp1eBaseItemSheet {
         <div class="tab" data-group="primary" data-tab="details">
 +           {{#if (eq effect.flags.merp1e.effectType "RankSkillBonus")}}
 +               <div class="form-group">
-+                   <label>{{ localize "MERP1E.Effect.RankSkillBonus" }}</label>
++                   <label>{{ localize "MERP1E.EffectItem.RankSkillBonus" }}</label>
 +                   <div class="form-fields">
 +                       <input type="number" name="flags.merp1e.SkillRankBonus.value" value="{{effect.flags.merp1e.SkillRankBonus.value }}"/>
 +                   </div>
 +               </div>
 +               <div class="form-group">
-+                   <label>{{ localize "MERP1E.Effect.Skill" }}</label>
++                   <label>{{ localize "MERP1E.EffectItem.Skill" }}</label>
 +                   <div class="form-fields">
 +                       <select name="flags.merp1e.SkillRankBonus.skillReference">
 +                           {{#unless effect.flags.merp1e.SkillRankBonus.skillReference}}<option></option>{{/unless}}
@@ -1052,9 +1068,9 @@ export class Merp1eEquipmentSheet extends Merp1eBaseItemSheet {
     "MERP1E.EffectType.SkillBonus": "Skill Bonus",
     "MERP1E.EffectType.SkillGroupBonus": "Skill Group Bonus",
 +   "MERP1E.EffectType.RankSkillBonus": "Skill Rank Bonus",
-+   "MERP1E.Effect.RankSkillBonus": "Skill Bonus per Rank",
-    "MERP1E.Effect.SkillBonus": "Skill Bonus",
-    "MERP1E.Effect.Skill": "Skill",
++   "MERP1E.EffectItem.RankSkillBonus": "Skill Bonus per Rank",
+    "MERP1E.EffectItem.SkillBonus": "Skill Bonus",
+    "MERP1E.EffectItem.Skill": "Skill",
 ```
 
 ## 
@@ -1550,3 +1566,6 @@ Why do skills have reference?
         </div>
     </section>
 -->
+
+
+

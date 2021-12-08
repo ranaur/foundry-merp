@@ -1,4 +1,4 @@
-import { formatBonus } from "./util.js";
+import { findByID, formatBonus } from "./util.js";
 import { Merp1eItemEffect } from "./effect/item-effects.js";
 import { Merp1eInjuryEffect } from "./effect/injury-effects.js";
 
@@ -13,6 +13,11 @@ export const registerHandlebarsHelpers = async function() {
         }
         return outStr;
     });
+    
+    Handlebars.registerHelper('getFieldByID', function(array, id, field = "label") {
+        return findByID(array, id, {label: "unknown"}, "id")?.[field];
+    });
+
     /*
     Handlebars.registerHelper('toLowerCase', function(str) {
     if(str === null) return "";
@@ -26,6 +31,10 @@ export const registerHandlebarsHelpers = async function() {
 
     Handlebars.registerHelper('default', function(a, b) {
     return a || b;
+    });
+
+    Handlebars.registerHelper('isEmpty', function(a) {
+        return a == null || a == undefined || a == "";
     });
 
     // read only if - makes an input read only iuf parameter is true

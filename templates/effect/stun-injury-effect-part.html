@@ -1,0 +1,40 @@
+<h2 class="flexrow">
+    <div class="flex3">{{localize "MERP1E.Injury.Stun"}}</div>
+    <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+        {{#if (or (eq effect.flags.merp1e.Stun.currentValue 0) (isEmpty effect.flags.merp1e.Stun    .formula))}}
+        <div><a class="injury-control" data-action="delete"><i class="fas fa-trash" title="{{localize 'MERP1E.EffectAction.Delete'}}"></i></a></div>
+        {{/if}}
+    </div>
+</h2>
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.Formula" }}</label>
+    <div class="form-fields">
+        <input type="text" name="flags.merp1e.Stun.formula" value="{{effect.flags.merp1e.Stun.formula}}" {{roif this.isApplied}}/>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.Effect.Description" }}</label>
+    <div class="form-fields">
+        <input type="text" name="flags.merp1e.Stun.description" value="{{effect.flags.merp1e.Stun.description}}" {{rw}}/>
+    </div>
+</div>
+{{#if this.isApplied}}
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.Applied" }}</label>
+    <div class="form-fields">
+        {{this.effect.appliedText}}
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.InitialValue" }}</label>
+    <div class="form-fields">
+        <input type="number" name="flags.merp1e.Stun.initialValue" value="{{effect.flags.merp1e.Stun.initialValue}}" {{ro}}/>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.CurrentValue" }}</label>
+    <div class="form-fields">
+        <input type="number" name="flags.merp1e.Stun.currentValue" value="{{effect.flags.merp1e.Stun.currentValue}}" {{rw}}/>
+    </div>
+</div>
+{{/if}} {{!-- this.isApplied --}}

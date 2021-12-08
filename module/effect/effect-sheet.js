@@ -1,3 +1,4 @@
+import { Merp1eInjuryHelper } from './injury-helper.js';
 import { Merp1eItemEffect } from "./item-effects.js"
 import { Merp1eInjuryEffect } from "./injury-effects.js"
 import { Merp1eEffectCondition } from "./condition.js";
@@ -60,9 +61,11 @@ export class Merp1eActiveEffectSheet extends DocumentSheet {
 
     /** @override */
     async _updateObject(event, formData) {
-        this.object.parent.sheet.render(true); // XXX1
+        //this.object.parent.sheet.render(true); // XXX1
         if(this.readOnly) return;
         
+        this.object?.updateObject(event, formData);
+
         return await this.object.update(formData);
     }
 
@@ -71,6 +74,8 @@ export class Merp1eActiveEffectSheet extends DocumentSheet {
 
         // Everything below here is only needed if the sheet is editable
         if (!this.options.editable) return;
+
+        Merp1eInjuryHelper.activateListeners(html, this);
     }
 }
 

@@ -4,8 +4,9 @@ export class Merp1eActiveEffectHelper extends ActiveEffect {
     static async onManageActiveEffect(event, owner) {
         event.preventDefault();
         const a = event.currentTarget;
-        const li = a.closest("li");
-        const effect = li?.dataset?.effectId ? owner.effects.get(li.dataset.effectId) : null;
+        //const effectElement = a.closest("li") && a.closest("span");
+        const effectElement = a.closest("[data-effect-id]");
+        const effect = effectElement?.dataset?.effectId ? owner.effects.get(effectElement.dataset.effectId) : null;
         switch ( a.dataset.action ) {
             case "create":
                 return await owner.createEmbeddedDocuments("ActiveEffect", [{
@@ -20,7 +21,7 @@ export class Merp1eActiveEffectHelper extends ActiveEffect {
                         }
                     },
                     canChangeAdapter: a.dataset.adapterName ? true: false
-                }], { renderSheet: true });
+                }], { render: true, renderSheet: true });
             case "edit":
                 let shouldEdit = !owner.isOwned;
                 return await effect.sheet.render(true, {editable: shouldEdit});
@@ -28,6 +29,7 @@ export class Merp1eActiveEffectHelper extends ActiveEffect {
                 return await effect.delete();
             case "toggle":
                 return await effect.update({disabled: !effect.data.disabled});
+            
         }
     }
 

@@ -1,8 +1,12 @@
+import { max, findByID } from "../util.js";
+
 class Merp1eInjuryHits {
-    constructor(actor) { this.actor = actor; }
+    constructor(actor) { 
+      this.actor = actor; 
+    }
   
     get maximumToDie() {
-      return this.maximumHPOut + this.actor.stats.co.value;
+      return this.maximumToPassOut + this.actor.stats.co.value;
     }
   
     get maximumToPassOut() {
@@ -10,7 +14,7 @@ class Merp1eInjuryHits {
     }
   
     get left() {
-      return this.maximumHPOut - this.hitsTaken;
+      return this.maximumToPassOut - this.taken;
     }
   
     get taken() {
@@ -35,27 +39,149 @@ class Merp1eInjuryHitsPerRound {
       return this.actor?.effects.filter((efc) => efc.effectName == "HitsPerRound" );
     }
   
-    get total() {
-      return this.injuries.reduce((acc, hpr) => acc += hpr.effectAdapter.value, 0);
+    get current() {
+      return this.injuries.reduce((acc, hpr) => acc += (hpr.effectAdapter.currentValue || 0), 0);
     }
   
+    get effective() {
+      return this.injuries.reduce((acc, hpr) => acc += (hpr.effectAdapter.effectiveValue || 0), 0);
+    }
+  
+    get taken() {
+      return this.injuries.reduce((acc, efc) => acc + efc?.hitsValue || 0, 0);
+    }
+
     get bleed() {
       this.actor.injury.hits.add(this.total);
     }
 }
   
 class Merp1eInjuryPenalty {
-    constructor(actor) { this.actor = actor; }
-  
-    get injuries() {
-      return this.actor?.effects.filter((efc) => efc.effectName == "Penalty" );
-    }
-  
-    get total() {
-      return this.injuries.reduce((acc, hpr) => acc = hpr.value, 0);
-    }
+  constructor(actor) { this.actor = actor; }
+
+  get injuries() {
+    return this.actor?.effects.filter((efc) => efc.effectName == "Penalty" );
+  }
+
+  get total() {
+    return this.injuries.reduce((acc, hpr) => acc += (hpr.effectAdapter.currentValue || 0), 0);
+  }
 }
-  
+
+class Merp1eInjurySpecificStatus {
+  constructor(actor, status) { 
+    this.actor = actor;
+    this.status = status;
+  }
+
+  get injuries() {
+    return this.actor?.effects.filter((efc) => efc.effectName == this.status );
+  }
+
+  get total() {
+    return this.injuries.reduce((acc, hpr) => acc += (hpr.effectAdapter.duration || 0), 0);
+  }
+}
+
+class Merp1eInjuryStatus {
+  constructor(actor) {
+    this.actor = actor;
+    game.merp1e.Merp1eRules.injury.statuses.forEach((status) => {
+      this[status.id] = new Merp1eInjurySpecificStatus(actor, status.effectName);
+    });
+  }
+
+  get current() {
+    for (const status of game.merp1e.Merp1eRules.injury.statuses) {
+      if(this[status.id].total > 0) return status.id;
+    }
+    return null;
+  }
+
+  get currentLabel() {
+    return findByID(game.merp1e.Merp1eRules.injury.statuses, this.current, null)?.label;
+  }
+
+  async advanceRound() {
+    for (const status of game.merp1e.Merp1eRules.injury.statuses) {
+      if(this[status.id].total > 0) {
+        for (const injury of this[status.id].injuries) {
+          if(injury.effectAdapter.currentValue > 0) {
+            await injury.effectAdapter.setCurrentValue(injury.effectAdapter.currentValue - 1);
+            return;
+          }
+        }
+      }
+    }
+    return;
+  }
+}
+
+class Merp1eInjurySpecificLocation {
+  constructor(actor, bodyGroup) {
+    this.actor = actor;
+    this.bodyGroup = bodyGroup
+    this.bodyGroupObject = findByID(game.merp1e.Merp1eRules.injury.bodyGroupsBilateral, bodyGroup, null);
+  }
+
+  get injuries() {
+    return this.actor?.effects.filter((efc) => efc.effectName == "ByLocation" && efc.effectAdapter.bodyGroupBilateral == this.bodyGroup );
+  }
+
+  get total() {
+    return this.injuries.reduce((acc, hpr) => acc += (hpr.effectAdapter.duration || 0), 0);
+  }
+
+  get worstStatus() {
+    const possibleValues = duplicate(this.bodyGroupObject.statuses);
+    possibleValues.unshift("ok");
+    let worstStatusIdx = this.injuries.reduce(
+      (acc, efc) => {
+        const idx = possibleValues.findIndex(s => s == efc.effectAdapter.currentValue);
+        return max(acc, idx);
+      }, 0 // possibleValues.findIdx(s => s == "ok") 
+    );
+    return possibleValues[worstStatusIdx];
+  }
+}
+
+class Merp1eInjuryByLocation {
+  constructor(actor) {
+    this.actor = actor;
+    game.merp1e.Merp1eRules.injury.bodyGroupsBilateral.forEach((bg) => {
+      this[bg.id] = new Merp1eInjurySpecificLocation(actor, bg.id);
+    });
+  }
+
+  get current() {
+    for (const status of game.merp1e.Merp1eRules.injury.statuses) {
+      if(this[status.id].total > 0) return status.id;
+    }
+    return null;
+  }
+
+  get currentLabel() {
+    return findByID(game.merp1e.Merp1eRules.injury.statuses, this.current, null)?.label;
+  }
+
+  get statuses() {
+    const status = [];
+    if(this["eye-left"].worstStatus != "ok" && this["eye-right"].worstStatus != "ok") status.push('blind');
+    if(this["ear-left"].worstStatus != "ok" && this["ear-right"].worstStatus != "ok") status.push('deaf');
+
+
+    return status.reduce((acc, itm) => { acc.push({id: itm, label: "MERP1E.Status." + itm }); return acc; }, []);
+  }
+
+  get orphans() {
+    return this.actor?.effects.filter((efc) => efc.effectName == "ByLocation" && (!efc.effectAdapter.bodyGroup || !efc.effectAdapter.side) );
+  }
+
+  async advanceRound() {
+  }
+}
+
+
 export class Merp1eInjury {
 
   constructor(actor) {
@@ -63,6 +189,12 @@ export class Merp1eInjury {
       this.hits = new Merp1eInjuryHits(actor);
       this.hitsPerRound = new Merp1eInjuryHitsPerRound(actor);
       this.penalty = new Merp1eInjuryPenalty(actor);
+      this.status = new Merp1eInjuryStatus(actor);
+      this.bylocation = new Merp1eInjuryByLocation(actor);
+  }
+
+  get hitsTaken() {
+    return this.hits.taken + this.hitsPerRound.taken;
   }
 }
 
@@ -111,20 +243,6 @@ export class Merp1eInjury {
         - while with shield
     }
 
-    recover: {
-        n days recovering
-    }
-
-    bodyGroup = [
-        { id: "arm", label: "MERP1E.BodyGroup.arm", paired: true },
-        { id: "leg", label: "MERP1E.BodyGroup.leg", paired: true },
-        { id: "torso", label: "MERP1E.BodyGroup.torso", paired: false },
-        { id: "eye", label: "MERP1E.BodyGroup.eye", paired: true },
-        { id: "nose", label: "MERP1E.BodyGroup.nose", paired: false},
-        { id: "ear", label: "MERP1E.BodyGroup.ear", paired: true },
-        { id: "head", label: "MERP1E.BodyGroup.head", paired: true },
-        { id: "organs", label: "MERP1E.BodyGroup.organs", paired: false },
-    ]
 
     
     ImmediateDeath

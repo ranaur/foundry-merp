@@ -69,6 +69,12 @@ class Merp1eInjuriesTab {
   static activateListeners(html, sheet) {
     Merp1eActiveEffectHelper.activateListeners(html, sheet.actor);
   }
+  static getData(sheetData, sheet) {
+    sheetData.statuses = game.merp1e.Merp1eRules.injury.statuses;
+    sheetData.bodyGroups = game.merp1e.Merp1eRules.injury.bodyGroups;
+    sheetData.bodyGroupsBilateral = game.merp1e.Merp1eRules.injury.bodyGroupsBilateral;
+    return sheetData;
+  }
 }
 
 class Merp1eEffectsTab {
@@ -450,6 +456,7 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
     sheetData = Merp1eEffectsTab.getData(sheetData, this);
     sheetData = Merp1eEquipmentsTab.getData(sheetData, this);
     sheetData = Merp1eHealthTab.getData(sheetData, this);
+    sheetData = Merp1eInjuriesTab.getData(sheetData, this);
     sheetData = Merp1eMoneyTab.getData(sheetData, this);
     sheetData = Merp1eSkillsTab.getData(sheetData, this);
     sheetData = Merp1eSpecialsTab.getData(sheetData, this);
@@ -493,12 +500,25 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
     return await this.actor.updateEmbeddedDocuments("Item", [{ _id: li?.dataset?.itemId, data: data}]);
   }
   
+  async _onActorControl(event) {
+    event.preventDefault();
+    const element = event.currentTarget;
+    switch(element?.dataset?.action) {
+      case "advanceRound":
+      case "advanceHour":
+      case "advanceDay":
+        return await this.actor[element?.dataset?.action]?.();
+    }
+  }
+
   /** @override */
   activateListeners(html) {
     super.activateListeners(html);
 
     // Everything below here is only needed if the sheet is editable
     if (!this.options.editable) return;
+
+    html.find('.actor-control').click(this._onActorControl.bind(this));
 
     LanguageSheetHelper.activateListeners(html, this.actor);
 

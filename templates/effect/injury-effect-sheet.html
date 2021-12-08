@@ -9,13 +9,25 @@
                 {{> "systems/merp1e/templates/effect/hits-injury-effect-part.html" effect=effect sheetOrder=sheetOrder}}
             {{/if}}
             {{#if (eq effect.flags.merp1e.adapterName "Heal")}}
-                {{> "systems/merp1e/templates/effect/hits-injury-effect-part.html" effect=effect sheetOrder=sheetOrder}}
+                {{> "systems/merp1e/templates/effect/heal-injury-effect-part.html" effect=effect sheetOrder=sheetOrder}}
             {{/if}}
             {{#if (eq effect.flags.merp1e.adapterName "HitsPerRound")}}
                 {{> "systems/merp1e/templates/effect/hits-per-round-injury-effect-part.html" effect=effect sheetOrder=sheetOrder}}
             {{/if}}
             {{#if (eq effect.flags.merp1e.adapterName "Penalty")}}
                 {{> "systems/merp1e/templates/effect/penalty-injury-effect-part.html" effect=effect sheetOrder=sheetOrder}}
+            {{/if}}
+            {{#if (eq effect.flags.merp1e.adapterName "Stun")}}
+                {{> "systems/merp1e/templates/effect/stun-injury-effect-part.html" effect=effect sheetOrder=sheetOrder}}
+            {{/if}}
+            {{#if (eq effect.flags.merp1e.adapterName "KnockedDown")}}
+                {{> "systems/merp1e/templates/effect/knocked-down-injury-effect-part.html" effect=effect sheetOrder=sheetOrder}}
+            {{/if}}
+            {{#if (eq effect.flags.merp1e.adapterName "KnockedOut")}}
+                {{> "systems/merp1e/templates/effect/knocked-out-injury-effect-part.html" effect=effect sheetOrder=sheetOrder}}
+            {{/if}}
+            {{#if (eq effect.flags.merp1e.adapterName "ByLocation")}}
+                {{> "systems/merp1e/templates/effect/by-location-injury-effect-part.html" effect=effect sheetOrder=sheetOrder}}
             {{/if}}
         </div>
     </section>

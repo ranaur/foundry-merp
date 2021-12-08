@@ -1,5 +1,5 @@
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.ShieldType" }}</label>
+    <label>{{ localize "MERP1E.EffectItem.ShieldType" }}</label>
     <div class="form-fields">
         <select name="flags.merp1e.Shield.type">
             {{#unless effect.flags.merp1e.Shield.type}}<option></option>{{/unless}}
@@ -8,14 +8,14 @@
     </div>
 </div>
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.ShieldBaseBonus" }}</label>
+    <label>{{ localize "MERP1E.EffectItem.ShieldBaseBonus" }}</label>
     <div class="form-fields">
         <input type="number" value="{{shieldBaseBonus}}" placeholder=0 {{roif true}}/>
     </div>
 </div>
 {{#if (ne effect.flags.merp1e.Shield.type "none")}}
 <div class="form-group">
-    <label>{{ localize "MERP1E.Effect.ShieldExtraBonus" }}</label>
+    <label>{{ localize "MERP1E.EffectItem.ShieldExtraBonus" }}</label>
     <div class="form-fields">
         <input type="number" name="flags.merp1e.Shield.extraBonus" value="{{effect.flags.merp1e.Shield.extraBonus}}" placeholder="0"/>
     </div>

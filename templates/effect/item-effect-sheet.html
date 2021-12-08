@@ -7,7 +7,7 @@
                 <h1>{{ name }}</h1>
             </div>
             <div class="resource">
-                <label class="resource-label">{{localize "MERP1E.Effect.Type" }}</label>
+                <label class="resource-label">{{localize "MERP1E.EffectItem.Type" }}</label>
                 <input type="hidden" name="flags.merp1e.effectType" value="ItemEffect"/>
                 <select name="flags.merp1e.adapterName">
                     {{#unless effect.flags.merp1e.adapterName}}<option></option>{{/unless}}
@@ -15,7 +15,7 @@
                 </select>
             </div>
             <div class="resource">
-                <label class="resource-label">{{localize "MERP1E.Effect.Condition" }}</label>
+                <label class="resource-label">{{localize "MERP1E.EffectItem.Condition" }}</label>
                 <select name="flags.merp1e.conditionType">
                     {{#unless effect.flags.merp1e.conditionType}}<option></option>{{/unless}}
                     {{selectOptions conditionTypes selected=effect.flags.merp1e.conditionType localize=true nameAttr="id" labelAttr="label"}}
@@ -92,7 +92,7 @@
         <div class="tab" data-tab="condition">
             {{#if (eq effect.flags.merp1e.conditionType "OnArmorTypes")}}
             <div class="flexrow">
-                <label>{{localize "MERP1E.Effect.AllowedArmorTypes"}}</label>
+                <label>{{localize "MERP1E.EffectItem.AllowedArmorTypes"}}</label>
     
                 <div class="flexrow">
                     {{#each rules.defense.armorTypes as | armorType |}}
@@ -106,7 +106,7 @@
             {{/if}}
             {{#if (eq effect.flags.merp1e.conditionType "AttackTypes")}}
             <div class="flexrow">
-                <label>{{localize "MERP1E.Effect.AllowedArmorTypes"}}</label>
+                <label>{{localize "MERP1E.EffectItem.AllowedArmorTypes"}}</label>
     
                 <div class="flexrow">
                     {{#each rules.defense.armorTypes as | armorType |}}
