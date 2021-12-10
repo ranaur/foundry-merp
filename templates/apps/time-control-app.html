@@ -1,0 +1,105 @@
+<form class="{{cssClass}}" autocomplete="off">
+    <header class="app-header flexrcol">
+		<div class="resource">
+			<label class="resource-label">{{localize "MERP1E.TimeControlControl.Label"}}</label>
+		</div>
+    </header>
+	
+	{{!-- Sheet Tab Navigation --}}
+	<nav class="app-tabs tabs" data-group="primary">
+		<a class="item" data-tab="time"><i class="far fa-clock"></i> {{localize "MERP1E.TimeControlControl.TimeControl"}}</a>
+		<a class="item" data-tab="date"><i class="far fa-calendar"></i> {{localize "MERP1E.TimeControlControl.Date"}}</a>
+		<a class="item" data-tab="calendar"><i class="far fa-calendar-alt"></i> {{localize "MERP1E.TimeControlControl.Calendar"}}</a>
+	</nav>
+	<section class="app-body">
+        <div class="tab" data-group="primary" data-tab="time">
+			TIME
+			<footer class="app-footer">
+				<button type="submit"><i class="fas fa-check"></i> {{localize "MERP1E.TimeControl.Save"}}</button>
+			</footer>
+		</div>
+        <div class="tab" data-group="primary" data-tab="date">
+			DATE
+			<footer class="app-footer">
+				<button type="submit"><i class="fas fa-check"></i> {{localize "MERP1E.TimeControl.Save"}}</button>
+			</footer>
+		</div>
+        <div class="tab" data-group="primary" data-tab="calendar">
+			<div class="form-group">
+				<label>{{ localize "MERP1E.TimeControl.HoursPerDay" }}</label>
+				<div class="form-fields">
+					<input type="number" name="hourPerDay" value="{{data.hourPerDay}}" {{rw}}/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>{{ localize "MERP1E.TimeControl.MinutesPerHour" }}</label>
+				<div class="form-fields">
+					<input type="number" name="minutesPerHour" value="{{data.minutesPerHour}}" {{rw}}/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>{{ localize "MERP1E.TimeControl.SecondsPerMinute" }}</label>
+				<div class="form-fields">
+					<input type="number" name="secondsPerMinute" value="{{data.secondsPerMinute}}" {{rw}}/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>{{ localize "MERP1E.TimeControl.SecondsPerRound" }}</label>
+				<div class="form-fields">
+					<input type="number" name="secondsPerRound" value="{{data.secondsPerRound}}" {{rw}}/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>{{ localize "MERP1E.TimeControl.FirstYear" }}</label>
+				<div class="form-fields">
+					<input type="number" name="firstYear" value="{{data.firstYear}}" {{rw}}/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>{{ localize "MERP1E.TimeControl.CalendarConfig" }}</label>
+				<div class="form-fields">
+					<table>
+						<thead>
+							<tr>
+								<th>{{localize "MERP1E.TimeControl.Number"}}</th>
+								<th>{{localize "MERP1E.TimeControl.MonthName"}}</th>
+								<th>{{localize "MERP1E.TimeControl.MonthDays"}}</th>
+								<th>{{localize "MERP1E.TimeControl.MonthLeapYears"}}</th>
+							</tr>
+						</thead>
+						<tbody>
+							{{#each calendarMonths as | month monthIdx | }}
+							<tr>
+								<td>{{monthIdx}}</td>
+								<td>{{month.name}}</td>
+								<td>{{month.days}}</td>
+								<td>{{month.leapYears}}</td>
+							</tr>
+							{{/each}}
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<footer class="app-footer">
+				<button type="submit"><i class="fas fa-check"></i> {{localize "MERP1E.TimeControl.Save"}}</button>
+			</footer>
+		</div>
+	</section>
+</form>
+{{!--
+
+<i class="fas fa-history"></i>
+<i class="fas fa-stopwatch"></i>
+<i class="fas fa-hourglass-half"></i>
+
+<i class="far fa-calendar-minus"></i>
+<i class="far fa-calendar-plus"></i>
+<i class="far fa-calendar-check"></i>
+
+MERP1E.TimeControlControl.Label
+MERP1E.TimeControlControl.TimeControl
+MERP1E.TimeControlControl.Date
+MERP1E.TimeControlControl.Calendar
+MERP1E.TimeControl.Save
+
+--}}

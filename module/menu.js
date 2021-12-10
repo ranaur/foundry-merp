@@ -1,3 +1,5 @@
+import { Merp1eTimeControlApplication } from "./apps/time-control.js";
+
 //Hooks.on('renderSceneControls', Merp1eMenu.renderMenu);
 // Base on COC7 version
 export class Merp1eMenu {
@@ -142,6 +144,13 @@ export class Merp1eMenu {
 					title: 'Merp1e.GmTools.Maneuvers',
                     button: true,
                     onClick: (event) => game.merp1e.Merp1eRules.maneuver(event)
+                },
+				{
+					icon : 'fas fa-user-clock',
+					name: 'time-contol',
+					title: 'Merp1e.GmTools.TimeControl',
+                    button: true,
+                    onClick: (event) => Merp1eTimeControlApplication.create({})
                 }
 			]
 		});

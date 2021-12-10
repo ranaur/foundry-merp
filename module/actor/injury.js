@@ -181,6 +181,12 @@ class Merp1eInjuryByLocation {
   }
 }
 
+class Merp1eInjuryDying {
+  constructor(actor) {
+    this.actor = actor;
+    game.merp1e.Merp1eRules.injury.bodyGroupsBilateral.forEach((bg) => {
+  });
+}}
 
 export class Merp1eInjury {
 
@@ -191,6 +197,7 @@ export class Merp1eInjury {
       this.penalty = new Merp1eInjuryPenalty(actor);
       this.status = new Merp1eInjuryStatus(actor);
       this.bylocation = new Merp1eInjuryByLocation(actor);
+      this.dying = new Merp1eInjuryDying(actor);
   }
 
   get hitsTaken() {

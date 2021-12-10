@@ -1,10 +1,12 @@
-<h2>{{localize "MERP1E.Injury.Death"}}</h2>
+<h2>{{localize "MERP1E.Injury.Dying"}}</h2>
 <div class="form-group">
     <label>{{ localize "MERP1E.EffectInjury.Duration" }}</label>
     <div class="form-fields">
+        {{#if (ne effect.flags.merp1e.Death.durationTimeFrame "")}}
         <input type="text" name="flags.merp1e.Death.duration" value="{{effect.flags.merp1e.Death.duration}}" {{roif this.isApplied}}/>
+        {{/if}}
         <select name="flags.merp1e.Death.durationTimeFrame" {{roif this.isApplied}}>
-            <option value=""></option>
+            <option value="">{{ localize "MERP1E.Duration.Indefinite" }}</option>
             {{selectOptions timeframe selected=effect.flags.merp1e.Death.durationTimeFrame localize=true nameAttr="id" labelAttr="label"}}
         </select>
     </div>
@@ -31,6 +33,6 @@
 {{/if}}
 {{!--
 MERP1E.EffectInjury.Duration
-MERP1E.Injury.Death
+MERP1E.Injury.Dying
 MERP1E.EffectInjury.CurrentDuration
 --}}

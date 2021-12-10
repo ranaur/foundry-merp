@@ -648,12 +648,13 @@ class Merp1eByLocationEffect extends Merp1eInjuryEffectAdapter {
 }
 
 ////////////////////////////////////////////////////////////
-class Merp1eByDelayedDeathEffect extends Merp1eInjuryEffectAdapter {
+class Merp1eDyingEffect extends Merp1eInjuryEffectAdapter {
     static dummy = Merp1eInjuryEffect.registeredAdapters.push(this)
-    static adapterName = "DelayedDeath";
+    static adapterName = "Dying";
 
     static getData(sheetData) {
         super.getData(sheetData);
+        sheetData.timeframe = game.merp1e.Merp1eRules.timeframes;
     }
 }
 
