@@ -1,85 +1,89 @@
 <form class="{{cssClass}}" autocomplete="off">
     <header class="app-header flexrcol">
 		<div class="resource">
-			<label class="resource-label">{{localize "MERP1E.TimeControlControl.Label"}}</label>
+			<label class="resource-label">{{localize "MERP1E.TimeControl.Label"}}</label>
 		</div>
     </header>
 	
 	{{!-- Sheet Tab Navigation --}}
 	<nav class="app-tabs tabs" data-group="primary">
-		<a class="item" data-tab="time"><i class="far fa-clock"></i> {{localize "MERP1E.TimeControlControl.TimeControl"}}</a>
-		<a class="item" data-tab="date"><i class="far fa-calendar"></i> {{localize "MERP1E.TimeControlControl.Date"}}</a>
-		<a class="item" data-tab="calendar"><i class="far fa-calendar-alt"></i> {{localize "MERP1E.TimeControlControl.Calendar"}}</a>
+		<a class="item" data-tab="time"><i class="far fa-clock"></i> {{localize "MERP1E.TimeControl.Time"}}</a>
+		<a class="item" data-tab="date"><i class="far fa-calendar"></i> {{localize "MERP1E.TimeControl.Date"}}</a>
 	</nav>
 	<section class="app-body">
         <div class="tab" data-group="primary" data-tab="time">
-			TIME
+			<div class="form-group">
+				<label>{{ localize "MERP1E.TimeControl.Hour" }}</label>
+				<div class="form-fields">
+					<input type="number" name="time.Hour" value="{{time.Hour}}" data-dtype="Number" {{rw}}/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>{{ localize "MERP1E.TimeControl.Minute" }}</label>
+				<div class="form-fields">
+					<input type="number" name="time.Minute" value="{{time.Minute}}" data-dtype="Number" {{rw}}/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>{{ localize "MERP1E.TimeControl.Second" }}</label>
+				<div class="form-fields">
+					<input type="number" name="time.Second" value="{{time.Second}}" data-dtype="Number" {{rw}}/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>{{ localize "MERP1E.TimeControl.Day" }}</label>
+				<div class="form-fields">
+					<input type="number" name="time.Day" value="{{time.Day}}" data-dtype="Number" {{rw}}/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>{{ localize "MERP1E.TimeControl.Month" }}</label>
+				<div class="form-fields">
+					<input type="number" name="time.Month" value="{{time.Month}}" data-dtype="Number" {{rw}}/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>{{ localize "MERP1E.TimeControl.Year" }}</label>
+				<div class="form-fields">
+					<input type="number" name="time.Year" value="{{time.Year}}" data-dtype="Number" {{rw}}/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>{{ localize "MERP1E.TimeControl.Time" }}</label>
+				<div class="form-fields">
+					<button type="submit" data-action="nextRound"><i class="fas fa-check"></i> {{localize "MERP1E.TimeControl.NextRound"}}</button>
+					<button type="submit" data-action="nextMinute"><i class="fas fa-check"></i> {{localize "MERP1E.TimeControl.NextMinute"}}</button>
+					<button type="submit" data-action="nextHour"><i class="fas fa-check"></i> {{localize "MERP1E.TimeControl.NextHour"}}</button>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>{{ localize "MERP1E.TimeControl.Date" }}</label>
+				<div class="form-fields">
+					<button type="submit" data-action="nextMorning"><i class="fas fa-check"></i> {{localize "MERP1E.TimeControl.NextMorning"}}</button>
+					<button type="submit" data-action="nextEvening"><i class="fas fa-check"></i> {{localize "MERP1E.TimeControl.NextEvening"}}</button>
+					<button type="submit" data-action="nextAfternoon"><i class="fas fa-check"></i> {{localize "MERP1E.TimeControl.NextAfternoon"}}</button>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>{{ localize "MERP1E.TimeControl.Calendar" }}</label>
+				<div class="form-fields">
+					<button type="submit" data-action="nextWeek"><i class="fas fa-check"></i> {{localize "MERP1E.TimeControl.NextWeek"}}</button>
+					<button type="submit" data-action="nextMonth"><i class="fas fa-check"></i> {{localize "MERP1E.TimeControl.NextMonth"}}</button>
+					<button type="submit" data-action="nextYear"><i class="fas fa-check"></i> {{localize "MERP1E.TimeControl.NextYear"}}</button>
+				</div>
+			</div>
+			<div class="form-group">
+				<label>{{ localize "MERP1E.TimeControl.SecondsSinceEpoch" }}</label>
+				<div class="form-fields">
+					<input type="number" value="{{worldTime}}" data-dtype="Number" {{ro}}/>
+				</div>
+			</div>
 			<footer class="app-footer">
-				<button type="submit"><i class="fas fa-check"></i> {{localize "MERP1E.TimeControl.Save"}}</button>
+				<button type="submit" data-action="save"><i class="fas fa-check"></i> {{localize "MERP1E.TimeControl.Save"}}</button>
 			</footer>
 		</div>
         <div class="tab" data-group="primary" data-tab="date">
 			DATE
-			<footer class="app-footer">
-				<button type="submit"><i class="fas fa-check"></i> {{localize "MERP1E.TimeControl.Save"}}</button>
-			</footer>
-		</div>
-        <div class="tab" data-group="primary" data-tab="calendar">
-			<div class="form-group">
-				<label>{{ localize "MERP1E.TimeControl.HoursPerDay" }}</label>
-				<div class="form-fields">
-					<input type="number" name="hourPerDay" value="{{data.hourPerDay}}" {{rw}}/>
-				</div>
-			</div>
-			<div class="form-group">
-				<label>{{ localize "MERP1E.TimeControl.MinutesPerHour" }}</label>
-				<div class="form-fields">
-					<input type="number" name="minutesPerHour" value="{{data.minutesPerHour}}" {{rw}}/>
-				</div>
-			</div>
-			<div class="form-group">
-				<label>{{ localize "MERP1E.TimeControl.SecondsPerMinute" }}</label>
-				<div class="form-fields">
-					<input type="number" name="secondsPerMinute" value="{{data.secondsPerMinute}}" {{rw}}/>
-				</div>
-			</div>
-			<div class="form-group">
-				<label>{{ localize "MERP1E.TimeControl.SecondsPerRound" }}</label>
-				<div class="form-fields">
-					<input type="number" name="secondsPerRound" value="{{data.secondsPerRound}}" {{rw}}/>
-				</div>
-			</div>
-			<div class="form-group">
-				<label>{{ localize "MERP1E.TimeControl.FirstYear" }}</label>
-				<div class="form-fields">
-					<input type="number" name="firstYear" value="{{data.firstYear}}" {{rw}}/>
-				</div>
-			</div>
-			<div class="form-group">
-				<label>{{ localize "MERP1E.TimeControl.CalendarConfig" }}</label>
-				<div class="form-fields">
-					<table>
-						<thead>
-							<tr>
-								<th>{{localize "MERP1E.TimeControl.Number"}}</th>
-								<th>{{localize "MERP1E.TimeControl.MonthName"}}</th>
-								<th>{{localize "MERP1E.TimeControl.MonthDays"}}</th>
-								<th>{{localize "MERP1E.TimeControl.MonthLeapYears"}}</th>
-							</tr>
-						</thead>
-						<tbody>
-							{{#each calendarMonths as | month monthIdx | }}
-							<tr>
-								<td>{{monthIdx}}</td>
-								<td>{{month.name}}</td>
-								<td>{{month.days}}</td>
-								<td>{{month.leapYears}}</td>
-							</tr>
-							{{/each}}
-						</tbody>
-					</table>
-				</div>
-			</div>
 			<footer class="app-footer">
 				<button type="submit"><i class="fas fa-check"></i> {{localize "MERP1E.TimeControl.Save"}}</button>
 			</footer>
@@ -96,10 +100,10 @@
 <i class="far fa-calendar-plus"></i>
 <i class="far fa-calendar-check"></i>
 
-MERP1E.TimeControlControl.Label
-MERP1E.TimeControlControl.TimeControl
-MERP1E.TimeControlControl.Date
-MERP1E.TimeControlControl.Calendar
+MERP1E.TimeControl.Label
+MERP1E.TimeControl.TimeControl
+MERP1E.TimeControl.Date
+MERP1E.TimeControl.Calendar
 MERP1E.TimeControl.Save
 
 --}}

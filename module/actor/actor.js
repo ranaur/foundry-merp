@@ -1,4 +1,4 @@
-import { min } from "../util.js";
+import { confirmDialog, min } from "../util.js";
 import { Merp1eItemEffect } from "../effect/item-effects.js";
 import { Merp1eDefense } from "./defense.js";
 import { Merp1eXP } from "./xp.js";
@@ -7,8 +7,122 @@ import { Merp1eSpellCasting } from "./spellcasting.js";
 import { Merp1eStats } from "./stat.js";
 import { Merp1eRules } from "../rules/rules.js";
 import { Merp1eAction } from "./action.js";
-
+import { Merp1eDecayChatCard } from "../chat/decay-chatcard.js";
 import { Merp1eInjury } from "./injury.js"
+
+class Merp1eDeath {
+  constructor(actor) {
+    this.actor = actor;
+  }
+
+  //  DEATH HANDLING ROUTINES
+  /**
+   * 
+   * @param {*} worldTime Time of the death (in worldTime - seconds since epoch)
+   * 
+   * Returns: nothing, because nothing returns from death :-)
+   */
+  async die(worldTime = null) {
+    worldTime ??= game.time.worldTime;
+
+    await this.actor.setFlag("merp1e", "deathTime", worldTime);
+  }
+  get deathTime() {
+    return this.actor.getFlag("merp1e", "deathTime");
+  }
+
+  isDead(worldTime = null) {
+    worldTime ??= game.time.worldTime;
+
+    return (this.deathTime != null) && (worldTime >= this.deathTime);
+  }
+
+  get isDeadNow() { return this.isDead(); }
+  /*  
+  get secondsDead() {
+    const since = this.since;
+    if(!since) return null;
+    if(game.time.worldTime < since)  return null;
+    return (game.time.worldTime - this.since);
+  }
+
+  getDeadSinceInTimeframe( timeframeId ) {
+    return new Merp1eTimeframe(this.secondsDead).getValue(timeframeId);
+  }
+
+  get roundsDead() {
+    return this.getDeadSinceInTimeframe("rounds");
+  }
+
+  get daysDead() {
+    return this.getDeadSinceInTimeframe("days");
+  }
+  */
+
+  async ressurrect() {
+    await this.actor.setFlag("merp1e", "deathTime", null);
+    // clear preserved status
+    await this.actor.setFlag("merp1e", "preserveTime", null);
+    await this.actor.setFlag("merp1e", "preservedFor", null);
+    // clear life keep status
+    await this.actor.setFlag("merp1e", "lifeKeepTime", null);
+    await this.actor.setFlag("merp1e", "lifeKeepdFor", null);
+  }
+
+  get isAliveNow() {
+    return !this.isDead;
+  }
+
+  async preserve(forSeconds, worldTime = null ) {
+    worldTime ??= game.time.worldTime;
+    await this.actor.setFlag("merp1e", "preserveTime", worldTime);
+    await this.actor.setFlag("merp1e", "preservedFor", forSeconds);
+  }
+
+  get preserveTime() { return this.actor.getFlag("merp1e", "preserveTime"); }
+  get preservedFor() { return this.actor.getFlag("merp1e", "preservedFor"); }
+  get preserveEndTime() { return (this.preserveTime + this.preservedFor) || null; }
+
+  isPreserved( worldTime = null ) {
+    if(!this.isDead(worldTime)) return true;
+
+    worldTime ??= game.time.worldTime;
+
+    if(worldTime >= this.preserveTime && worldTime < this.preserveEndTime) return true;
+
+    return false;
+  }
+  //get isPreservedNow() { return this.isPreserved(); }
+
+  async lifeKeep( forSeconds, worldTime = null ) {
+    worldTime ??= game.time.worldTime;
+    await this.actor.setFlag("merp1e", "lifeKeepTime", worldTime);
+    await this.actor.setFlag("merp1e", "lifeKeepdFor", forSeconds);
+  }
+
+  get lifeKeepTime() { return this.actor.getFlag("merp1e", "preserveTime"); }
+  get lifeKeepdFor() { return this.actor.getFlag("merp1e", "preservedFor"); }
+  get lifeKeepEndTime() { return (this.lifeKeepTime + this.lifeKeepdFor) || null; }
+  isLifeKeepd( worldTime = null ) {
+    if(!this.isDead(worldTime)) return true;
+
+    worldTime ??= game.time.worldTime;
+
+    if(worldTime >= this.lifeKeepTime && worldTime < this.lifeKeepEndTime) return true;
+
+    return false;
+  }
+  //get isLifeKeepdNow() { return this.isLifeKeepd(); }
+
+  async decayStats(frames, timeFrame) {
+    return new Merp1eDecayChatCard({
+      actorID: this.id,
+      frames: frames,
+      timeFrame: timeFrame,
+    })
+  }
+}
+
 
 /**
  * Extend the base Actor entity by defining a custom roll data structure which is ideal for the Simple system.
@@ -32,6 +146,7 @@ export class Merp1eActor extends Actor {
   /** @override */
   prepareDerivedData() {
     super.prepareDerivedData();
+    this.death = new Merp1eDeath(this);
     this._characterInit();
   }
 

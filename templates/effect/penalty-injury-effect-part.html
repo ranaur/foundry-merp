@@ -1,4 +1,9 @@
-<h2>{{localize "MERP1E.Injury.Penalty"}}</h2>
+<h2 class="flexrow">
+    <div class="flex3">{{localize "MERP1E.Injury.Penalty"}}</div>
+    {{#if document.canDelete}}
+    <div><a class="injury-control" data-action="delete"><i class="fas fa-trash" title="{{localize 'MERP1E.EffectAction.Delete'}}"></i></a></div>
+    {{/if}}
+</h2>
 <div class="form-group">
     <label>{{ localize "MERP1E.EffectInjury.Formula" }}</label>
     <div class="form-fields">
@@ -43,7 +48,7 @@
 <div class="form-group">
     <label>{{ localize "MERP1E.EffectInjury.Applied" }}</label>
     <div class="form-fields">
-        {{this.effect.appliedText}}
+        {{appliedText}}
     </div>
 </div>
 <div class="form-group">
@@ -63,9 +68,6 @@
 <h2 class="flexrow">
     <div class="flex3">{{localize "MERP1E.EffectInjury.Treatment"}}</div>
     <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
-        {{#if (eq effect.flags.merp1e.Penalty.effectiveValue 0)}}
-            <div><a class="injury-control" data-action="delete"><i class="fas fa-trash" title="{{localize 'MERP1E.EffectAction.Delete'}}"></i></a></div>
-        {{/if}}
         <a class="injury-control" data-action="treat"><i class="fas fa-stethoscope" title="{{localize 'MERP1E.EffectAction.Treat'}}"></i></a>
     </div>
 </h2>
@@ -83,7 +85,7 @@
             <div class="flex4"><input type="number" name="flags.merp1e.Penalty.HealsIn" value="{{effect.flags.merp1e.Penalty.HealsIn}}" {{rw}}/></div>
             <select name="flags.merp1e.Penalty.HealsInTimeFrame" {{rw}}>
                 <option value=""></option>
-                {{selectOptions timeframe selected=effect.flags.merp1e.Penalty.HealsInTimeFrame localize=true nameAttr="id" labelAttr="label"}}
+                {{selectOptions timeframes selected=effect.flags.merp1e.Penalty.HealsInTimeFrame localize=true nameAttr="id" labelAttr="label"}}
             </select>
         </div>
     </div>

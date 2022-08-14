@@ -1,4 +1,9 @@
-<h2>{{localize "MERP1E.Injury.HitsPerRound"}}</h2>
+<h2 class="flexrow">
+    <div class="flex3">{{localize "MERP1E.Injury.HitsPerRound"}}</div>
+    {{#if document.canDelete}}
+    <div><a class="injury-control" data-action="delete"><i class="fas fa-trash" title="{{localize 'MERP1E.EffectAction.Delete'}}"></i></a></div>
+    {{/if}}
+</h2>
 <div class="form-group">
     <label>{{ localize "MERP1E.EffectInjury.Formula" }}</label>
     <div class="form-fields">
@@ -59,9 +64,6 @@
 <h2 class="flexrow">
     <div class="flex3">{{localize "MERP1E.EffectInjury.Treatment"}}</div>
     <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
-        {{#if (eq effect.flags.merp1e.HitsPerRound.currentValue 0)}}
-            <div><a class="injury-control" data-action="delete"><i class="fas fa-trash" title="{{localize 'MERP1E.EffectAction.Delete'}}"></i></a></div>
-        {{/if}}
         {{#if isTreated}}
             {{#if (eq effect.flags.merp1e.HitsPerRound.treatment "tourniquet")}}
                 <a class="injury-control" data-action="loosentourniquet"><i class="fas fa-heartbeat" title="{{localize 'MERP1E.EffectAction.LoosenTourniquet'}}"></i></a>
@@ -81,7 +83,7 @@
     <div class="form-fields">
         <div class="flexrow">
             <div class="flex4">
-                <input type="text" value="{{localize (getFieldByID treatments effect.flags.merp1e.HitsPerRound.treatment)}}" {{ro}}/>
+                <input type="text" value="{{localize (getFieldByID treatments effect.flags.merp1e.HitsPerRound.treatment 'label')}}" {{ro}}/>
             </div>
         </div>
     </div>
@@ -99,7 +101,7 @@
             <div class="flex4"><input type="number" name="flags.merp1e.HitsPerRound.HealsIn" value="{{effect.flags.merp1e.HitsPerRound.HealsIn}}" {{rw}}/></div>
             <select name="flags.merp1e.HitsPerRound.HealsInTimeFrame" {{rw}}>
                 <option value=""></option>
-                {{selectOptions timeframe selected=effect.flags.merp1e.HitsPerRound.HealsInTimeFrame localize=true nameAttr="id" labelAttr="label"}}
+                {{selectOptions timeframes selected=effect.flags.merp1e.HitsPerRound.HealsInTimeFrame localize=true nameAttr="id" labelAttr="label"}}
             </select>
         </div>
     </div>

@@ -3,8 +3,10 @@ import { Merp1eItemEffect } from "./item-effects.js"
 import { Merp1eInjuryEffect } from "./injury-effects.js"
 import { Merp1eEffectCondition } from "./condition.js";
 import { toKebabCase } from "../util.js";
-//import { findByID } from "./util.js";
-import { Merp1eModifier } from "../modifier.js"
+import { Merp1eTimeframeHelper } from "../timeframe.js";
+import { Merp1eModifier } from "../modifier.js";
+import { Merp1eDuration } from "../duration.js";
+import { Merp1eCalendar } from "../calendar.js";
 
 export class Merp1eActiveEffectSheet extends DocumentSheet {
     /** @override */
@@ -48,6 +50,31 @@ export class Merp1eActiveEffectSheet extends DocumentSheet {
         sheetData.modifierEnableFunctions = Merp1eModifier.enableFunctions;
         sheetData.modifierValueFunctions = Merp1eModifier.valueFunctions;
 
+        sheetData.durationTypes = Merp1eDuration.types;
+        
+        sheetData.hasDuration = this.object.hasDuration;
+        sheetData.effectActive = this.object.isActive;
+        if(sheetData.hasDuration) {
+            Merp1eTimeframeHelper.processGetData(sheetData, "durationFrame", "durationNumber", sheetData.data.duration.seconds)
+
+            if(sheetData.data.duration.startTime != null) {
+                const startDate = Merp1eCalendar.world2date(sheetData.data.duration.startTime);
+                sheetData.durationStartTimeText = startDate.strTime + "\n" + startDate.strDate;
+                sheetData.durationEndTime = sheetData.data.duration.startTime + sheetData.data.duration.seconds;
+                const endDate = Merp1eCalendar.world2date(sheetData.durationEndTime);
+                sheetData.durationEndTimeText = endDate.strTime + "\n" + endDate.strDate;;
+            } else {
+                sheetData.durationStartTimeText = "";
+                sheetData.durationEndTime = null;
+                sheetData.durationEndTimeText = "";
+            }
+    
+            sheetData.durationType = "indefinite";
+            if(sheetData.data.duration.rounds != null ) sheetData.durationType = "combat";
+            if(sheetData.data.duration.turns != null) sheetData.durationType = "combat";
+            if(sheetData.data.duration.seconds != null ) sheetData.durationType = "timeBased";
+        }
+
         // GAMBIARRA XXX
         if(!sheetData.effect.flags.merp1e.adapterName) {
             sheetData.effect.flags.merp1e.adapterName = sheetData.effect.flags.merp1e.effectType;
@@ -65,6 +92,27 @@ export class Merp1eActiveEffectSheet extends DocumentSheet {
         if(this.readOnly) return;
         
         this.object?.updateObject(event, formData);
+
+        switch(formData.durationType) {
+            case "indefinite":
+                formData["duration.rounds"] = null;
+                formData["duration.turns"] = null;
+                formData["duration.seconds"] = null;
+                break;
+            case "timeBased":
+                formData["duration.rounds"] = null;
+                formData["duration.turns"] = null;
+                formData["durationFrame"] ??= "seconds";
+                formData["durationNumber"] ??= 1;
+                formData["duration.seconds"] = Merp1eTimeframeHelper.processUpdate(formData, "durationFrame", "durationNumber");
+                break;
+            case "combat":
+                formData["duration.rounds"] ??= 1;
+                formData["duration.turns"] ??= 0;
+                formData["duration.seconds"] = null;
+                break;
+        }
+        
 
         return await this.object.update(formData);
     }

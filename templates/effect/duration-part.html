@@ -1,0 +1,77 @@
+<div class="form-group">
+    <label>{{ localize "MERP1E.Duration.Type" }}</label>
+    <div class="form-fields">
+        <select class="userentry" name="durationType">
+            {{selectOptions durationTypes selected=durationType localize=true nameAttr="id" labelAttr="label"}}
+        </select>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.Duration.IsActive" }}</label>
+    <div class="form-fields">
+        {{#if effectActive}}
+        {{ localize "MERP1E.Yes" }}
+        {{else}}
+        {{ localize "MERP1E.No" }}
+        {{/if}}
+    </div>
+</div>
+{{#if (eq durationType "timeBased") }}
+<hr/>
+<div class="form-group">
+    <label>{{ localize "MERP1E.Duration.Label" }}</label>
+    <div class="form-fields">
+        <input type="number" name="durationNumber" value="{{durationNumber}}" {{rw}}/>
+        <select class="userentry" name="durationFrame">
+            {{selectOptions timeframes selected=durationFrame localize=true nameAttr="id" labelAttr="label"}}
+        </select>
+    </div>
+</div>
+<hr/>
+<div class="form-group">
+    <label>{{ localize "EFFECT.StartTime" }}</label>
+    <div class="form-fields flexcol">
+        <input type="number" name="duration.startTime" value="{{ effect.duration.startTime }}" {{gmonly}}/> {{!-- XXX world2date --}}
+    </div>
+    <div class="form-fields flexcol">
+            {{durationStartTimeText}}
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "EFFECT.EndTime" }}</label>
+    <div class="form-fields flexcol">
+        <input type="number" value="{{ durationEndTime }}" {{ro}}/>
+    </div>
+    <div class="form-fields flexcol">
+            {{durationEndTimeText}}
+    </div>
+</div>
+{{/if}}
+{{#if (eq durationType "combat") }}
+<hr/>
+<div class="form-group">
+    <label>{{ localize "EFFECT.DurationTurns" }}</label>
+    <div class="form-fields">
+        <label>{{ localize "COMBAT.Rounds" }}</label>
+        <input type="number" name="duration.rounds" value="{{ effect.duration.rounds }}" {{rw}}/>
+        <label>{{ localize "COMBAT.Turns" }}</label>
+        <input type="number" name="duration.turns" value="{{ effect.duration.turns }}" {{rw}}/>
+    </div>
+</div>
+<hr/>
+<div class="form-group">
+    <label>{{ localize "EFFECT.Combat" }}</label>
+    <div class="form-fields">
+        <input type="text" name="duration.combat" value="{{ effect.duration.combat }}" {{ro}}/>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "EFFECT.StartTurns" }}</label>
+    <div class="form-fields">
+        <label>{{ localize "COMBAT.Round" }}</label>
+        <input type="number" name="duration.startRound" value="{{ effect.duration.startRound }}" {{gmonly}} />
+        <label>{{ localize "COMBAT.Turn" }}</label>
+        <input type="number" name="duration.startTurn" value="{{ effect.duration.startTurn }}" {{gmonly}} />
+    </div>
+</div>
+{{/if}}

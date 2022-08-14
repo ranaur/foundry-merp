@@ -12,10 +12,28 @@ import { confirmDialog, min, max, findByID, formatBonus, replaceData } from "../
 import { Merp1eEffect, Merp1eEffectAdapter } from "./base-effects.js";
 import { Merp1eTimeStamp } from "../timestamp.js";
 import { Merp1eOrigin } from "../origin.js";
+import { Merp1eTimeframe } from "../timeframe.js";
+import { Merp1eDuration } from "../duration.js";
 
 export class Merp1eInjuryEffect extends Merp1eEffect {
     static registeredAdapters = []; // filled by a dummy on each subclass
 
+    get canDelete() {
+        return !this.isApplied || (this.hasDuration && !this.isActive) || this.effectAdapter?.canDelete;
+    }
+
+    // DURATION
+    get hasDuration() {
+        return this.effectAdapter?.hasDuration;
+    }
+    
+    get isActive() {
+        if(!this.hasDuration) return true;
+
+        const d = new Merp1eDuration(this.data.duration);
+        return d.isActive;
+    }
+    
     _onCreate(data, options, userId) {
         data.origin = new Merp1eOrigin(options.origin);
     }
@@ -31,7 +49,7 @@ export class Merp1eInjuryEffect extends Merp1eEffect {
 
     // apply control
     apply(actor, change) {
-        if(this.applied) return;
+        if(this.isApplied) return;
 
         super.apply(actor, change);
 
@@ -41,9 +59,18 @@ export class Merp1eInjuryEffect extends Merp1eEffect {
     async asyncApply(actor, change) {
         if(!await this.effectAdapter?.onApply(actor, change)) return;
         
+        if(this.hasDuration) {
+            await this.update( { duration: { 
+                startRound: game.combat.data.round,
+                startTurn: game.combat.data.turn,
+                startTime: game.time.worldTime
+            }});
+        }
+
         await this.stampTime("appliedAt");
     }
-    get applied() {
+
+    get isApplied() {
         return this.appliedAt != null;
     }
     
@@ -55,7 +82,7 @@ export class Merp1eInjuryEffect extends Merp1eEffect {
         return new Merp1eTimeStamp(this.getEffectFlag("appliedAt")).makeString();
     }
 
-    // candy for flag manipulation
+    // Flag Manipulation
     getEffectFlag(name) {
         return this.getFlag("merp1e", "InjuryEffect." + name);
     }
@@ -68,6 +95,7 @@ export class Merp1eInjuryEffect extends Merp1eEffect {
         return await this.setEffectFlag(flagName, Merp1eTimeStamp.generateGameTimeStamp());
     }
 
+    // TREATMENT
     get treatedAt() {
         return this.getEffectFlag("treatedAt");
     }
@@ -82,9 +110,11 @@ export class Merp1eInjuryEffectAdapter extends Merp1eEffectAdapter {
         return "InjuryEffect";
     };
 
-    // async _copyEffectToActor(actor) {
-    //     return await actor.createEmbeddedDocuments("ActveEffect", [this.effect.toObject()], {renderSheet: false});
-    // }
+    get canDelete() {
+        return true;
+    }
+
+    get hasDuration() { return false; }
 
     get hitsValue() { return 0; }
 
@@ -232,6 +262,8 @@ class Merp1eInjuryEffectHits extends Merp1eInjuryEffectAdapter {
     static dummy = Merp1eInjuryEffect.registeredAdapters.push(this)
     static adapterName = "Hits";
 
+    get hasDuration() { return true; }
+
     generateDescription() {
         if (!this.formula) {
             return game.i18n.localize("MERP1E.Effect.NotConfigured");
@@ -252,6 +284,8 @@ class Merp1eInjuryEffectHeal extends Merp1eInjuryEffectAdapter {
     static dummy = Merp1eInjuryEffect.registeredAdapters.push(this)
     static adapterName = "Heal";
 
+    get hasDuration() { return true; }
+
     generateDescription() {
         if (!this.formula) {
             return game.i18n.localize("MERP1E.Effect.NotConfigured");
@@ -271,6 +305,12 @@ class Merp1eInjuryEffectHeal extends Merp1eInjuryEffectAdapter {
 class Merp1eInjuryEffectHitsPerRound extends Merp1eInjuryEffectAdapter {
     static dummy = Merp1eInjuryEffect.registeredAdapters.push(this)
     static adapterName = "HitsPerRound";
+
+    get canDelete() {
+        return !this.formula || this.currentValue == 0;
+    }
+
+    get hasDuration() { return true; }
 
     generateDescription() {
         if (!this.formula) {
@@ -403,7 +443,6 @@ class Merp1eInjuryEffectHitsPerRound extends Merp1eInjuryEffectAdapter {
         sheetData.defaultCategory = this.resolveCategory(sheetData.effect.flags.merp1e?.HitsPerRound?.currentValue);
         sheetData.injuryLocations = game.merp1e.Merp1eRules.injury.locations;
         sheetData.injuryCategories = game.merp1e.Merp1eRules.injury.categories;
-        sheetData.timeframe = game.merp1e.Merp1eRules.timeframes;
 
         sheetData.treatments = [
             { id: "none", label: "MERP1E.Treatment.None"},
@@ -419,6 +458,12 @@ class Merp1eInjuryEffectHitsPerRound extends Merp1eInjuryEffectAdapter {
 class Merp1eInjuryEffectPenalty extends Merp1eInjuryEffectAdapter {
     static dummy = Merp1eInjuryEffect.registeredAdapters.push(this)
     static adapterName = "Penalty";
+
+    get hasDuration() { return true; }
+
+    get canDelete() {
+        return this.currentValue == 0;
+    }
 
     generateDescription() {
         if (!this.formula) {
@@ -460,7 +505,8 @@ class Merp1eInjuryEffectPenalty extends Merp1eInjuryEffectAdapter {
         const timeFrame = expandedFormData.flags.merp1e.Penalty.HealsInTimeFrame;
         const healsInTime = expandedFormData.flags.merp1e.Penalty.HealsIn;
 
-        const healsInTimeSeconds = healsInTime * findByID(game.merp1e.Merp1eRules.timeframes, timeFrame, 0)?.seconds;
+        const tf = new Merp1eTimeframe(healsInTime, timeFrame);
+        const healsInTimeSeconds = tf.seconds;
         if(healsInTimeSeconds.isNaN) {
             formData["flags.merp1e.Penalty.HealsInTimeSeconds"] = null;
             formData["flags.merp1e.Penalty.HealsFirstDay"] = null;
@@ -495,7 +541,6 @@ class Merp1eInjuryEffectPenalty extends Merp1eInjuryEffectAdapter {
         sheetData.injuryLocations = game.merp1e.Merp1eRules.injury.locations;
         sheetData.injuryCategories = game.merp1e.Merp1eRules.injury.categories;
         sheetData.injuryTypes = game.merp1e.Merp1eRules.injury.types;
-        sheetData.timeframe = game.merp1e.Merp1eRules.timeframes;
     }
 
     async applyRound() {
@@ -556,6 +601,8 @@ class Merp1eInjuryEffectPenalty extends Merp1eInjuryEffectAdapter {
 
 /////////////////////////////////////////////////////
 class Merp1eStatusEffectPenalty extends Merp1eInjuryEffectAdapter {
+    get hasDuration() { return false; }
+
     get duration() {
         return this.currentValue;
     }
@@ -622,6 +669,12 @@ class Merp1eByLocationEffect extends Merp1eInjuryEffectAdapter {
     static dummy = Merp1eInjuryEffect.registeredAdapters.push(this)
     static adapterName = "ByLocation";
 
+    get canDelete() {
+        return this.currentValue == "ok";
+    }
+
+    get hasDuration() { return true; }
+
     static getData(sheetData) {
         super.getData(sheetData);
         let possibleValues = sheetData.document.effectAdapter.bodyGroupObject?.statuses;
@@ -652,9 +705,35 @@ class Merp1eDyingEffect extends Merp1eInjuryEffectAdapter {
     static dummy = Merp1eInjuryEffect.registeredAdapters.push(this)
     static adapterName = "Dying";
 
+    get hasDuration() { return false; }
+
+    generateDescription() {
+        if (!this.formula) {
+            return game.i18n.localize("MERP1E.Effect.NotConfigured");
+        }
+
+        return replaceData(game.i18n.localize("MERP1E.InjuryDescription.Dying"),
+            {
+                ROUNDS: this.rolled ? this.initialValue : this.formula,
+            });
+    }
+
+    async applyRound() {
+        this.currentValue 
+    }
+
+    get currentValue() {
+        return new Merp1eTimeframe(this._effect.appliedAt.worldTime + this.initialValue - game.time.worldTime).getValue("rounds");
+    }
+
     static getData(sheetData) {
         super.getData(sheetData);
-        sheetData.timeframe = game.merp1e.Merp1eRules.timeframes;
+        sheetData.dieAt = sheetData.document.appliedAt.worldTime + new Merp1eTimeframe(sheetData.data.flags.merp1e.Dying.initialValue, "rounds").seconds;
+        if(sheetData.dieAt - game.time.worldTime > 0) {
+        } else {
+            sheetData.data.flags.merp1e.Dying.currentValue = null;
+        }
+        
     }
 }
 

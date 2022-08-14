@@ -187,7 +187,6 @@ export class Merp1eRules {
         bt5aux: TableBT5Aux,
         rr1: TableRR1
     };
-    
     static injury = {
         statuses: [
             { id: "knockedout", label: "MERP1E.Statuses.KnockedOut", effectName: "KnockedOut" },
@@ -248,11 +247,6 @@ export class Merp1eRules {
             { id: "light", label: "MERP1E.InjuryCategory.Light", abbr: "MERP1E.InjuryCategoryAbbr.Light", icon: 'far fa-star' } ,
             { id: "medium", label: "MERP1E.InjuryCategory.Medium", abbr: "MERP1E.InjuryCategoryAbbr.Medium", icon: 'fas fa-star-half-alt' },
             { id: "severe", label: "MERP1E.InjuryCategory.Severe", abbr: "MERP1E.InjuryCategoryAbbr.Severe", icon: 'fas fa-star' }
-        ],
-        durations: [
-            { id: "indefinite", label: "Indefinite" },
-            { id: "combat", label: "Combat" },
-            { id: "time", label: "Time" }
         ],
         locationStatuses: [
             { id: "ok",  label: "MERP1E.InjuryStatuses.Ok" },
@@ -378,16 +372,6 @@ export class Merp1eRules {
         { id: "DB", label: "MERP1E.RollType.DB", abbr: "MERP1E.RollTypeAbbr.DB" },
         { id: "OB", label: "MERP1E.RollType.OB", abbr: "MERP1E.RollTypeAbbr.OB" },
         { id: "SP", label: "MERP1E.RollType.SP", abbr: "MERP1E.RollTypeAbbr.SP", rollCard: (data) => new Merp1eSpecialRollChatCard(data) }
-    ];
-
-    static timeframes = [
-        { id: "seconds", label: "MERP1E.TimeFrame.Seconds", abbr: "MERP1E.TimeFrameAbbr.Seconds", seconds: 1 },
-        { id: "rounds", label: "MERP1E.TimeFrame.Rounds", abbr: "MERP1E.TimeFrameAbbr.Rounds", seconds: 10 },
-        { id: "minutes", label: "MERP1E.TimeFrame.Minutes", abbr: "MERP1E.TimeFrameAbbr.Minutes", seconds: 60 },
-        { id: "hours", label: "MERP1E.TimeFrame.Hours", abbr: "MERP1E.TimeFrameAbbr.Hours", seconds: 3600 },
-        { id: "days", label: "MERP1E.TimeFrame.Days", abbr: "MERP1E.TimeFrameAbbr.Days", seconds: 3600 * 24 },
-        { id: "weeks", label: "MERP1E.TimeFrame.Weeks", abbr: "MERP1E.TimeFrameAbbr.Weeks", seconds: 3600 * 24 * 7 },
-        { id: "months", label: "MERP1E.TimeFrame.Months", abbr: "MERP1E.TimeFrameAbbr.Months", seconds: 3600 * 24 * 30 },
     ];
 
     static getSpecialItems() {

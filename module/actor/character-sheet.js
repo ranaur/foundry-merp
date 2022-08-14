@@ -3,6 +3,7 @@ import { Merp1eBaseSheet } from './base-sheet.js';
 import { Merp1eRollChooserApplication } from '../apps/roll-chooser.js';
 import { Merp1eItemEffect } from '../effect/item-effects.js';
 import { Merp1eActiveEffectHelper } from '../effect/effect-helper.js';
+import { Merp1eTimeframeHelper } from "../timeframe.js";
 
 class Merp1eActionsTab {
   static getData(sheetData, sheet) {
@@ -68,12 +69,29 @@ class Merp1eActionsTab {
 class Merp1eInjuriesTab {
   static activateListeners(html, sheet) {
     Merp1eActiveEffectHelper.activateListeners(html, sheet.actor);
+    html.find(".death-control").click(event => {
+      event.preventDefault();
+      const a = event.currentTarget;
+      if(a.dataset.action) {
+        sheet.actor.death[a.dataset.action]?.();
+      }
+    });
+  
   }
   static getData(sheetData, sheet) {
+    Merp1eTimeframeHelper.processGetData(sheetData, "preservedForFrame", "preservedForNumber", sheetData.data.flags.merp1e.preservedFor);
+    Merp1eTimeframeHelper.processGetData(sheetData, "lifeKeepedForFrame", "lifeKeepedForNumber", sheetData.data.flags.merp1e.lifeKeepedFor);
+    
     sheetData.statuses = game.merp1e.Merp1eRules.injury.statuses;
     sheetData.bodyGroups = game.merp1e.Merp1eRules.injury.bodyGroups;
     sheetData.bodyGroupsBilateral = game.merp1e.Merp1eRules.injury.bodyGroupsBilateral;
     return sheetData;
+  }
+
+  static updateObject(event, formData, sheet) {
+    formData["flags.merp1e.preservedFor"] = Merp1eTimeframeHelper.processUpdate(formData, "preservedForFrame", "preservedForNumber");
+    formData["flags.merp1e.lifeKeepedFor"] = Merp1eTimeframeHelper.processUpdate(formData, "lifeKeepedForFrame", "lifeKeepedForNumber");
+    return formData;
   }
 }
 
@@ -665,7 +683,7 @@ export class Merp1eCharacterSheet extends Merp1eBaseSheet {
     formData = await Merp1eSpecialsTab.updateObject(event, formData, this);
     formData = await Merp1eSpellsTab.updateObject(event, formData, this);
     formData = await Merp1eXPTab.updateObject(event, formData, this);
-
+    formData = await Merp1eInjuriesTab.updateObject(event, formData, this);
     return await this.object.update(formData);
   }
 

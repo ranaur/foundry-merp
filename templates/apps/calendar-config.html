@@ -1,0 +1,48 @@
+<form class="{{cssClass}}" autocomplete="off">
+	<nav class="app-tabs tabs" data-group="primary" style="display: none">
+		<a class="item" data-tab="calendar"><i class="far fa-calendar-alt"></i> {{localize "MERP1E.CalendarConfig.Calendar"}}</a>
+	</nav>
+	
+	<section class="app-body">
+		<div class="tab" data-group="primary" data-tab="calendar">
+			<h2 class="flexrow">
+				<label>{{ localize "MERP1E.CalendarConfig.Label" }}</label>
+				<div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+					<a class="calendar-control" data-action="addMonth" title="{{localize 'MERP1E.CalendarConfig.AddMonth'}}">
+						<i class="fas fa-plus" title="{{localize 'MERP1E.Effect.Add'}}"></i>
+					</a>
+					<a class="calendar-control" data-action="delMonth" data-month="{{monthIdx}}">
+						<i class="fas fa-trash" title="{{localize 'MERP1E.CalendarConfig.DelMonth'}}"></i>
+					</a>
+				</div>
+			</h2>
+			<div class="form-fields">
+				<table>
+					<thead>
+						<tr>
+							<th>{{localize "MERP1E.CalendarConfig.Number"}}</th>
+							<th>{{localize "MERP1E.CalendarConfig.MonthName"}}</th>
+							<th>{{localize "MERP1E.CalendarConfig.MonthDays"}}</th>
+							<th>{{localize "MERP1E.CalendarConfig.MonthLeapYears"}}</th>
+						</tr>
+					</thead>
+					<tbody id="calendar">
+						{{#each calendarConfig as | month monthIdx | }}
+						<tr data-row="{{monthIdx}}">
+							<td>{{monthIdx}}
+							</td>
+							<td><input name="name" value="{{month.name}}" type="text" data-dtype="String" {{rw}}/></td>
+							<td><input name="numDays" value="{{month.numDays}}" type="number" data-dtype="Number" {{rw}}/></td>
+							<td><input name="leapStr" value="{{month.leapStr}}" type="text" data-dtype="String" {{rw}}/></td>
+						</tr>
+						{{/each}}
+					</tbody>
+				</table>
+			</div>
+		
+			<footer class="app-footer">
+				<button type="submit" data-action="save"><i class="fas fa-check"></i> {{localize "MERP1E.TimeControl.Save"}}</button>
+			</footer>
+		</div>
+	</section>
+</form>

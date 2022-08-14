@@ -135,44 +135,7 @@
         {{!-- Duration Tab --}}
 {{!-- 
         <div class="tab" data-tab="duration">
-            <div class="form-group">
-                <label>{{ localize "EFFECT.DurationSecs" }}</label>
-                <div class="form-fields">
-                    <input type="number" name="duration.seconds" value="{{ effect.duration.seconds }}"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>{{ localize "EFFECT.StartTime" }}</label>
-                <div class="form-fields">
-                    <input type="number" name="duration.startTime" value="{{ effect.duration.startTime }}"/>
-                </div>
-            </div>
-            <hr/>
-            <div class="form-group">
-                <label>{{ localize "EFFECT.DurationTurns" }}</label>
-                <div class="form-fields">
-                    <label>{{ localize "COMBAT.Rounds" }}</label>
-                    <input type="number" name="duration.rounds" value="{{ effect.duration.rounds }}"/>
-                    <label>{{ localize "COMBAT.Turns" }}</label>
-                    <input type="number" name="duration.turns" value="{{ effect.duration.turns }}"/>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>{{ localize "EFFECT.Combat" }}</label>
-                <div class="form-fields">
-                    <input type="text" name="duration.combat" value="{{ effect.duration.combat }}" disabled/>
-                </div>
-            </div>
-    
-            <div class="form-group">
-                <label>{{ localize "EFFECT.StartTurns" }}</label>
-                <div class="form-fields">
-                    <label>{{ localize "COMBAT.Round" }}</label>
-                    <input type="number" name="duration.startRound" value="{{ effect.duration.startRound }}"/>
-                    <label>{{ localize "COMBAT.Turn" }}</label>
-                    <input type="number" name="duration.startTurn" value="{{ effect.duration.startTurn }}"/>
-                </div>
-            </div>
+            {{> "systems/merp1e/templates/effect/duration-part.html" effect=effect}}
         </div>
 --}}
         {{!-- Details Tab --}}

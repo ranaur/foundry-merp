@@ -1,25 +1,9 @@
+import { Merp1eCalendar } from "../calendar.js";
+
 export class Merp1eTimeControlApplication extends Application {
 	constructor(options) {
 		super(options);
-		this.rules = game.merp1e.Merp1eRules;
-		this.data = { // default
-			rollType: "SM",
-			actorID: null,
-			skill: null,
-			skillReference: null,
-			skillID: null,
-			value: null,
-			conditions: [],
-			actors: this.rules.getActors(),
-			rollTypes: this.rules.rollTypes,
-			isGM: game.user.isGM,
-			mm: {
-				skillID: "MM",
-				skillsAll: false,
-				difficulties: this.rules.skill.difficulties,
-				movementModifiers: this.rules.skill.modifiers.Movement,
-			},
-		};
+		this.data = {};
 	}
 	/** @override */
 	get template() {
@@ -40,8 +24,9 @@ export class Merp1eTimeControlApplication extends Application {
 	/** @override */
 	activateListeners(html) {
 		super.activateListeners( html);
-		html.on('change', 'input', this._onChangeInput.bind(this));
-		html.on('change', 'select', this._onChangeInput.bind(this));
+		//html.on('change', 'input', this._onChangeInput.bind(this));
+		//html.on('change', 'select', this._onChangeInput.bind(this));
+        //html.find(".settings").on("change", "input", this._onChangeInput.bind(sheet));
 		html.on('click', 'button', this._onButton.bind(this));
 	}
     
@@ -49,7 +34,7 @@ export class Merp1eTimeControlApplication extends Application {
 		super._onChangeTab(event, tabs, active);
 	}
 
-	async _onChangeInput(event){
+    async _onChangeInput(event){
 		event.preventDefault();
 
 		let eventName = event.target.name;
@@ -70,96 +55,143 @@ export class Merp1eTimeControlApplication extends Application {
 
 		let newData = {}; newData[eventName] = eventValue;
 		this.data = mergeObject(this.data, expandObject(newData)?.data)
+        game.settings.set("merp1e", "calendar", this.data.calendar );
 		this.render(true);
 	}
 
+
+
 	_onButton(event) {
-		event.preventDefault();
+        event.preventDefault();
 
-		const action = event.currentTarget.dataset.action;
+        const a = event.currentTarget;
 
-		let total = 0;
-		for(let bonusNode of event.currentTarget.form.getElementsByClassName("mm-bonus")) {
-			let value = bonusNode.valueAsNumber;
-			if(isNaN(value)) value = 0;
-			total += value;
-		}
-		/*
-		let title = "Title";
-		let message = `
-		<div class="chat-card">
-			<div class="card-title"><b>Total</b> ${total}
-			</div>
-			<div class="card-content">Details ...
-				<input class="radio-switch" id="easy" type="radio" name="difficulty" value="easy">
-				<label for="easy">easy</label>
-				<input class="radio-switch" id="hard" type="radio" name="difficulty" value="medium">
-				<label for="medium">medium</label>
-				<input class="radio-switch" id="hard" type="radio" name="difficulty" value="hard">
-				<label for="hard">hard</label>
-			</div>
-		</div>
-		`;
-		Merp1eChat.createMessage(title, message);
-		*/
+        const func = this[a.dataset.action];
 
-		/*
-		const card = new Merp1eTestChatCard({ key: "value"});
-		console.log(card);
-		card.sendMessage();
-		*/
-		const card = new Merp1eStaticManeuverChatCard({ actorID: this.data.actorID, skillID: this.data.mm.skill.id });
-		card.sendMessage();
+        if(func) func.call(this, event);
 	}
+
 	/** @override */
 	getData() {
-		if(this.data.actorID !== null) { // lookup actor
-			let actors = this.data.actors.filter((a) => a.id == this.data.actorID);
-			if(actors.length > 0) {
-				this.data.actor = actors[0];
-			} else {
-				this.data.actor = null;
-			}
-		} else {
-			this.data.actor = null;
-		}
-		
-		let skills = null
-		if(this.data.actor === null) {
-			skills = this.rules.skill.getAvaliable();
-			this.data.mm.skill = null;
-		} else {
-			skills = this.data.actor.getSkills();
-			if(this.data.mm?.skillID == "MM")
-				this.data.mm.skill = this.data.actor.getSkillMovement();
-			else this.data.mm.skill = this.data.actor.getOwnedItem(this.data.mm?.skillID);
-		}
-		this.data.sheetOrder = this.rules.skill.generateSheetOrder(skills);
-
-		this.data.mm.difficultyValue = this.rules.skill.getModifierValue(this.data.mm.difficulties, this.data.mm?.difficultyID);
-		this.data.mm.modifiers = [];
-/* old modifier code
-		for(let modifier of this.data.mm.movementModifiers) {
-			let isEnabled;
-			let isOptional;
-			if("enableFunction" in modifier) {
-				isEnabled = this.data.actor ? modifier.enableFunction(this.data.actor) : false;
-				isOptional = false;
-			} else {
-				isEnabled = true;
-				isOptional = modifier.optional || false;
-			}
-			this.data.mm.modifiers.push({
-				value: modifier.value,
-				label: modifier.label,
-				enabled: isEnabled,
-				optional: isOptional
-			})
-		}
-*/
-		return this.data;
+        let sheetData = super.getData();
+        sheetData.calendar = Merp1eCalendar.getCalendar();
+		const now = Merp1eCalendar.world2date(game.time.worldTime);
+		sheetData.time = {
+			Hour: now.hour,
+			Minute: now.minute,
+			Second:  now.second,
+			Day: now.day,
+			Month: now.month,
+			Year: now.year,
+		}; 
+		sheetData.worldTime = game.time.worldTime;
+		return sheetData;
 	}
 
+	get _choosenWorldData() {
+		const window = this.element[0];
+		const now = Merp1eCalendar.world2date(game.time.worldTime);
+		now.hour = parseInt(window.querySelector("[name='time.Hour']").value);
+		now.minute = parseInt(window.querySelector("[name='time.Minute']").value);
+		now.second = parseInt(window.querySelector("[name='time.Second']").value);
+		now.day = parseInt(window.querySelector("[name='time.Day']").value);
+		now.month = parseInt(window.querySelector("[name='time.Month']").value);
+		now.year = parseInt(window.querySelector("[name='time.Year']").value);
+		
+		return Merp1eCalendar.date2world(now);
+	}
+
+	async save(event) {
+		await game.time.advance(this._choosenWorldData - game.time.worldTime);
+		await this.render(true);
+	}
+
+	async nextRound() {
+		const secondPerRound = Merp1eCalendar.getCalendar().SecondsPerRound;
+		const now = game.time.worldTime;
+		const nR = (Math.trunc(now / secondPerRound) + 1) * secondPerRound;
+		await game.time.advance(nR - game.time.worldTime);
+		await this.render(true);
+	}
+
+	async nextMinute() {
+		const secondsPerMinute = Merp1eCalendar.getCalendar().SecondsPerMinute;
+		const now = game.time.worldTime;
+		const nR = (Math.trunc(now / secondsPerMinute) + 1) * secondsPerMinute;
+		await game.time.advance(nR - game.time.worldTime);
+		await this.render(true);
+	}
+
+	async nextHour() {
+		const calendar = Merp1eCalendar.getCalendar();
+		const secondsPerHour = calendar.SecondsPerMinute * calendar.MinutesPerHour;
+		const now = game.time.worldTime;
+		const nR = (Math.trunc(now / secondsPerHour) + 1) * secondsPerHour;
+		await game.time.advance(nR - game.time.worldTime);
+		await this.render(true);
+	}
+
+	async nextMidnight(addHours = 0) {
+		const calendar = Merp1eCalendar.getCalendar();
+		const secondsPerDay = calendar.SecondsPerMinute * calendar.MinutesPerHour * calendar.HoursPerDay;
+		const now = game.time.worldTime;
+		const nR = (Math.trunc(now / secondsPerDay) + 1) * secondsPerDay + addHours * calendar.SecondsPerMinute * calendar.MinutesPerHour;
+		await game.time.advance(nR - game.time.worldTime);
+		await this.render(true);
+	}
+
+	async setNextHour(hour) {
+		const now = Merp1eCalendar.world2date(game.time.worldTime);
+		if(now.hour >= hour) {
+			await this.nextMidnight(hour);
+		} else {
+			const window = this.element[0];
+			window.querySelector("[name='time.Hour']").value = hour;
+			await this.save();
+		}
+	}
+
+	async nextMorning() {
+		return await this.setNextHour(7); // XXX Morning at 7:00
+	}
+
+	async nextEvening() {
+		return await this.setNextHour(12); // XXX Evening at 12:00
+	}
+
+	async nextAfternoon() {
+		return await this.setNextHour(18); // XXX Afternoon at 18:00
+	}
+
+	async nextWeek() {
+		const window = this.element[0];
+
+		const day = window.querySelector("[name='time.Day']").value;
+		window.querySelector("[name='time.Day']").value = parseInt(day) + 7;
+		await this.save();
+	}
+	async nextMonth() {
+		const window = this.element[0];
+
+		const calendar = Merp1eCalendar.getCalendar();
+		const month = window.querySelector("[name='time.Month']").value;
+		window.querySelector("[name='time.Day']").value = 1;
+		if(month > calendar.calendarConfig.length) { // first month of next year
+			const year = window.querySelector("[name='time.Year']").value;
+			window.querySelector("[name='time.Month']").value = 1;
+			window.querySelector("[name='time.Year']").value = parseInt(year) + 1;
+		} else { // next Month
+			window.querySelector("[name='time.Month']").value = parseInt(month) + 1;
+		}
+	}
+	async nextYear() {
+		const window = this.element[0];
+
+		const year = window.querySelector("[name='time.Year']").value;
+		window.querySelector("[name='time.Day']").value = 1;
+		window.querySelector("[name='time.Month']").value = 1;
+		window.querySelector("[name='time.Year']").value = parseInt(year) + 1;
+	}
 	static async create(data){ 
 		return new Merp1eTimeControlApplication(data).render(true);
 	}

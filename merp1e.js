@@ -27,6 +27,7 @@ import { Merp1eCombat } from "./module/combat/combat.js";
 import { Merp1eCombatTracker } from "./module/combat/combatTracker.js";
 import { Merp1eRollTable } from "./module/rolltable/rolltable.js";
 import { Merp1eRollTableConfig } from "./module/rolltable/rolltableConfig.js";
+import { Merp1eCalendar } from "./module/calendar.js";
 
 Hooks.once('init', async function() {
   game.templatesPath = "systems/merp1e/templates/"
@@ -189,5 +190,7 @@ function registerSettings() {
     default: "",
     restricted: true
 	});
+
+  Merp1eCalendar.registerSettings();
 
 }

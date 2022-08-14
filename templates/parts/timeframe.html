@@ -1,0 +1,22 @@
+{{!-- Variables: label, fieldNumber, fieldFrame
+
+    Use: {{> "systems/merp1e/templates/parts/timeframe.html" label="MERP1E.XXX.YYY" fieldNumber="durationNumber" fieldFrame="durationFrame" }}
+
+    Add on getData() method: sheetData.data.duration.seconds) is the value in seconds
+    
+    Merp1eTimeframeHelper.processGetData(sheetData, "durationFrame", "durationNumber", sheetData.data.duration.seconds);
+
+    And add on _updateObject:
+
+    formData["duration.seconds"] = Merp1eTimeframeHelper.processUpdate(formData, "durationFrame", "durationNumber");
+    
+--}}
+<div class="form-group">
+    <label>{{ localize label }}</label>
+    <div class="form-fields">
+        <input type="number" name="{{fieldNumber}}" value="{{lookup this fieldNumber}}" {{rw}}/>
+        <select class="userentry" name="{{fieldFrame}}">
+            {{selectOptions timeframes selected=(lookup this fieldFrame) localize=true nameAttr="id" labelAttr="label"}}
+        </select>
+    </div>
+</div>

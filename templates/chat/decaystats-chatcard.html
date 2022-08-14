@@ -1,0 +1,30 @@
+<div class="decay">
+    <div class="stats">
+        <div class="chat-card">
+            <div class="card-title grid grid-3col" style="font-weight: bold; grid-template-columns: 15% 60% 15%; border-bottom: 1pt; border-bottom-style: solid;">
+                <div>{{localize "MERP1E.DecayCard.Stats"}}</div>
+                <div>
+                    {{localize columnText}}
+                </div>
+                <div>
+                    <input type="button" value="{{localize 'MERP1E.DecayCard.RollAllButton'}}" data-action="rollall"/>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="grid grid-3col" style="grid-template-columns: 15% 60% 15%;">
+                {{#each stats as | stat |}}
+                    <div>{{localize stat.abbr}}</div>
+                    <div>
+                        {{#if (isEmpty stat.roll)}}
+                        <input type="button" value="{{localize 'MERP1E.DecayCard.RollButton'}}" data-action="roll" data-stat="{{stat.id}}"/>
+                        {{else}}
+                        {{stat.roll}}
+                        {{/if}}
+                    </div>
+                    <div style="text-align: center;">{{stat.reduced}}</div>
+                {{/each}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

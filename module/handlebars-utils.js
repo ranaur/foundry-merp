@@ -1,6 +1,7 @@
 import { findByID, formatBonus } from "./util.js";
 import { Merp1eItemEffect } from "./effect/item-effects.js";
 import { Merp1eInjuryEffect } from "./effect/injury-effects.js";
+import { Merp1eCalendar } from "./calendar.js";
 
 export const registerHandlebarsHelpers = async function() {
     // If you need to add Handlebars helpers, here are a few useful examples:
@@ -35,6 +36,14 @@ export const registerHandlebarsHelpers = async function() {
 
     Handlebars.registerHelper('isEmpty', function(a) {
         return a == null || a == undefined || a == "";
+    });
+
+    Handlebars.registerHelper('condition', function(cond, ifTrue, ifFalse) {
+        return cond ? ifTrue : ifFalse;
+    });
+
+    Handlebars.registerHelper('worldTime', function(worldtime) {
+        return Merp1eCalendar.world2date(worldtime)?.str;
     });
 
     // read only if - makes an input read only iuf parameter is true
@@ -153,6 +162,8 @@ export const preloadHandlebarsTemplates = async function() {
       "systems/merp1e/templates/parts/realm-chooser.html",
       "systems/merp1e/templates/parts/skill-chooser.html",
       "systems/merp1e/templates/parts/spell-chooser.html",
+      "systems/merp1e/templates/effect/duration-part.html",
+      "systems/merp1e/templates/parts/timeframe.html",
     ];
     Merp1eItemEffect.registerParts(templatePaths);
     Merp1eInjuryEffect.registerParts(templatePaths);

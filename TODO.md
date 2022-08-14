@@ -4,14 +4,17 @@
     console.log(game.merp1e.Merp1eRules.injury.types.reduce((acc, item) => { const x = item.label.split(".")[2]; acc.push(`"${item.label}": "${x}",`); return acc; }, []).join("\n"));
     console.log(game.merp1e.Merp1eRules.timeframes.reduce((acc, item) => { const x = item.label.split(".")[2]; acc.push(`"${item.abbr}": "${x}",`); return acc; }, []).join("\n"));
 
-    Fazer o resto das raças (depois de Noldor)\
+    Fazer o resto das raças (depois de Noldor)
     Postar sobre em https://www.youtube.com/watch?v=qj43xV1Edto
 
 # TODO
 
 ## Publicar
+* Permitir o delete quando o efeito não estiver mais ativo
+
 
 * Fazer as durations para qualquer efeito (duration)
+* Testar duration do tipo combat
 * Permitir editar o initial baseado em uma opção do sistema
     Colocar os totais como campos do ator (editáveis dependendo da configuração)
 * Aplicar a penalidade nos rolamentos (modifier, ou geral)

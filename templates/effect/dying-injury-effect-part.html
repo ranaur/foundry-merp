@@ -1,38 +1,44 @@
-<h2>{{localize "MERP1E.Injury.Dying"}}</h2>
+<h2 class="flexrow">
+    <div class="flex3">{{localize "MERP1E.Injury.Dying"}}</div>
+    {{#if document.canDelete}}
+    <div><a class="injury-control" data-action="delete"><i class="fas fa-trash" title="{{localize 'MERP1E.EffectAction.Delete'}}"></i></a></div>
+    {{/if}}
+</h2>
 <div class="form-group">
-    <label>{{ localize "MERP1E.EffectInjury.Duration" }}</label>
+    <label>{{ localize "MERP1E.EffectInjury.Formula" }}</label>
     <div class="form-fields">
-        {{#if (ne effect.flags.merp1e.Death.durationTimeFrame "")}}
-        <input type="text" name="flags.merp1e.Death.duration" value="{{effect.flags.merp1e.Death.duration}}" {{roif this.isApplied}}/>
-        {{/if}}
-        <select name="flags.merp1e.Death.durationTimeFrame" {{roif this.isApplied}}>
-            <option value="">{{ localize "MERP1E.Duration.Indefinite" }}</option>
-            {{selectOptions timeframe selected=effect.flags.merp1e.Death.durationTimeFrame localize=true nameAttr="id" labelAttr="label"}}
-        </select>
+        <input type="text" name="flags.merp1e.Dying.formula" value="{{effect.flags.merp1e.Dying.formula}}" {{roif this.isApplied}}/>
     </div>
 </div>
 <div class="form-group">
     <label>{{ localize "MERP1E.Effect.Description" }}</label>
     <div class="form-fields">
-        <input type="text" name="flags.merp1e.Death.description" value="{{effect.flags.merp1e.Death.description}}" {{rw}}/>
+        <input type="text" name="flags.merp1e.Dying.description" value="{{effect.flags.merp1e.Dying.description}}" {{rw}}/>
     </div>
 </div>
 {{#if this.isApplied}}
 <div class="form-group">
     <label>{{ localize "MERP1E.EffectInjury.Applied" }}</label>
     <div class="form-fields">
-        {{this.effect.appliedText}}
+        {{appliedText}}
     </div>
 </div>
 <div class="form-group">
-    <label>{{ localize "MERP1E.EffectInjury.CurrentDuration" }}</label>
+    <label>{{ localize "MERP1E.EffectInjury.RoundsToDie" }}</label>
     <div class="form-fields">
-        <input type="number" name="flags.merp1e.Death.currentDuration" value="{{effect.flags.merp1e.Death.currentDuration}}" {{rw}}/>
+        <input type="number" name="flags.merp1e.Dying.initialValue" value="{{effect.flags.merp1e.Dying.initialValue}}" {{rw}}/>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.RoundsLeftToDie" }}</label>
+    <div class="form-fields">
+        <input type="number" name="flags.merp1e.Dying.currentValue" value="{{effect.flags.merp1e.Dying.currentValue}}" {{rw}}/>
+    </div>
+</div>
+<div class="form-group">
+    <label>{{ localize "MERP1E.EffectInjury.DieAt" }}</label>
+    <div class="form-fields">
+        <input type="number" value="{{dieAt}}" {{ro}}/>
     </div>
 </div>
 {{/if}}
-{{!--
-MERP1E.EffectInjury.Duration
-MERP1E.Injury.Dying
-MERP1E.EffectInjury.CurrentDuration
---}}

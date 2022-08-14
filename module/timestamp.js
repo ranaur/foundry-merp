@@ -39,7 +39,6 @@ export class Merp1eTimeStamp {
         return res;
     }
     makeString(option = "default") {
-
         switch(option) {
             case "default":
                 if(this.combat) { return this.makeString("combat"); }

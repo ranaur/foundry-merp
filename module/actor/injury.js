@@ -182,11 +182,12 @@ class Merp1eInjuryByLocation {
 }
 
 class Merp1eInjuryDying {
-  constructor(actor) {
-    this.actor = actor;
-    game.merp1e.Merp1eRules.injury.bodyGroupsBilateral.forEach((bg) => {
-  });
-}}
+  constructor(actor) { this.actor = actor; }
+  
+  get injuries() {
+    return this.actor?.effects.filter((efc) => efc.effectName == "Dying" );
+  }
+}
 
 export class Merp1eInjury {
 
@@ -230,14 +231,6 @@ export class Merp1eInjury {
        * /
 
 export class Merp1eInjury {
-    static IHT1StatDeteriorationTable = [
-        [ 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ],
-        [ 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1 ],
-        [ 30, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2 ],
-        [ 75, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3 ],
-        [ 90, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 4 ],
-        [ 100, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 5 ],
-    ];
 
     duration = {
         indefinite => true/false

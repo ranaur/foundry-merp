@@ -37,7 +37,7 @@
         <h3>{{localize "MERP1E.InjuryTab.IndividualHits"}}</h3>
         <div class="grid grid-6col">
             {{#each actor.injury.hits.injuries as | injury | }}
-            <li data-effect-id="{{injury.id}}" class="flexrow" style="border: 1px solid; padding: 2px; text-align: center;">
+            <li data-effect-id="{{injury.id}}" class="flexrow simpleborder {{condition injury.isActive 'active' 'inactive'}}">
                 <div>
                     {{#if (eq injury.effectName "Hits")}}
                     <span><i class="fas fa-heart-broken" title="{{localize 'MERP1E.Injury.Hits'}}"></i></span>
@@ -57,7 +57,7 @@
             </li>
             {{/each}}
             {{#each actor.injury.hitsPerRound.injuries as | injury | }}
-            <li data-effect-id="{{injury.id}}" class="flexrow" style="border: 1px solid; padding: 2px;  text-align: center;">
+            <li data-effect-id="{{injury.id}}" class="flexrow simpleborder active">
                 <div>
                     <span><i class="fas fa-tint" title="{{localize 'MERP1E.Injury.HitsPerRound'}}"></i></span>
                 </div>
@@ -87,7 +87,7 @@
 
     <div class="grid grid-6col">
         {{#each actor.injury.hitsPerRound.injuries as | injury | }}
-        <li data-effect-id="{{injury.id}}" class="flexrow" style="border: 1px solid; padding: 2px; text-align: center;">
+        <li data-effect-id="{{injury.id}}" class="flexrow simpleborder {{condition injury.isActive 'active' 'inactive'}}">
             <div>
                 <span><i class="fas fa-tint" title="{{localize 'MERP1E.Injury.HitsPerRound'}}"></i></span>
             </div>
@@ -116,7 +116,7 @@
     </h2>
     <div class="grid grid-6col">
         {{#each actor.injury.penalty.injuries as | injury | }}
-        <li data-effect-id="{{injury.id}}" class="flexrow" style="border: 1px solid; padding: 2px; text-align: center;">
+        <li data-effect-id="{{injury.id}}" class="flexrow simpleborder {{condition injury.isActive 'active' 'inactive'}}">
             <div>{{injury.effectAdapter.currentValue}}</div>
             <div>
                 <a class="effect-control" title="{{localize 'MERP1E.Item.Edit'}}" data-action="edit"><i class="fas fa-edit"></i></a>
@@ -200,7 +200,7 @@
                         <span>
                             {{#if (gt injuryIdx 0)}} + {{/if}}
                         </span>
-                        <span data-effect-id="{{injury.id}}">
+                        <span data-effect-id="{{injury.id}}" class="{{condition injury.isActive 'active' 'inactive'}}">
                             <a class="effect-control" title="{{localize 'MERP1E.Item.Edit'}}" data-action="edit">{{localize injury.effectAdapter.currentLabel}}</a>
                         </span>
                         {{/each}}
@@ -210,7 +210,7 @@
                         <span>
                             {{#if (gt injuryIdx 0)}} + {{/if}}
                         </span>
-                        <span data-effect-id="{{injury.id}}">
+                        <span data-effect-id="{{injury.id}}" class="{{condition injury.isActive 'active' 'inactive'}}">
                             <a class="effect-control" title="{{localize 'MERP1E.Item.Edit'}}" data-action="edit">{{localize injury.effectAdapter.currentLabel}}</a>
                         </span>
                         {{/each}}
@@ -221,7 +221,7 @@
                         <span>
                             {{#if (gt injuryIdx 0)}} + {{/if}}
                         </span>
-                        <span data-effect-id="{{injury.id}}">
+                        <span data-effect-id="{{injury.id}}" class="{{condition injury.isActive 'active' 'inactive'}}">
                             <a class="effect-control" title="{{localize 'MERP1E.Item.Edit'}}" data-action="edit">{{localize injury.effectAdapter.currentLabel}}</a>
                         </span>
                         {{/each}}
@@ -246,4 +246,85 @@
             </tr>
         </tfoot>
     </table>
+    {{!-- Dying ----------------------------------------- --}}
+    <h2 class="flexrow">
+        <div class="flex">{{localize "MERP1E.InjuryTab.Dying"}}</div>
+        <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow flex0">
+            <a class="effect-control" data-action="create" data-effect-type="InjuryEffect" data-adapter-name="Dying" title="{{localize 'MERP1E.Effect.New'}}">
+                <i class="fas fa-plus" title="{{localize 'MERP1E.Effect.Add'}}"></i>
+            </a>
+        </div>
+    </h2>
+    <div class="grid grid-6col">
+        {{#each actor.injury.dying.injuries as | injury | }}
+        <li data-effect-id="{{injury.id}}" class="flexrow simpleborder {{condition injury.isActive 'active' 'inactive'}}">
+            <div>{{injury.effectAdapter.currentValue}}</div>
+            <div>
+                <a class="effect-control" title="{{localize 'MERP1E.Item.Edit'}}" data-action="edit"><i class="fas fa-edit"></i></a>
+                <a class="effect-control" title="{{localize 'MERP1E.Item.Edit'}}" data-action="delete"><i class="fas fa-trash"></i></a>
+            </div>
+        </li>
+        {{/each}}
+    </div>
+    {{!-- Death ----------------------------------------- --}}
+    <h2 class="flexrow">
+        <div class="flex">{{localize "MERP1E.InjuryTab.Death"}}</div>
+        <div style="display: flex; justify-content: center; align-items: center; text-align: center;" class="flexrow">
+            {{#if this.actor.death.isDeadNow}}
+            <a class="death-control" data-action="ressurrect" title="{{localize 'MERP1E.Death.Ressurect'}}">
+                <i class="fas fa-heartbeat"></i>
+            </a>
+            <a class="death-control" data-action="preserve" title="{{localize 'MERP1E.Death.Preserve'}}">
+                <i class="fas fa-igloo"></i>
+            </a>
+            <a class="death-control" data-action="lifekeep" title="{{localize 'MERP1E.Death.LifeKeep'}}">
+                <i class="fas fa-ghost"></i>
+            </a>
+            <a class="death-control" data-action="decay" title="{{localize 'MERP1E.Death.Decay'}}">
+                <i class="fas fa-skull"></i>
+            </a>
+            {{else}}
+            <a class="death-control" data-action="die" title="{{localize 'MERP1E.Death.Die'}}">
+                <i class="fas fa-skull-crossbones"></i>
+            </a>
+            {{/if}}
+        </div>
+    </h2>
+    {{#if this.actor.death.isDeadNow}}
+        <div class="form-group">
+            <label>{{ localize "MERP1E.Death.Since" }}</label>
+            <div class="form-fields">
+                {{worldTime this.actor.death.deathTime }}
+            </div>
+        </div>
+        <hr/>
+        <div class="form-group">
+            <label>{{ localize "MERP1E.Death.PreservedSince" }}</label>
+            <div class="form-fields">
+                {{worldTime this.actor.death.preserveTime }}
+            </div>
+        </div>
+        {{> "systems/merp1e/templates/parts/timeframe.html" label="MERP1E.Death.PreservedFor" fieldNumber="preservedForNumber" fieldFrame="preservedForFrame" }}
+        <div class="form-group">
+            <label>{{ localize "MERP1E.Death.PreservedUntil" }}</label>
+            <div class="form-fields">
+                {{worldTime this.actor.death.preserveEndTime }}
+            </div>
+        </div>
+        <hr/>
+        <div class="form-group">
+            <label>{{ localize "MERP1E.Death.LifeKeepedSince" }}</label>
+            <div class="form-fields">
+                {{worldTime this.actor.death.lifeKeepTime }}
+            </div>
+        </div>
+        {{> "systems/merp1e/templates/parts/timeframe.html" label="MERP1E.Death.LifeKeepedFor" fieldNumber="lifeKeepedForNumber" fieldFrame="lifeKeepedForFrame" }}
+        <div class="form-group">
+            <label>{{ localize "MERP1E.Death.LifeKeepedUntil" }}</label>
+            <div class="form-fields">
+                {{worldTime this.actor.death.lifeKeepEndTime }}
+            </div>
+        </div>
+    {{/if}}
 </div>
+

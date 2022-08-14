@@ -281,3 +281,18 @@ input.userentry {
   font-family: Roboto, Sanf-serif;
 }
 
+.active {
+  text-decoration: none  
+}
+
+.inactive {
+  color: #7f7f7f;
+}
+
+.simpleborder {
+  border: 1px solid; 
+  padding: 2px;
+  text-align: center;
+}
+
+

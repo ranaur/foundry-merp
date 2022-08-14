@@ -107,3 +107,25 @@ export function confirmDialog(title, text, okFunc) {
    });
    d.render(true);
 }
+
+export function lookupTable(table, column, number) {
+  let ret = null;
+  let choosedLine = null;
+
+  if(number == null) return null;
+
+  for (let line of table.table) {
+      if(number <= line[0]) {
+          choosedLine = line;
+          break;
+      }
+  }
+  if(typeof column == 'string') {
+      column = table.columns.indexOf(column) + 1;
+  }
+  if(Array.isArray(choosedLine)) {
+      return choosedLine[column];
+  } else {
+      return null;
+  }
+};
