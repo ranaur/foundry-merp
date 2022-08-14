@@ -13,7 +13,7 @@ I use it on docker fow Windows with no hassle. Should work theorically in a loca
 Find the Data/systems directory. Is is something like ../data/Data/systems. On a regular instalation if the "UserDataPath".
 Shutdown Foundry. It may work on live installations, but you shouldn't push you luck.
 Clone the git repository: git clone https://github.com/ranaur/foundry-merp.git
-Change to devel branch: git checkout devel
+you shoould have a directory names foundry-merp. Rename it to merp1e.
 Run Foundry. Create a New campaign, the system Merp1e should be there.
 
 The campagn begins very empty. You should load/type the Items. When I mean Item, it is not only magic/mundane equipment, but anything an actor (PC/NPC) can "have": Skills, Professions, Races, Backgorund Options, Spells, Spell Lists and, of course, equipment.
